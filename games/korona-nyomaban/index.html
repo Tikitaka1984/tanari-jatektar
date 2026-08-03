@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A korona nyomában — érettségi felkészítő (v2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Literata:opsz,wght@18..144,400;18..144,500;18..144,600&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#160d0a; --dusk:#341412; --horizon:#5c231d;
+    --parchment:#f2e7c9; --ink:#2b1b12;
+    --crimson:#8b1a1a; --crimson-dark:#601010;
+    --forest:#2f5d3a; --gold:#c9a227; --gold-light:#e8d48a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:linear-gradient(180deg,var(--night) 0%,var(--dusk) 45%,var(--horizon) 78%, #7a4a2e 100%);
+    background-attachment:fixed; color:var(--parchment);
+    font-family:'Literata',serif; min-height:100vh; overflow-x:hidden;
+  }
+  .stars{position:fixed;inset:0;pointer-events:none;z-index:0;}
+  .stars span{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.7;animation:twinkle 3s infinite ease-in-out;}
+  @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.8}}
+  h1,h2,h3{font-family:'Cinzel',serif;letter-spacing:.02em;}
+  .eyebrow{font-family:'Space Mono',monospace;letter-spacing:.14em;text-transform:uppercase;font-size:.7rem;color:var(--gold-light);}
+  button{font-family:inherit;cursor:pointer;}
+
+  #app{max-width:960px;margin:0 auto;padding:24px 18px 90px;position:relative;z-index:1;}
+  .screen{display:none;animation:fadeIn .5s ease;}
+  .screen.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  .hud{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px;flex-wrap:wrap;}
+  .hud-title{font-family:'Cinzel',serif;font-weight:700;color:var(--gold-light);font-size:1rem;}
+  .hud-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .cartouche{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.3);border:2px solid var(--gold);border-radius:999px;padding:6px 14px;}
+  .cartouche .slot{width:28px;height:28px;border-radius:6px;background:rgba(255,255,255,.06);border:1px solid rgba(201,162,39,.35);display:flex;align-items:center;justify-content:center;transition:all .5s ease;}
+  .cartouche .slot.filled{background:var(--gold);border-color:var(--gold);box-shadow:0 0 12px rgba(201,162,39,.8);animation:pop .5s ease;}
+  @keyframes pop{0%{transform:scale(.4)}70%{transform:scale(1.25)}100%{transform:scale(1)}}
+  .cartouche .slot svg{width:17px;height:17px;}
+  .hud-pill{font-family:'Space Mono',monospace;font-size:.78rem;background:rgba(0,0,0,.3);border:1px solid rgba(242,231,201,.3);border-radius:999px;padding:7px 13px;}
+  .hud-pill.clickable{cursor:pointer;}
+  .hud-pill.clickable:hover{border-color:var(--gold-light);}
+
+  .cover{text-align:center;padding:24px 0 10px;}
+  .cover-scene{max-width:640px;margin:0 auto 4px;}
+  .cover h1{font-size:2.3rem;color:var(--gold-light);margin:10px 0 8px;line-height:1.15;text-shadow:0 2px 20px rgba(201,162,39,.3);}
+  .cover .sub{opacity:.88;max-width:600px;margin:0 auto 24px;font-size:1.03rem;line-height:1.6;}
+  .story{text-align:left;background:rgba(0,0,0,.28);border:1px solid rgba(201,162,39,.3);border-radius:14px;padding:20px 22px;max-width:640px;margin:0 auto 28px;font-size:.96rem;line-height:1.65;}
+  .story b{color:var(--gold-light);}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--crimson);color:#fff2e6;border:none;border-radius:10px;padding:14px 26px;font-size:1rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .15s,background .15s;}
+  .btn:hover{background:var(--crimson-dark);transform:translateY(-2px);}
+  .btn.secondary{background:transparent;border:1.5px solid var(--gold-light);color:var(--gold-light);}
+  .btn.secondary:hover{background:rgba(232,212,138,.12);}
+
+  .map-head{text-align:center;margin-bottom:14px;}
+  .map-wrap{position:relative;max-width:780px;margin:0 auto;}
+  .map-svg{width:100%;height:auto;display:block;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.4);}
+  .marker{cursor:pointer;}
+  .marker .ring{animation:pulse 2s infinite;transform-origin:center;transform-box:fill-box;}
+  @keyframes pulse{0%{opacity:.8;transform:scale(1)}70%{opacity:0;transform:scale(2)}100%{opacity:0;transform:scale(2)}}
+  .marker.done .ring{animation:none;opacity:0;}
+  .marker.locked{cursor:not-allowed;opacity:.45;}
+  .marker text{font-family:'Cinzel',serif;font-weight:700;pointer-events:none;}
+  .maplegend{display:flex;gap:16px;justify-content:center;margin-top:14px;font-size:.8rem;font-family:'Space Mono',monospace;opacity:.85;flex-wrap:wrap;}
+  .maplegend span{display:flex;align-items:center;gap:6px;}
+  .dot{width:11px;height:11px;border-radius:50%;display:inline-block;}
+
+  .overlay{position:fixed;inset:0;background:rgba(6,6,10,.75);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;z-index:50;padding:24px 12px;overflow-y:auto;}
+  .overlay.active{display:flex;}
+  .panel{background:linear-gradient(180deg,#f6ecd1,var(--parchment));color:var(--ink);border-radius:18px;max-width:740px;width:100%;padding:30px 28px 26px;box-shadow:0 30px 70px rgba(0,0,0,.55);position:relative;margin:auto 0;}
+  .panel::before{content:"";position:absolute;inset:8px;border:1.5px solid rgba(139,26,26,.22);border-radius:12px;pointer-events:none;}
+  .panel h2{color:var(--crimson-dark);margin:0 0 4px;font-size:1.4rem;}
+  .panel .eyebrow{color:var(--forest);}
+  .panel-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:1.3rem;color:var(--ink);opacity:.5;z-index:2;}
+  .panel-close:hover{opacity:1;}
+  .panel-body{margin-top:12px;font-size:.95rem;line-height:1.6;}
+  .panel-body p{margin:0 0 12px;}
+  .feedback{margin-top:14px;padding:12px 14px;border-radius:10px;font-size:.92rem;display:none;}
+  .feedback.ok{background:rgba(47,93,58,.15);border:1px solid var(--forest);color:#1d3d26;display:block;}
+  .feedback.bad{background:rgba(139,26,26,.12);border:1px solid var(--crimson);color:var(--crimson-dark);display:block;}
+  .panel-actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;}
+
+  .opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid #d8c79e;color:var(--ink);border-radius:10px;padding:12px 14px;margin-bottom:9px;font-size:.93rem;transition:.15s;}
+  .opt:hover{border-color:var(--crimson);}
+  .opt.correct{border-color:var(--forest);background:rgba(47,93,58,.18);}
+  .opt.incorrect{border-color:var(--crimson);background:rgba(139,26,26,.12);}
+  .opt:disabled{cursor:default;}
+
+  .year-wheel{display:flex;justify-content:center;margin:10px 0 16px;}
+  .year-wheel svg{max-width:340px;width:100%;height:auto;}
+  .year-seg{cursor:pointer;transition:.2s;}
+  .year-seg:hover .seg-bg{filter:brightness(1.15);}
+  .year-seg.correct .seg-bg{stroke:var(--forest);stroke-width:3;}
+  .year-seg.incorrect .seg-bg{stroke:var(--crimson);stroke-width:3;}
+  .year-seg text{pointer-events:none;font-family:'Cinzel',serif;}
+
+  .match-grid{display:grid;grid-template-columns:190px 1fr;gap:9px;margin:12px 0;}
+  @media(max-width:560px){.match-grid{grid-template-columns:1fr;}}
+  .match-col{display:flex;flex-direction:column;gap:8px;}
+  .match-item{background:#fff;border:1.5px solid #d8c79e;border-radius:10px;padding:10px 12px;font-size:.87rem;text-align:left;transition:.15s;color:var(--ink);}
+  .match-item.term{font-family:'Cinzel',serif;font-weight:700;color:var(--crimson-dark);}
+  .match-item:hover{border-color:var(--crimson);}
+  .match-item.sel{border-color:var(--gold);background:rgba(201,162,39,.18);box-shadow:0 0 0 2px rgba(201,162,39,.3);}
+  .match-item.done{border-color:var(--forest);background:rgba(47,93,58,.14);opacity:.85;cursor:default;}
+  .match-item.flash{border-color:var(--crimson);background:rgba(139,26,26,.12);}
+
+  .decision-scene{display:flex;justify-content:center;margin:10px 0;}
+  .decision-scene svg{max-width:500px;width:100%;height:auto;border-radius:12px;}
+  .spot{cursor:pointer;}
+  .spot circle{transition:.2s;}
+  .spot:hover circle{stroke-width:4;}
+  .spot.picked-ok circle{fill:var(--forest);}
+  .spot.picked-bad circle{fill:#9a3a2c;}
+
+  .city-layout{display:grid;grid-template-columns:1fr 220px;gap:18px;align-items:start;}
+  @media(max-width:620px){.city-layout{grid-template-columns:1fr;}}
+  .npc-card{background:#fff;border:1.5px solid #d8c79e;border-radius:12px;padding:16px;}
+  .npc-head{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+  .npc-face{width:54px;height:54px;flex:none;}
+  .npc-name{font-family:'Cinzel',serif;font-weight:700;color:var(--crimson-dark);}
+  .npc-q{font-style:italic;font-size:.93rem;margin:4px 0 10px;}
+  .soc-pyr{background:#fff;border:1.5px solid #d8c79e;border-radius:12px;padding:12px;text-align:center;}
+  .soc-pyr h4{margin:0 0 8px;font-size:.8rem;color:var(--crimson-dark);font-family:'Space Mono',monospace;letter-spacing:.06em;}
+  .soc-pyr svg{width:100%;height:auto;}
+  .tier{transition:.4s;}
+  .tier .tier-bg{fill:#e8dcb8;stroke:#cdb480;}
+  .tier.lit .tier-bg{fill:var(--gold);stroke:#a5820f;}
+  .tier text{font-size:8.5px;font-family:'Space Mono',monospace;fill:#5a4a30;}
+  .tier.lit text{fill:#3d2f12;font-weight:700;}
+
+  .pyr-layout{display:grid;grid-template-columns:1fr 200px;gap:16px;align-items:start;}
+  @media(max-width:620px){.pyr-layout{grid-template-columns:1fr;}}
+  .phase-list{display:flex;flex-direction:column;gap:8px;margin:10px 0;}
+  .phase{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #d8c79e;border-radius:10px;padding:9px 12px;}
+  .phase .idx{font-family:'Space Mono',monospace;color:var(--crimson);font-weight:700;width:22px;}
+  .phase .ico{font-size:1.2rem;width:26px;text-align:center;}
+  .phase .txt{flex:1;font-size:.85rem;}
+  .phase-btns{display:flex;gap:5px;}
+  .mini-btn{background:var(--parchment);border:1px solid #cdb480;border-radius:6px;padding:4px 9px;font-size:.85rem;}
+  .mini-btn:hover{background:#e2d2a3;}
+  .pyr-visual{background:#fff;border:1.5px solid #d8c79e;border-radius:12px;padding:10px;text-align:center;}
+  .pyr-visual svg{width:100%;height:auto;}
+  .pyr-layer{opacity:.12;transition:opacity .5s;}
+  .pyr-layer.built{opacity:1;}
+
+  .source-card{background:#fff;border:1.5px solid #d8c79e;border-radius:12px;padding:16px;margin-bottom:14px;}
+  .source-card h4{margin:0 0 6px;color:var(--crimson-dark);font-size:.98rem;}
+  .source-card .src-text{font-style:italic;font-size:.9rem;opacity:.9;margin:0 0 6px;background:rgba(201,162,39,.08);padding:10px 12px;border-left:3px solid var(--gold);border-radius:0 8px 8px 0;}
+  .source-card .src-note{font-size:.76rem;opacity:.6;margin:0 0 8px;}
+  .src-q{font-size:.9rem;font-weight:600;margin:10px 0 6px;color:var(--crimson-dark);}
+  .hint-line{font-size:.85rem;margin-top:8px;opacity:.85;}
+
+  .kscroll{background:linear-gradient(180deg,#f9f0d8,#efe0b8);border:1.5px solid #cdb480;border-radius:12px;padding:16px 18px;margin-top:14px;position:relative;font-size:.9rem;line-height:1.6;}
+  .kscroll::before,.kscroll::after{content:"";position:absolute;left:-6px;right:-6px;height:12px;background:#a5820f;border-radius:8px;}
+  .kscroll::before{top:-7px;}
+  .kscroll::after{bottom:-7px;}
+  .kscroll h4{margin:2px 0 8px;font-family:'Cinzel',serif;color:var(--crimson-dark);}
+  .kscroll ul{margin:0;padding-left:18px;}
+  .kscroll li{margin-bottom:5px;}
+  .kscroll .lexika{margin-top:10px;padding:8px 10px;background:rgba(139,26,26,.07);border-left:3px solid var(--crimson);font-size:.82rem;border-radius:0 8px 8px 0;}
+  .kscroll .src{font-size:.75rem;opacity:.6;margin-top:8px;}
+
+  .review-progress{display:flex;gap:6px;justify-content:center;margin:8px 0 14px;}
+  .rp-dot{width:12px;height:12px;border-radius:50%;background:#d8c79e;}
+  .rp-dot.good{background:var(--forest);}
+  .rp-dot.bad{background:var(--crimson);}
+  .rp-dot.cur{outline:2px solid var(--gold);}
+
+  .ending{text-align:center;padding:30px 0;}
+  .cartouche-final{margin:0 auto 18px;display:inline-flex;gap:10px;padding:16px 26px;border:3px solid var(--gold);border-radius:999px;background:rgba(0,0,0,.28);box-shadow:0 0 40px rgba(201,162,39,.45);}
+  .cartouche-final .slot{width:44px;height:44px;border-radius:8px;background:var(--gold);display:flex;align-items:center;justify-content:center;animation:pop .6s ease;}
+  .cartouche-final .slot svg{width:26px;height:26px;}
+  .ending h2{font-size:1.8rem;color:var(--gold-light);}
+  .stat-box{display:inline-block;background:rgba(0,0,0,.28);border:1px solid rgba(201,162,39,.4);border-radius:12px;padding:14px 22px;margin:18px auto 6px;font-family:'Space Mono',monospace;font-size:.9rem;text-align:left;line-height:1.9;}
+  .stat-box b{color:var(--gold-light);}
+  .scroll-shelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;max-width:820px;margin:26px auto 0;text-align:left;}
+  footer.tiny{text-align:center;opacity:.5;font-size:.78rem;margin-top:50px;font-family:'Space Mono',monospace;position:relative;z-index:1;}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div id="app">
+
+  <div class="hud" id="hud" style="display:none;">
+    <div class="hud-title">A korona nyomában</div>
+    <div class="hud-right">
+      <div class="hud-pill" id="errPill" title="Hibás próbálkozások">&#9878; 0 hiba</div>
+      <div class="hud-pill clickable" id="scrollCount" onclick="showScrolls()">&#128220; 0/6 tekercs</div>
+      <div class="cartouche" id="cartouche" aria-label="Megszerzett jelek"></div>
+    </div>
+  </div>
+
+  <!-- COVER -->
+  <section class="screen active" id="screen-cover">
+    <div class="cover">
+      <div class="cover-scene">
+        <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#160d0a"/><stop offset=".6" stop-color="#5c231d"/><stop offset="1" stop-color="#a5602f"/>
+            </linearGradient>
+            <linearGradient id="hillG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#3d2a1f"/><stop offset="1" stop-color="#241811"/>
+            </linearGradient>
+            <radialGradient id="moonG" cx=".5" cy=".5" r=".5">
+              <stop offset="0" stop-color="#fdf3d0"/><stop offset=".7" stop-color="#e8d48a"/><stop offset="1" stop-color="#c9a227"/>
+            </radialGradient>
+          </defs>
+          <rect width="640" height="260" fill="url(#skyG)" rx="18"/>
+          <circle cx="500" cy="70" r="34" fill="url(#moonG)"/>
+          <path d="M0 230 Q120 195 240 220 T480 210 T640 225 L640 260 L0 260Z" fill="url(#hillG)"/>
+          <g fill="#1c130d">
+            <rect x="120" y="150" width="18" height="70"/><rect x="112" y="140" width="34" height="14"/>
+            <rect x="150" y="120" width="24" height="100"/><rect x="142" y="108" width="40" height="16"/>
+            <polygon points="162,72 148,108 176,108"/>
+            <rect x="186" y="160" width="16" height="60"/><rect x="179" y="150" width="30" height="13"/>
+            <rect x="215" y="170" width="90" height="50"/>
+            <rect x="212" y="160" width="10" height="12"/><rect x="230" y="160" width="10" height="12"/>
+            <rect x="248" y="160" width="10" height="12"/><rect x="266" y="160" width="10" height="12"/>
+            <rect x="284" y="160" width="10" height="12"/><rect x="300" y="160" width="10" height="12"/>
+          </g>
+          <path d="M0 240 Q160 228 320 240 T640 236 L640 252 Q480 244 320 252 T0 250 Z" fill="#2f5d3a" opacity=".7"/>
+        </svg>
+      </div>
+      <div class="eyebrow">Érettségi felkészítő nyomozójáték &middot; Középkori Magyarország &middot; 12. évfolyam</div>
+      <h1>A korona nyomában</h1>
+      <p class="sub">1526 nyara. Egy öreg krónikás sürgető üzenetet küld: mielőtt eldőlne az ország sorsa, valakinek össze kell raknia, mi tartotta egyben fél évezreden át a magyar államot.</p>
+      <div class="story">
+        <p><b>A küldetésed:</b> hat helyszínt kell azonosítanod a térképen, majd mindegyiken próbát kiállnod — az államalapítástól Mohács előestéjéig. Minden állomás egy jelet ad; a végén egy <b>záró ismétlő próba</b> vár, és csak azután áll össze a szó.</p>
+        <p>A próbák az <b>érettségi kötelező lexikájára</b> épülnek (évszám, fogalom, név, topográfia), a kérdések játszásonként <b>változnak</b>. Hibáidat a fejléc számolja — a cél nem a hibátlanság, hanem hogy a végére kevesebb legyen. A tudástekercsek a középszintű törzsanyag adatait emelik ki; emelt szinten a hivatalos követelmény további elemeket jelöl ki.</p>
+      </div>
+      <button class="btn" onclick="goTo('map')">A nyomozás kezdete &rarr;</button>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section class="screen" id="screen-map">
+    <div class="map-head">
+      <div class="eyebrow">A középkori Magyar Királyság — Kárpát-medence</div>
+      <h2 style="margin:6px 0 4px;">Azonosítsd a helyszíneket</h2>
+      <p style="opacity:.85;font-size:.9rem;max-width:600px;margin:0 auto;">A jelölt pontok neve rejtve van: kattints egy pontra, és a földrajzi helyzete alapján állapítsd meg, melyik település — csak ezután nyílik meg a próba. A sorszámok a fokozatos nehezedést jelzik (felidézéstől a forráselemzésig).</p>
+    </div>
+    <div class="map-wrap">
+      <svg class="map-svg" viewBox="0 0 760 560" xmlns="http://www.w3.org/2000/svg" id="mapSvg" role="group" aria-label="A középkori Magyarország térképe helyszínjelölőkkel">
+        <defs>
+          <linearGradient id="landG" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#dcc48f"/><stop offset="1" stop-color="#b3924f"/>
+          </linearGradient>
+          <linearGradient id="riverG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#4a7ea3"/><stop offset="1" stop-color="#2e5f80"/>
+          </linearGradient>
+        </defs>
+        <rect width="760" height="560" fill="url(#landG)" rx="18"/>
+        <g stroke="#7a5c33" stroke-width="2" fill="#8f6f42" opacity=".8">
+          <path d="M30 110 L48 84 L66 110 Z"/><path d="M78 96 L96 68 L114 96 Z"/><path d="M128 86 L146 58 L164 86 Z"/>
+          <path d="M180 76 L198 48 L216 76 Z"/><path d="M234 68 L252 40 L270 68 Z"/><path d="M290 62 L308 34 L326 62 Z"/>
+          <path d="M348 58 L366 30 L384 58 Z"/><path d="M406 56 L424 28 L442 56 Z"/><path d="M464 58 L482 30 L500 58 Z"/>
+          <path d="M522 64 L540 36 L558 64 Z"/><path d="M578 74 L596 46 L614 74 Z"/><path d="M630 92 L648 64 L666 92 Z"/>
+          <path d="M672 120 L692 94 L708 122 Z"/><path d="M690 160 L712 136 L726 166 Z"/>
+          <path d="M700 210 L722 188 L734 218 Z"/><path d="M702 262 L724 240 L736 270 Z"/>
+          <path d="M698 314 L720 292 L732 322 Z"/><path d="M690 366 L712 344 L724 374 Z"/>
+          <path d="M672 414 L694 392 L706 422 Z"/><path d="M644 456 L666 434 L678 464 Z"/>
+        </g>
+        <text x="360" y="22" fill="#5c3f1e" font-size="13" font-family="Cinzel,serif" font-weight="700" text-anchor="middle">K á r p á t o k</text>
+        <text x="742" y="290" fill="#5c3f1e" font-size="13" font-family="Cinzel,serif" font-weight="700" transform="rotate(90 742 290)">K á r p á t o k</text>
+        <text x="620" y="330" fill="#6b4a22" font-size="14" font-family="Cinzel,serif" font-style="italic">Erdély</text>
+        <path d="M 30 190 C 110 178 220 164 320 158 C 362 156 392 158 402 176 C 412 196 408 240 410 300 C 412 370 416 430 422 480 C 426 512 430 540 432 560"
+              fill="none" stroke="url(#riverG)" stroke-width="16" stroke-linecap="round"/>
+        <text x="150" y="152" fill="#1c3b52" font-size="15" font-family="Cinzel,serif" font-weight="700">Duna</text>
+        <text x="432" y="380" fill="#1c3b52" font-size="14" font-family="Cinzel,serif" font-weight="700" transform="rotate(84 432 380)">Duna</text>
+        <path d="M 655 100 C 630 150 600 200 583 250 C 566 300 556 380 552 450 C 549 500 548 535 548 560"
+              fill="none" stroke="url(#riverG)" stroke-width="11" stroke-linecap="round"/>
+        <text x="588" y="410" fill="#1c3b52" font-size="14" font-family="Cinzel,serif" font-weight="700" transform="rotate(83 588 410)">Tisza</text>
+        <path d="M 520 90 C 545 130 570 170 596 212" fill="none" stroke="url(#riverG)" stroke-width="7" stroke-linecap="round"/>
+        <text x="512" y="128" fill="#1c3b52" font-size="11" font-family="Cinzel,serif" font-style="italic">Sajó</text>
+        <ellipse cx="235" cy="330" rx="58" ry="15" fill="#2e5f80" transform="rotate(-32 235 330)"/>
+        <text x="192" y="372" fill="#1c3b52" font-size="12" font-family="Cinzel,serif" font-style="italic">Balaton</text>
+        <circle cx="440" cy="537" r="5" fill="#601010" stroke="#fff" stroke-width="1.5"/>
+        <text x="452" y="541" fill="#3d2a14" font-size="11" font-family="Cinzel,serif">Nándorfehérvár</text>
+        <g id="markers"></g>
+      </svg>
+    </div>
+    <div class="maplegend">
+      <span><span class="dot" style="background:var(--crimson)"></span> nyitva</span>
+      <span><span class="dot" style="background:var(--forest)"></span> teljesítve</span>
+      <span><span class="dot" style="background:#8a8a8a"></span> zárva</span>
+    </div>
+  </section>
+
+  <!-- ENDING -->
+  <section class="screen" id="screen-ending">
+    <div class="ending">
+      <div class="eyebrow">1526. augusztus 29. előtt</div>
+      <h2>A jelekből előáll a szó: a KORONA</h2>
+      <div class="cartouche-final" id="cartouche-final"></div>
+      <p style="opacity:.9;max-width:640px;margin:0 auto;">Amit összeraktál, az nem egyetlen uralkodó neve, hanem ami mindet összekötötte: a <b style="color:var(--gold-light)">korona</b> mint a magyar államiság folytonosságának jelképe — Szent István államalapításától az Aranybullán, a tatárjárás utáni újjáépítésen és az Anjou-kor gazdasági megújulásán át a Hunyadiak török elleni harcáig. Maga a <b>Szent Korona-eszme</b> — a tan, amely szerint a hatalom nem a király személyét, hanem a koronát illeti, és annak a rendek is részesei — a késő középkor fejleménye: Werbőczy István <i>Hármaskönyve</i> (1514) foglalta rendszerbe. 1526. augusztus 29-én a mohácsi csatában II. Lajos is életét vesztette; az ország három részre szakadása 1541-ben, Buda elfoglalásával vált véglegessé.</p>
+      <div class="stat-box" id="statBox"></div>
+      <div class="scroll-shelf" id="scrollShelf"></div>
+      <div style="margin-top:28px;">
+        <button class="btn secondary" onclick="restartGame()">Új nyomozás indítása (új kérdésekkel)</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="panel" id="panel">
+    <button class="panel-close" onclick="closePanel()" aria-label="Bezárás">&#10005;</button>
+    <div class="eyebrow" id="panel-eyebrow"></div>
+    <h2 id="panel-title"></h2>
+    <div class="panel-body" id="panel-body"></div>
+    <div class="feedback" id="panel-feedback" role="status" aria-live="polite"></div>
+    <div class="panel-actions" id="panel-actions"></div>
+  </div>
+</div>
+
+<footer class="tiny">Történelem érettségi felkészítő &middot; a 2024-től érvényes vizsgakövetelmények lexikája alapján &middot; v2</footer>
+
+<script>
+/* ============ csillagok ============ */
+(function(){
+  const wrap = document.getElementById('stars');
+  for(let i=0;i<60;i++){
+    const s=document.createElement('span');
+    s.style.left=Math.random()*100+'%';
+    s.style.top=Math.random()*55+'%';
+    s.style.animationDelay=(Math.random()*3)+'s';
+    wrap.appendChild(s);
+  }
+})();
+
+/* ============ segédek ============ */
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function sample(arr,n){return shuffle(arr).slice(0,n);}
+
+/* ============ jelek — KORONA ============ */
+const GLYPHS = {
+  K:{name:'korona (államalapítás)',svg:'<path d="M6 24 L6 14 L12 19 L16 9 L20 19 L26 14 L26 24 Z" fill="none" stroke="#601010" stroke-width="2.4" stroke-linejoin="round"/>'},
+  O1:{name:'pecsét (Aranybulla)',svg:'<circle cx="16" cy="16" r="10" fill="none" stroke="#601010" stroke-width="2.4"/><path d="M16 8 L16 24 M8 16 L24 16" stroke="#601010" stroke-width="1.6"/>'},
+  R:{name:'őrtorony (várépítés)',svg:'<rect x="10" y="10" width="12" height="18" fill="none" stroke="#601010" stroke-width="2.2"/><path d="M8 10 L16 3 L24 10 Z" fill="none" stroke="#601010" stroke-width="2.2" stroke-linejoin="round"/>'},
+  O2:{name:'aranyforint (Anjou-kor)',svg:'<circle cx="16" cy="16" r="10" fill="none" stroke="#a5820f" stroke-width="2.4"/><path d="M16 10 L16 22 M11 16 L21 16" stroke="#a5820f" stroke-width="1.6"/>'},
+  N:{name:'corvina (Hunyadiak)',svg:'<path d="M16 8 L16 26 M6 10 Q16 6 16 8 Q16 6 26 10 L26 24 Q16 20 16 22 Q16 20 6 24 Z" fill="none" stroke="#601010" stroke-width="2"/>'},
+  A:{name:'pajzs (Mohács)',svg:'<path d="M16 6 L26 10 L26 17 Q26 25 16 28 Q6 25 6 17 L6 10 Z" fill="none" stroke="#601010" stroke-width="2.2" stroke-linejoin="round"/>'},
+};
+const NAME_ORDER = ['K','O1','R','O2','N','A'];
+
+/* ============ tudástekercsek ============ */
+const SCROLLS = {
+  esztergom:{title:'A keresztény államalapítás',items:[
+    '<b>Géza fejedelem</b> (972–997) megkezdte a nyugati kereszténység felvételét; művét fia, Vajk — a keresztségben <b>István</b> — folytatta.',
+    'Istvánt az <b>1000/1001. év fordulóján</b> koronázták királlyá, a hagyomány szerint II. Szilveszter pápa küldte koronával. Uralkodása: <b>997–1038</b>.',
+    'Kiépítette a <b>vármegyerendszert</b> (élén az <b>ispánnal</b>) és az egyházszervezetet: tíz egyházmegyét, köztük az <b>esztergomi érsekséget</b>; elrendelte a <b>tized</b> fizetését.',
+    'Két törvénykönyve a magántulajdont és a keresztény vallásgyakorlatot védte; az <b>Intelmek</b> latin nyelvű királytükör, amelyet fiához, Imre herceghez intézett. A század végén <b>I. (Szent) László</b> és <b>Könyves Kálmán</b> szigorú törvényei szilárdították meg a belső rendet.'],
+    lexika:'Évszámok: 997–1038, 1000/1001 &middot; Nevek: Géza, I. (Szent) István, I. (Szent) László, Könyves Kálmán &middot; Fogalmak: vármegye, ispán, tized, egyházmegye &middot; Topográfia: Esztergom',
+    src:'Vö. Oktatási Hivatal: történelem részletes vizsgakövetelmény (2024); Kristó Gyula: Magyarország története 895–1301'},
+  aranybulla:{title:'Az Aranybulla és a rendiség kezdetei',items:[
+    'II. András <b>1222-ben</b> adta ki az Aranybullát, amely a birtokadományozások és a bárói túlhatalom miatt elégedetlen <b>servienseket</b> védte.',
+    'Főbb pontjai: a serviensek <b>adómentessége</b>, bírói ítélet nélküli elfogatásuk tilalma, külföldi hadjáratban csak a király költségén harcolnak; korlátozta az idegenek birtokszerzését és a <b>tisztséghalmozást</b>.',
+    'Az <b>ellenállási záradék</b> (ius resistendi) felhatalmazta a nemességet, hogy hűtlenség vádja nélkül szembeszegüljön az oklevelet megszegő uralkodóval — ezt csak <b>1687-ben</b> törölték el.',
+    'Az Aranybulla a magyar <b>rendiség</b> fejlődésének kiindulópontja; <b>1351-ben Nagy Lajos</b> erősítette meg, a szabad örökítés helyébe az ősiséget léptetve.'],
+    lexika:'Évszám: 1222 &middot; Nevek: II. András &middot; Fogalmak: Aranybulla, serviens, ellenállási záradék, rendiség &middot; Topográfia: (Székes)Fehérvár',
+    src:'Vö. Zsoldos Attila: Az Árpádok és alattvalóik; az 1222. évi Aranybulla szövege'},
+  muhi:{title:'A tatárjárás és az újjáépítés',items:[
+    'A <b>Batu kán</b> vezette mongol (tatár) sereg <b>1241. április 11-én</b>, a Sajó menti <b>muhi csatában</b> megsemmisítő vereséget mért IV. Béla seregére.',
+    'A pusztítás (1241–42) a népesség jelentős részét elpusztította; a mongolok 1242-ben kivonultak — a hagyományos magyarázat szerint Ögödej nagykán halálhíre miatt, de a kutatás más tényezőket (ellátási nehézségek, veszteségek) is felvet.',
+    '<b>IV. Béla</b> („a második honalapító") <b>kővárak</b> építését ösztönözte (a birtokadományt várépítéshez kötötte), <b>városi kiváltságokat</b> adott (pl. Buda), és visszahívta a <b>kunokat</b>.',
+    'A városokba <b>hospesek</b> (kiváltságolt telepesek) érkeztek; a kézművesek később <b>céhekbe</b> szerveződtek — a tatárjárás utáni újjáépítés a magyar városfejlődés egyik lendítője.'],
+    lexika:'Évszámok: 1241–1242, 1241. április 11. &middot; Nevek: IV. Béla, Batu kán &middot; Fogalmak: tatárjárás, kővár, városi kiváltság, hospes, kunok &middot; Topográfia: Muhi, Buda',
+    src:'Vö. Rogerius mester: Siralmas ének; Engel Pál: Szent István birodalma'},
+  visegrad:{title:'Az Anjou-kor gazdasági megújulása',items:[
+    'Az Árpád-ház <b>1301-es</b> kihalása után tartományúri hatalom következett (pl. <b>Csák Máté</b>); <b>Károly Róbert</b> (1308–1342) fokozatosan törte le a tartományurakat.',
+    'Reformjai a <b>regálékra</b> épültek: <b>1325-től értékálló aranyforint</b> firenzei mintára, <b>kapuadó</b> (1336) a kamara haszna pótlására, <b>harmincadvám</b>, a bányászatból <b>urbura</b> és nemesércmonopólium.',
+    '<b>1335-ben Visegrádon</b> királytalálkozót tartott a cseh (Luxemburgi János) és a lengyel (III. Kázmér) uralkodóval — cél a Bécset elkerülő kereskedelmi utak megnyitása.',
+    '<b>I. (Nagy) Lajos</b> (1342–1382) <b>1351. évi törvényei</b>: az Aranybulla megerősítése, az <b>ősiség</b> és a <b>kilenced</b> egységes szedése; 1370-től lengyel–magyar perszonálunió.'],
+    lexika:'Évszámok: 1301, 1308–1342, 1325, 1335, 1342–1382, 1351 &middot; Nevek: Csák Máté, Károly Róbert, I. (Nagy) Lajos &middot; Fogalmak: regálé, aranyforint, kapuadó, harmincad, urbura, ősiség, kilenced &middot; Topográfia: Visegrád',
+    src:'Vö. Engel Pál: Szent István birodalma; Bertényi Iván: Magyarország az Anjouk korában'},
+  buda:{title:'Luxemburgi Zsigmond és a Hunyadiak',items:[
+    '<b>Luxemburgi Zsigmond</b> (1387–1437) alatt vált állandóvá az <b>oszmán fenyegetés</b>: az <b>1396-os nikápolyi</b> vereség után kiépítette a déli <b>végvárrendszert</b>.',
+    '<b>Hunyadi János</b> — kormányzó 1446-tól — a török elleni harc vezéralakja; <b>1456-ban Nándorfehérvárnál</b> aratott diadala évtizedekre megállította az oszmán előrenyomulást.',
+    '<b>Hunyadi Mátyás</b> (1458–1490) központosított: állandó zsoldossereg (<b>fekete sereg</b>), jövedelmek a <b>füstpénzből</b> és a <b>rendkívüli hadiadóból</b>.',
+    'Udvara a <b>reneszánsz és humanizmus</b> központja; könyvtára a <b>Bibliotheca Corviniana</b>. 1485-ben elfoglalta Bécset; halála után a Jagellók alatt a központi hatalom meggyengült.'],
+    lexika:'Évszámok: 1387–1437, 1396, 1456, 1458–1490 &middot; Nevek: Luxemburgi Zsigmond, Hunyadi János, Hunyadi Mátyás &middot; Fogalmak: végvár, kormányzó, fekete sereg, füstpénz, rendkívüli hadiadó, humanizmus, reneszánsz &middot; Topográfia: Nándorfehérvár, Buda',
+    src:'Vö. Kubinyi András: Mátyás király; Engel–Kristó–Kubinyi: Magyarország története 1301–1526'},
+  mohacs:{title:'Mohács és a forráskritika',items:[
+    'A Jagelló-korban a királyi jövedelmek és a végvárrendszer leépültek; <b>1521-ben elesett Nándorfehérvár</b>, a déli védvonal kulcsa.',
+    '<b>1526. augusztus 29-én</b> Mohácsnál <b>I. Szulejmán</b> serege szétverte a magyar hadat; <b>II. Lajos</b> menekülés közben életét vesztette. A három részre szakadás <b>1541-ben</b>, Buda elfoglalásával vált véglegessé.',
+    'Forráselemzésnél az első kérdés mindig: <b>ki írta, mikor és milyen szándékkal?</b> A szerző időbeli távolsága és érdekeltsége határozza meg, <b>mire</b> jó forrás a szöveg — nem azt, hogy „jó" vagy „rossz" forrás-e.',
+    'Az érettségin a forrás <b>rögzítése</b> (mit állít) és az önálló ismerettel való <b>megállapítás</b> (magyarázat, kontextus) együtt hoz pontot.'],
+    lexika:'Évszámok: 1521, 1526. augusztus 29., 1541 &middot; Nevek: II. Lajos, I. Szulejmán &middot; Fogalmak: végvár, forráskritika, elsődleges/másodlagos forrás &middot; Topográfia: Mohács, Nándorfehérvár, Buda',
+    src:'Vö. B. Szabó János: A mohácsi csata; Oktatási Hivatal: vizsgaleírás (forráshasználat)'},
+};
+
+/* ============ állapot ============ */
+const state = {
+  completed:{esztergom:false,aranybulla:false,muhi:false,visegrad:false,buda:false,mohacs:false},
+  topoDone:{},
+  glyphsWon:[], scrolls:[],
+  errors:0, reviewScore:null,
+};
+window.gameState = state;
+function addErr(){ state.errors++; renderErr(); }
+function renderErr(){ document.getElementById('errPill').innerHTML='&#9878; '+state.errors+' hiba'; }
+
+/* ============ helyszínek + topográfiai kapu ============ */
+const LOCS = [
+  {id:'esztergom', num:1, x:345, y:120, title:'Esztergom',      glyph:'K',  icon:'crown',  lx:0,ly:-32,anchor:'middle',
+   topoOpts:['Esztergom','Pozsony','Vác'], topoHint:'Nézd meg: a Duna itt még kelet felé folyik, közvetlenül a kanyar előtt — érseki székhely, István szülőhelye.'},
+  {id:'visegrad',  num:4, x:404, y:170, title:'Visegrád',       glyph:'O2', icon:'coin',   lx:30,ly:5,anchor:'start',
+   topoOpts:['Visegrád','Esztergom','Buda'], topoHint:'A pont magában a Duna-kanyarban fekszik, ott, ahol a folyó délnek fordul — itt állt az Anjou-kori királyi palota.'},
+  {id:'aranybulla',num:2, x:315, y:272, title:'Székesfehérvár', glyph:'O1', icon:'seal',   lx:-30,ly:5,anchor:'end',
+   topoOpts:['Székesfehérvár','Veszprém','Esztergom'], topoHint:'A Dunától nyugatra, a Balatontól északkeletre fekvő koronázó- és törvénykezőváros.'},
+  {id:'buda',      num:5, x:408, y:248, title:'Buda',           glyph:'N',  icon:'book',   lx:30,ly:5,anchor:'start',
+   topoOpts:['Buda','Székesfehérvár','Visegrád'], topoHint:'A Duna jobb partján, már a kanyar alatt — a késő középkori királyi székhely.'},
+  {id:'muhi',      num:3, x:600, y:222, title:'Muhi',           glyph:'R',  icon:'castle', lx:0,ly:40,anchor:'middle',
+   topoOpts:['Muhi','Mohács','Eger'], topoHint:'Figyeld a folyókat: a pont a Sajó Tisza-torkolatánál fekszik, az ország északkeleti részén. (Vigyázat: gyakori tévesztés a hasonló nevű dunai helyszínnel!)'},
+  {id:'mohacs',    num:6, x:425, y:468, title:'Mohács',         glyph:'A',  icon:'shield', lx:-30,ly:5,anchor:'end', needsAll:true,
+   topoOpts:['Mohács','Muhi','Nándorfehérvár'], topoHint:'A Duna mentén, az ország déli részén — a Sajó menti, hasonló nevű csatatér 285 évvel korábbi történet.'},
+];
+const MARKER_ICONS = {
+  crown:'<path d="M-9 6 L-9 -2 L-4 3 L0 -6 L4 3 L9 -2 L9 6 Z" fill="none" stroke="#fff" stroke-width="2"/>',
+  castle:'<rect x="-6" y="-2" width="12" height="10" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M-8 -2 L0 -9 L8 -2Z" fill="none" stroke="#fff" stroke-width="1.8"/>',
+  seal:'<circle r="8" fill="none" stroke="#fff" stroke-width="2"/><path d="M0 -5 L0 5 M-5 0 L5 0" stroke="#fff" stroke-width="1.5"/>',
+  coin:'<circle r="8" fill="none" stroke="#fff" stroke-width="2"/><path d="M0 -4 L0 4 M-3 0 L3 0" stroke="#fff" stroke-width="1.5"/>',
+  book:'<path d="M0 -7 L0 8 M-9 -5 Q0 -8 0 -6 Q0 -8 9 -5 L9 6 Q0 3 0 5 Q0 3 -9 6 Z" fill="none" stroke="#fff" stroke-width="1.6"/>',
+  shield:'<path d="M0 -8 L8 -5 L8 2 Q8 8 0 10 Q-8 8 -8 2 L-8 -5 Z" fill="none" stroke="#fff" stroke-width="1.8"/>',
+};
+
+/* ============ navigáció, közös UI ============ */
+function goTo(screen){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+screen).classList.add('active');
+  document.getElementById('hud').style.display = screen==='cover' ? 'none' : 'flex';
+  if(screen==='map') renderMap();
+  if(screen==='ending'){renderFinalCartouche(); renderShelf(); renderStats();}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderCartouche(){
+  document.getElementById('cartouche').innerHTML = NAME_ORDER.map(k=>{
+    const won = state.glyphsWon.includes(k);
+    return `<div class="slot ${won?'filled':''}" title="${won?GLYPHS[k].name:''}">${won?'<svg viewBox="0 0 32 32" aria-hidden="true">'+GLYPHS[k].svg+'</svg>':''}</div>`;
+  }).join('');
+  document.getElementById('scrollCount').innerHTML = '&#128220; '+state.scrolls.length+'/6 tekercs';
+  renderErr();
+}
+function renderMap(){
+  renderCartouche();
+  const g = document.getElementById('markers');
+  const baseDone = LOCS.filter(l=>!l.needsAll).every(l=>state.completed[l.id]);
+  g.innerHTML = LOCS.map(loc=>{
+    const done = state.completed[loc.id];
+    const locked = loc.needsAll && !baseDone;
+    const known = !!state.topoDone[loc.id];
+    const color = done ? 'var(--forest)' : (locked ? '#8a8a8a' : 'var(--crimson)');
+    const cls = 'marker'+(done?' done':'')+(locked?' locked':'');
+    const label = known ? loc.title : '?';
+    return `<g class="${cls}" transform="translate(${loc.x},${loc.y})" onclick="${locked?'':`openLocation('${loc.id}')`}" onkeydown="if(!${locked}&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openLocation('${loc.id}');}" role="button" tabindex="${locked?-1:0}" aria-label="${known?loc.title:'Azonosítatlan helyszín, '+loc.num+'. próba'}">
+      <circle class="ring" r="19" fill="none" stroke="${color}" stroke-width="2"/>
+      <circle r="18" fill="${color}" stroke="#fff" stroke-width="2.5"/>
+      ${done?'<path d="M-7 0 L-2 5 L8 -6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>':MARKER_ICONS[loc.icon]}
+      <text x="14" y="-14" text-anchor="start" font-size="11" fill="#fff" stroke="${color}" stroke-width="3" paint-order="stroke">${loc.num}</text>
+      <text x="${loc.lx}" y="${loc.ly}" text-anchor="${loc.anchor}" font-size="15" fill="#241811" stroke="#dcc48f" stroke-width="4" paint-order="stroke">${label}</text>
+    </g>`;
+  }).join('');
+}
+function openPanel(eyebrow,title,bodyHtml,actionsHtml=''){
+  document.getElementById('panel-eyebrow').innerHTML = eyebrow;
+  document.getElementById('panel-title').textContent = title;
+  document.getElementById('panel-body').innerHTML = bodyHtml;
+  document.getElementById('panel-actions').innerHTML = actionsHtml;
+  const fb=document.getElementById('panel-feedback');
+  fb.className='feedback'; fb.textContent='';
+  document.getElementById('overlay').classList.add('active');
+}
+function closePanel(){document.getElementById('overlay').classList.remove('active');}
+function feedback(msg,ok){
+  const fb=document.getElementById('panel-feedback');
+  fb.className='feedback '+(ok?'ok':'bad');
+  fb.innerHTML=msg;
+}
+function scrollHtml(id){
+  const sc=SCROLLS[id];
+  return `<div class="kscroll"><h4>&#128220; Tudástekercs: ${sc.title}</h4><ul>${sc.items.map(i=>'<li>'+i+'</li>').join('')}</ul><div class="lexika"><b>Kötelező lexika (középszintű törzsanyag):</b> ${sc.lexika}</div><div class="src">${sc.src}</div></div>`;
+}
+function finishLocation(locId){
+  state.completed[locId]=true;
+  const loc=LOCS.find(l=>l.id===locId);
+  if(!state.glyphsWon.includes(loc.glyph)) state.glyphsWon.push(loc.glyph);
+  if(!state.scrolls.includes(locId)) state.scrolls.push(locId);
+  renderCartouche();
+  document.getElementById('panel-body').insertAdjacentHTML('beforeend', scrollHtml(locId));
+  feedback('&#10003; Megszerezted a(z) <b>'+GLYPHS[loc.glyph].name+'</b> jelet és egy tudástekercset!',true);
+  const allDone=Object.values(state.completed).every(v=>v);
+  document.getElementById('panel-actions').innerHTML =
+    allDone
+      ? `<button class="btn" onclick="startReview()">Záró ismétlő próba &rarr;</button>`
+      : `<button class="btn" onclick="closePanel(); renderMap();">Vissza a térképre &rarr;</button>`;
+}
+function renderFinalCartouche(){
+  document.getElementById('cartouche-final').innerHTML = NAME_ORDER.map((k,i)=>
+    `<div class="slot" style="animation-delay:${i*0.15}s"><svg viewBox="0 0 32 32" aria-hidden="true">${GLYPHS[k].svg}</svg></div>`).join('');
+}
+function renderShelf(){
+  document.getElementById('scrollShelf').innerHTML = state.scrolls.map(scrollHtml).join('');
+}
+function renderStats(){
+  const r=state.reviewScore;
+  let grade;
+  if(state.errors<=2) grade='Kiváló — vizsgaközeli biztonság.';
+  else if(state.errors<=5) grade='Jó — néhány adat még megerősítésre szorul.';
+  else if(state.errors<=9) grade='Közepes — olvasd újra a tekercseket, majd játszd újra!';
+  else grade='Gyakorlásra szorul — a tekercsek célzott átismétlése után érdemes újrakezdeni.';
+  document.getElementById('statBox').innerHTML=
+    `Hibás próbálkozások összesen: <b>${state.errors}</b><br>`+
+    (r!==null?`Záró ismétlő próba: <b>${r.good}/${r.total}</b><br>`:'')+
+    `Értékelés: <b>${grade}</b>`;
+}
+function showScrolls(){
+  if(state.scrolls.length===0){
+    openPanel('Tudástekercsek','Még üres a tarsolyod','<p>Oldd meg a helyszínek próbáit — minden megoldás után egy tudástekercset kapsz, benne az érettségi kötelező lexikájával.</p>');
+    return;
+  }
+  openPanel('Tudástekercsek','Amit eddig átismételtél', state.scrolls.map(scrollHtml).join(''));
+}
+function restartGame(){
+  Object.keys(state.completed).forEach(k=>state.completed[k]=false);
+  state.topoDone={}; state.glyphsWon=[]; state.scrolls=[];
+  state.errors=0; state.reviewScore=null;
+  goTo('cover');
+}
+
+/* ============ általános feleletválasztó (kevert opciókkal) ============ */
+let mcCurrent=null;
+function mcHtml(q){
+  /* q: {opts:[{t,ok,fb?}], wrongFb, okFb, onOk} */
+  mcCurrent=q;
+  const opts=shuffle(q.opts.map((o,i)=>({...o,orig:i})));
+  return '<div>'+opts.map((o,i)=>
+    `<button class="opt" data-ok="${o.ok?1:0}" data-fb="${(o.fb||'').replace(/"/g,'&quot;')}" onclick="mcAnswer(this)">${o.t}</button>`).join('')+'</div>';
+}
+function mcAnswer(btn){
+  const ok=btn.dataset.ok==='1';
+  document.querySelectorAll('#panel-body .opt').forEach(b=>b.classList.remove('correct','incorrect'));
+  if(ok){
+    btn.classList.add('correct');
+    document.querySelectorAll('#panel-body .opt').forEach(b=>b.disabled=true);
+    feedback(mcCurrent.okFb,true);
+    if(mcCurrent.onOk) setTimeout(mcCurrent.onOk, mcCurrent.delay||2000);
+  }else{
+    addErr();
+    btn.classList.add('incorrect');
+    feedback(btn.dataset.fb||mcCurrent.wrongFb,false);
+  }
+}
+
+/* ============ fogalompárosító ============ */
+const matchState={pairs:[],doneCount:0,sel:null,onComplete:null,prefix:''};
+function initMatch(pairs,onComplete,prefix){
+  matchState.pairs=pairs; matchState.doneCount=0; matchState.sel=null;
+  matchState.onComplete=onComplete; matchState.prefix=prefix;
+}
+function matchHtml(){
+  const terms=matchState.pairs.map((p,i)=>({i,t:p.term}));
+  const defs=shuffle(matchState.pairs.map((p,i)=>({i,d:p.def})));
+  return `<div class="match-grid">
+    <div class="match-col">${terms.map(o=>`<button class="match-item term" id="${matchState.prefix}-t-${o.i}" onclick="pickTerm(${o.i})">${o.t}</button>`).join('')}</div>
+    <div class="match-col">${defs.map(o=>`<button class="match-item" id="${matchState.prefix}-d-${o.i}" onclick="pickDef(${o.i})">${o.d}</button>`).join('')}</div>
+  </div>`;
+}
+function pickTerm(i){
+  const el=document.getElementById(matchState.prefix+'-t-'+i);
+  if(el.classList.contains('done'))return;
+  document.querySelectorAll('.match-item.term').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+  matchState.sel=i;
+}
+function pickDef(i){
+  const dEl=document.getElementById(matchState.prefix+'-d-'+i);
+  if(dEl.classList.contains('done'))return;
+  if(matchState.sel===null){feedback('Előbb válassz egy fogalmat a bal oldali oszlopból!',false);return;}
+  const tEl=document.getElementById(matchState.prefix+'-t-'+matchState.sel);
+  if(matchState.sel===i){
+    tEl.classList.remove('sel'); tEl.classList.add('done'); dEl.classList.add('done');
+    matchState.doneCount++; matchState.sel=null;
+    if(matchState.doneCount===matchState.pairs.length){
+      feedback('Minden fogalmat helyesen párosítottál!',true);
+      setTimeout(matchState.onComplete,900);
+    }else{
+      feedback('Helyes párosítás! ('+matchState.doneCount+'/'+matchState.pairs.length+')',true);
+    }
+  }else{
+    addErr();
+    dEl.classList.add('flash');
+    setTimeout(()=>dEl.classList.remove('flash'),600);
+    feedback('Ez a meghatározás nem ehhez a fogalomhoz tartozik — gondold át újra!',false);
+  }
+}
+
+/* ============ topográfiai kapu ============ */
+let pendingLoc=null;
+function openLocation(id){
+  const loc=LOCS.find(l=>l.id===id);
+  if(state.topoDone[id]){ startStation(id); return; }
+  pendingLoc=id;
+  const opts=shuffle(loc.topoOpts.map((t,i)=>({t,ok:i===0})));
+  openPanel('Topográfiai azonosítás &mdash; '+loc.num+'. próba','Melyik település ez a pont?',
+    `<p>Nézd meg a pont <b>földrajzi helyzetét</b> a térképen: folyók, tájegységek, égtájak. Melyik középkori helyszínt jelöli?</p>
+     <div>${opts.map(o=>`<button class="opt" data-ok="${o.ok?1:0}" onclick="topoAnswer(this)">${o.t}</button>`).join('')}</div>`);
+}
+function topoAnswer(btn){
+  const loc=LOCS.find(l=>l.id===pendingLoc);
+  const ok=btn.dataset.ok==='1';
+  document.querySelectorAll('#panel-body .opt').forEach(b=>b.classList.remove('correct','incorrect'));
+  if(ok){
+    btn.classList.add('correct');
+    document.querySelectorAll('#panel-body .opt').forEach(b=>b.disabled=true);
+    state.topoDone[pendingLoc]=true;
+    feedback('Helyes: <b>'+loc.title+'</b>. '+loc.topoHint,true);
+    document.getElementById('panel-actions').innerHTML=
+      `<button class="btn" onclick="startStation('${pendingLoc}')">Tovább a próbához &rarr;</button>`;
+  }else{
+    addErr();
+    btn.classList.add('incorrect');
+    feedback(loc.topoHint,false);
+  }
+}
+function startStation(id){
+  ({esztergom:openEsztergom,aranybulla:openAranybulla,muhi:openMuhi,visegrad:openVisegrad,buda:openBuda,mohacs:openMohacs})[id]();
+}
+
+/* =========================================================
+   1) ESZTERGOM — évszám-kerék (véletlen célesemény) + fogalompárosító
+   ========================================================= */
+const WHEEL_TARGETS=[
+  {key:'koronazas',ask:'a királlyá koronázást',reveal:'Istvánt az <b>1000/1001. év fordulóján</b> koronázták királlyá.'},
+  {key:'geza',ask:'Géza fejedelem halálát és István hatalomátvételét',reveal:'<b>997</b>: Géza halála — István fejedelemként veszi át a hatalmat.'},
+  {key:'istvanhal',ask:'István halálát',reveal:'<b>1038</b>: István halála, amelyet trónviszályok követtek.'},
+];
+let wheelTarget=null;
+function openEsztergom(){
+  wheelTarget=pick(WHEEL_TARGETS);
+  openPanel('01 &middot; Esztergom &middot; államalapítás &mdash; szint: felidézés','Az évek kereke',
+    `<p>Az esztergomi várhegyen egy krónikás fogad: <i>„Három évszámot vések eléd — mindhárom fordulópont István életútjában. Melyikhez kötjük <b>${wheelTarget.ask}</b>?”</i></p>
+     <div class="year-wheel"><svg viewBox="0 0 300 300" role="img" aria-label="Évszám-kerék: 997, 1000, 1038">
+       <circle cx="150" cy="150" r="145" fill="#fff" stroke="#cdb480" stroke-width="2"/>
+       ${yearSeg('geza',0,'997','#8fa8c9')}
+       ${yearSeg('koronazas',1,'1000','#9dc08a')}
+       ${yearSeg('istvanhal',2,'1038','#d98a6c')}
+       <circle cx="150" cy="150" r="42" fill="var(--parchment)" stroke="#cdb480" stroke-width="2"/>
+       <text x="150" y="155" text-anchor="middle" font-size="12" font-family="Cinzel,serif" fill="#601010" font-weight="700">Melyik év?</text>
+     </svg></div>`);
+}
+function yearSeg(id,i,name,color){
+  const a0=-90+i*120, a1=a0+120;
+  const r=145, cx=150, cy=150;
+  const x0=cx+r*Math.cos(a0*Math.PI/180), y0=cy+r*Math.sin(a0*Math.PI/180);
+  const x1=cx+r*Math.cos(a1*Math.PI/180), y1=cy+r*Math.sin(a1*Math.PI/180);
+  const mid=(a0+a1)/2, tr=95;
+  const tx=cx+tr*Math.cos(mid*Math.PI/180), ty=cy+tr*Math.sin(mid*Math.PI/180);
+  return `<g class="year-seg" id="seg-${id}" onclick="pickYear('${id}')">
+    <path class="seg-bg" d="M${cx} ${cy} L${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1} Z" fill="${color}" stroke="#fff" stroke-width="2"/>
+    <text x="${tx}" y="${ty+6}" text-anchor="middle" font-size="19" font-weight="700" fill="#2b1b12">${name}</text>
+  </g>`;
+}
+function pickYear(id){
+  document.querySelectorAll('.year-seg').forEach(s=>s.classList.remove('correct','incorrect'));
+  const seg=document.getElementById('seg-'+id);
+  if(id===wheelTarget.key){
+    seg.classList.add('correct');
+    feedback('Pontosan! '+wheelTarget.reveal+' A három fordulópont együtt: 997 — Géza halála; 1000/1001 — koronázás; 1038 — István halála.',true);
+    setTimeout(renderIstvanMatch,2200);
+  }else{
+    addErr();
+    seg.classList.add('incorrect');
+    feedback('Ehhez az évhez az életút egy <b>másik</b> fordulópontja kötődik. Gondold végig: István 997–1038 között állt az ország élén — a keresett esemény ennek melyik szakaszára eshetett?',false);
+  }
+}
+const ISTVAN_POOL=[
+  {term:'vármegye',def:'a királyi közigazgatás és birtokszervezet területi alapegysége'},
+  {term:'ispán',def:'a megye élén álló, a király által kinevezett tisztségviselő (bíráskodás, katonaság, jövedelmek beszedése)'},
+  {term:'tized',def:'az egyháznak fizetett kötelező szolgáltatás, a termés meghatározott hányada'},
+  {term:'esztergomi érsekség',def:'a Szent István által szervezett magyar egyháztartomány feje'},
+  {term:'Intelmek',def:'latin nyelvű királytükör, amelyet István Imre herceghez intézett'},
+  {term:'egyházmegye',def:'püspök által vezetett egyházkormányzati terület'},
+];
+function renderIstvanMatch(){
+  initMatch(sample(ISTVAN_POOL,4),()=>finishLocation('esztergom'),'ist');
+  openPanel('01 &middot; Esztergom &middot; államalapítás &mdash; szint: fogalomértés','Az államszervezés fogalmai',
+    `<p><i>„Jól van. De a koronázás önmagában még nem állam. Párosítsd össze az államszervezés fogalmait a meghatározásukkal!”</i></p>
+     ${matchHtml()}`);
+}
+
+/* =========================================================
+   2) SZÉKESFEHÉRVÁR — Aranybulla NPC-k, kérdésvariánsokkal
+   ========================================================= */
+const NPCS=[
+  {id:'servien',name:'Both, a serviens',tier:0,skin:'#c98a5b',hat:'none',
+   fact:'Az Aranybulla a serviensek adómentességét és személyes szabadságjogait rögzítette; külföldi hadjáratban csak a király költségén voltak kötelesek harcolni.',
+   variants:[
+    {q:'„Királyi szolgálattevő kisbirtokos vagyok, és sokat várok ettől az oklevéltől. Mit gondolsz, mi változik a magunkfajták helyzetében?”',
+     opts:[{t:'Mostantól minden hadjáratban, külföldön is, saját költségükön kötelesek részt venni',ok:false},
+           {t:'Adómentességet kapnak, és bírói ítélet nélkül nem foghatók el',ok:true},
+           {t:'Mentesülnek minden hadkötelezettség alól, cserébe magasabb adót fizetnek',ok:false}]},
+    {q:'„A múlt héten az ispán embere bírói ítélet nélkül vetette tömlöcbe a szomszédomat. Tehet-e ilyet az új oklevél kiadása után?”',
+     opts:[{t:'Nem — serviens bírói ítélet nélkül nem fogható el és nem büntethető',ok:true},
+           {t:'Igen, ha az ispán a király nevében jár el',ok:false},
+           {t:'Csak háború idején teheti meg',ok:false}]},
+   ]},
+  {id:'baro',name:'Detre ispán',tier:1,skin:'#b97a4e',hat:'band',
+   fact:'Az Aranybulla tiltotta egész vármegyék eladományozását, korlátozta az idegenek birtokhoz jutását és a világi tisztségek halmozását.',
+   variants:[
+    {q:'„A nagybirtokosok közé tartozom. A köznemesség régóta sérelmezi az udvar egyes gyakorlatait — melyik sérelmükre ad választ az oklevél?”',
+     opts:[{t:'A jobbágyköltözés korlátozására és a robot emelésére',ok:false},
+           {t:'Az idegenek birtokszerzésére és a tisztségek halmozására',ok:true},
+           {t:'A városi polgárok vámmentességére',ok:false}]},
+    {q:'„Az udvarban egyre több idegen lovag kap birtokot és több tisztséget egyszerre. Hogyan rendezi ezt az oklevél?”',
+     opts:[{t:'Korlátozza az idegenek birtokszerzését és a tisztséghalmozást',ok:true},
+           {t:'Megerősíti a gyakorlatot, mert az idegenek a király leghűbb hívei',ok:false},
+           {t:'Csak az egyházi tisztségekre mond ki korlátozást',ok:false}]},
+   ]},
+  {id:'egyhaz',name:'Fábián, a szerzetes',tier:2,skin:'#a86a42',hat:'bald',
+   fact:'Az Aranybulla a magyar rendiség fejlődésének kiindulópontja: a köznemesség jogilag körülhatárolt rendként lép fel; 1351-ben Nagy Lajos erősítette meg.',
+   variants:[
+    {q:'„Hosszú távon gondolkodom. Ha egy társadalmi csoport jogait írásban, a királlyal szemben is érvényesíthetően rögzítik — milyen államfejlődési folyamat indulhat el ebből?”',
+     opts:[{t:'A királyi hatalom korlátlanná válása',ok:false},
+           {t:'A rendiség kialakulása: a kiváltságolt csoportok szervezett érdekérvényesítése',ok:true},
+           {t:'A vármegyerendszer felszámolása',ok:false}]},
+    {q:'„Vajon száz-százötven év múlva hogyan tekintenek majd erre az oklevélre?”',
+     opts:[{t:'A nemesi jogok alapdokumentumaként, amelyet a későbbi királyok megerősítenek',ok:true},
+           {t:'Elfeledett, egyszeri engedményként, amelyre soha többé nem hivatkoznak',ok:false},
+           {t:'A jobbágyok szabadságleveleként',ok:false}]},
+   ]},
+  {id:'kiraly',name:'A királyi kancellária jegyzője',tier:3,skin:'#c98a5b',hat:'wig',
+   fact:'Ez az ellenállási záradék (ius resistendi): felhatalmazta a nemességet a törvénysértő uralkodóval szembeni fellépésre — csak 1687-ben törölték el.',
+   variants:[
+    {q:'„A záró cikkely a legkényesebb kérdést rendezi: mi történjék akkor, ha maga az uralkodó szegi meg az oklevélben vállaltakat?”',
+     opts:[{t:'Semmi — az oklevél csupán erkölcsi kötelezettséget ró a királyra',ok:false},
+           {t:'A nemesség hűtlenség vádja nélkül ellenszegülhet neki',ok:true},
+           {t:'A döntés a pápára száll, aki új királyt nevezhet ki',ok:false}]},
+    {q:'„Miért veszélyes — és a korona szemszögéből mégis szükséges — engedmény a záró cikkely?”',
+     opts:[{t:'Mert jogalapot ad az ellenállásra, de nélküle a nemesség aligha fogadta volna el az oklevelet',ok:true},
+           {t:'Mert a pápa követelte, és megtagadása kiközösítéssel járt volna',ok:false},
+           {t:'Mert a jobbágyokra is kiterjed, és felkelésekhez vezethet',ok:false}]},
+   ]},
+];
+const TIERS=['Serviensek (köznemesség)','Bárók, ispánok','Egyházi rend','Király és kancelláriája'];
+const city={done:new Set(),idx:0,chosen:[]};
+function npcFace(npc){
+  const hats={
+    none:'', band:`<rect x="14" y="12" width="26" height="5" rx="2" fill="#8b1a1a"/>`,
+    wig:`<path d="M12 30 Q10 8 27 8 Q44 8 42 30 L38 30 Q40 14 27 13 Q14 14 16 30Z" fill="#2b1b12"/>`,
+    bald:`<ellipse cx="27" cy="13" rx="13" ry="5" fill="${npc.skin}" opacity=".6"/>`
+  };
+  return `<svg class="npc-face" viewBox="0 0 54 54" aria-hidden="true">
+    <circle cx="27" cy="22" r="14" fill="${npc.skin}"/>
+    ${hats[npc.hat]||''}
+    <circle cx="22" cy="21" r="1.7" fill="#2b1b12"/><circle cx="32" cy="21" r="1.7" fill="#2b1b12"/>
+    <path d="M23 28 Q27 31 31 28" fill="none" stroke="#2b1b12" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M13 52 Q13 38 27 38 Q41 38 41 52Z" fill="#efe3c4" stroke="#cdb480"/>
+  </svg>`;
+}
+function socPyramid(){
+  const w=196, rows=TIERS.length;
+  let html=`<svg viewBox="0 0 ${w} 140" aria-hidden="true">`;
+  for(let i=0;i<rows;i++){
+    const tierIdx=rows-1-i;
+    const y=8+i*32;
+    const half=(i+1)*20+8;
+    const cx=w/2;
+    const lit = NPCS.some(n=>n.tier===tierIdx && city.done.has(n.id));
+    html+=`<g class="tier ${lit?'lit':''}" id="tier-${tierIdx}">
+      <polygon class="tier-bg" points="${cx-half+14},${y} ${cx+half-14},${y} ${cx+half},${y+28} ${cx-half},${y+28}" stroke-width="1.5"/>
+      <text x="${cx}" y="${y+18}" text-anchor="middle">${TIERS[tierIdx]}</text></g>`;
+  }
+  return html+'</svg>';
+}
+function openAranybulla(){
+  city.done=new Set(); city.idx=0;
+  city.chosen=NPCS.map(n=>pick(n.variants));
+  renderCity();
+}
+function renderCity(){
+  const npc=NPCS[city.idx];
+  const variant=city.chosen[city.idx];
+  const opts=shuffle(variant.opts);
+  openPanel('02 &middot; Székesfehérvár, 1222 &mdash; szint: megértés, összefüggések','Az Aranybulla érintettjei',
+    `<p style="margin-bottom:14px;">A koronázóváros törvénylátó napjain négy szereplő vár rád. Minden helyes válasz után a <b>rendi tagozódás</b> egy szintje gyullad fel.</p>
+     <div class="city-layout">
+       <div class="npc-card" id="npcCard">
+         <div class="npc-head">${npcFace(npc)}<div><div class="npc-name">${npc.name}</div><div style="font-size:.78rem;opacity:.7;">${city.done.size+1}/4 beszélgetés</div></div></div>
+         <p class="npc-q">${variant.q}</p>
+         <div>${opts.map(o=>`<button class="opt" data-ok="${o.ok?1:0}" onclick="answerCity(this)">${o.t}</button>`).join('')}</div>
+         <div class="hint-line" id="npcFact" style="display:none;"></div>
+       </div>
+       <div class="soc-pyr"><h4>A RENDI TAGOZÓDÁS</h4>${socPyramid()}</div>
+     </div>`);
+}
+function answerCity(btn){
+  const npc=NPCS[city.idx];
+  const ok=btn.dataset.ok==='1';
+  const btns=document.querySelectorAll('#npcCard .opt');
+  if(ok){
+    btn.classList.add('correct');
+    btns.forEach(b=>b.disabled=true);
+    city.done.add(npc.id);
+    document.getElementById('npcFact').style.display='block';
+    document.getElementById('npcFact').innerHTML='&#128161; '+npc.fact;
+    document.getElementById('tier-'+npc.tier)?.classList.add('lit');
+    if(city.done.size===NPCS.length){
+      feedback('Mind a négy szereplőt meghallgattad — így vált az Aranybulla a rendi fejlődés kiindulópontjává.',true);
+      setTimeout(()=>finishLocation('aranybulla'),1600);
+    }else{
+      feedback('Helyes! Figyeld meg, hova került '+npc.name.split(',')[0]+' a rendi tagozódásban.',true);
+      setTimeout(()=>{city.idx++; renderCity();},1900);
+    }
+  }else{
+    addErr();
+    btn.classList.add('incorrect');
+    feedback('Ezt '+npc.name.split(',')[0]+' fejcsóválva hallgatja — kinek az érdekét, milyen sérelmét rendezheti az oklevél? Gondold át újra!',false);
+  }
+}
+
+/* =========================================================
+   3) MUHI — tanulság-kvíz (variánsokkal) + várhely-döntés
+   ========================================================= */
+const MUHI_VARIANTS=[
+  {q:'„Batu kán serege itt semmisítette meg IV. Béla hadát. A király a kivonulás után gyökeresen új politikába kezdett. A vereség <b>melyik tanulságából</b> indult ki — és ebből <b>mi következett</b>?”',
+   opts:[
+    {t:'A könnyűlovas harcmodor kudarcából — ezért nyugati mintájú lovagi hadsereget szervezett, és felszámolta a keleti népelemek szállásait',ok:false},
+    {t:'A fa- és földvárak védtelenségéből — ezért kővárak építését ösztönözte, városi kiváltságokat adott, és visszahívta a kunokat',ok:true},
+    {t:'A királyi birtokállomány szétaprózódásából — ezért leállított minden birtokadományt, és visszavette az eladományozott várföldeket',ok:false}],
+   okFb:'Pontosan! IV. Béla a birtokadományokat kővár építéséhez kötötte, kiváltságolt városokat emelt (pl. Buda), és visszahívta a kunokat. Figyelemre méltó fordulat: a birtok-visszavételi politika épp a tatárjárás <b>előtti</b> irányvonala volt — a vereség után ennek ellenkezőjére tért át.',
+   wrongFb:'Gondold végig két lépésben: <b>1.</b> Mi volt 1241-ben a gyenge pont — a harcmodor, a várak vagy a birtokrend? <b>2.</b> Mit csinált Béla a tatárjárás <b>előtt</b>, és min változtatott <b>utána</b>?'},
+  {q:'„Miért nevezi a történetírás IV. Bélát »második honalapítónak«? Mit tett a mongolok kivonulása után?”',
+   opts:[
+    {t:'Fegyverrel visszafoglalta az országot a mongol helyőrségektől',ok:false},
+    {t:'Újjászervezte az országot: kővárépítést ösztönzött, kiváltságolt városokat alapított, telepeseket és kunokat hívott be',ok:true},
+    {t:'Áttette a székhelyét külföldre, és onnan szervezte az ellenállást évtizedeken át',ok:false}],
+   okFb:'Így van: a jelző az újjáépítésnek szól — kővárak, városi kiváltságok (pl. Buda), betelepítések. A mongolok nem hagytak hátra helyőrségeket: 1242-ben kivonultak.',
+   wrongFb:'A jelző nem katonai visszafoglalásra utal. Gondold végig: mi maradt az országból 1242-re, és mire volt szükség ahhoz, hogy egy újabb támadás ne járhasson ugyanígy?'},
+];
+function openMuhi(){
+  const v=pick(MUHI_VARIANTS);
+  openPanel('03 &middot; Muhi, 1241. április 11. &mdash; szint: ok&ndash;okozati elemzés','A vereség tanulságai',
+    `<p>A Sajó menti csatatéren egy túlélő szerzetes fogad: <i>${v.q}</i></p>`+
+    mcHtml({opts:v.opts,okFb:v.okFb,wrongFb:v.wrongFb,onOk:renderCastleDecision,delay:2400}));
+}
+/* várhely-döntés: történelmi döntéshelyzet */
+function renderCastleDecision(){
+  openPanel('03 &middot; Muhi &middot; az újjáépítés &mdash; szint: alkalmazás','Hová építenéd a várat?',
+    `<p><i>„Most gondolkodj úgy, mint a király várépítő mestere! Három helyszín közül választhatsz — döntsd el a terep alapján, hová érdemes kővárat emelni.”</i></p>
+     <div class="decision-scene"><svg viewBox="0 0 500 300" role="img" aria-label="Terepszelvény három lehetséges várhellyel">
+       <rect width="500" height="300" fill="#d9c48c" rx="10"/>
+       <!-- folyó átkelővel -->
+       <path d="M0 200 C 120 190 220 210 320 200 C 400 192 460 198 500 195" fill="none" stroke="#2e5f80" stroke-width="26"/>
+       <g fill="#b3924f"><circle cx="245" cy="196" r="5"/><circle cx="258" cy="202" r="5"/><circle cx="271" cy="197" r="5"/></g>
+       <text x="258" y="232" text-anchor="middle" font-size="11" fill="#1c3b52" font-family="Cinzel,serif">átkelőhely (gázló)</text>
+       <!-- sziklás magaslat az átkelő fölött -->
+       <path d="M200 150 L240 80 L285 105 L315 150 Z" fill="#8f6f42" stroke="#6b4a22" stroke-width="2"/>
+       <text x="258" y="140" text-anchor="middle" font-size="10" fill="#3d2a14" font-family="Cinzel,serif">sziklás magaslat</text>
+       <!-- nyílt síkság -->
+       <g stroke="#a3813f" stroke-width="1.5" opacity=".6" fill="none">
+         <path d="M30 120 q25 -8 50 0"/><path d="M50 150 q25 -8 50 0"/><path d="M30 90 q25 -8 50 0"/>
+       </g>
+       <text x="80" y="70" text-anchor="middle" font-size="10" fill="#3d2a14" font-family="Cinzel,serif">nyílt síkság</text>
+       <!-- ártéri mocsár -->
+       <g stroke="#5a6654" stroke-width="2" fill="none">
+         <path d="M380 235 q10 -8 20 0 t20 0"/><path d="M390 252 q10 -8 20 0 t20 0"/><path d="M375 268 q10 -8 20 0 t20 0"/>
+       </g>
+       <text x="412" y="290" text-anchor="middle" font-size="10" fill="#3d2a14" font-family="Cinzel,serif">ártéri mocsár</text>
+       <!-- választható pontok -->
+       <g class="spot" id="spot-a" onclick="pickSpot('a')"><circle cx="80" cy="110" r="16" fill="#8b1a1a" stroke="#fff" stroke-width="2.5"/><text x="80" y="116" text-anchor="middle" font-size="14" fill="#fff" font-family="Cinzel,serif" font-weight="700">A</text></g>
+       <g class="spot" id="spot-b" onclick="pickSpot('b')"><circle cx="258" cy="105" r="16" fill="#8b1a1a" stroke="#fff" stroke-width="2.5"/><text x="258" y="111" text-anchor="middle" font-size="14" fill="#fff" font-family="Cinzel,serif" font-weight="700">B</text></g>
+       <g class="spot" id="spot-c" onclick="pickSpot('c')"><circle cx="412" cy="250" r="16" fill="#8b1a1a" stroke="#fff" stroke-width="2.5"/><text x="412" y="256" text-anchor="middle" font-size="14" fill="#fff" font-family="Cinzel,serif" font-weight="700">C</text></g>
+     </svg></div>`);
+}
+function pickSpot(s){
+  const el=document.getElementById('spot-'+s);
+  document.querySelectorAll('.spot').forEach(e=>e.classList.remove('picked-ok','picked-bad'));
+  if(s==='b'){
+    el.classList.add('picked-ok');
+    feedback('Jó döntés: a <b>sziklás magaslat az átkelő fölött</b> egyszerre védhető (meredek oldalak, szilárd alap) és stratégiai (ellenőrzi a folyón átkelő forgalmat). A 13. század második felének magyar várépítése pontosan ilyen magaslati várakat emelt.',true);
+    setTimeout(renderCastleWhy,2400);
+  }else{
+    addErr();
+    el.classList.add('picked-bad');
+    feedback(s==='a'
+      ?'A nyílt síkság könnyen megközelíthető — éppen ezt használta ki a mongol lovasság. Keress olyan pontot, amely természetes védelmet ad, ÉS ellenőriz valamit, ami az ellenségnek is kell!'
+      :'Az ártér vizenyős talaja nem hordja el a kőfalat, árvízkor pedig a vár elszigetelődik az utánpótlástól. Keress szilárd, uralkodó pontot!',false);
+  }
+}
+function renderCastleWhy(){
+  openPanel('03 &middot; Muhi &middot; az újjáépítés &mdash; szint: alkalmazás','Miért működött a kővár?',
+    `<p><i>„Utolsó kérdésem: miért volt hatékony a kővár éppen a mongol harcmodorral szemben?”</i></p>`+
+    mcHtml({
+      opts:[
+        {t:'A mongol haderő gyors mozgású könnyűlovasságra épült; az elhúzódó ostrom felőrölte volna legfőbb előnyét',ok:true},
+        {t:'A kővárak ágyúi biztonságos távolságban tartották a támadókat',ok:false,fb:'Vigyázz az anakronizmussal: a tüzérség széles körű európai elterjedése jóval későbbi fejlemény. Mi volt a mongol haderő legfőbb előnye — és mi veszi el ezt az előnyt?'},
+        {t:'A mongolok nem rendelkeztek semmilyen ostromtechnikával',ok:false,fb:'Ez így túlzás: a mongolok kínai mérnököktől átvett ostromgépeket is használtak. A kérdés az arányokon múlik — mibe került nekik egy-egy elhúzódó ostrom?'},
+      ],
+      okFb:'Pontosan! A mongol hadviselés a gyorsaságra és a mezei csatára épült; egy jól épített kővár hosszú ostromra kényszerítette, ami időt, embert és utánpótlást emésztett. 1285-ben, a második mongol betöréskor az új várrendszer már bizonyított.',
+      wrongFb:'Gondold végig: mi volt a mongol haderő legfőbb előnye, és milyen harci helyzet veszi el ezt az előnyt?',
+      onOk:()=>finishLocation('muhi'),delay:2400}));
+}
+
+/* =========================================================
+   4) VISEGRÁD — Anjou gazdaságpolitika (bővített fogalombank)
+   ========================================================= */
+const ANJOU_POOL=[
+  {term:'regálé',def:'királyi felségjogon szedett jövedelem (pénzverés, vám, bányabér, só)'},
+  {term:'aranyforint',def:'1325-től veretett, firenzei mintájú értékálló aranypénz'},
+  {term:'kapuadó',def:'jobbágytelkenként (kapunként) szedett állandó állami adó, a kamara haszna kiesésének pótlására (1336)'},
+  {term:'harmincad',def:'a külkereskedelmi forgalom után szedett királyi vám'},
+  {term:'urbura',def:'a kitermelt nemesérc után a királyt megillető bányabér'},
+  {term:'kilenced',def:'a jobbágy terméséből a földesúrnak járó, 1351-ben egységesen előírt szolgáltatás'},
+  {term:'kamara haszna',def:'a kötelező évi pénzbeváltásból származó korábbi királyi jövedelem, amelyet az értékálló pénz szükségtelenné tett'},
+  {term:'ősiség',def:'a nemesi birtok elidegeníthetetlensége; a család kihalásakor a birtok a koronára száll (1351)'},
+];
+function openVisegrad(){
+  initMatch(sample(ANJOU_POOL,6),()=>finishLocation('visegrad'),'anj');
+  openPanel('04 &middot; Visegrád &middot; Anjou-kor &mdash; szint: fogalomhasználat','A királyi kincstár fogalmai',
+    `<p>A visegrádi palota kancelláriájában az udvari számvevő fogad: <i>„1301-ben kihalt az Árpád-ház, az országot tartományurak — köztük Csák Máté — szabdalták fel. Károly Róbert nemcsak legyőzte őket: újjáépítette a kincstárat. Párosítsd össze a gazdaságpolitika fogalmait a meghatározásukkal!”</i></p>
+     ${matchHtml()}
+     <p style="font-size:.84rem;opacity:.75;margin-top:4px;">Emlékeztető: itt, Visegrádon zajlott 1335-ben a cseh–lengyel–magyar királytalálkozó is.</p>`);
+}
+
+/* =========================================================
+   5) BUDA — kronológiai rendezés
+   ========================================================= */
+const PHASES=[
+  {ico:'&#9876;',txt:'Nikápolyi csata — Luxemburgi Zsigmond keresztes hadjáratának veresége az oszmánoktól'},
+  {ico:'&#128737;',txt:'Nándorfehérvári diadal — Hunyadi János megvédi a déli végvárrendszer kulcsát'},
+  {ico:'&#128081;',txt:'Hunyadi Mátyás királlyá választása'},
+  {ico:'&#128176;',txt:'A fekete sereg fenntartása a megreformált jövedelmekből (füstpénz, rendkívüli hadiadó)'},
+  {ico:'&#127984;',txt:'Bécs elfoglalása — Mátyás nyugati hódításainak csúcspontja'},
+];
+let phaseOrder=[];
+function openBuda(){
+  do{ phaseOrder=shuffle(PHASES.map((_,i)=>i)); }while(phaseOrder.every((v,i)=>v===i));
+  renderPyramid(countCorrectPrefix());
+}
+function pyrVisual(builtLayers){
+  let html='<svg viewBox="0 0 180 150" aria-hidden="true">';
+  const cx=90, baseY=138, lh=19;
+  for(let i=0;i<PHASES.length;i++){
+    const y=baseY-(i+1)*lh;
+    const halfBottom=(PHASES.length-i)*13, halfTop=(PHASES.length-1-i)*13;
+    html+=`<polygon class="pyr-layer ${i<builtLayers?'built':''}"
+      points="${cx-halfBottom},${y+lh} ${cx+halfBottom},${y+lh} ${cx+halfTop},${y} ${cx-halfTop},${y}"
+      fill="${i===PHASES.length-1?'#c9a227':'#c9a66b'}" stroke="#601010" stroke-width="1.5"/>`;
+  }
+  html+=`<text x="90" y="148" text-anchor="middle" font-size="9" font-family="Space Mono,monospace" fill="#5a4a30">a helyes sorrend nyomán épül</text></svg>`;
+  return html;
+}
+function renderPyramid(built){
+  const list=phaseOrder.map((pi,i)=>`
+    <div class="phase">
+      <div class="idx">0${i+1}</div><div class="ico">${PHASES[pi].ico}</div>
+      <div class="txt">${PHASES[pi].txt}</div>
+      <div class="phase-btns">
+        <button class="mini-btn" onclick="movePhase(${i},-1)" aria-label="Mozgatás felfelé">&#8593;</button>
+        <button class="mini-btn" onclick="movePhase(${i},1)" aria-label="Mozgatás lefelé">&#8595;</button>
+      </div>
+    </div>`).join('');
+  openPanel('05 &middot; Buda &middot; Zsigmondtól Mátyásig &mdash; szint: kronológiai elemzés','Rendezd időrendbe',
+    `<p>Az udvari írnok összekevert emlékeztetőt ad át. A nyilakkal állítsd időrendbe az eseményeket — az évszámokat neked kell hozzájuk tudnod! <b>Minden helyes pozíció után épül egy szint</b> a budai palotából.</p>
+     <div class="pyr-layout">
+       <div class="phase-list">${list}</div>
+       <div class="pyr-visual" id="pyrVisual">${pyrVisual(built)}</div>
+     </div>`,
+    `<button class="btn" onclick="checkPyramid()">Sorrend ellenőrzése</button>`);
+}
+function movePhase(i,dir){
+  const j=i+dir; if(j<0||j>=phaseOrder.length)return;
+  [phaseOrder[i],phaseOrder[j]]=[phaseOrder[j],phaseOrder[i]];
+  renderPyramid(countCorrectPrefix());
+}
+function countCorrectPrefix(){
+  let n=0; while(n<phaseOrder.length && phaseOrder[n]===n) n++; return n;
+}
+function checkPyramid(){
+  const correct=countCorrectPrefix();
+  document.getElementById('pyrVisual').innerHTML=pyrVisual(correct);
+  if(correct===phaseOrder.length){
+    feedback('Tökéletes! A helyes sor: Nikápoly (<b>1396</b>) &rarr; Nándorfehérvár (<b>1456</b>) &rarr; Mátyás megválasztása (<b>1458</b>) &rarr; fekete sereg és adóreform &rarr; Bécs elfoglalása (<b>1485</b>).',true);
+    setTimeout(()=>finishLocation('buda'),1400);
+  }else{
+    addErr();
+    feedback('Az első <b>'+correct+'</b> esemény már a helyén van. Módszertani fogás: előbb kösd mindegyik eseményt egy-egy személyhez (Zsigmond, Hunyadi János, Mátyás), majd a személyeket állítsd időrendbe — az események sorrendje ebből következik.',false);
+  }
+}
+
+/* =========================================================
+   6) MOHÁCS — okok kvíz (variánsokkal) + valódi forrásokra épülő elemzés
+   ========================================================= */
+const MOHACS_VARIANTS=[
+  {q:'„Mátyás halála (1490) után a Jagelló-királyok kora következett. Hogyan változott az ország védekezőképessége 1526-ra — és miért éppen így?”',
+   opts:[
+    {t:'A zsoldossereg és a kincstári jövedelmek fennmaradtak; a bajt egyedül a szövetségesek kimaradása okozta',ok:false},
+    {t:'A zsoldossereg felbomlott, a királyi jövedelmek szétfolytak, a déli végvárrendszer karbantartás nélkül leromlott',ok:true},
+    {t:'A védelem súlypontja a Habsburgokkal közös hadseregre helyeződött át, amely azonban túl lassan mozgósult',ok:false}],
+   okFb:'Így van: a fekete sereg Mátyás halála után felbomlott, a jövedelmeket a bárói csoportok vetélkedése emésztette fel, a végvárak zsold nélkül maradtak — és <b>1521-ben elesett Nándorfehérvár</b>, a déli védvonal kulcsa.',
+   wrongFb:'Gondold végig oksági láncként: mely intézmények kötődtek <b>személyesen Mátyáshoz és az ő jövedelmeihez</b> — és mi történhetett velük egy gyenge központi hatalom alatt?'},
+  {q:'„1521-ben elesett Nándorfehérvár. Miért volt ez stratégiai fordulópont az 1526-os eseményekhez vezető úton?”',
+   opts:[
+    {t:'A déli végvárrendszer kulcsa volt — eleste után nyitva állt az út az ország belseje felé',ok:true},
+    {t:'Jelképes veszteség volt, katonai jelentőség nélkül',ok:false},
+    {t:'Az oszmánok ezzel egy időben Budát is elfoglalták',ok:false,fb:'Vigyázz a kronológiával: Buda csak jóval Mohács után, 1541-ben került oszmán kézre. Mi volt Nándorfehérvár szerepe a védelmi rendszerben?'}],
+   okFb:'Pontosan: az a vár, amelyet 1456-ban Hunyadi János még megvédett, 1521-ben elesett — a Zsigmond kora óta épített déli védvonal ezzel megnyílt, és öt évvel később Szulejmán serege már Mohácsnál állt.',
+   wrongFb:'Idézd fel Nándorfehérvár szerepét: mit védett ez a vár 1456-ban, és mi következik abból, ha egy védvonal kulcspontja elesik?'},
+];
+/* Valódi forrásokra épülő elemzés — a szemelvények tartalmi kivonatok (parafrázisok) */
+const SOURCES=[
+  {id:1,title:'Rogerius mester: Siralmas ének (Carmen miserabile, 1243 körül)',
+   note:'Tartalmi kivonat. Rogerius nagyváradi főesperes maga is átélte a tatárjárást, fogságba esett, majd megszökött.',
+   text:'A szerző leírja, hogyan pusztították el a mongolok a városokat és falvakat, hogyan csalták elő rejtekükből a lakosságot hamis ígéretekkel, és milyen éhínség sújtotta a túlélőket a kivonulás után.',
+   questions:[
+    {q:'Milyen viszonyban áll a szerző az elbeszélt eseményekkel?',
+     opts:[
+      {t:'Kortárs szemtanú, aki maga is átélte és elszenvedte az eseményeket',ok:true},
+      {t:'Évszázadokkal későbbi krónikás, aki szájhagyományból dolgozott',ok:false},
+      {t:'Külföldi tudósító, aki sosem járt az országban',ok:false}],
+     okFb:'Így van — ettől elsőrangú, elsődleges forrás. De a szemtanúság nem jelent automatikus pontosságot: a következő kérdés épp erről szól.',
+     wrongFb:'Nézd meg a keletkezés évét (1243 körül) és a szerző életútját a forrásleírásban — mikor és honnan látta, amit leír?'},
+    {q:'Mit kell mérlegelnie a történésznek a forrásértékénél?',
+     opts:[
+      {t:'Szemtanú, de maga is szenvedő fél — panaszirata a pusztítás mértékét felnagyíthatja, ezért más forrásokkal együtt értékelendő',ok:true},
+      {t:'Mivel szemtanú, minden állítása ellenőrzés nélkül elfogadható',ok:false},
+      {t:'Mivel egyházi személy, világi eseményekről nem hiteles',ok:false}],
+     okFb:'Pontosan — a jó forráskritika nem elveti és nem is vakon hiszi a forrást, hanem a keletkezés körülményei felől mérlegeli. A műfaj (siralmas ének, panaszirat) maga is figyelmeztet a hangsúlyokra.',
+     wrongFb:'Se a vak bizalom, se a teljes elvetés nem forráskritika. Milyen helyzetből, milyen műfajban írt a szerző — és ez hogyan színezheti a leírását?'}]},
+  {id:2,title:'Anonymus: Gesta Hungarorum (1200 körül)',
+   note:'Tartalmi kivonat. A szerző, „P. mester", III. Béla egykori jegyzője; műve a honfoglalás (895) történetét beszéli el.',
+   text:'A gesta elbeszéli, hogyan foglalta el Árpád vezér a Kárpát-medencét, és sorra bemutatja az előkelő nemzetségek őseinek hőstetteit és birtokszerzéseit.',
+   questions:[
+    {q:'Mennyi idő telt el az elbeszélt események és a mű megírása között?',
+     opts:[
+      {t:'Körülbelül háromszáz év',ok:true},
+      {t:'A szerző a honfoglalás kortársa volt',ok:false},
+      {t:'Körülbelül harminc év',ok:false}],
+     okFb:'Így van: a honfoglalás 895 körül zajlott, a gesta 1200 körül készült — a szerző semmilyen közvetlen ismerettel nem rendelkezhetett az eseményekről.',
+     wrongFb:'Vesd össze a két évszámot: mikor volt a honfoglalás, és mikor élt III. Béla jegyzője?'},
+    {q:'Mire jó forrás elsősorban ez a mű?',
+     opts:[
+      {t:'A saját kora — a 13. század eleje — nemesi szemléletére és a nemzetségek birtokjogi igényeire',ok:true},
+      {t:'A honfoglalás pontos eseménytörténetére',ok:false},
+      {t:'Semmire, mert nem kortárs forrás',ok:false}],
+     okFb:'Ez a forráskritika egyik legfontosabb belátása: egy forrás elsősorban a <b>saját keletkezési korára</b> nézve hiteles. Anonymus a nemzetségek dicső őseit részben azért szerepelteti, hogy koruk birtokjogait igazolja.',
+     wrongFb:'Vigyázz a két véglettel: a mű nem eseménytörténeti hitelű a honfoglalásra — de ettől még nem értéktelen. Melyik korról árul el sokat az, ahogyan a szerző a múltat elbeszéli?'}]},
+  {id:3,title:'Antonio Bonfini: A magyar történelem tizedei (1490-es évek)',
+   note:'Tartalmi kivonat. Az itáliai humanista Mátyás udvari történetírója volt, művét a király megbízásából kezdte írni.',
+   text:'A mű Mátyást bölcs, igazságos, a tudományokat pártoló uralkodóként ábrázolja, akinek tettei az antik hősökéhez mérhetők, udvara pedig Itália legfényesebb udvaraival vetekszik.',
+   questions:[
+    {q:'Milyen helyzetből írt a szerző?',
+     opts:[
+      {t:'A király megbízásából, az udvar támogatásával — megélhetése a megrendelőtől függött',ok:true},
+      {t:'Független külföldi megfigyelőként, aki sosem járt az udvarban',ok:false},
+      {t:'Mátyás politikai ellenfeleinek udvarából',ok:false}],
+     okFb:'Így van — a humanista udvari történetírás műfaja eleve a megrendelő dicsőítését (is) szolgálta.',
+     wrongFb:'Nézd meg a forrásleírást: kinek a megbízásából, kinek az udvarában készült a mű — és mit jelent ez a szerző mozgásterére nézve?'},
+    {q:'Hogyan kezelje a történész ezt a forrást?',
+     opts:[
+      {t:'Valós adatokat is őriz (események, épületek, udvari élet), de a Mátyás-kép idealizált — más forrásokkal kell ütköztetni',ok:true},
+      {t:'Teljes egészében el kell vetni, mert megrendelésre készült',ok:false},
+      {t:'Szó szerint el kell fogadni, mert a szerző szemtanú volt',ok:false}],
+     okFb:'Pontosan: az elfogultság nem érvényteleníti a forrást, hanem kijelöli a használat módját — a tényadatok és az értékelő elemek szétválasztását, más forrásokkal való ütköztetést. Ez az érettségi forráselemzés kulcsművelete.',
+     wrongFb:'Se a teljes elvetés, se a szó szerinti elfogadás nem elemzés. Mit lehet mégis megtudni egy elfogult, de jól értesült szerzőtől — és mit kell másból ellenőrizni?'}]},
+];
+const srcState={srcIdx:0,qIdx:0};
+function openMohacs(){
+  const v=pick(MOHACS_VARIANTS);
+  openPanel('06 &middot; Mohács előestéje &mdash; szint: ok&ndash;okozati elemzés','Miért gyengült meg az ország?',
+    `<p>A krónikás utolsó próbája kettős. Először a tényeket kérdezi: <i>${v.q}</i></p>`+
+    mcHtml({opts:v.opts,okFb:v.okFb,wrongFb:v.wrongFb,onOk:()=>{srcState.srcIdx=0;srcState.qIdx=0;renderSourceStep();},delay:2400}));
+}
+function renderSourceStep(){
+  const s=SOURCES[srcState.srcIdx];
+  const q=s.questions[srcState.qIdx];
+  const isLast = srcState.srcIdx===SOURCES.length-1 && srcState.qIdx===s.questions.length-1;
+  openPanel('06 &middot; Mohács előestéje &mdash; szint: forráselemzés',
+    `Forráselemzés ${srcState.srcIdx+1}/3 — ${srcState.qIdx+1}. kérdés`,
+    `<p style="margin-bottom:6px;">A történész első kérdése mindig: <b>ki írta, mikor, és milyen szándékkal?</b> Elemezd a forrást!</p>
+     <div class="source-card">
+       <h4>${s.title}</h4>
+       <p class="src-note">${s.note}</p>
+       <p class="src-text">${s.text}</p>
+       <p class="src-q">${q.q}</p>
+     </div>`+
+    mcHtml({opts:q.opts,okFb:q.okFb,wrongFb:q.wrongFb,delay:2600,onOk:()=>{
+      if(srcState.qIdx < s.questions.length-1){ srcState.qIdx++; renderSourceStep(); }
+      else if(srcState.srcIdx < SOURCES.length-1){ srcState.srcIdx++; srcState.qIdx=0; renderSourceStep(); }
+      else finishLocation('mohacs');
+    }}));
+}
+
+/* =========================================================
+   ZÁRÓ ISMÉTLŐ PRÓBA — vegyes kérdésbank (lefedettségi rések pótlásával)
+   ========================================================= */
+const REVIEW_POOL=[
+  {q:'Melyik uralkodópáros szilárdította meg a belső rendet a 11. század végén — a 12. század elején szigorú, tulajdont védő törvényekkel?',
+   opts:[{t:'I. (Szent) László és Könyves Kálmán',ok:true},{t:'Géza fejedelem és I. István',ok:false},{t:'Károly Róbert és Nagy Lajos',ok:false}],
+   okFb:'László szigorú tulajdonvédő törvényei után Kálmán már enyhíthetett a büntetéseken — az ő nevéhez fűződik a strigákra (boszorkányokra) vonatkozó híres törvényhely is.'},
+  {q:'Mi a különbség a kilenced és a tized között?',
+   opts:[{t:'A kilenced a földesúrnak, a tized az egyháznak járó szolgáltatás',ok:true},{t:'Mindkettő a királynak járt, csak más néven',ok:false},{t:'A kilenced az egyháznak, a tized a földesúrnak járt',ok:false}],
+   okFb:'A jobbágy terhei így együtt: kilenced a földesúrnak (1351-től egységesen), tized az egyháznak, és állami adó (kapuadó, később füstpénz) a királynak.'},
+  {q:'Ki volt a hospes a középkori Magyarországon?',
+   opts:[{t:'Kiváltságokkal rendelkező, betelepült (gyakran idegen) telepes',ok:true},{t:'A céh választott elöljárója',ok:false},{t:'A vármegye királyi bírája',ok:false}],
+   okFb:'A hospesek — német, vallon, itáliai és más telepesek — a városfejlődés motorjai voltak; kiváltságaik (önkormányzat, bíráskodás) a városi jog alapjává váltak.'},
+  {q:'Mi volt a céh fő funkciója a középkori városban?',
+   opts:[{t:'Az azonos mesterséget űzők érdekvédelme, a minőség és a piac szabályozása',ok:true},{t:'A jobbágyok szabad költözésének biztosítása',ok:false},{t:'A királyi bányajövedelmek kezelése',ok:false}],
+   okFb:'A céh szabályozta a képzést (inas–legény–mester), a minőséget és a versenyt — egyszerre volt érdekvédelmi és piackorlátozó intézmény.'},
+  {q:'Melyik évben zajlott a visegrádi királytalálkozó?',
+   opts:[{t:'1335',ok:true},{t:'1351',ok:false},{t:'1301',ok:false}],
+   okFb:'1335: Károly Róbert, Luxemburgi János cseh és III. Kázmér lengyel király — cél a Bécset elkerülő kereskedelmi utak megnyitása. (1301: az Árpád-ház kihalása; 1351: Nagy Lajos törvényei.)'},
+  {q:'Az 1351. évi törvények melyik rendelkezése mondta ki a nemesi birtok elidegeníthetetlenségét?',
+   opts:[{t:'Az ősiség',ok:true},{t:'A kilenced',ok:false},{t:'A harmincad',ok:false}],
+   okFb:'Az ősiség (aviticitas) szerint a nemesi birtok a családon belül öröklődik, kihalás esetén a koronára száll — 1848-ig a nemesi birtokjog alapja maradt.'},
+  {q:'Melyik vár volt a déli végvárrendszer kulcsa, amelyet 1456-ban Hunyadi János még megvédett, de 1521-ben elesett?',
+   opts:[{t:'Nándorfehérvár',ok:true},{t:'Buda',ok:false},{t:'Szigetvár',ok:false}],
+   okFb:'Nándorfehérvár (ma Belgrád) a Duna–Száva találkozásánál őrizte az ország déli kapuját — eleste (1521) nyitotta meg az utat Mohács felé.'},
+  {q:'Mit jelentett a humanizmus a Mátyás-kori udvarban?',
+   opts:[{t:'Az antik műveltség újrafelfedezésére épülő világi szellemi mozgalmat',ok:true},{t:'Kizárólag vallási megújulási mozgalmat',ok:false},{t:'A jobbágyfelszabadítás korai programját',ok:false}],
+   okFb:'A humanizmus az antik szerzők tanulmányozására és az emberi képességek kibontakoztatására épült — Mátyás udvarában a Bibliotheca Corviniana volt a központja.'},
+  {q:'Melyik esemény kötődik 1301-hez?',
+   opts:[{t:'Az Árpád-ház férfiágának kihalása',ok:true},{t:'Az Aranybulla kiadása',ok:false},{t:'A nikápolyi csata',ok:false}],
+   okFb:'III. András halálával (1301) kihalt az Árpád-ház férfiága; az interregnum és a tartományúri hatalom kora következett. (Aranybulla: 1222; Nikápoly: 1396.)'},
+  {q:'Ki és mikor foglalta rendszerbe a Szent Korona-eszmét a Hármaskönyvben?',
+   opts:[{t:'Werbőczy István, 1514',ok:true},{t:'Anonymus, 1200 körül',ok:false},{t:'Hunyadi Mátyás, 1485',ok:false}],
+   okFb:'Werbőczy Tripartituma (1514) a nemesi jog összefoglalása; a Szent Korona-tan szerint a hatalom a koronát illeti, amelynek a nemesi rendek is tagjai.'},
+];
+const review={qs:[],idx:0,good:0,results:[]};
+function startReview(){
+  review.qs=sample(REVIEW_POOL,8);
+  review.idx=0; review.good=0; review.results=[];
+  renderReviewQ();
+}
+function reviewDots(){
+  return `<div class="review-progress">`+review.qs.map((_,i)=>{
+    let c='rp-dot';
+    if(i<review.results.length) c+=review.results[i]?' good':' bad';
+    if(i===review.idx) c+=' cur';
+    return `<div class="${c}"></div>`;
+  }).join('')+`</div>`;
+}
+function renderReviewQ(){
+  const q=review.qs[review.idx];
+  const opts=shuffle(q.opts);
+  openPanel('Záró ismétlő próba &mdash; szint: szintézis',`${review.idx+1}. kérdés / ${review.qs.length}`,
+    reviewDots()+
+    `<p><b>${q.q}</b></p>
+     <div>${opts.map(o=>`<button class="opt" data-ok="${o.ok?1:0}" onclick="reviewAnswer(this)">${o.t}</button>`).join('')}</div>
+     <p style="font-size:.82rem;opacity:.7;">A záró próbán minden kérdésre egy válaszod van — itt már a felidézés biztonságát mérjük.</p>`);
+  window._reviewQ=q;
+}
+function reviewAnswer(btn){
+  const q=window._reviewQ;
+  const ok=btn.dataset.ok==='1';
+  document.querySelectorAll('#panel-body .opt').forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.ok==='1') b.classList.add('correct');
+  });
+  if(!ok){ btn.classList.add('incorrect'); addErr(); }
+  else review.good++;
+  review.results.push(ok);
+  feedback((ok?'Helyes! ':'A helyes választ zölddel jelöltük. ')+q.okFb, ok);
+  document.getElementById('panel-actions').innerHTML =
+    review.idx < review.qs.length-1
+      ? `<button class="btn" onclick="review.idx++; renderReviewQ();">Következő kérdés &rarr;</button>`
+      : `<button class="btn" onclick="state.reviewScore={good:review.good,total:review.qs.length}; closePanel(); goTo('ending');">Eredmény és zárás &rarr;</button>`;
+}
+
+renderCartouche();
+</script>
+</body>
+</html>

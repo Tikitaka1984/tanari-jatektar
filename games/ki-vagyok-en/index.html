@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ki vagyok én? — érettségi portréjáték (v2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Literata:opsz,wght@18..144,400;18..144,500;18..144,600&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#160d0a; --dusk:#341412; --horizon:#5c231d;
+    --parchment:#f2e7c9; --ink:#2b1b12;
+    --crimson:#8b1a1a; --crimson-dark:#601010;
+    --forest:#2f5d3a; --gold:#c9a227; --gold-light:#e8d48a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:linear-gradient(180deg,var(--night) 0%,var(--dusk) 45%,var(--horizon) 78%, #7a4a2e 100%);
+    background-attachment:fixed; color:var(--parchment);
+    font-family:'Literata',serif; min-height:100vh;
+  }
+  h1,h2,h3{font-family:'Cinzel',serif;letter-spacing:.02em;}
+  .eyebrow{font-family:'Space Mono',monospace;letter-spacing:.14em;text-transform:uppercase;font-size:.7rem;color:var(--gold-light);}
+  button{font-family:inherit;cursor:pointer;}
+  #app{max-width:900px;margin:0 auto;padding:24px 18px 80px;}
+  .screen{display:none;animation:fadeIn .5s ease;}
+  .screen.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  .hud{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+  .hud-title{font-family:'Cinzel',serif;font-weight:700;color:var(--gold-light);}
+  .hud-right{display:flex;gap:10px;flex-wrap:wrap;}
+  .pill{font-family:'Space Mono',monospace;font-size:.78rem;background:rgba(0,0,0,.3);border:1px solid rgba(242,231,201,.3);border-radius:999px;padding:7px 13px;}
+  .pill b{color:var(--gold-light);}
+
+  .cover{text-align:center;padding:30px 0;}
+  .cover h1{font-size:2.4rem;color:var(--gold-light);margin:10px 0;}
+  .cover .sub{opacity:.88;max-width:560px;margin:0 auto 22px;line-height:1.6;}
+  .story{text-align:left;background:rgba(0,0,0,.28);border:1px solid rgba(201,162,39,.3);border-radius:14px;padding:20px 22px;max-width:620px;margin:0 auto 26px;font-size:.94rem;line-height:1.65;}
+  .story b{color:var(--gold-light);}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--crimson);color:#fff2e6;border:none;border-radius:10px;padding:13px 24px;font-size:1rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .15s,background .15s;}
+  .btn:hover:not(:disabled){background:var(--crimson-dark);transform:translateY(-2px);}
+  .btn.secondary{background:transparent;border:1.5px solid var(--gold-light);color:var(--gold-light);box-shadow:none;}
+  .btn.secondary:hover:not(:disabled){background:rgba(232,212,138,.12);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+  .btn.small{padding:9px 15px;font-size:.85rem;}
+
+  .card{background:linear-gradient(180deg,#f6ecd1,var(--parchment));color:var(--ink);border-radius:16px;padding:24px;box-shadow:0 18px 44px rgba(0,0,0,.4);}
+  .card h3{color:var(--crimson-dark);margin:0 0 10px;font-size:1.15rem;}
+  .portrait{display:flex;justify-content:center;margin-bottom:8px;}
+  .portrait svg{width:92px;height:92px;}
+  .clue{background:#fff;border:1.5px solid #d8c79e;border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:11px 14px;margin-bottom:9px;font-size:.93rem;line-height:1.55;animation:fadeIn .4s ease;}
+  .clue .cnum{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--crimson);display:block;margin-bottom:2px;letter-spacing:.06em;}
+
+  .answer-zone{margin-top:16px;padding-top:14px;border-top:1.5px dashed #d8c79e;}
+  .answer-label{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--crimson-dark);display:block;margin-bottom:7px;}
+  .answer-row{display:flex;gap:8px;flex-wrap:wrap;}
+  #nameInput{flex:1;min-width:190px;background:#fff;border:1.5px solid #d8c79e;border-radius:10px;padding:12px 14px;font-family:'Literata',serif;font-size:.98rem;color:var(--ink);}
+  #nameInput:focus{outline:none;border-color:var(--crimson);box-shadow:0 0 0 3px rgba(139,26,26,.12);}
+  #nameInput:disabled{opacity:.6;}
+  .helper-row{margin-top:11px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .potential{font-family:'Space Mono',monospace;font-size:.8rem;color:var(--forest);font-weight:700;}
+
+  .feedback{margin-top:13px;padding:11px 14px;border-radius:10px;font-size:.9rem;display:none;line-height:1.55;}
+  .feedback.ok{background:rgba(47,93,58,.15);border:1px solid var(--forest);color:#1d3d26;display:block;}
+  .feedback.bad{background:rgba(139,26,26,.12);border:1px solid var(--crimson);color:var(--crimson-dark);display:block;}
+  .feedback.info{background:rgba(201,162,39,.16);border:1px solid var(--gold);color:#5c4310;display:block;}
+  .actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;}
+
+  .board{margin-top:16px;background:rgba(0,0,0,.06);border:1.5px solid #d8c79e;border-radius:12px;padding:12px;display:none;}
+  .board.open{display:block;animation:fadeIn .4s ease;}
+  .board h4{margin:0 0 9px;font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.08em;color:var(--crimson-dark);text-transform:uppercase;}
+  .names{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:7px;}
+  .nbtn{background:#fff;border:1.5px solid #cdb480;color:var(--ink);border-radius:8px;padding:8px 6px;font-size:.77rem;font-family:'Cinzel',serif;font-weight:700;transition:.15s;line-height:1.25;}
+  .nbtn:hover:not(:disabled){border-color:var(--crimson);transform:translateY(-1px);}
+  .nbtn.used{background:#e6dcc0;color:#9c8f74;text-decoration:line-through;cursor:default;}
+  .nbtn.wrong-flash{background:rgba(139,26,26,.25);border-color:var(--crimson);}
+
+  .ending{text-align:center;padding:26px 0;}
+  .ending h2{color:var(--gold-light);font-size:1.7rem;}
+  .stat-box{display:inline-block;background:rgba(0,0,0,.28);border:1px solid rgba(201,162,39,.4);border-radius:12px;padding:14px 24px;margin:16px auto;font-family:'Space Mono',monospace;font-size:.92rem;line-height:2;text-align:left;}
+  .stat-box b{color:var(--gold-light);}
+  .recap{max-width:720px;margin:18px auto 0;text-align:left;display:grid;gap:10px;}
+  .recap-item{background:linear-gradient(180deg,#f9f0d8,#efe0b8);color:var(--ink);border:1.5px solid #cdb480;border-radius:10px;padding:11px 14px;font-size:.87rem;line-height:1.5;}
+  .recap-item b{color:var(--crimson-dark);font-family:'Cinzel',serif;}
+  .recap-item .pts{float:right;font-family:'Space Mono',monospace;font-size:.76rem;color:var(--forest);font-weight:700;}
+  footer.tiny{text-align:center;opacity:.5;font-size:.78rem;margin-top:46px;font-family:'Space Mono',monospace;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="hud" id="hud" style="display:none;">
+    <div class="hud-title">Ki vagyok én?</div>
+    <div class="hud-right">
+      <div class="pill">Kör: <b id="hudRound">1/8</b></div>
+      <div class="pill">Pontszám: <b id="hudScore">0</b></div>
+    </div>
+  </div>
+
+  <!-- COVER -->
+  <section class="screen active" id="screen-cover">
+    <div class="cover">
+      <div class="eyebrow">Érettségi felkészítő portréjáték &middot; a kötelező névsor személyei &middot; v2</div>
+      <h1>Ki vagyok én?</h1>
+      <p class="sub">Nyolc történelmi személy lép eléd. Mindegyik öt nyomot ad magáról — a legnehezebbtől a legkönnyebbig. A nevet <b>fejből kell megnevezned</b>.</p>
+      <div class="story">
+        <p><b>Pontozás:</b> az első nyom után <b>5 pont</b>, minden további nyommal eggyel kevesebb. Helyes válaszért mindig jár legalább 1 pont. Maximum: <b>40 pont</b>.</p>
+        <p><b>Névtábla:</b> alapból rejtve van — a felidézés többet ér, mint a felismerés. Ha elakadsz, megnyithatod, de <b>1 pont az ára</b>.</p>
+        <p><b>Tévedés:</b> a rossz tipp elégeti a következő nyomot. Az elgépelés viszont nem büntetés: ha nem ismerem fel a beírt nevet, szólok, és próbálkozhatsz újra.</p>
+      </div>
+      <button class="btn" onclick="startGame()">Kezdjük &rarr;</button>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section class="screen" id="screen-game">
+    <div class="card">
+      <div class="portrait" aria-hidden="true">
+        <svg viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="46" fill="#e8dcb8" stroke="#cdb480" stroke-width="2"/>
+          <circle cx="48" cy="38" r="16" fill="#b3924f"/>
+          <path d="M20 84 Q22 58 48 58 Q74 58 76 84 Z" fill="#b3924f"/>
+          <text x="48" y="48" text-anchor="middle" font-size="26" font-family="Cinzel,serif" fill="#f2e7c9" font-weight="700">?</text>
+        </svg>
+      </div>
+      <h3 id="roundTitle">1. rejtőzködő</h3>
+      <div id="clues"></div>
+
+      <div class="answer-zone">
+        <label class="answer-label" for="nameInput">Ki vagyok én? Írd be a nevet</label>
+        <div class="answer-row">
+          <input id="nameInput" type="text" autocomplete="off" spellcheck="false"
+                 placeholder="pl. Hunyadi Mátyás" onkeydown="if(event.key==='Enter'){event.preventDefault();submitName();}">
+          <button class="btn" onclick="submitName()" id="submitBtn">Megnevezem</button>
+        </div>
+        <div class="helper-row">
+          <button class="btn secondary small" id="nextClueBtn" onclick="revealClue()">Következő nyom (&minus;1 pont)</button>
+          <button class="btn secondary small" id="boardBtn" onclick="openBoard()">Névtábla megnyitása (&minus;1 pont)</button>
+          <span class="potential" id="potential"></span>
+        </div>
+      </div>
+
+      <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+
+      <div class="board" id="board">
+        <h4>Névtábla — segítség, kattints a tippedre</h4>
+        <div class="names" id="names"></div>
+      </div>
+
+      <div class="actions" id="roundActions"></div>
+    </div>
+  </section>
+
+  <!-- ENDING -->
+  <section class="screen" id="screen-ending">
+    <div class="ending">
+      <div class="eyebrow">A játék vége</div>
+      <h2>Minden arc felfedve</h2>
+      <div class="stat-box" id="endStats"></div>
+      <div class="recap" id="recap"></div>
+      <div style="margin-top:26px;">
+        <button class="btn secondary" onclick="location.reload()">Új játék (új sorsolással)</button>
+      </div>
+    </div>
+  </section>
+</div>
+<footer class="tiny">Történelem érettségi felkészítő &middot; szabad felidézés &middot; a nyomok a legnehezebbtől a legkönnyebbig haladnak</footer>
+
+<script>
+/* =========================================================
+   SZEMÉLYEK
+   clues: 1. = legnehezebb → 5. = legkönnyebb (árulkodó)
+   accept: elfogadott névalakok (ékezet és központozás nélkül)
+   ========================================================= */
+const FIGURES=[
+ {id:'istvan',name:'I. (Szent) István',
+  accept:['i istvan','szent istvan','i szent istvan','istvan kiraly','szent istvan kiraly','vajk'],
+  bio:'Az első magyar király (997/1000–1038): vármegyerendszer, egyházszervezet, Intelmek.',
+  clues:[
+   'Uralkodásom kezdetén fegyverrel kellett legyőznöm egy rokonomat, aki a hatalmat az ősi öröklési rend alapján követelte magának.',
+   'Országomat megyékre osztottam, élükre a magam embereit állítottam — ők bíráskodtak, hadat vezettek, jövedelmet szedtek.',
+   'Elrendeltem, hogy minden tíz falu építsen templomot, és a termés tizedét az egyháznak adja.',
+   'Fiamhoz latin nyelvű intelmeket intéztem az uralkodás művészetéről.',
+   'Én vagyok az első magyar király: az 1000/1001. év fordulóján koronáztak meg, s a hagyomány szerint a koronát II. Szilveszter pápa küldte.']},
+
+ {id:'laszlo',name:'I. (Szent) László',
+  accept:['i laszlo','szent laszlo','laszlo','i szent laszlo','laszlo kiraly','szent laszlo kiraly'],
+  bio:'A lovagkirály (1077–1095): szigorú, tulajdonvédő törvények, Horvátország megszerzésének kezdete, az első magyar szentté avatások.',
+  clues:[
+   'Trónra kerülésem nem volt magától értetődő: unokatestvéremmel, a korábbi királlyal fegyverrel kellett megküzdenem a hatalomért.',
+   'Szigorú törvényeim a magántulajdont védték: már egy tyúk értékét meghaladó lopásért is súlyos büntetés járt.',
+   'Uralkodásom alatt avatták szentté az első magyar királyt és annak fiát.',
+   'Horvátország megszerzését én kezdtem meg.',
+   'A kun leányrabló elleni párviadalomat templomfalak sokaságára festették; „lovagkirályként" emlegetnek — és magam is szent lettem.']},
+
+ {id:'bela4',name:'IV. Béla',
+  accept:['iv bela','bela','bela iv','negyedik bela','iv bela kiraly'],
+  bio:'A „második honalapító" (1235–1270): muhi vereség, majd kővárépítés, városi kiváltságok, a kunok visszahívása.',
+  clues:[
+   'Uralkodásom elején visszavettem az eladományozott királyi birtokokat — ezzel a bárók jó részét magamra haragítottam.',
+   'A nagy vereség után az üldözőim elől egészen a tengerpartig kellett menekülnöm.',
+   'A katasztrófa után a birtokadományt várépítéshez kötöttem, és visszahívtam az országból korábban elűzött keleti szövetségeseimet.',
+   'Kiváltságokat adtam a városoknak — nevemhez fűződik Buda felemelkedése is.',
+   'A Sajó menti csatavesztés és az ország újjáépítése az én történetem: a történetírás a „második honalapítónak" nevez.']},
+
+ {id:'karoly',name:'Károly Róbert',
+  accept:['karoly robert','i karoly','karoly','robert karoly','i karoly robert'],
+  bio:'Az Anjou-ház első magyar királya (1308–1342): aranyforint, kapuadó, harmincad, visegrádi királytalálkozó.',
+  clues:[
+   'Trónomat csak a harmadik koronázás után éreztem törvényesnek — azt már a Szent Koronával, a hagyomány szerinti helyen végezték.',
+   'A rozgonyi csatában mértem döntő csapást a velem szembeszegülő tartományurakra.',
+   'Jövedelmeimet a királyi felségjogokra alapoztam: bányabérre, vámra, pénzverésre.',
+   'Firenzei mintára értékálló aranypénzt verettem, és állandó adót vezettem be a jobbágytelkekre.',
+   'Az Anjou-ház első magyar királya vagyok (1308–1342); visegrádi palotámban királytalálkozót tartottam a cseh és a lengyel uralkodóval.']},
+
+ {id:'lajos',name:'I. (Nagy) Lajos',
+  accept:['nagy lajos','i lajos','i nagy lajos','nagy lajos kiraly','lajos kiraly'],
+  bio:'Anjou-király (1342–1382): 1351. évi törvények (ősiség, kilenced), lengyel–magyar perszonálunió (1370).',
+  clues:[
+   'Öcsém meggyilkolása miatt két hadjáratot is vezettem Itáliába, Nápoly ellen.',
+   'Apám gazdasági reformjaira építve a lovagi kultúra fénykorát hoztam el az udvarba.',
+   '1351-ben megerősítettem az Aranybullát, s bevezettem az ősiséget és a kilencedet.',
+   '1370-től a lengyel trónon is én ültem, perszonálunióban.',
+   'Én vagyok az egyetlen magyar király, akit a hagyomány a „Nagy" jelzővel tisztel.']},
+
+ {id:'zsigmond',name:'Luxemburgi Zsigmond',
+  accept:['luxemburgi zsigmond','zsigmond','zsigmond kiraly','zsigmond luxemburgi'],
+  bio:'Magyar, német és cseh király, német-római császár (magyar trónon 1387–1437): nikápolyi vereség, déli végvárrendszer, konstanzi zsinat.',
+  clues:[
+   'Trónomat feleségem révén, hosszú belháború árán szereztem meg — saját báróim egy időre még fogságba is vetettek.',
+   'Lovagrendet alapítottam híveim összefogására, és fél Európát bejártam uralkodóként.',
+   'Zsinatot hívtam össze a nyugati egyházszakadás felszámolására.',
+   'Keresztes hadam 1396-ban súlyos vereséget szenvedett az Al-Dunánál; ezután kezdtem kiépíteni a déli végvárrendszert.',
+   'Magyar, német és cseh király voltam, életem végén császár — fél évszázadig, 1387-től 1437-ig ültem a magyar trónon.']},
+
+ {id:'hunyadij',name:'Hunyadi János',
+  accept:['hunyadi janos','janos hunyadi'],
+  bio:'A törökverő (kormányzó 1446-tól): hosszú hadjárat, nándorfehérvári diadal (1456).',
+  clues:[
+   'Köznemesi sorból emelkedtem az ország leggazdagabb bárójává — birtokaim jövedelmét szinte teljesen a hadakozásra fordítottam.',
+   'A „hosszú hadjárat" és a téli hadviselés tette ismertté nevemet a Balkánon.',
+   'A király halála után kormányzóként irányítottam az országot a gyermekkirály kiskorúsága idején.',
+   'Legnagyobb győzelmemet 1456-ban arattam a Duna–Száva torkolatánál, de nem sokkal utána pestisjárvány vitt el.',
+   'Nándorfehérvár védője vagyok — a törökverő; fiamból magyar király lett.']},
+
+ {id:'matyas',name:'Hunyadi Mátyás',
+  accept:['hunyadi matyas','matyas','matyas kiraly','i matyas','igazsagos matyas','matyas hunyadi'],
+  bio:'Reneszánsz király (1458–1490): fekete sereg, füstpénz, Bibliotheca Corviniana, Bécs elfoglalása (1485).',
+  clues:[
+   'Prágai fogságból kerültem egyenesen a trónra — bátyámat előtte kivégezték.',
+   'Ellenfeleim szerint adóprésem kíméletlen volt: a füstpénz és a gyakran kivetett rendkívüli hadiadó az én nevemhez kötődik.',
+   'Állandó zsoldosseregem egész Európában félelmetes hírnévnek örvendett.',
+   'Könyvtáram kódexei koruk egyik leggazdagabb gyűjteményét alkották; 1485-ben elfoglaltam Bécset.',
+   'A néphagyomány az „igazságos" jelzőt ragasztotta rám; 1458 és 1490 között uralkodtam, s apám Nándorfehérvár védője volt.']},
+
+ {id:'dozsa',name:'Dózsa György',
+  accept:['dozsa gyorgy','dozsa','gyorgy dozsa'],
+  bio:'Az 1514. évi parasztháború vezére; a temesvári vereség után kegyetlenül kivégezték.',
+  clues:[
+   'Székely katonaként a végeken, egy párviadalban tüntettem ki magam — kitüntetést és nemességet kaptam érte.',
+   'Keresztes hadjárat vezetésével bíztak meg a török ellen.',
+   'A hadba gyűlt sereg végül a nemesség ellen fordult — én álltam az élére.',
+   'Temesvárnál szenvedtem döntő vereséget az erdélyi vajdától.',
+   'Az 1514. évi parasztháború vezére vagyok; kivégzésem kegyetlensége hírhedtté vált, s a megtorlás Werbőczy törvénykönyvébe is bekerült.']},
+
+ {id:'rakoczi',name:'II. Rákóczi Ferenc',
+  accept:['ii rakoczi ferenc','rakoczi ferenc','rakoczi','ferenc rakoczi','ii rakoczi'],
+  bio:'A szabadságharc (1703–1711) vezérlő fejedelme; ónodi trónfosztás, majd emigráció Rodostóban.',
+  clues:[
+   'Az ország leggazdagabb birtokosai közé születtem, mégis Habsburg-felügyelet alatt, idegenben neveltek.',
+   'Szervezkedésem lelepleződött, börtönbe vetettek — onnan szöktem külföldre.',
+   'A tiszaháti felkelők hívására tértem haza, és álltam a mozgalom élére; vezérlő fejedelemmé választottak.',
+   'Az ónodi országgyűlésen mondtuk ki a Habsburg-ház trónfosztását.',
+   'Nyolcéves küzdelmem a szatmári békével zárult; én az emigrációt választottam, és Rodostóban hunytam el.']},
+
+ {id:'mterez',name:'Mária Terézia',
+  accept:['maria terezia','terezia','maria terezia kiralyno'],
+  bio:'Habsburg uralkodó (1740–1780): kettős vámrendszer, úrbéri rendelet, Ratio Educationis.',
+  clues:[
+   'Trónöröklésemet apám még életében külön törvénnyel igyekezett biztosítani, mert fiúörökös nélkül maradt.',
+   'Két háborút is vívtam Sziléziáért a porosz királlyal — a tartományt mégsem sikerült visszaszereznem.',
+   'Vámrendszerem a birodalmon belüli munkamegosztást rögzítette: Magyarország nyersanyagot adott, ipari terméket vásárolt.',
+   'Rendeletemmel országosan szabályoztam a jobbágyok földesúri terheit; uralkodásom végén jelent meg az oktatásügy első átfogó állami szabályozása is.',
+   'Negyven évig, 1740-től 1780-ig uralkodtam; trónra lépésemkor a magyar rendek „életüket és vérüket" ajánlották fel nekem.']},
+
+ {id:'jozsef2',name:'II. József',
+  accept:['ii jozsef','jozsef ii','kalapos kiraly','masodik jozsef'],
+  bio:'A „kalapos király" (1780–1790): türelmi és jobbágyrendelet; halálos ágyán rendeletei többségét visszavonta.',
+  clues:[
+   'Anyám halála után egyedül kormányoztam, s tíz év alatt több ezer rendeletet bocsátottam ki — a rendek megkérdezése nélkül.',
+   'Az egységes igazgatás kedvéért a német nyelvet tettem a hivatalok nyelvévé, és feloszlattam a szemlélődő szerzetesrendeket.',
+   'Az országot új kerületekre osztottam, a vármegyék önkormányzatát pedig felfüggesztettem.',
+   'Türelmi rendeletem a protestánsoknak adott szabadabb vallásgyakorlatot, jobbágyrendeletem pedig eltörölte a röghöz kötöttséget.',
+   'Nem koronáztattam meg magam, hogy ne kössön a rendi alkotmány — ezért csúfoltak „kalapos királynak"; halálos ágyamon három kivétellel visszavontam rendeleteimet.']},
+
+ {id:'szechenyi',name:'Széchenyi István',
+  accept:['szechenyi istvan','szechenyi','istvan szechenyi','grof szechenyi istvan'],
+  bio:'„A legnagyobb magyar": MTA-felajánlás (1825), Hitel (1830), Lánchíd, Tisza-szabályozás; 1848-ban közlekedési miniszter.',
+  clues:[
+   'Huszártisztként szolgáltam, mielőtt nyugat-európai utazásaim ráébresztettek hazám elmaradottságára.',
+   'Vitairatomban nem egy program célját, hanem a „modorát" támadtam: az érzelmekre ható izgatást forradalmi veszélynek tartottam.',
+   'Fő művem a gazdasági elmaradottság okát az ősiségben és a kölcsönhöz jutás lehetetlenségében jelölte meg.',
+   'Nevemhez fűződik az első állandó pest-budai híd és a Tisza szabályozásának ügye; 1848-ban közlekedési miniszter lettem.',
+   'Egyévi birtokjövedelmemet ajánlottam fel egy tudós társaság alapítására — legnagyobb vitapartnerem nevezett „a legnagyobb magyarnak".']},
+
+ {id:'kossuth',name:'Kossuth Lajos',
+  accept:['kossuth lajos','kossuth','lajos kossuth'],
+  bio:'A reformellenzék vezére, 1848-as pénzügyminiszter, kormányzó-elnök; a „turini remete".',
+  clues:[
+   'Írásaim kéziratban terjedtek, mert nyomtatásukat a cenzúra nem engedte — végül fogságba is vetettek miattuk.',
+   'Szabadulásom után egy hírlap szerkesztőjeként lettem a reformellenzék vezéralakja.',
+   'Mozgalmat szerveztem a honi ipar pártolására, és a tengerhez vezető vasútvonalat sürgettem.',
+   '1848-ban pénzügyminiszterként új bankjegyeket bocsátottam ki — a nép rólam nevezte el őket.',
+   'A debreceni trónfosztás után kormányzó-elnökké választottak; emigrációban, Torinóban haltam meg.']},
+
+ {id:'deak',name:'Deák Ferenc',
+  accept:['deak ferenc','deak','ferenc deak'],
+  bio:'„A haza bölcse": passzív ellenállás, húsvéti cikk, a kiegyezés (1867) fő alkotója.',
+  clues:[
+   'Zala vármegye követeként a reformországgyűlések mérsékelt, jogászi tekintélye voltam — a büntetőjog megújításán is dolgoztam.',
+   '1848-ban az első felelős magyar kormány igazságügyi minisztere lettem.',
+   'Az önkényuralom éveiben a passzív ellenállás politikáját képviseltem: nem lázadtam, de nem is működtem együtt.',
+   'Húsvétkor megjelent cikkem nyitotta meg az utat az uralkodóval való megegyezés felé.',
+   'Az 1867-es kiegyezés fő alkotójaként „a haza bölcsének" neveznek.']},
+
+ {id:'ferencj',name:'Ferenc József',
+  accept:['ferenc jozsef','i ferenc jozsef','ferencz jozsef','ferenc jozsef csaszar'],
+  bio:'Császár és király (1848–1916): önkényuralom, majd kiegyezés (1867); az I. világháború kitörésekor is uralkodott.',
+  clues:[
+   'Tizennyolc évesen, egy forradalom leverésének árnyékában, nagybátyám lemondása után léptem trónra.',
+   'Uralkodásom első évtizedét Magyarországon nyílt önkényuralom jellemezte, idegen hivatalnokokkal.',
+   'A königgrätzi vereség után kényszerültem megegyezni a magyarokkal.',
+   '1867-ben magyar királlyá koronáztak; a birodalom ettől kezdve két államból állt.',
+   'Közel hét évtizedig uralkodtam: az első világháború kitörésekor is én ültem a trónon, s 1916-ban haltam meg.']},
+];
+
+/* Több személynél is előforduló, önmagában félreérthető keresztnevek */
+const AMBIG={
+  'istvan':'Több <b>István</b> is szerepel a névtáblán — pontosítsd (uralkodó? reformer?).',
+  'lajos':'Több <b>Lajos</b> is szerepel — pontosítsd a nevet!',
+  'jozsef':'Több <b>József</b> is szerepel — pontosítsd a nevet!',
+  'ferenc':'Több <b>Ferenc</b> is szerepel — pontosítsd a nevet!',
+  'hunyadi':'Két <b>Hunyadi</b> is szerepel — melyikre gondolsz?'
+};
+
+const ROUNDS=8;
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function norm(s){
+  return (s||'').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9 ]+/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+const G={order:[],round:0,revealed:0,boardOpen:false,score:0,solved:{},results:[],locked:false};
+
+function startGame(){
+  G.order=shuffle(FIGURES.map(f=>f.id)).slice(0,ROUNDS);
+  G.round=0; G.score=0; G.solved={}; G.results=[]; G.locked=false;
+  document.getElementById('screen-cover').classList.remove('active');
+  document.getElementById('screen-game').classList.add('active');
+  document.getElementById('hud').style.display='flex';
+  startRound();
+}
+function cur(){ return FIGURES.find(f=>f.id===G.order[G.round]); }
+function boardPenalty(){ return G.boardOpen?1:0; }
+function potential(){ return Math.max(1, 6 - G.revealed - boardPenalty()); }
+
+function startRound(){
+  G.revealed=0; G.boardOpen=false; G.locked=false;
+  document.getElementById('roundTitle').textContent=(G.round+1)+'. rejtőzködő';
+  document.getElementById('clues').innerHTML='';
+  document.getElementById('roundActions').innerHTML='';
+  document.getElementById('board').classList.remove('open');
+  const inp=document.getElementById('nameInput');
+  inp.value=''; inp.disabled=false;
+  document.getElementById('submitBtn').disabled=false;
+  document.getElementById('boardBtn').disabled=false;
+  document.getElementById('boardBtn').style.display='';
+  fb('',null);
+  revealClue(true);
+  inp.focus();
+}
+function revealClue(first){
+  if(G.locked || G.revealed>=5) return;
+  G.revealed++;
+  const f=cur();
+  document.getElementById('clues').insertAdjacentHTML('beforeend',
+    `<div class="clue"><span class="cnum">${G.revealed}. nyom</span>${f.clues[G.revealed-1]}</div>`);
+  document.getElementById('nextClueBtn').disabled = G.revealed>=5;
+  if(!first) fb('Új nyom felfedve — a kör értéke eggyel csökkent.','info');
+  updateHud();
+}
+function openBoard(){
+  if(G.locked || G.boardOpen) return;
+  G.boardOpen=true;
+  renderBoard();
+  document.getElementById('board').classList.add('open');
+  document.getElementById('boardBtn').style.display='none';
+  fb('A névtábla megnyílt — ez 1 pontodba került. A már felismert személyek ki vannak húzva.','info');
+  updateHud();
+}
+function updateHud(){
+  document.getElementById('hudRound').textContent=(G.round+1)+'/'+ROUNDS;
+  document.getElementById('hudScore').textContent=G.score;
+  document.getElementById('potential').textContent='Ezért a körért most: '+potential()+' pont';
+}
+function renderBoard(){
+  document.getElementById('names').innerHTML =
+    FIGURES.map(f=>`<button class="nbtn ${G.solved[f.id]?'used':''}" id="nb-${f.id}" ${G.solved[f.id]?'disabled':''} onclick="resolveGuess('${f.id}')">${f.name}</button>`).join('');
+}
+function fb(msg,kind){
+  const el=document.getElementById('feedback');
+  if(!msg){el.className='feedback';el.textContent='';return;}
+  el.className='feedback '+kind;
+  el.innerHTML=msg;
+}
+
+/* --- szabad felidézés: névbeírás --- */
+function submitName(){
+  if(G.locked) return;
+  const n=norm(document.getElementById('nameInput').value);
+  if(!n) return;
+  if(AMBIG[n]){ fb(AMBIG[n],'info'); return; }                 /* nem számít hibás tippnek */
+  const hit=FIGURES.find(f=>f.accept.includes(n));
+  if(!hit){
+    fb('Ezt a nevet nem ismerem fel — ellenőrizd a helyesírást, vagy nyisd meg a névtáblát. <i>(Ez nem számít hibás tippnek.)</i>','info');
+    return;
+  }
+  resolveGuess(hit.id);
+}
+
+/* --- közös kiértékelés (beírás és névtábla) --- */
+function resolveGuess(id){
+  if(G.locked) return;
+  const f=cur();
+  if(id!==f.id && G.solved[id]){
+    fb('Őt már felismerted egy korábbi körben — nem ő az. <i>(Ez nem számít hibás tippnek.)</i>','info');
+    return;
+  }
+  if(id===f.id){
+    const pts=potential();
+    G.score+=pts; G.solved[id]=true; G.locked=true;
+    G.results.push({name:f.name,bio:f.bio,pts:pts,clues:G.revealed,board:G.boardOpen});
+    if(G.boardOpen) renderBoard();
+    lockRound();
+    updateHud();
+    fb('<b>'+f.name+'</b> — helyes, <b>+'+pts+' pont</b>! '+f.bio,'ok');
+    nextBtn();
+  }else{
+    const el=document.getElementById('nb-'+id);
+    if(el){ el.classList.add('wrong-flash'); setTimeout(()=>el.classList.remove('wrong-flash'),700); }
+    document.getElementById('nameInput').value='';
+    if(G.revealed<5){
+      revealClue();
+      fb('Nem ő az — a tévedés ára egy elégetett nyom. Olvasd össze az eddigi nyomokat: melyik korszakra és milyen szerepre utalnak <i>együtt</i>?','bad');
+    }else{
+      G.solved[f.id]=true; G.locked=true;
+      G.results.push({name:f.name,bio:f.bio,pts:0,clues:5,board:G.boardOpen});
+      if(G.boardOpen) renderBoard();
+      lockRound();
+      updateHud();
+      fb('A kör elveszett. A keresett személy: <b>'+f.name+'</b>. '+f.bio,'bad');
+      nextBtn();
+    }
+  }
+}
+function lockRound(){
+  document.getElementById('nameInput').disabled=true;
+  document.getElementById('submitBtn').disabled=true;
+  document.getElementById('nextClueBtn').disabled=true;
+  document.getElementById('boardBtn').disabled=true;
+  document.querySelectorAll('.nbtn').forEach(b=>b.disabled=true);
+}
+function nextBtn(){
+  document.getElementById('roundActions').innerHTML =
+    G.round<ROUNDS-1
+      ? '<button class="btn" onclick="G.round++; startRound();">Következő rejtőzködő &rarr;</button>'
+      : '<button class="btn" onclick="endGame()">Eredmény &rarr;</button>';
+}
+function endGame(){
+  document.getElementById('screen-game').classList.remove('active');
+  document.getElementById('screen-ending').classList.add('active');
+  const max=ROUNDS*5;
+  const pct=G.score/max;
+  const boardUsed=G.results.filter(r=>r.board).length;
+  let grade;
+  if(pct>=.8) grade='Kiváló — kevés nyomból, fejből azonosítasz. Vizsgaközeli tudás.';
+  else if(pct>=.6) grade='Jó — az arcképcsarnok nagy része megvan; a nehezebb nyomokat gyakorold.';
+  else if(pct>=.4) grade='Közepes — a könnyű nyomokból már megy; célod, hogy korábban ess rá a megoldásra.';
+  else grade='Gyakorlásra szorul — olvasd át az alábbi összefoglalókat, és játssz újra!';
+  document.getElementById('endStats').innerHTML=
+    'Pontszám: <b>'+G.score+' / '+max+'</b><br>'+
+    'Névtábla-segítség: <b>'+boardUsed+' körben</b><br>'+
+    'Értékelés: <b>'+grade+'</b>';
+  document.getElementById('recap').innerHTML =
+    '<div class="eyebrow" style="margin-bottom:2px;">A kör szereplői — ismételd át</div>'+
+    G.results.map(r=>
+      `<div class="recap-item"><span class="pts">+${r.pts} pont &middot; ${r.clues} nyom${r.board?' &middot; táblával':''}</span><b>${r.name}</b> — ${r.bio}</div>`).join('');
+}
+</script>
+</body>
+</html>

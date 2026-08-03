@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A titkos levéltár — reformkori szabadulószoba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Literata:opsz,wght@18..144,400;18..144,500;18..144,600&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#160d0a; --dusk:#341412; --horizon:#5c231d;
+    --parchment:#f2e7c9; --ink:#2b1b12;
+    --crimson:#8b1a1a; --crimson-dark:#601010;
+    --forest:#2f5d3a; --gold:#c9a227; --gold-light:#e8d48a;
+    --steel:#3d5a80;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:linear-gradient(180deg,var(--night) 0%,var(--dusk) 45%,var(--horizon) 78%, #7a4a2e 100%);
+    background-attachment:fixed; color:var(--parchment);
+    font-family:'Literata',serif; min-height:100vh;
+  }
+  h1,h2,h3{font-family:'Cinzel',serif;letter-spacing:.02em;}
+  .eyebrow{font-family:'Space Mono',monospace;letter-spacing:.14em;text-transform:uppercase;font-size:.7rem;color:var(--gold-light);}
+  button{font-family:inherit;cursor:pointer;}
+  #app{max-width:940px;margin:0 auto;padding:24px 18px 80px;}
+  .screen{display:none;animation:fadeIn .5s ease;}
+  .screen.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  .hud{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+  .hud-title{font-family:'Cinzel',serif;font-weight:700;color:var(--gold-light);}
+  .hud-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .pill{font-family:'Space Mono',monospace;font-size:.78rem;background:rgba(0,0,0,.3);border:1px solid rgba(242,231,201,.3);border-radius:999px;padding:7px 13px;}
+  .clock{font-family:'Space Mono',monospace;font-size:1.05rem;font-weight:700;background:rgba(0,0,0,.4);border:2px solid var(--gold);border-radius:999px;padding:6px 18px;color:var(--gold-light);letter-spacing:.06em;transition:.3s;}
+  .clock.warn{border-color:var(--crimson);color:#ff9c8f;animation:tick 1s infinite;}
+  @keyframes tick{0%,100%{opacity:1}50%{opacity:.55}}
+
+  .cover{text-align:center;padding:26px 0;}
+  .cover h1{font-size:2.2rem;color:var(--gold-light);margin:10px 0;}
+  .cover .sub{opacity:.88;max-width:600px;margin:0 auto 22px;line-height:1.6;}
+  .story{text-align:left;background:rgba(0,0,0,.3);border:1px solid rgba(201,162,39,.35);border-radius:14px;padding:20px 22px;max-width:640px;margin:0 auto 24px;font-size:.95rem;line-height:1.68;}
+  .story b{color:var(--gold-light);}
+  .warnbox{max-width:640px;margin:0 auto 26px;background:rgba(139,26,26,.22);border:1px solid var(--crimson);border-radius:12px;padding:14px 18px;font-size:.94rem;line-height:1.6;text-align:left;}
+  .warnbox b{color:#ffb3a7;}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--crimson);color:#fff2e6;border:none;border-radius:10px;padding:13px 24px;font-size:1rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .15s,background .15s;}
+  .btn:hover:not(:disabled){background:var(--crimson-dark);transform:translateY(-2px);}
+  .btn.secondary{background:transparent;border:1.5px solid var(--gold-light);color:var(--gold-light);box-shadow:none;}
+  .btn.secondary:hover:not(:disabled){background:rgba(232,212,138,.12);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+  .btn.small{padding:9px 15px;font-size:.85rem;}
+
+  /* --- a terem --- */
+  .locks{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+  @media(max-width:760px){.locks{grid-template-columns:1fr 1fr;}}
+  .lock{background:rgba(0,0,0,.3);border:1.5px solid rgba(201,162,39,.35);border-radius:14px;padding:16px 12px;text-align:center;cursor:pointer;transition:.18s;}
+  .lock:hover{border-color:var(--gold);transform:translateY(-3px);}
+  .lock svg{width:52px;height:52px;margin-bottom:6px;}
+  .lock .lname{font-family:'Cinzel',serif;font-weight:700;font-size:.95rem;color:var(--gold-light);}
+  .lock .ltype{font-family:'Space Mono',monospace;font-size:.66rem;opacity:.7;margin-top:3px;letter-spacing:.05em;}
+  .lock.done{border-color:var(--forest);background:rgba(47,93,58,.22);cursor:default;}
+  .lock.done:hover{transform:none;}
+  .lock.done .lname{color:#a8dfb8;}
+
+  .door{background:rgba(0,0,0,.3);border:1.5px dashed rgba(242,231,201,.28);border-radius:14px;padding:22px;text-align:center;opacity:.5;transition:.3s;}
+  .door.ready{opacity:1;border-style:solid;border-color:var(--crimson);background:rgba(139,26,26,.18);cursor:pointer;}
+  .door.ready:hover{background:rgba(139,26,26,.3);}
+  .door h3{margin:0 0 4px;color:var(--gold-light);}
+  .door p{margin:0;font-size:.88rem;opacity:.85;}
+
+  /* --- panel --- */
+  .overlay{position:fixed;inset:0;background:rgba(6,6,10,.8);backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;z-index:50;padding:22px 12px;overflow-y:auto;}
+  .overlay.active{display:flex;}
+  .panel{background:linear-gradient(180deg,#f6ecd1,var(--parchment));color:var(--ink);border-radius:18px;max-width:760px;width:100%;padding:28px 26px 24px;box-shadow:0 30px 70px rgba(0,0,0,.6);position:relative;margin:auto 0;}
+  .panel::before{content:"";position:absolute;inset:8px;border:1.5px solid rgba(139,26,26,.22);border-radius:12px;pointer-events:none;}
+  .panel h2{color:var(--crimson-dark);margin:0 0 4px;font-size:1.35rem;}
+  .panel .eyebrow{color:var(--forest);}
+  .panel-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;color:var(--ink);opacity:.5;z-index:2;}
+  .panel-close:hover{opacity:1;}
+  .pbody{margin-top:12px;font-size:.95rem;line-height:1.62;}
+  .pbody p{margin:0 0 12px;}
+  .pact{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .fb{margin-top:12px;padding:11px 14px;border-radius:10px;font-size:.9rem;display:none;line-height:1.55;}
+  .fb.ok{background:rgba(47,93,58,.15);border:1px solid var(--forest);color:#1d3d26;display:block;}
+  .fb.bad{background:rgba(139,26,26,.12);border:1px solid var(--crimson);color:var(--crimson-dark);display:block;}
+  .fb.info{background:rgba(201,162,39,.16);border:1px solid var(--gold);color:#5c4310;display:block;}
+
+  .doc{background:linear-gradient(180deg,#fdf8e8,#f3e8c8);border:1.5px solid #cdb480;border-radius:10px;padding:15px 18px;margin-bottom:12px;font-family:'Literata',serif;}
+  .doc .dhead{font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:.06em;color:var(--crimson-dark);text-transform:uppercase;margin-bottom:7px;}
+  .doc .dtext{font-style:italic;font-size:.95rem;line-height:1.72;}
+  .tm{background:rgba(201,162,39,.22);border-bottom:1.5px dashed #a5820f;padding:1px 3px;border-radius:3px;cursor:pointer;font-style:normal;transition:.14s;}
+  .tm:hover{background:rgba(201,162,39,.45);}
+  .tm.clean{background:rgba(47,93,58,.16);border-bottom-color:var(--forest);color:#1d3d26;cursor:default;}
+  .tm.hit{background:var(--crimson);color:#fff;border-bottom-color:var(--crimson-dark);cursor:default;}
+
+  input[type=text],input[type=tel]{background:#fff;border:1.5px solid #d8c79e;border-radius:10px;padding:11px 13px;font-family:'Literata',serif;font-size:.96rem;color:var(--ink);}
+  input:focus{outline:none;border-color:var(--crimson);box-shadow:0 0 0 3px rgba(139,26,26,.12);}
+  input:disabled{opacity:.65;}
+  .codebox{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px;}
+  #yearCode{width:150px;font-family:'Space Mono',monospace;font-size:1.5rem;letter-spacing:.28em;text-align:center;font-weight:700;}
+  .dial-row{display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px;}
+  .dial{display:grid;grid-template-columns:1fr 190px;gap:10px;align-items:center;background:#fff;border:1.5px solid #d8c79e;border-radius:10px;padding:10px 12px;}
+  @media(max-width:600px){.dial{grid-template-columns:1fr;}}
+  .dial .ddef{font-size:.88rem;line-height:1.45;}
+  .dial input{width:100%;}
+  .dial.solved{border-color:var(--forest);background:rgba(47,93,58,.13);}
+  .dial.solved .ddef{opacity:.75;}
+  .dial .sol{font-family:'Cinzel',serif;font-weight:700;color:var(--forest);font-size:.95rem;text-align:center;}
+
+  .clue{background:#fff;border:1.5px solid #d8c79e;border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:10px 13px;margin-bottom:8px;font-size:.92rem;line-height:1.5;}
+  .clue .cn{font-family:'Space Mono',monospace;font-size:.66rem;color:var(--crimson);display:block;margin-bottom:2px;letter-spacing:.06em;}
+  .seal{display:flex;justify-content:center;margin-bottom:10px;}
+  .seal svg{width:76px;height:76px;}
+
+  .mapwrap{border:1.5px solid #cdb480;border-radius:12px;overflow:hidden;background:#dcc48f;}
+  .mapwrap svg{width:100%;height:auto;display:block;}
+  .mpt{cursor:pointer;}
+  .mpt circle{transition:.15s;}
+  .mpt:hover circle{stroke-width:4;}
+  .mpt.ok circle{fill:var(--forest);}
+  .mpt.no circle{fill:#9a3a2c;}
+  .mq{font-weight:600;color:var(--crimson-dark);margin:10px 0 4px;font-size:.98rem;}
+
+  .ending{padding:24px 0;text-align:center;}
+  .ending h2{color:var(--gold-light);font-size:1.75rem;}
+  .ending.lost h2{color:#ff9c8f;}
+  .stat{display:inline-block;background:rgba(0,0,0,.3);border:1px solid rgba(201,162,39,.45);border-radius:12px;padding:16px 26px;margin:16px auto;font-family:'Space Mono',monospace;font-size:.92rem;line-height:2;text-align:left;}
+  .stat b{color:var(--gold-light);}
+  .profile{max-width:640px;margin:14px auto 0;text-align:left;}
+  .prow{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center;background:rgba(0,0,0,.24);border:1px solid rgba(201,162,39,.25);border-radius:9px;padding:9px 13px;margin-bottom:7px;font-size:.86rem;}
+  .prow .pn{font-family:'Cinzel',serif;font-weight:700;color:var(--gold-light);}
+  .bar{height:9px;background:rgba(242,231,201,.14);border-radius:5px;overflow:hidden;}
+  .bar i{display:block;height:100%;background:var(--crimson);border-radius:5px;}
+  .bar i.zero{background:var(--forest);}
+  .prow .pv{font-family:'Space Mono',monospace;text-align:right;opacity:.85;}
+  .verdict{max-width:640px;margin:16px auto 0;background:rgba(0,0,0,.24);border:1px solid rgba(201,162,39,.3);border-radius:12px;padding:14px 18px;font-size:.9rem;line-height:1.6;text-align:left;}
+  footer.tiny{text-align:center;opacity:.5;font-size:.78rem;margin-top:44px;font-family:'Space Mono',monospace;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="hud" id="hud" style="display:none;">
+    <div class="hud-title">A titkos levéltár</div>
+    <div class="hud-right">
+      <div class="pill">Zárak: <b id="hudLocks">0/4</b></div>
+      <div class="clock" id="clock">25:00</div>
+    </div>
+  </div>
+
+  <!-- COVER -->
+  <section class="screen active" id="s-cover">
+    <div class="cover">
+      <div class="eyebrow">Érettségi felkészítő szabadulószoba &middot; Reformkor (1825&ndash;1848) &middot; 11&ndash;12. évfolyam</div>
+      <h1>A titkos levéltár</h1>
+      <p class="sub">Egy zárt levéltári teremben találod magad. Az ajtón négy zár. Az asztalon négy oklevél — ezekből fejthetők meg a kódok.</p>
+      <div class="story">
+        <p><b>A négy zár:</b> évszám, fogalom, név és térkép — vagyis pontosan az a négy adattípus, amelyet az érettségi számon kér. <b>Sehol nincs válaszlehetőség:</b> minden kódot fejből kell beírnod. Egy zár vagy kinyílik, vagy nem.</p>
+        <p><b>Az idő a pontszámod.</b> 25 perced van. Hibás kód <b>&minus;1 perc</b>, segítségkérés <b>&minus;1,5 perc</b>. A segítség tehát nem ingyenes — de nem is tilos.</p>
+        <p style="font-size:.86rem;opacity:.75;">A kódok minden játszásnál mások: 10 dátumfeladvány, 24 fogalom, 14 személy, 8 térképkérdés és 5 okleveles készlet közül sorsol a levéltár.</p>
+      </div>
+      <div class="warnbox">
+        <b>A falon egy cédula:</b> „A négy oklevél egyike <b>hamisítvány</b>. Aki hamis oklevélre alapozva nyitja az ajtót, az bent marad." — A négy zár kinyitása után meg kell találnod a hamisítványt: rá kell kattintanod arra a szóra, amely elárulja.
+      </div>
+      <button class="btn" onclick="startGame()">Belépek a levéltárba &rarr;</button>
+    </div>
+  </section>
+
+  <!-- ROOM -->
+  <section class="screen" id="s-room">
+    <p style="text-align:center;opacity:.85;font-size:.92rem;margin:0 0 16px;">Kattints egy zárra. Bármilyen sorrendben dolgozhatsz.</p>
+    <div class="locks" id="locks"></div>
+    <div class="door" id="door" onclick="openFinale()">
+      <h3>A vasajtó</h3>
+      <p id="doorTxt">Négy zár tartja. Nyisd ki mind, hogy hozzáférj az oklevelekhez.</p>
+    </div>
+  </section>
+
+  <!-- ENDING -->
+  <section class="screen" id="s-end">
+    <div class="ending" id="endWrap">
+      <div class="eyebrow" id="endEyebrow"></div>
+      <h2 id="endTitle"></h2>
+      <p id="endLead" style="max-width:620px;margin:8px auto 0;opacity:.9;line-height:1.6;"></p>
+      <div class="stat" id="endStat"></div>
+      <div class="profile" id="endProfile"></div>
+      <div class="verdict" id="endVerdict"></div>
+      <div style="margin-top:24px;">
+        <button class="btn secondary" onclick="location.reload()">Új nyomozás (új kódokkal)</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="overlay" id="ov">
+  <div class="panel">
+    <button class="panel-close" onclick="closePanel()" aria-label="Bezárás">&#10005;</button>
+    <div class="eyebrow" id="p-eb"></div>
+    <h2 id="p-t"></h2>
+    <div class="pbody" id="p-b"></div>
+    <div class="fb" id="p-fb" role="status" aria-live="polite"></div>
+    <div class="pact" id="p-a"></div>
+  </div>
+</div>
+<footer class="tiny">Reformkor &middot; szabad felidézés, forráskritikai finálé &middot; a szemelvények korhű stílusú, tartalmi rekonstrukciók</footer>
+
+<script>
+/* ========== segédek ========== */
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function sample(a,n){return shuffle(a).slice(0,n);}
+function norm(s){return (s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim();}
+
+/* =========================================================
+   1) ÉVSZÁM-ZÁR — dátumfeloldás (a kód maga az évszám)
+   ========================================================= */
+const YEAR_BANK=[
+ {frag:'…kelt azon esztendőben, midőn a <b>Magyar Tudós Társaság</b> alapítására tett felajánlás óta <b>öt</b> év telt el…',
+  code:'1830', anchor:'A felajánlás az 1825-ös pozsonyi országgyűlésen hangzott el — Felsőbüki Nagy Pál beszéde után.',
+  reveal:'1825 + 5 = <b>1830</b> — a <i>Hitel</i> megjelenése. Sokan innen, nem 1825-től számítják a reformkor kezdetét.'},
+ {frag:'…kelt azon esztendőben, midőn Széchenyi gróf <b>Hitel</b> című munkájának megjelenése óta <b>egy</b> év telt el…',
+  code:'1831', anchor:'A Hitel 1830-ban jelent meg.',
+  reveal:'1830 + 1 = <b>1831</b> — ekkor írta Széchenyi a <i>Világ</i>at (válasz a támadásokra), és ekkor tört ki a felvidéki koleralázadás.'},
+ {frag:'…kelt azon esztendőben, midőn Széchenyi gróf <b>Hitel</b> című munkájának megjelenése óta <b>két</b> év telt el…',
+  code:'1832', anchor:'A Hitel 1830-ban jelent meg.',
+  reveal:'1830 + 2 = <b>1832</b> — ekkor nyílt meg az első igazi reformországgyűlés (1832–1836).'},
+ {frag:'…kelt azon esztendőben, midőn Széchenyi gróf <b>Hitel</b> című munkájának megjelenése óta <b>három</b> év telt el…',
+  code:'1833', anchor:'A Hitel 1830-ban jelent meg.',
+  reveal:'1830 + 3 = <b>1833</b> — ekkor jelent meg a <i>Stádium</i>, benne a rendi rendszer lebontásának tizenkét pontjával.'},
+ {frag:'…kelt azon esztendőben, midőn Széchenyi gróf <b>Hitel</b> című munkájának megjelenése óta <b>tizenegy</b> év telt el…',
+  code:'1841', anchor:'A Hitel 1830-ban jelent meg.',
+  reveal:'1830 + 11 = <b>1841</b> — a <i>Pesti Hírlap</i> indulása, Széchenyi <i>Kelet népe</i> című vitairata és Kossuth <i>Felelete</i>.'},
+ {frag:'…kelt azon esztendőben, midőn Kossuth úr hírlapjának első száma óta <b>egy</b> év telt el…',
+  code:'1842', anchor:'A Pesti Hírlap első száma 1841 januárjában jelent meg.',
+  reveal:'1841 + 1 = <b>1842</b> — az Első Ipari Kiállítás éve: itt döbbent rá Kossuth, hogy a cseh és osztrák ipar versenye megfojtaná a magyart. Innen a védővám gondolata.'},
+ {frag:'…kelt azon esztendőben, midőn a <b>Magyar Tudós Társaság</b> alapítására tett felajánlás óta <b>tizenkilenc</b> év telt el…',
+  code:'1844', anchor:'A felajánlás az 1825-ös pozsonyi országgyűlésen hangzott el.',
+  reveal:'1825 + 19 = <b>1844</b> — a magyar államnyelv törvénye és a Védegylet megalakulása; ekkor távolították el Kossuthot a Pesti Hírlap éléről.'},
+ {frag:'…kelt azon esztendőben, midőn <b>V. Ferdinánd</b> trónra lépte óta <b>tizenegy</b> év telt el…',
+  code:'1846', anchor:'I. Ferenc 1835-ben halt meg; utóda V. Ferdinánd lett, mellette Metternich befolyása nőtt.',
+  reveal:'1835 + 11 = <b>1846</b> — ekkor alakult meg a Konzervatív Párt.'},
+ {frag:'…kelt azon esztendőben, midőn a nagy <b>pesti árvíz</b> óta <b>kilenc</b> év telt el…',
+  code:'1847', anchor:'A pesti árvíz 1838 márciusában pusztított — ekkor lett Wesselényi „árvízi hajós".',
+  reveal:'1838 + 9 = <b>1847</b> — az Ellenzéki Kör megalakulása és az Ellenzéki Nyilatkozat kiadása, Deák Ferenc megfogalmazásában.'},
+ {frag:'…kelt azon esztendőben, midőn Kossuth úr hírlapjának első száma óta <b>hét</b> év telt el…',
+  code:'1848', anchor:'A Pesti Hírlap 1841 januárjában indult.',
+  reveal:'1841 + 7 = <b>1848</b> — a polgári forradalom és az áprilisi törvények éve.'},
+];
+
+/* =========================================================
+   2) FOGALOM-ZÁR — definíció → beírt fogalom
+   ========================================================= */
+const CONCEPT_BANK=[
+ {def:'A jobbágy egy összegben megválthatja a földesúri szolgáltatásokat, és földje szabad tulajdonosává válik.',
+  ans:['orokvaltsag','orok valtsag','az orokvaltsag'], show:'örökváltság'},
+ {def:'A jobbágyfelszabadítás azon módja, amelyet az 1839/40-es országgyűlés iktatott törvénybe: csak akkor jöhet létre, ha a földesúr beleegyezik. <i>(Két szó!)</i>',
+  ans:['onkentes orokvaltsag','az onkentes orokvaltsag'], show:'önkéntes örökváltság'},
+ {def:'Kossuth javaslata: kivétel nélkül minden jobbágyra vonatkozna, s a váltságdíjat nem a jobbágy, hanem az állam fizetné. <i>(Két szó!)</i>',
+  ans:['kotelezo orokvaltsag','a kotelezo orokvaltsag'], show:'kötelező örökváltság'},
+ {def:'Az az elv, amely szerint az ország terheiből a kiváltságos rendeknek is részt kell vállalniuk.',
+  ans:['kozteherviseles','a kozteherviseles'], show:'közteherviselés'},
+ {def:'A nemesi birtok elidegeníthetetlensége: eladni, elzálogosítani nem lehet — emiatt utasította el a bécsi bank Széchenyi hitelkérelmét.',
+  ans:['osiseg','aviticitas','az osiseg'], show:'ősiség'},
+ {def:'A család kihalása után a birtok a kincstárra száll — a Stádium ennek megszüntetését is követelte.',
+  ans:['fiscalitas','fiszkalitas','a fiscalitas'], show:'fiscalitas'},
+ {def:'Az a követelés, hogy a nemességen kívüliek is szerezhessenek földtulajdont — a Stádium egyik pontja.',
+  ans:['birtokbirhatas','jus proprietatis','ius proprietatis','a birtokbirhatas'], show:'birtokbírhatás (jus proprietatis)'},
+ {def:'A nemesség és a jobbágyság érdekeinek összekapcsolása jogkiterjesztés útján — nem a kiváltságok eltörlésével.',
+  ans:['erdekegyesites','az erdekegyesites'], show:'érdekegyesítés'},
+ {def:'1844-ben alakult társadalmi mozgalom: tagjai becsületszóra fogadták, hogy csak honi terméket vásárolnak.',
+  ans:['vedegylet','a vedegylet','orszagos vedegylet'], show:'Védegylet'},
+ {def:'Olyan gazdaságpolitika, amely a fejletlenebb ország gyenge iparát a határon kivetett teherrel óvja a fejlettebb versenytárstól — Friedrich List elmélete nyomán.',
+  ans:['vedovam','vedovamrendszer','protekcionizmus','vedovamos gazdasagpolitika'], show:'védővám (protekcionizmus)'},
+ {def:'A sajtótermékek előzetes hatósági engedélyezése — a szabad szó legfőbb akadálya a korszakban.',
+  ans:['cenzura','a cenzura','elozetes cenzura'], show:'cenzúra'},
+ {def:'A vármegye írásos parancsa a diétára küldött emberének: mit szavazhat és mit nem. Megváltoztatása miatt mondott le Kölcsey.',
+  ans:['kovetutasitas','a kovetutasitas'], show:'követutasítás'},
+ {def:'A hírlap első helyén álló, véleményformáló írás — Kossuth ebben a műfajban fogalmazta meg programját.',
+  ans:['vezercikk','a vezercikk'], show:'vezércikk'},
+ {def:'Kossuth kéziratos lapja az 1832–36-os diéta vitáiról: a cenzúra megkerülésére kézzel másolva terjedt. <i>(Két szó!)</i>',
+  ans:['orszaggyulesi tudositasok','az orszaggyulesi tudositasok'], show:'Országgyűlési Tudósítások'},
+ {def:'Kossuth következő kéziratos lapja, immár a megyegyűlésekről — betiltása után tartóztatták le 1837-ben. <i>(Két szó!)</i>',
+  ans:['torvenyhatosagi tudositasok','a torvenyhatosagi tudositasok'], show:'Törvényhatósági Tudósítások'},
+ {def:'A kormányzat királyi kinevezésű, kormányhű tisztviselőket ültetett a megyék élére, hogy letörje az ellenzéki többséget.',
+  ans:['adminisztratori rendszer','adminisztratorok','az adminisztratori rendszer'], show:'adminisztrátori rendszer'},
+ {def:'Széchenyi által alapított társasági intézmény: politikai és gazdasági eszmecsere fóruma a nemesség számára.',
+  ans:['kaszino','a kaszino','nemzeti kaszino'], show:'kaszinó'},
+ {def:'1847-ben, Deák Ferenc megfogalmazásában kiadott programirat: közteherviselés, népképviselet, az ősiség eltörlése, felelős kormány. <i>(Két szó!)</i>',
+  ans:['ellenzeki nyilatkozat','az ellenzeki nyilatkozat'], show:'Ellenzéki Nyilatkozat'},
+ {def:'A polgári átalakulás törvényei, amelyeket az uralkodó 1848. április 11-én szentesített. <i>(Két szó!)</i>',
+  ans:['aprilisi torvenyek','az aprilisi torvenyek','1848 aprilisi torvenyek','aprilisi torveny'], show:'áprilisi törvények'},
+ {def:'A reformellenzék azon értelmiségi csoportja, amely nem a vármegyére, hanem a parlamentnek felelős központi kormányra akarta építeni az átalakulást.',
+  ans:['centralistak','a centralistak','centralista'], show:'centralisták'},
+ {def:'A konzervatívok másik neve: óvatos reformokat támogattak, s az arisztokrácia érdekeit tartották szem előtt. <i>(Két szó!)</i>',
+  ans:['fontolva haladok','a fontolva haladok','fontolva halado'], show:'fontolva haladók'},
+ {def:'A pesti radikális fiatal értelmiség köre, amely a reformokat kevésnek és lassúnak tartotta; törzshelyükről is elnevezték őket. <i>(Két szó!)</i>',
+  ans:['marciusi ifjak','a marciusi ifjak','pilvax kor','a pilvax kor'], show:'márciusi ifjak (Pilvax kör)'},
+ {def:'A képviselőket nem a rendek, hanem a választópolgárok küldik — az 1848-as átalakulás egyik alapelve.',
+  ans:['nepkepviselet','a nepkepviselet','nepkepviseleti orszaggyules'], show:'népképviselet'},
+ {def:'A jobbágy évi ingyenmunkája a földesúr saját kezelésű földjén — Széchenyi szerint „erkölcstelen és haszontalan".',
+  ans:['robot','a robot'], show:'robot'},
+];
+
+/* =========================================================
+   3) NÉV-ZÁR — pecsét + nyomok (nehéztől könnyűig), 4. nyom = segítség
+   ========================================================= */
+const NAME_BANK=[
+ {name:'Széchenyi István', accept:['szechenyi istvan','szechenyi','istvan szechenyi','grof szechenyi istvan'],
+  clues:['Bécsben születtem udvarhű arisztokrata családban; apám múzeumot alapított, anyám bátyja a keszthelyi gazdasági főiskolát.',
+         'Huszártisztként szolgáltam a napóleoni háborúkban, s ott voltam a bécsi kongresszuson is — angliai utam döbbentett rá hazám elmaradottságára.',
+         'Első könyvem a lovakról szólt; hengermalmot, kaszinót, gőzhajózást és folyószabályozást is kezdeményeztem.'],
+  hint:'Vitapartnerem nevezett „a legnagyobb magyarnak"; birtokaim egyévi jövedelmét ajánlottam a Tudós Társaságra.'},
+ {name:'Kossuth Lajos', accept:['kossuth lajos','kossuth','lajos kossuth'],
+  clues:['Nem választott követként ültem a diétán, hanem egy távollévő főrend helyetteseként — zempléni kisnemes voltam.',
+         'Kéziratos tudósításaim után egy másik lapot is indítottam; annak betiltása után letartóztattak, és három évet ültem.',
+         'Szabadulásom után egy hírlap élére hívtak; a vezércikk műfajával teremtettem meg a modern magyar újságírást.'],
+  hint:'„Ipar nélkül a nemzet félkarú óriás" — tőlem való; 1844-ben a Védegylet igazgatója lettem.'},
+ {name:'Deák Ferenc', accept:['deak ferenc','deak','ferenc deak'],
+  clues:['Zala vármegye követeként a büntetőjog megújításán dolgoztam; társam lemondása után vettem át az ellenzék vezetését.',
+         '1847-ben én fogalmaztam meg azt a programiratot, amely a haladás pártjának követeléseit összegezte.',
+         '1848-ban az első felelős kormány igazságügyi minisztere lettem.'],
+  hint:'Széchenyi hiába próbált a maga oldalára állítani a Kossuth elleni vitában — kitartottam a liberális ellenzék egysége mellett.'},
+ {name:'Wesselényi Miklós', accept:['wesselenyi miklos','wesselenyi','miklos wesselenyi'],
+  clues:['Erdélyi báró vagyok; Széchenyivel együtt jártam be Nyugat-Európát, később útjaink elváltak.',
+         'Művemben a fejekben lévő téveszmék megváltoztatására helyeztem a hangsúlyt; a zsidóság egyenjogúsítását is szorgalmaztam.',
+         'Hűtlenségi perbe fogtak, három évre ítéltek, de szembajom miatt két hónap után felfüggesztették a büntetést — végül megvakultam.'],
+  hint:'Az 1838-as árvíz idején csónakon mentettem a pesti polgárokat — azóta „az árvízi hajós".'},
+ {name:'Kölcsey Ferenc', accept:['kolcsey ferenc','kolcsey','ferenc kolcsey'],
+  clues:['Vármegyém utasítását megváltoztatták fölöttem: mikor visszavonta megbízásomat, inkább lemondtam a követségről.',
+         'Szerintem a nemességet és a parasztságot közös érdek köti a hazához, s ez az érdek két szó: szabadság és tulajdon.',
+         'Búcsúbeszédemben így intettem: „Jelszavaink valának: haza és haladás."'],
+  hint:'Szatmár vármegye követe voltam az 1832–36-os diétán; egy nemzeti énekem szövegét ma is minden ünnepen elénekeljük.'},
+ {name:'Batthyány Lajos', accept:['batthyany lajos','batthyany','lajos batthyany'],
+  clues:['Grófi címem ellenére a felsőtáblán az ellenzék élére álltam.',
+         'Széchenyi engem is meg akart nyerni a maga oldalára a nagy vita idején — de kitartottam az ellenzék egysége mellett.',
+         '1848 márciusában egy addig soha nem létezett testület élére neveztek ki.'],
+  hint:'Én lettem az első felelős magyar kormány miniszterelnöke; 1849 októberében Pesten kivégeztek.'},
+ {name:'Eötvös József', accept:['eotvos jozsef','eotvos','jozsef eotvos'],
+  clues:['Báró vagyok és író; a vármegyei nemesi világot idegennek éreztem.',
+         'Körünk népképviseleten alapuló, központosított polgári államot akart, angol és francia mintára — de tömegtámogatásra nem találtunk.',
+         'Regényemben egy falusi jegyző sorsán át mutattam meg a vármegyei visszásságokat.'],
+  hint:'A centralisták közé tartoztam Szalay Lászlóval és Trefort Ágostonnal; 1848-ban vallás- és közoktatásügyi miniszter lettem.'},
+ {name:'Szalay László', accept:['szalay laszlo','szalay','laszlo szalay'],
+  clues:['Jogtudós vagyok, nem birtokos nemes — a centralisták vezéralakja.',
+         'A vármegyerendszerrel szemben álltunk: parlamentnek felelős kormányt akartunk, francia és angol példa nyomán.',
+         '1844-ben én vettem át a Pesti Hírlap szerkesztését — attól, akit a kormányzat eltávolított.'],
+  hint:'Társaim Eötvös József és Trefort Ágoston voltak.'},
+ {name:'Dessewffy Aurél', accept:['dessewffy aurel','dessewffy','aurel dessewffy'],
+  clues:['Fiatal, konzervatív arisztokraták csoportját szerveztem — felsőbb sugalmazásra.',
+         'Elhatárolódtunk a merev maradiságtól is, a liberalizmustól is: óvatos reformokat támogattunk, például az önkéntes örökváltságot.',
+         'Célunk a közvélemény eltávolítása volt a reformerektől; ehhez lapot is indítottam <i>Világ</i> címmel.'],
+  hint:'A „fontolva haladók" szervezője voltam a negyvenes évek elején.'},
+ {name:'Felsőbüki Nagy Pál', accept:['felsobuki nagy pal','nagy pal','felsobuki nagy','felso buki nagy pal'],
+  clues:['Köznemes vagyok, dunántúli megyém követe a diétán.',
+         'Beszédemben az arisztokráciát ostoroztam, amiért nem karolja fel a magyar nyelv ügyét.',
+         'Az én felszólalásomra állt fel a gróf, és ajánlotta fel birtokai egyévi jövedelmét egy tudós társaságra.'],
+  hint:'Sopron vármegye követe voltam az 1825-ös országgyűlésen.'},
+ {name:'Lovassy László', accept:['lovassy laszlo','lovassy','laszlo lovassy'],
+  clues:['Jogásznak készültem, és a diéta karzatán hallgattam a vitákat — közülünk sokan 1848 aktív résztvevői lettek.',
+         'Társaimmal egyletet alapítottunk; a hatalom ezt izgatásnak tekintette.',
+         'Tíz évre ítéltek; Spielberg börtönében elborult az elmém.'],
+  hint:'Az országgyűlési ifjak vezetője voltam; 1836-ban tartóztattak le.'},
+ {name:'Táncsics Mihály', accept:['tancsics mihaly','tancsics','mihaly tancsics'],
+  clues:['Jobbágycsaládból származom, takácsmesterséget tanultam — mégis író és tanító lettem.',
+         'Programom a legradikálisabb: a föld azé, aki megműveli — ingyenes földosztást követeltem, kártalanítás nélkül.',
+         '1848. március 15-én a pesti nép engem szabadított ki a börtönből.'],
+  hint:'Írásaimért sajtóvétség címén tartottak fogva Budán; a márciusi ifjakhoz álltam közel.'},
+ {name:'Irinyi József', accept:['irinyi jozsef','irinyi','jozsef irinyi'],
+  clues:['Publicista voltam, a pesti radikális fiatal értelmiség köréből.',
+         'Én öntöttem szavakba azt a követeléssorozatot, amelyet 1848 márciusában kinyomtattak — a felolvasója Jókai Mór volt.',
+         'A tizenkét pont szövegének megfogalmazója vagyok. (Bátyám a gyufa feltalálója — ne keverd össze velem!)'],
+  hint:'A márciusi ifjak (Pilvax kör) tagja voltam Petőfi, Vasvári és Jókai mellett.'},
+ {name:'Metternich', accept:['metternich','klemens metternich','metternich kelemen','metternich herceg','metternich kancellar'],
+  clues:['Az európai egyensúly nevében szerveztem a nagyhatalmak együttműködését a forradalmak ellen.',
+         'Befolyásom akkor nőtt meg igazán, mikor a gyenge képességű uralkodó lépett a trónra 1835-ben.',
+         'Rendszerem a rendőri felügyeletre, a cenzúrára és a besúgókra épült: feloszlattam az országgyűlést, és bebörtönöztettem a haladók vezetőit.'],
+  hint:'Osztrák államkancellár voltam; 1848 márciusában, a bécsi forradalom hírére menekülnöm kellett.'},
+];
+
+/* =========================================================
+   4) TÉRKÉP-ZÁR — vaktérkép, 2 kérdés
+   ========================================================= */
+const MAP_PTS=[
+ {id:'becs',    x:210, y:120, name:'Bécs'},
+ {id:'pozsony', x:300, y:150, name:'Pozsony'},
+ {id:'pest',    x:398, y:250, name:'Pest-Buda'},
+ {id:'debrecen',x:608, y:265, name:'Debrecen'},
+ {id:'vukovar', x:428, y:442, name:'Vukovár'},
+ {id:'fiume',   x:205, y:452, name:'Fiume'},
+ {id:'vaskapu', x:620, y:460, name:'Vaskapu (Al-Duna)'},
+];
+const MAP_BANK=[
+ {q:'Hol ülésezett a rendi országgyűlés a reformkorban?', id:'pozsony',
+  hint:'A Duna mentén, az ország északnyugati szélén, Bécshez közel.',
+  fb:'A reformországgyűlések színhelye — itt hangzott el Széchenyi felajánlása is 1825-ben.'},
+ {q:'Hol tartotta a Védegylet 1844. októberi alakuló gyűlését?', id:'pozsony',
+  hint:'Ugyanott, ahol a rendi országgyűlés ülésezett: a Duna mentén, északnyugaton.',
+  fb:'A Védegylet alakuló gyűlése 1844. október 6-án zajlott, az országgyűlés városában.'},
+ {q:'Melyik város volt az ország szellemi és gazdasági központja — itt tört ki 1848. március 15-én a forradalom?', id:'pest',
+  hint:'A Duna két partján, az ország szívében.',
+  fb:'A reformkor „szellemi fővárosa": kaszinó, Pesti Hírlap, Pilvax kör, Nemzeti Múzeum — és 1848 márciusa.'},
+ {q:'Melyik városban működött a Pilvax kör, a márciusi ifjak törzshelye?', id:'pest',
+  hint:'A Duna bal partján, az ország szellemi központjában.',
+  fb:'Petőfi, Vasvári, Jókai és Irinyi köre innen indult 1848. március 15-én.'},
+ {q:'Melyik tengeri kikötőhöz akarta Kossuth a vasutat vezetni?', id:'fiume',
+  hint:'Az Adriai-tenger partján, az ország délnyugati kijáratánál.',
+  fb:'„Tengerhez, magyar!" — a saját kikötő a Bécstől való gazdasági függetlenedés kulcsa lett volna.'},
+ {q:'Melyik dunai városból indult volna Kossuth tervezett vasútvonala a tenger felé?', id:'vukovar',
+  hint:'A Duna mentén, az ország déli részén.',
+  fb:'A Vukovár–Fiume vonal terve — ezt bírálta Széchenyi a Pest-központú, sugaras hálózat nevében.'},
+ {q:'Hol kezdte meg Széchenyi 1831-ben a Duna hajózhatóvá tételét, ott, ahol a folyó szorosba kényszerül?', id:'vaskapu',
+  hint:'A Duna délkeleti szakaszán, az ország peremén.',
+  fb:'Az Al-Duna szabályozása Széchenyi legnagyobb mérnöki vállalkozásainak egyike volt.'},
+ {q:'Hol székelt a birodalmi kormányzat, ahonnan Metternich irányította az országot?', id:'becs',
+  hint:'A Dunától északnyugatra, az országhatáron túl.',
+  fb:'Metternich rendszerének központja — minden reformnak itt kellett átjutnia.'},
+];
+
+/* =========================================================
+   FINÁLÉ — négy oklevél, egyik hamis (3 készlet)
+   ========================================================= */
+const DOC_SETS=[
+ {docs:[
+   {head:'Kölcsey Ferenc levele — Cseke, 1834',
+    parts:[['a1','Szatmár vármegye'],' követeként az ',['a2','örökváltság'],' ügyét viszem a ',['a3','pozsonyi diétára'],'. A megye utasítása azonban megköti kezemet, s a jobbágy sorsán nem enyhíthetek.']},
+   {head:'Széchenyi István feljegyzése — Pest, 1830',
+    parts:['Kiadtam könyvemet, melyben megmutatom: amíg az ',['b1','ősiség'],' miatt a birtok nem lehet a ',['b2','kölcsön'],' fedezete, a magyar gazda szegény marad. Nem a múltat siratom: a ',['b3','jövőt'],' akarom építeni.']},
+   {head:'Kossuth Lajos levele — Pest, 1836',
+    parts:['Az országgyűlés ',['c1','tudósításait kéziratban'],' terjesztem, mert a ',['c2','cenzúra'],' a nyomtatást tiltja. Reményem, hogy a ',['c3','Védegylet'],' tagjai a honi ipart pártolva erősítik a nemzetet.']},
+   {head:'Deák Ferenc feljegyzése — Kehida, 1847',
+    parts:['Az ',['d1','Ellenzéki Nyilatkozatban'],' összefoglaltuk, mit kíván a haladás pártja: ',['d2','közteherviselést'],', az úrbéri viszonyok megszüntetését ',['d3','kármentesítéssel'],'.']},
+ ],
+  terms:{
+   a1:{fb:'Korhű. Kölcsey valóban Szatmár vármegye követe volt az 1832–36-os országgyűlésen.'},
+   a2:{fb:'Korhű. Az örökváltság az 1832–36-os országgyűlés egyik fő vitakérdése volt.'},
+   a3:{fb:'Korhű. A rendi országgyűlés a reformkorban végig Pozsonyban ülésezett.'},
+   b1:{fb:'Korhű. Az ősiséget csak 1848-ban törölték el — Széchenyi épp ezt támadta.'},
+   b2:{fb:'Korhű. A <i>Hitel</i> (1830) központi gondolata: fedezet híján nincs kölcsön, kölcsön híján nincs fejlesztés.'},
+   b3:{fb:'Korhű. Széchenyi híres gondolata a jövőbe vetett hitről a <i>Hitel</i> zárlatában áll.'},
+   c1:{fb:'Korhű. Az <i>Országgyűlési Tudósítások</i> valóban kéziratos másolatokban terjedt — épp a cenzúra megkerülésére.'},
+   c2:{fb:'Korhű. Az előzetes cenzúra a korszak egészében működött.'},
+   c3:{fake:true, fb:'<b>Megvan a hamisítvány!</b> A <b>Védegylet</b> csak <b>1844-ben</b> alakult meg — egy 1836-ra keltezett levélben nem szerepelhetne. A hamisító a nevet ismerte, az évszámot nem.'},
+   d1:{fb:'Korhű. Az Ellenzéki Nyilatkozat 1847-ben született, szövegét Deák fogalmazta.'},
+   d2:{fb:'Korhű. A közteherviselés a reformellenzék központi követelése volt.'},
+   d3:{fb:'Korhű. A kármentesítés (kártalanítás) kérdése végig napirenden volt az úrbéri viszonyok felszámolásánál.'},
+  }},
+
+ {docs:[
+   {head:'Wesselényi Miklós levele — Pest, 1838',
+    parts:['A ',['a1','pesti árvíz'],' napjaiban csónakon mentettem, akit tudtam. ',['a2','Hűtlenségi perem'],' azonban tovább folyik; a hatalom nem felejt.']},
+   {head:'Széchenyi István naplója — Pozsony, 1825',
+    parts:['A ',['b1','pozsonyi diétán'],' felajánlottam egy évi jövedelmemet a ',['b2','Tudós Társaság'],' alapítására. S míg a ',['b3','Lánchíd'],' már összeköti Pestet Budával, még mennyi tennivaló vár ránk!']},
+   {head:'Kossuth Lajos — Pest, 1841',
+    parts:[['c1','Hírlapom'],' első számát útjára bocsátom; vezércikkeimben az ',['c2','érdekegyesítés'],' mellett szólok: a nemesnek és a jobbágynak közös a jövője.']},
+   {head:'Táncsics Mihály feljegyzése — Pest, 1848. március',
+    parts:['A ',['d1','börtönből'],' a pesti nép szabadított ki. A ',['d2','sajtószabadság'],' immár a nemzet követelése, nem az enyém.']},
+ ],
+  terms:{
+   a1:{fb:'Korhű. A pesti árvíz 1838 márciusában pusztított — Wesselényi mentőakciója innen a „árvízi hajós" jelző.'},
+   a2:{fb:'Korhű. A hűtlenségi per 1835-től folyt ellene; 1839-ben ítélték el.'},
+   b1:{fb:'Korhű. Az 1825-ös országgyűlés Pozsonyban ülésezett.'},
+   b2:{fb:'Korhű. Széchenyi 1825-ben ajánlotta fel egyévi jövedelmét a Magyar Tudós Társaság alapítására.'},
+   b3:{fake:true, fb:'<b>Megvan a hamisítvány!</b> A <b>Lánchíd</b> építése csak <b>1839-ben</b> kezdődött, és <b>1849-ben</b> adták át. 1825-ben nem állhatott — az első állandó pest-budai híd akkor még terv sem volt.'},
+   c1:{fb:'Korhű. A <i>Pesti Hírlap</i> első száma 1841 januárjában jelent meg, Kossuth szerkesztésében.'},
+   c2:{fb:'Korhű. Az érdekegyesítés Kossuth programjának magja volt.'},
+   d1:{fb:'Korhű. Táncsicsot sajtóvétség miatt tartották fogva; 1848. március 15-én szabadították ki.'},
+   d2:{fb:'Korhű. A sajtószabadság a Tizenkét pont első követelése volt.'},
+  }},
+
+ {docs:[
+   {head:'Kölcsey Ferenc búcsúbeszéde — Pozsony, 1835',
+    parts:['Búcsúzom a követi pályától: megyém visszavonta ',['a1','követutasításomat'],'. ',['a2','„Jelszavaink valának: haza és haladás"'],' — s aki e kettőt elválasztja, veszni fog.']},
+   {head:'Deák Ferenc feljegyzése — Pozsony, 1836',
+    parts:['Az ',['b1','önkéntes örökváltság'],' törvénybe iktatását elértük — de a jobbágy csak akkor válthat, ha ',['b2','földesura beleegyezik'],'. Fél siker ez, mégis siker.']},
+   {head:'Batthyány Lajos levele — Pest, 1843',
+    parts:['Mint a ',['c1','felelős magyar kormány'],' elnöke, minisztertársaimmal a ',['c2','közteherviselés'],' törvénybe iktatásán dolgozom. A ',['c3','főrendi táblán'],' eddig is a haladás oldalán álltam.']},
+   {head:'Széchenyi István — Pest, 1841',
+    parts:['Vitairatomat ',['d1','Kelet népe'],' címmel bocsátom ki: nem a célt támadom, hanem a ',['d2','modort'],', mely a nemzetet forradalomba sodorhatja.']},
+ ],
+  terms:{
+   a1:{fb:'Korhű. A követutasítás rendszere valóban megkötötte a követek kezét — Kölcsey ezért mondott le 1835-ben.'},
+   a2:{fb:'Korhű. Kölcsey búcsúbeszédének (1835) leghíresebb mondata.'},
+   b1:{fb:'Korhű. Az 1836. évi törvény valóban csak <i>önkéntes</i> örökváltságot engedett.'},
+   b2:{fb:'Korhű. Épp ez volt a törvény gyengéje: a földesúr beleegyezése nélkül nem volt megváltás.'},
+   c1:{fake:true, fb:'<b>Megvan a hamisítvány!</b> Az első <b>felelős magyar kormány</b> csak <b>1848 áprilisában</b> alakult meg, Batthyány elnökletével. 1843-ban ilyen testület nem létezett — a hamisító visszadátumozta a miniszterelnökséget.'},
+   c2:{fb:'Korhű. A közteherviselés a reformellenzék központi követelése volt.'},
+   c3:{fb:'Korhű. Batthyány a főrendi (felső) tábla ellenzékének vezére volt.'},
+   d1:{fb:'Korhű. A <i>Kelet népe</i> 1841-ben jelent meg, válaszul a Pesti Hírlap indulására.'},
+   d2:{fb:'Korhű. Széchenyi épp a „modort", az érzelmekre ható izgatást kifogásolta, nem a célokat.'},
+  }},
+ {docs:[
+   {head:'Széchenyi István feljegyzése — Pest, 1833',
+    parts:['Megjelent ',['a1','Stádium'],' című munkám: tizenkét pontban sorolom, mit kell lebontani — köztük az ',['a2','ősiséget'],' és a ',['a3','fiscalitást'],'.']},
+   {head:'Kölcsey Ferenc levele — Pozsony, 1835',
+    parts:['Megyém megváltoztatta ',['b1','követutasításomat'],' — inkább lemondok. Helyemet az ellenzék élén ',['b2','Deák Ferenc'],' veszi át.']},
+   {head:'Kossuth Lajos levele — Pest, 1834',
+    parts:[['c1','Országgyűlési Tudósításaimat'],' kézzel másolva terjesztem, mert a nyomtatást nem engedik. ',['c2','V. Ferdinánd'],' őfelsége trónra lépte óta a kancellár keze mind erősebb.']},
+   {head:'Wesselényi Miklós levele — Zsibó, 1836',
+    parts:['Perem folyik; a ',['d1','Balítéletekről'],' szóló művem miatt is támadnak. Az ',['d2','örökváltság'],' ügyét mégsem adom fel.']},
+ ],
+  terms:{
+   a1:{fb:'Korhű. A <i>Stádium</i> 1833-ban jelent meg, benne a rendi rendszer lebontásának tizenkét pontjával.'},
+   a2:{fb:'Korhű. Az ősiség (aviticitas) eltörlése a Stádium 2. pontja.'},
+   a3:{fb:'Korhű. A fiscalitas megszüntetése a Stádium 3. pontja: a család kihalása után a birtok a kincstárra szállt.'},
+   b1:{fb:'Korhű. A követutasítás megváltoztatása miatt mondott le Kölcsey 1835-ben.'},
+   b2:{fb:'Korhű. Kölcsey helyét valóban Deák Ferenc vette át az ellenzék élén.'},
+   c1:{fb:'Korhű. Az <i>Országgyűlési Tudósítások</i> az 1832–36-os diéta idején, kézzel másolva terjedt — épp a cenzúra megkerülésére.'},
+   c2:{fake:true, fb:'<b>Megvan a hamisítvány!</b> <b>V. Ferdinánd</b> csak <b>1835-ben</b> lépett trónra, I. Ferenc halála után. 1834-ben még I. Ferenc uralkodott — az a király, aki így intézte el a reformjavaslatokat: „Az indítványokat agyonütöm."'},
+   d1:{fb:'Korhű. Wesselényi <i>Balítéletekről</i> című műve a fejekben lévő téveszmék megváltoztatását sürgette.'},
+   d2:{fb:'Korhű. Az örökváltság hirdetése Wesselényi programjának sarokpontja volt.'},
+  }},
+
+ {docs:[
+   {head:'Kossuth Lajos vezércikke — Pest, 1842',
+    parts:['Az ',['a1','Első Ipari Kiállítás'],' megmutatta: a fejlettebb cseh és osztrák ipar versenye megfojtaná a magyarét. ',['a2','Védővámokra'],' van szükség — ',['a3','Friedrich List'],' tanítása nyomán.']},
+   {head:'Széchenyi István vitairata — Pest, 1841',
+    parts:[['b1','Kelet népe'],' címmel bocsátom ki írásomat: nem a célt támadom, hanem a ',['b2','modort'],', mely a nemzetet forradalomba sodorhatja.']},
+   {head:'Kossuth Lajos válasza — Pest, 1841',
+    parts:['A ',['c1','Feleletben'],' megírtam a magamét: ',['c2','„Veletek, általatok, ha nektek tetszik; nélkületek, ellenetek, ha kell!"']]},
+   {head:'Deák Ferenc feljegyzése — Kehida, 1844',
+    parts:['Az ',['d1','Ellenzéki Nyilatkozatban'],' rögzítettük: ',['d2','közteherviselés'],', ',['d3','népképviseleti országgyűlés'],', az ősiség eltörlése.']},
+ ],
+  terms:{
+   a1:{fb:'Korhű. Az Első Ipari Kiállítás 1842-ben zajlott — itt döbbent rá Kossuth, hogy a magyar ipar védelemre szorul.'},
+   a2:{fb:'Korhű. A védővám gondolata 1842 után került Kossuth programjának középpontjába.'},
+   a3:{fb:'Korhű. Friedrich List elmélete az önálló nemzetgazdaság megteremtéséről Kossuth fő hivatkozási alapja volt.'},
+   b1:{fb:'Korhű. A <i>Kelet népe</i> 1841-ben jelent meg, válaszul a Pesti Hírlap indulására.'},
+   b2:{fb:'Korhű. Széchenyi épp a „modort", az érzelmekre ható izgatást kifogásolta, nem a célokat.'},
+   c1:{fb:'Korhű. Kossuth <i>Felelete</i> szintén 1841-ben jelent meg, válaszul a Kelet népére.'},
+   c2:{fb:'Korhű. A <i>Felelet</i> leghíresebb mondata: a középnemesség vezető szerepét hirdeti az arisztokráciával szemben.'},
+   d1:{fake:true, fb:'<b>Megvan a hamisítvány!</b> Az <b>Ellenzéki Nyilatkozat</b> csak <b>1847-ben</b> született — az Ellenzéki Kör megalakulása után, Deák Ferenc megfogalmazásában. 1844-ben még nem létezett.'},
+   d2:{fb:'Korhű. A közteherviselés a reformellenzék központi követelése volt.'},
+   d3:{fb:'Korhű. A népképviseleti országgyűlés a liberális ellenzék egyik alapkövetelése volt.'},
+  }},
+];
+
+/* =========================================================
+   ÁLLAPOT
+   ========================================================= */
+const LOCKDEF=[
+ {id:'year',   name:'Évszám-zár',  type:'kronológia', open:openYearLock},
+ {id:'concept',name:'Fogalom-zár', type:'fogalom',    open:openConceptLock},
+ {id:'name',   name:'Név-zár',     type:'személyek',  open:openNameLock},
+ {id:'map',    name:'Térkép-zár',  type:'topográfia', open:openMapLock},
+];
+const L={year:{o:false,e:0,h:0},concept:{o:false,e:0,h:0},name:{o:false,e:0,h:0},map:{o:false,e:0,h:0},fin:{o:false,e:0,h:0}};
+const G={t:1500, tm:null, ended:false, won:false, finErr:0, finHint:0};
+const R={};   /* a futáshoz kisorsolt tartalom */
+
+const LOCK_SVG={
+ year:'<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="19" fill="none" stroke="#c9a227" stroke-width="2.4"/><path d="M24 12 L24 24 L32 29" fill="none" stroke="#c9a227" stroke-width="2.4" stroke-linecap="round"/></svg>',
+ concept:'<svg viewBox="0 0 48 48"><rect x="9" y="12" width="30" height="26" rx="3" fill="none" stroke="#c9a227" stroke-width="2.2"/><path d="M15 20h18M15 26h18M15 32h11" stroke="#c9a227" stroke-width="2" stroke-linecap="round"/></svg>',
+ name:'<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16" fill="none" stroke="#c9a227" stroke-width="2.2"/><circle cx="24" cy="20" r="6" fill="none" stroke="#c9a227" stroke-width="2"/><path d="M13 37q3-9 11-9t11 9" fill="none" stroke="#c9a227" stroke-width="2"/></svg>',
+ map:'<svg viewBox="0 0 48 48"><path d="M8 13l11-4 10 4 11-4v26l-11 4-10-4-11 4z" fill="none" stroke="#c9a227" stroke-width="2.2" stroke-linejoin="round"/><path d="M19 9v26M29 13v26" stroke="#c9a227" stroke-width="1.6"/></svg>',
+};
+
+/* ========== idő ========== */
+function fmt(s){const m=Math.floor(Math.max(0,s)/60), q=Math.max(0,s)%60;return m+':'+String(q).padStart(2,'0');}
+function tick(){
+  if(G.ended)return;
+  G.t--;
+  const c=document.getElementById('clock');
+  c.textContent=fmt(G.t);
+  c.classList.toggle('warn', G.t<=180);
+  if(G.t<=0) endGame(false,'timeout');
+}
+function penal(sec,why){
+  G.t-=sec;
+  document.getElementById('clock').textContent=fmt(G.t);
+  if(G.t<=0) endGame(false,'timeout');
+}
+
+/* ========== indítás, terem ========== */
+function startGame(){
+  R.year=pick(YEAR_BANK);
+  R.concepts=sample(CONCEPT_BANK,5).map(c=>({...c,solved:false}));
+  R.name=pick(NAME_BANK);
+  R.map=sample(MAP_BANK,2); R.mapIdx=0;
+  R.set=pick(DOC_SETS);
+  go('room');
+  document.getElementById('hud').style.display='flex';
+  document.getElementById('clock').textContent=fmt(G.t);
+  G.tm=setInterval(tick,1000);
+  renderRoom();
+}
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function renderRoom(){
+  document.getElementById('locks').innerHTML=LOCKDEF.map(d=>{
+    const done=L[d.id].o;
+    return `<div class="lock ${done?'done':''}" onclick="${done?'':'LOCKDEF.find(x=>x.id===\''+d.id+'\').open()'}" role="button" tabindex="0">
+      ${done?'<svg viewBox="0 0 48 48"><path d="M13 25l7 8 15-17" fill="none" stroke="#4d8a5c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>':LOCK_SVG[d.id]}
+      <div class="lname">${d.name}</div><div class="ltype">${done?'NYITVA':d.type}</div></div>`;
+  }).join('');
+  const n=LOCKDEF.filter(d=>L[d.id].o).length;
+  document.getElementById('hudLocks').textContent=n+'/4';
+  const door=document.getElementById('door');
+  if(n===4){
+    door.classList.add('ready');
+    document.getElementById('doorTxt').textContent='A zárak engednek. Az oklevelek eléd tárulnak — de az egyik hamis. Kattints ide.';
+  }
+}
+
+/* ========== panel ========== */
+function P(eb,t,body,act){
+  document.getElementById('p-eb').innerHTML=eb;
+  document.getElementById('p-t').textContent=t;
+  document.getElementById('p-b').innerHTML=body;
+  document.getElementById('p-a').innerHTML=act||'';
+  const f=document.getElementById('p-fb'); f.className='fb'; f.textContent='';
+  document.getElementById('ov').classList.add('active');
+}
+function closePanel(){document.getElementById('ov').classList.remove('active');renderRoom();}
+function F(msg,kind){const f=document.getElementById('p-fb');f.className='fb '+kind;f.innerHTML=msg;}
+function solved(id,msg){
+  L[id].o=true;
+  F('&#128275; '+msg,'ok');
+  document.getElementById('p-a').innerHTML='<button class="btn" onclick="closePanel()">Vissza a terembe &rarr;</button>';
+  renderRoom();
+}
+function hintBtn(id){return `<button class="btn secondary small" id="hb-${id}" onclick="useHint('${id}')">Segítség (&minus;1,5 perc)</button>`;}
+
+/* ========== 1. ÉVSZÁM-ZÁR ========== */
+function openYearLock(){
+  P('1. zár &middot; kronológia &mdash; szabad felidézés','A dátumfeloldó zár',
+   `<p>A zár négy számjegyet kér. A kód <b>egy évszám</b> — de nincs kiírva sehol: a levél keltezéséből kell kiszámolnod.</p>
+    <div class="doc"><div class="dhead">Töredékes keltezés</div><div class="dtext">${R.year.frag}</div></div>
+    <div class="codebox">
+      <input id="yearCode" type="tel" maxlength="4" inputmode="numeric" placeholder="&mdash;&mdash;&mdash;&mdash;"
+             onkeydown="if(event.key==='Enter'){event.preventDefault();tryYear();}">
+      <button class="btn" onclick="tryYear()">Kód beírása</button>
+      ${hintBtn('year')}
+    </div>`);
+  setTimeout(()=>document.getElementById('yearCode').focus(),100);
+}
+function tryYear(){
+  if(L.year.o)return;
+  const v=(document.getElementById('yearCode').value||'').trim();
+  if(v.length<4){F('Négy számjegyet kér a zár.','info');return;}
+  if(v===R.year.code){
+    document.getElementById('yearCode').disabled=true;
+    solved('year','A zár enged. '+R.year.reveal);
+  }else{
+    L.year.e++; penal(60);
+    F('A zár nem mozdul. <b>&minus;1 perc.</b> Kösd a keltezést egy <i>ismert</i> évszámhoz, és számolj — a horgony a reformkor egyik alapdátuma.','bad');
+  }
+}
+
+/* ========== 2. FOGALOM-ZÁR ========== */
+function openConceptLock(){
+  P('2. zár &middot; fogalmak &mdash; szabad felidézés','Az öt tárcsa',
+   `<p>A zár öt tárcsája öt fogalmat rejt. Írd be mindegyiket — <b>nincs válaszlehetőség</b>.</p>
+    <div class="dial-row" id="dials"></div>
+    <div class="codebox" style="margin-top:12px;">${hintBtn('concept')}</div>`);
+  renderDials();
+}
+function renderDials(){
+  document.getElementById('dials').innerHTML=R.concepts.map((c,i)=>
+   c.solved
+    ? `<div class="dial solved"><div class="ddef">${c.def}</div><div class="sol">&#10003; ${c.show}</div></div>`
+    : `<div class="dial"><div class="ddef">${c.def}</div>
+        <input type="text" id="dc-${i}" placeholder="a fogalom…" autocomplete="off" spellcheck="false"
+               onkeydown="if(event.key==='Enter'){event.preventDefault();tryConcept(${i});}"></div>`).join('');
+}
+function tryConcept(i){
+  const c=R.concepts[i];
+  if(c.solved)return;
+  const v=norm(document.getElementById('dc-'+i).value);
+  if(!v)return;
+  if(c.ans.includes(v)){
+    c.solved=true; renderDials();
+    const left=R.concepts.filter(x=>!x.solved).length;
+    if(left===0){ solved('concept','Mind az öt tárcsa a helyére kattant.'); }
+    else F('Helyes: <b>'+c.show+'</b>. Még '+left+' tárcsa.','ok');
+  }else{
+    L.concept.e++; penal(60);
+    const other=R.concepts.find(x=>x!==c && x.ans.includes(v));
+    if(other) F('Ez egy <i>másik</i> tárcsa fogalma (<b>'+other.show+'</b>). <b>&minus;1 perc.</b> Olvasd újra ezt a meghatározást!','bad');
+    else F('Ez nem a keresett fogalom. <b>&minus;1 perc.</b> Olvasd újra a meghatározást: <i>ki</i> ad, <i>kinek</i>, <i>mit</i> — és melyik évhez köthető?','bad');
+  }
+}
+
+/* ========== 3. NÉV-ZÁR ========== */
+function openNameLock(){
+  const n=R.name;
+  P('3. zár &middot; személyek &mdash; szabad felidézés','A pecsét gazdája',
+   `<p>A zárra egy pecsét van nyomva. A kód: <b>a pecsét gazdájának neve</b>.</p>
+    <div class="seal"><svg viewBox="0 0 76 76" aria-hidden="true">
+      <circle cx="38" cy="38" r="34" fill="#8b1a1a" stroke="#601010" stroke-width="2"/>
+      <circle cx="38" cy="38" r="27" fill="none" stroke="#e8d48a" stroke-width="1.4" stroke-dasharray="3 3"/>
+      <path d="M38 20 L46 32 L38 44 L30 32 Z" fill="none" stroke="#e8d48a" stroke-width="2"/>
+      <path d="M24 52 h28" stroke="#e8d48a" stroke-width="2" stroke-linecap="round"/>
+      <text x="38" y="60" text-anchor="middle" font-size="9" font-family="Cinzel,serif" fill="#e8d48a">SIGILLVM</text>
+    </svg></div>
+    ${n.clues.map((c,i)=>`<div class="clue"><span class="cn">${i+1}. nyom</span>${c}</div>`).join('')}
+    <div class="codebox">
+      <input type="text" id="nameCode" placeholder="a név…" autocomplete="off" spellcheck="false" style="width:230px;"
+             onkeydown="if(event.key==='Enter'){event.preventDefault();tryName();}">
+      <button class="btn" onclick="tryName()">Név beírása</button>
+      ${hintBtn('name')}
+    </div>`);
+  setTimeout(()=>document.getElementById('nameCode').focus(),100);
+}
+function tryName(){
+  if(L.name.o)return;
+  const v=norm(document.getElementById('nameCode').value);
+  if(!v)return;
+  if(R.name.accept.includes(v)){
+    document.getElementById('nameCode').disabled=true;
+    solved('name','A pecsét gazdája: <b>'+R.name.name+'</b>.');
+  }else{
+    L.name.e++; penal(60);
+    F('Nem ő az. <b>&minus;1 perc.</b> Olvasd össze a három nyomot: milyen <i>társadalmi helyzet</i>, milyen <i>sors</i> és milyen <i>szerep</i> rajzolódik ki belőlük együtt?','bad');
+  }
+}
+
+/* ========== 4. TÉRKÉP-ZÁR ========== */
+function mapSvg(){
+  const solvedIds=(R.mapSolved||[]);
+  return `<svg viewBox="0 0 760 560" role="img" aria-label="A reformkori Magyarország vaktérképe">
+   <rect width="760" height="560" fill="#dcc48f"/>
+   <path d="M40 375 C 100 388 160 415 205 455 C 240 486 258 522 268 560 L 40 560 Z" fill="#4a7ea3" opacity=".75"/>
+   <text x="105" y="520" fill="#123449" font-size="13" font-family="Cinzel,serif" font-style="italic">Adriai-tenger</text>
+   <path d="M 150 95 C 220 125 280 145 340 160 C 380 170 400 185 398 220 C 396 270 400 330 408 385 C 414 415 418 428 425 440 C 470 450 530 452 600 458 C 640 461 670 462 700 464"
+         fill="none" stroke="#3b6f92" stroke-width="14" stroke-linecap="round"/>
+   <text x="250" y="132" fill="#1c3b52" font-size="15" font-family="Cinzel,serif" font-weight="700">Duna</text>
+   <text x="368" y="330" fill="#1c3b52" font-size="14" font-family="Cinzel,serif" font-weight="700" transform="rotate(86 368 330)">Duna</text>
+   <path d="M 640 95 C 600 150 570 210 552 280 C 535 350 515 400 495 435"
+         fill="none" stroke="#3b6f92" stroke-width="10" stroke-linecap="round"/>
+   <text x="585" y="330" fill="#1c3b52" font-size="14" font-family="Cinzel,serif" font-weight="700" transform="rotate(80 585 330)">Tisza</text>
+   <ellipse cx="292" cy="300" rx="52" ry="13" fill="#3b6f92" transform="rotate(-30 292 300)"/>
+   <text x="250" y="340" fill="#1c3b52" font-size="12" font-family="Cinzel,serif" font-style="italic">Balaton</text>
+   <g stroke="#8f6f42" stroke-width="2" fill="#a3813f" opacity=".55">
+     <path d="M330 60 L348 34 L366 60 Z"/><path d="M400 56 L418 30 L436 56 Z"/><path d="M470 60 L488 34 L506 60 Z"/>
+     <path d="M690 200 L710 176 L724 204 Z"/><path d="M688 300 L708 276 L722 304 Z"/>
+   </g>
+   ${MAP_PTS.map(p=>{
+     const done=solvedIds.includes(p.id);
+     return `<g class="mpt ${done?'ok':''}" id="mp-${p.id}" onclick="tryMap('${p.id}')" role="button" tabindex="0">
+       <circle cx="${p.x}" cy="${p.y}" r="12" fill="${done?'#2f5d3a':'#8b1a1a'}" stroke="#fff" stroke-width="2.5"/>
+       ${done?`<text x="${p.x+17}" y="${p.y+5}" font-size="14" font-family="Cinzel,serif" font-weight="700" fill="#241811" stroke="#dcc48f" stroke-width="4" paint-order="stroke">${p.name}</text>`
+             :`<text x="${p.x}" y="${p.y+5}" text-anchor="middle" font-size="13" font-family="Cinzel,serif" font-weight="700" fill="#fff">?</text>`}
+     </g>`;}).join('')}
+  </svg>`;
+}
+function openMapLock(){
+  if(!R.mapSolved) R.mapSolved=[];
+  renderMapStep();
+}
+function renderMapStep(){
+  const q=R.map[R.mapIdx];
+  P('4. zár &middot; topográfia &mdash; szabad felidézés',`A vaktérkép (${R.mapIdx+1}/2)`,
+   `<p class="mq">${q.q}</p>
+    <p style="font-size:.86rem;opacity:.75;margin-top:-6px;">Kattints a helyes pontra. A pontok neve rejtve van — a folyók, a tenger és az égtájak segítenek.</p>
+    <div class="mapwrap">${mapSvg()}</div>
+    <div class="codebox" style="margin-top:12px;">${hintBtn('map')}</div>`);
+}
+function tryMap(id){
+  if(L.map.o)return;
+  const q=R.map[R.mapIdx];
+  if(id===q.id){
+    R.mapSolved.push(id);
+    if(R.mapIdx<R.map.length-1){
+      R.mapIdx++;
+      renderMapStep();
+      F('Helyes. '+q.fb+' Következő kérdés.','ok');
+    }else{
+      const el=document.querySelector('.mapwrap'); if(el) el.innerHTML=mapSvg();
+      solved('map','Helyes. '+q.fb+' A térkép-zár enged.');
+    }
+  }else{
+    L.map.e++; penal(60);
+    const el=document.getElementById('mp-'+id);
+    if(el){el.classList.add('no'); setTimeout(()=>el.classList.remove('no'),700);}
+    F('Nem ez a pont. <b>&minus;1 perc.</b> Nézd a <i>folyókat</i> és a <i>tengert</i>: melyik égtáj, melyik víz mellett kellene lennie?','bad');
+  }
+}
+
+/* ========== SEGÍTSÉG ========== */
+function useHint(id){
+  if(L[id].o) return;
+  if(L[id].h){F('Ehhez a zárhoz már kértél segítséget.','info');return;}
+  L[id].h=1; penal(90);
+  const b=document.getElementById('hb-'+id); if(b) b.disabled=true;
+  if(id==='year')    F('&#128161; <b>&minus;1,5 perc.</b> '+R.year.anchor,'info');
+  if(id==='concept'){
+    const rem=R.concepts.filter(c=>!c.solved);
+    F('&#128161; <b>&minus;1,5 perc.</b> A hiányzó fogalmak kezdőbetűi: '+rem.map(c=>'<b>'+c.show[0].toUpperCase()+'…</b>').join(', '),'info');
+  }
+  if(id==='name')    F('&#128161; <b>&minus;1,5 perc. 4. nyom:</b> '+R.name.hint,'info');
+  if(id==='map')     F('&#128161; <b>&minus;1,5 perc.</b> '+R.map[R.mapIdx].hint,'info');
+  if(id==='fin'){
+    const S=R.set;
+    let n=0;
+    S.docs.forEach((d,i)=>{ if(d.parts.some(p=>Array.isArray(p)&&S.terms[p[0]].fake)) n=i+1; });
+    F('&#128161; <b>&minus;1,5 perc.</b> A hamisítvány a(z) <b>'+n+'. oklevél</b>. Most keresd meg benne azt az intézményt, művet vagy tisztséget, amely a keltezés idején <i>még nem létezhetett</i>.','info');
+  }
+}
+
+/* ========== FINÁLÉ ========== */
+function openFinale(){
+  if(LOCKDEF.some(d=>!L[d.id].o)) return;
+  renderFinale();
+}
+function renderFinale(){
+  const S=R.set;
+  const body=
+   `<p>A vasszekrény kinyílt. Négy oklevél fekszik előtted — <b>az egyik hamisítvány</b>.</p>
+    <p style="font-size:.9rem;opacity:.8;">Ne a stílust nézd, hanem a <b>kronológiát</b>: van-e a szövegben olyan intézmény, mű vagy tisztség, amely a keltezés idején <b>még nem létezhetett</b>? Kattints arra a kiemelt szóra, amelyik elárulja a hamisítót.</p>`
+   + S.docs.map(d=>
+     `<div class="doc"><div class="dhead">${d.head}</div><div class="dtext">${
+        d.parts.map(p=>Array.isArray(p)?`<span class="tm" data-k="${p[0]}" onclick="clickTerm(this)">${p[1]}</span>`:p).join('')
+      }</div></div>`).join('')
+   + `<div class="codebox">${hintBtn('fin')}</div>`;
+  P('Finálé &middot; forráskritika &mdash; anakronizmus-keresés','Melyik oklevél hamis?',body);
+}
+function clickTerm(el){
+  if(G.ended)return;
+  const k=el.dataset.k;
+  const t=R.set.terms[k];
+  if(el.classList.contains('clean')||el.classList.contains('hit'))return;
+  if(t.fake){
+    el.classList.add('hit');
+    document.querySelectorAll('.tm').forEach(x=>x.style.pointerEvents='none');
+    F('&#127942; '+t.fb,'ok');
+    document.getElementById('p-a').innerHTML='<button class="btn" onclick="endGame(true)">Kilépek a levéltárból &rarr;</button>';
+  }else{
+    G.finErr++; penal(60);
+    el.classList.add('clean');
+    F('<b>&minus;1 perc.</b> '+t.fb+' — keress tovább: az anakronizmus <i>évszámhoz</i> kötött.','bad');
+  }
+}
+
+/* ========== VÉGE ========== */
+function endGame(won,reason){
+  if(G.ended)return;
+  G.ended=true; G.won=won;
+  clearInterval(G.tm);
+  document.getElementById('ov').classList.remove('active');
+  go('end');
+  const w=document.getElementById('endWrap');
+  w.classList.toggle('lost',!won);
+  const totalErr=LOCKDEF.reduce((s,d)=>s+L[d.id].e,0)+G.finErr;
+  const hints=LOCKDEF.filter(d=>L[d.id].h).length+(L.fin&&L.fin.h?1:0);
+
+  if(won){
+    document.getElementById('endEyebrow').textContent='Az ajtó kinyílik';
+    document.getElementById('endTitle').textContent='Kijutottál a levéltárból';
+    document.getElementById('endLead').innerHTML='A hamisítványt felismerted — és ezzel a legfontosabbat is: <b>egy forrás hitelét nem a stílusa, hanem a belső következetessége dönti el</b>. Egyetlen anakronizmus elég, hogy az egész irat összeomoljon.';
+  }else{
+    document.getElementById('endEyebrow').textContent='Lejárt az idő';
+    document.getElementById('endTitle').textContent='Bent maradtál';
+    document.getElementById('endLead').innerHTML='A zárak nem engedtek. Nézd meg a hibaprofilt: <b>amelyik zárnál a legtöbbet hibáztál, azt a lexikatípust kell ismételned</b> — utána gyere vissza.';
+  }
+  document.getElementById('endStat').innerHTML=
+    'Maradék idő (pontszám): <b>'+fmt(Math.max(0,G.t))+'</b><br>'+
+    'Kinyitott zárak: <b>'+LOCKDEF.filter(d=>L[d.id].o).length+' / 4</b><br>'+
+    'Hibás próbálkozás összesen: <b>'+totalErr+'</b><br>'+
+    'Kért segítség: <b>'+hints+'</b>';
+
+  const maxE=Math.max(1,...LOCKDEF.map(d=>L[d.id].e), G.finErr);
+  document.getElementById('endProfile').innerHTML=
+    '<div class="eyebrow" style="margin-bottom:8px;">Hibaprofil — mit kell ismételni</div>'+
+    LOCKDEF.map(d=>{
+      const e=L[d.id].e, pctv=Math.round(e/maxE*100);
+      return `<div class="prow"><span class="pn">${d.type}</span>
+        <span class="bar"><i class="${e===0?'zero':''}" style="width:${e===0?100:pctv}%"></i></span>
+        <span class="pv">${e} hiba</span></div>`;
+    }).join('')+
+    `<div class="prow"><span class="pn">forráskritika</span>
+      <span class="bar"><i class="${G.finErr===0?'zero':''}" style="width:${G.finErr===0?100:Math.round(G.finErr/maxE*100)}%"></i></span>
+      <span class="pv">${G.finErr} hiba</span></div>`;
+
+  const worst=[...LOCKDEF].sort((a,b)=>L[b.id].e-L[a.id].e)[0];
+  const worstE=L[worst.id].e;
+  document.getElementById('endVerdict').innerHTML =
+    worstE===0 && G.finErr===0
+      ? '<b>Értékelés:</b> hibátlan futás. A négy lexikatípus mindegyike biztosan ül, és a forráskritikai fogást is érted. Vizsgaérett.'
+      : '<b>Értékelés:</b> a legtöbb hibát a(z) <b>'+worst.type+'</b> záron vétetted ('+worstE+' hiba). Ez az a lexikatípus, amelyet célzottan ismételned kell — a többi zár eredménye ehhez képest értékelendő.'
+        + (G.finErr>2 ? ' A forráskritikai finálé is sok próbálkozásba került: gyakorold az <b>anakronizmus-keresést</b> — mindig az évszámhoz kösd az intézményeket és a tisztségeket.' : '');
+}
+</script>
+</body>
+</html>

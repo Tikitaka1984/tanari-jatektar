@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Szókereső — történelem 9–12.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#150F31;
+    --surf:#1F1749;
+    --surf-2:#2B2160;
+    --edge:rgba(255,255,255,.09);
+    --edge-2:rgba(255,255,255,.16);
+    --text:#F5F2FF;
+    --muted:#A79CD8;
+    --win:#3DDC97;
+    --win-bg:rgba(61,220,151,.16);
+    --fail:#FF6B6B;
+    --fail-bg:rgba(255,107,107,.18);
+    --acc:#FFC24B;
+    --acc-2:#FF9A2E;
+    --acc-ink:#2A1B00;
+    --r:18px;
+    --r-sm:11px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(900px 520px at 12% -8%, rgba(124,92,255,.30) 0%, transparent 62%),
+      radial-gradient(760px 460px at 92% 4%, rgba(255,110,160,.18) 0%, transparent 58%),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--text);
+    font-family:'Manrope',system-ui,sans-serif; font-size:15px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;letter-spacing:-0.03em;margin:0;line-height:1.05;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  :focus-visible{outline:3px solid var(--acc);outline-offset:3px;border-radius:6px;}
+
+  /* ---------- topbar ---------- */
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(21,15,49,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--edge);}
+  .topbar-in{max-width:1080px;margin:0 auto;padding:13px 22px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+  .wordmark{display:flex;align-items:baseline;gap:10px;}
+  .wordmark .nm{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.08rem;letter-spacing:-0.03em;}
+  .wordmark .sub{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
+  .stats{display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
+  .stat{font-family:'JetBrains Mono',monospace;font-size:.73rem;background:rgba(255,255,255,.07);border:1px solid var(--edge);
+    border-radius:999px;padding:6px 12px;color:var(--muted);white-space:nowrap;}
+  .stat b{color:var(--text);font-weight:700;}
+  .stat.code-chip{border-color:var(--acc);background:rgba(255,194,75,.16);color:var(--acc);cursor:pointer;transition:.15s;}
+  .stat.code-chip b{color:var(--acc);}
+  .stat.code-chip:hover{background:rgba(255,194,75,.28);}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:34px 22px 80px;}
+  .screen{display:none;}
+  .screen.on{display:block;animation:rise .38s cubic-bezier(.2,.75,.3,1);}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  /* ---------- start ---------- */
+  .lede{max-width:660px;margin-bottom:34px;}
+  .lede h1{font-size:clamp(2.2rem,6vw,3.5rem);margin-bottom:14px;}
+  .lede h1 em{font-style:normal;background:linear-gradient(96deg,var(--acc),var(--acc-2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .lede p{color:var(--muted);font-size:1.06rem;margin:0;}
+
+  .panel{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:24px;margin-bottom:18px;
+    box-shadow:0 18px 40px rgba(0,0,0,.28);}
+  .panel-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+  .panel-head h3{font-size:1rem;font-weight:700;}
+  .panel-head .note{font-size:.79rem;color:var(--muted);}
+
+  /* ---------- idősáv ---------- */
+  .rail{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  @media(max-width:660px){.rail{grid-template-columns:repeat(2,1fr);}}
+  .era{position:relative;background:var(--surf-2);border:1.5px solid var(--edge);border-radius:14px;
+    padding:16px 14px 15px;text-align:left;transition:.2s;overflow:hidden;}
+  .era:hover{border-color:var(--edge-2);transform:translateY(-2px);}
+  .era .gr{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.75rem;line-height:1;letter-spacing:-0.045em;color:var(--muted);transition:.2s;}
+  .era .gl{font-size:.83rem;font-weight:700;margin-top:7px;color:var(--text);}
+  .era .gs{font-family:'JetBrains Mono',monospace;font-size:.67rem;color:var(--muted);margin-top:4px;}
+  .era .bar{position:absolute;left:0;right:0;bottom:0;height:4px;background:transparent;transition:.2s;}
+  .era[aria-pressed="true"]{border-color:var(--acc);background:linear-gradient(160deg,rgba(255,194,75,.20),rgba(255,194,75,.05));
+    box-shadow:0 0 0 1px var(--acc), 0 12px 30px -8px var(--acc);transform:translateY(-2px);}
+  .era[aria-pressed="true"] .gr{color:var(--acc);}
+  .era[aria-pressed="true"] .bar{background:linear-gradient(90deg,var(--acc),var(--acc-2));}
+
+  /* ---------- opciók ---------- */
+  .opt-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media(max-width:700px){.opt-grid{grid-template-columns:1fr;}}
+  .seg{display:flex;background:var(--surf-2);border:1px solid var(--edge);border-radius:var(--r-sm);padding:4px;gap:4px;}
+  .seg button{flex:1;padding:10px 8px;border-radius:8px;font-size:.85rem;font-weight:700;color:var(--muted);transition:.15s;text-align:center;}
+  .seg button:hover{background:rgba(255,255,255,.06);color:var(--text);}
+  .seg button[aria-pressed="true"]{background:linear-gradient(140deg,var(--acc),var(--acc-2));color:var(--acc-ink);}
+  .seg button .sm{display:block;font-weight:500;font-size:.68rem;opacity:.8;margin-top:2px;}
+  .field-label{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+
+  .cta{background:linear-gradient(140deg,var(--acc),var(--acc-2));color:var(--acc-ink);border-radius:var(--r-sm);
+    padding:15px 28px;font-size:1rem;font-weight:800;letter-spacing:-0.01em;transition:.16s;
+    box-shadow:0 10px 26px -8px var(--acc);}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 16px 34px -10px var(--acc);}
+  .ghost{border:1.5px solid var(--edge-2);background:rgba(255,255,255,.04);border-radius:var(--r-sm);
+    padding:10px 16px;font-size:.84rem;font-weight:700;color:var(--text);transition:.15s;}
+  .ghost:hover{background:rgba(255,255,255,.1);border-color:var(--acc);}
+
+  .coderow{display:flex;gap:9px;flex-wrap:wrap;align-items:center;}
+  #codeInput{flex:1;min-width:180px;background:var(--surf-2);border:1.5px solid var(--edge);border-radius:var(--r-sm);
+    padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:1rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text);}
+  #codeInput::placeholder{color:var(--muted);opacity:.6;}
+  #codeInput:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(255,194,75,.2);}
+  .msg{margin-top:11px;font-size:.84rem;padding:11px 13px;border-radius:var(--r-sm);display:none;line-height:1.5;}
+  .msg.show{display:block;background:var(--fail-bg);border:1px solid var(--fail);color:#FFD9D9;}
+
+  /* ---------- játék ---------- */
+  .play{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:18px;align-items:start;}
+  @media(max-width:900px){.play{grid-template-columns:1fr;}}
+  .gridcard{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:20px;box-shadow:0 18px 40px rgba(0,0,0,.28);}
+
+  .prog{height:10px;background:var(--surf-2);border-radius:999px;overflow:hidden;border:1px solid var(--edge);}
+  .prog-fill{height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--acc-2));border-radius:999px;
+    transition:width .45s cubic-bezier(.2,.8,.3,1);}
+  .prog-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:9px 0 16px;
+    font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--muted);}
+  .prog-meta b{color:var(--text);}
+  .streak{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;padding:4px 11px;border-radius:999px;
+    background:var(--win-bg);color:var(--win);border:1px solid var(--win);opacity:0;transform:scale(.8);transition:.25s;}
+  .streak.on{opacity:1;transform:scale(1);}
+  .streak.hot{background:rgba(255,194,75,.2);color:var(--acc);border-color:var(--acc);}
+
+  .lgrid{display:grid;gap:4px;user-select:none;margin:0 auto;}
+  .cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+    background:var(--surf-2);border-radius:7px;
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:clamp(.6rem,1.5vw,.86rem);
+    color:var(--text);cursor:pointer;transition:background .13s,color .13s,transform .13s;}
+  .cell:hover{background:rgba(255,255,255,.14);}
+  .cell.anchor{background:linear-gradient(140deg,var(--acc),var(--acc-2));color:var(--acc-ink);transform:scale(1.1);}
+  .cell.found{background:var(--win-bg);color:var(--win);cursor:default;box-shadow:inset 0 0 0 1.5px rgba(61,220,151,.55);animation:pop .38s cubic-bezier(.2,.9,.3,1);}
+  .cell.found:hover{background:var(--win-bg);}
+  @keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.22)}100%{transform:scale(1)}}
+  .cell.miss{background:var(--fail-bg);color:var(--fail);animation:shake .34s;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+  .cell.ping{box-shadow:inset 0 0 0 3px var(--acc);animation:beat .85s ease-in-out 2;}
+  @keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
+  .tools{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px;padding-top:18px;border-top:1px solid var(--edge);}
+
+  .list{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:18px 18px 10px;
+    position:sticky;top:72px;max-height:calc(100vh - 94px);overflow-y:auto;box-shadow:0 18px 40px rgba(0,0,0,.28);}
+  .list h4{font-family:'JetBrains Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 13px;font-weight:400;}
+  .w{border-left:3px solid var(--edge-2);padding:8px 0 8px 12px;margin-bottom:10px;font-size:.86rem;transition:.25s;}
+  .w.hit{border-left-color:var(--win);opacity:.55;}
+  .w .nm{font-weight:800;}
+  .w.hit .nm{color:var(--win);text-decoration:line-through;text-decoration-thickness:1.5px;}
+  .w .cl{color:var(--muted);}
+
+  /* ---------- eredmény ---------- */
+  .result-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:24px;}
+  .result-head h2{font-size:clamp(1.9rem,5vw,2.8rem);}
+  .scoreline{display:grid;grid-template-columns:repeat(auto-fit,minmax(126px,1fr));gap:10px;margin-bottom:18px;}
+  .sc{background:var(--surf);border:1px solid var(--edge);border-radius:14px;padding:16px 17px;}
+  .sc .k{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);}
+  .sc .v{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.7rem;margin-top:4px;letter-spacing:-0.035em;color:var(--acc);}
+  .verdict{background:linear-gradient(140deg,rgba(255,194,75,.18),rgba(255,154,46,.07));border:1.5px solid var(--acc);
+    color:var(--text);border-radius:var(--r);padding:16px 20px;font-size:.97rem;font-weight:700;margin-bottom:26px;}
+  .recap{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:11px;}
+  .rc{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r-sm);padding:12px 14px;font-size:.83rem;}
+  .rc b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:.93rem;margin-bottom:3px;color:var(--acc);}
+  .rc span{color:var(--muted);}
+
+  .foot{max-width:1080px;margin:0 auto;padding:0 22px 44px;font-family:'JetBrains Mono',monospace;font-size:.69rem;color:var(--muted);opacity:.7;}
+
+  /* ---------- nyomtatható feladatlap (mindig világos) ---------- */
+  #sheet{display:none;}
+  .pg{page-break-after:always;break-after:page;color:#000;}
+  .pg:last-child{page-break-after:auto;break-after:auto;}
+  .pg-head{border-bottom:1.2pt solid #000;padding-bottom:6pt;margin-bottom:10pt;}
+  .pg-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15pt;letter-spacing:-0.02em;}
+  .pg-meta{display:flex;justify-content:space-between;gap:12pt;font-size:9pt;margin-top:3pt;}
+  .pg-meta .code{font-family:'JetBrains Mono',monospace;font-weight:700;}
+  .pg-fields{display:flex;gap:16pt;font-size:9.5pt;margin-top:9pt;}
+  .pg-fields span{flex:1;border-bottom:.6pt solid #000;padding-bottom:2pt;}
+  .pg-note{font-size:8.5pt;margin:8pt 0 10pt;line-height:1.4;}
+  .sgrid{display:grid;grid-template-columns:repeat(16,1fr);width:148mm;margin:0 auto 12pt;}
+  .sgrid div{aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+    border:.35pt solid #8A8A8A;font-family:'JetBrains Mono',monospace;font-size:8.5pt;font-weight:700;color:#000;background:#fff;}
+  .sgrid div.sol{background:#D7DBE0 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .pg h4{font-family:'JetBrains Mono',monospace;font-size:8pt;letter-spacing:.08em;text-transform:uppercase;margin:0 0 5pt;font-weight:400;color:#000;}
+  .pg ol{margin:0;padding-left:16pt;font-size:9.5pt;line-height:1.6;columns:2;column-gap:16pt;color:#000;}
+  .pg ol.wide{columns:1;}
+  .pg ol li{break-inside:avoid;}
+  .keytag{display:inline-block;border:.8pt solid #000;padding:1pt 6pt;font-size:8pt;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;}
+
+  @media print{
+    .topbar,.wrap,.foot{display:none !important;}
+    #sheet{display:block;}
+    html,body{background:#fff !important;color:#000 !important;}
+    @page{size:A4 portrait;margin:13mm;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="wordmark">
+      <span class="nm">Szókereső</span>
+      <span class="sub" id="ctxLabel">történelem 9–12.</span>
+    </div>
+    <div class="stats" id="stats" style="display:none;">
+      <button class="stat code-chip" id="chipCode" onclick="copyCode()" title="Másolás">kód <b id="vCode">—</b></button>
+      <span class="stat">idő <b id="vTime">0:00</b></span>
+      <span class="stat">talált <b id="vFound">0/0</b></span>
+      <span class="stat">hiba <b id="vErr">0</b></span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ START ============ -->
+  <section class="screen on" id="sc-start">
+    <div class="lede">
+      <h1>Találd meg. <em>Jegyezd meg.</em></h1>
+      <p>Lexikagyakorló a történelem érettségi követelményeire, az ókortól napjainkig. Válaszd ki az évfolyamot, és keresd meg a rácsban elrejtett szavakat.</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Évfolyam</h3>
+        <span class="note">a négy tanév egymást követő korszakokat fed le</span>
+      </div>
+      <div class="rail" id="rail"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>Beállítások</h3></div>
+      <div class="opt-grid">
+        <div>
+          <div class="field-label">Témakör</div>
+          <div class="seg" id="topicSeg"></div>
+        </div>
+        <div>
+          <div class="field-label">Nehézség</div>
+          <div class="seg" id="modeSeg"></div>
+        </div>
+        <div>
+          <div class="field-label">Hossz</div>
+          <div class="seg" id="lenSeg"></div>
+        </div>
+        <div style="display:flex;align-items:flex-end;">
+          <button class="cta" style="width:100%;" onclick="startPuzzle()">Rejtvény indítása</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Feladatlap nyomtatása</h3>
+        <span class="note">a fenti beállításokkal, A4-re</span>
+      </div>
+      <div class="opt-grid">
+        <div>
+          <div class="field-label">Változatok</div>
+          <div class="seg" id="varSeg"></div>
+        </div>
+        <div>
+          <div class="field-label">Megoldókulcs</div>
+          <div class="seg" id="keySeg"></div>
+        </div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:9px;flex-wrap:wrap;align-items:center;">
+        <button class="cta" onclick="printSheet()">Feladatlap nyomtatása</button>
+        <span class="note" id="printNote"></span>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h3>Közös rejtvény kóddal</h3>
+        <span class="note">ugyanaz a rács minden gépen</span>
+      </div>
+      <div class="coderow">
+        <input id="codeInput" type="text" placeholder="11BH-4821" autocomplete="off" spellcheck="false"
+               aria-label="Rejtvénykód" onkeydown="if(event.key==='Enter'){event.preventDefault();startFromCode();}">
+        <button class="ghost" onclick="startFromCode()">Betöltés</button>
+      </div>
+      <div class="msg" id="codeMsg"></div>
+    </div>
+  </section>
+
+  <!-- ============ GAME ============ -->
+  <section class="screen" id="sc-game">
+    <div class="play">
+      <div class="gridcard">
+        <div class="prog"><div class="prog-fill" id="progFill"></div></div>
+        <div class="prog-meta">
+          <span><b id="progText">0</b> / <span id="progTotal">0</span> megvan</span>
+          <span class="streak" id="streak"></span>
+        </div>
+        <div class="lgrid" id="grid"></div>
+        <div class="tools">
+          <button class="ghost" onclick="useHint()">Segítség &middot; &minus;20 mp</button>
+          <button class="ghost" onclick="startPuzzle()">Új rejtvény</button>
+          <button class="ghost" onclick="printCurrent()">Nyomtatás</button>
+          <button class="ghost" onclick="goStart()">Beállítások</button>
+        </div>
+      </div>
+      <aside class="list">
+        <h4 id="listTitle">Keresendő szavak</h4>
+        <div id="words"></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ RESULT ============ -->
+  <section class="screen" id="sc-result">
+    <div class="result-head">
+      <h2>Megvan mind!</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="cta" onclick="startPuzzle()">Új rejtvény</button>
+        <button class="ghost" onclick="goStart()">Beállítások</button>
+      </div>
+    </div>
+    <div class="scoreline" id="scoreline"></div>
+    <div class="verdict" id="verdict"></div>
+    <div class="field-label">A rejtvény szavai — ismételd át</div>
+    <div class="recap" id="recap"></div>
+  </section>
+</div>
+
+<div id="sheet"></div>
+
+<div class="foot">A hivatalos történelem érettségi vizsgakövetelmény lexikája alapján &middot; 428 fogalom, név és helyszín</div>
+
+<script>
+/* ===== magvetéses generátor (mulberry32) ===== */
+let _r=1;
+function seedRng(s){ _r=(s>>>0)||1; }
+function rnd(){ _r=(_r+0x6D2B79F5)|0; let t=Math.imul(_r^(_r>>>15),1|_r); t=(t+Math.imul(t^(t>>>7),61|t))^t; return ((t^(t>>>14))>>>0)/4294967296; }
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function sample(a,n){return shuffle(a).slice(0,Math.min(n,a.length));}
+
+/* ===== SZÓBANKOK ===== */
+const ITEMS_OKOR=[
+ // fogalmak
+ {token:'DEMOKRÁCIA',label:'demokrácia',clue:'„Népuralom": az athéni polgárok közvetlen részvétele a döntéshozatalban.'},
+ {token:'AGORA',label:'agora',clue:'Az athéni piactér és gyülekezőhely, a közélet színtere.'},
+ {token:'AKROPOLISZ',label:'akropolisz',clue:'A görög városállamok szent vára; Athénban itt áll a Parthenón.'},
+ {token:'SZTRATÉGOSZ',label:'sztratégosz',clue:'Athénban a hadvezetői, egyben vezető politikai tisztség.'},
+ {token:'CSERÉPSZAVAZÁS',label:'cserépszavazás',clue:'Athéni eljárás: a polgárok tíz évre száműzhettek egy veszélyesnek tartott politikust.'},
+ {token:'FILOZÓFIA',label:'filozófia',clue:'A görögök „bölcsesség szeretete": a világ és az ember észszerű vizsgálata.'},
+ {token:'MÍTOSZ',label:'mítosz',clue:'Istenekről és hősökről szóló elbeszélés az ókori népeknél.'},
+ {token:'PATRÍCIUS',label:'patrícius',clue:'Rómában az ősi nemesi családok tagja.'},
+ {token:'PLEBEJUS',label:'plebejus',clue:'Rómában a köznép, a nem nemesi származású szabad polgár.'},
+ {token:'SZENÁTUS',label:'szenátus',clue:'Róma legfőbb tanácsadó testülete, a köztársaság korában a valódi hatalom birtokosa.'},
+ {token:'KONZUL',label:'konzul',clue:'A római köztársaság két, egy évre választott legfőbb tisztségviselője.'},
+ {token:'DIKTÁTOR',label:'diktátor',clue:'A római köztársaságban rendkívüli helyzetben, hat hónapra kinevezett korlátlan hatalmú vezető.'},
+ {token:'LÉGIÓ',label:'légió',clue:'A római hadsereg alapvető katonai egysége.'},
+ {token:'GLADIÁTOR',label:'gladiátor',clue:'Rómában életre-halálra küzdő, gyakran rabszolgasorban tartott viadalozó.'},
+ {token:'PRINCIPÁTUS',label:'principátus',clue:'Az első császár kormányzati formája, amely megőrizte a köztársasági intézmények látszatát.'},
+ {token:'TRIUMVIRÁTUS',label:'triumvirátus',clue:'Három hatalmas férfi szövetsége Róma irányítására.'},
+ {token:'CENZOR',label:'cenzor',clue:'Rómában a polgárok vagyoni összeírását végző és az erkölcsöket felügyelő tisztségviselő.'},
+ {token:'TÜRANNISZ',label:'türannisz',clue:'Egyeduralom, amelyet egy hatalmat erőszakkal magához ragadó vezető gyakorol.'},
+ {token:'ESKÜDTBÍRÓSÁG',label:'esküdtbíróság',clue:'Athéni intézmény, ahol sorsolt polgárok ítélkeztek.'},
+ {token:'OLIGARCHIA',label:'oligarchia',clue:'Olyan államforma, amelyben a hatalom kevesek — egy szűk csoport — kezében összpontosul.'},
+ {token:'MONOTEIZMUS',label:'monoteizmus',clue:'Egyistenhit.'},
+ {token:'POLITEIZMUS',label:'politeizmus',clue:'Sokistenhit; jellemző az ókori keleti civilizációkra.'},
+ {token:'ZSINAGÓGA',label:'zsinagóga',clue:'A zsidó vallási közösség gyülekezési és imahelye.'},
+ {token:'BIBLIA',label:'Biblia',clue:'A zsidó és a keresztény vallás szent könyve.'},
+ {token:'KERESZTÉNYSÉG',label:'kereszténység',clue:'Jézus tanításain alapuló monoteista vallás, amely a Római Birodalomban terjedt el.'},
+ {token:'HIEROGLIFA',label:'hieroglifa',clue:'Egyiptomi képírás.'},
+ {token:'ÉKÍRÁS',label:'ékírás',clue:'A mezopotámiai civilizációk agyagtáblákra vésett írásrendszere.'},
+ {token:'BETŰÍRÁS',label:'betűírás',clue:'Olyan írásrendszer, amelyben egy jel egy hangot jelöl — a föníciaiak találták fel.'},
+ {token:'COLOSSEUM',label:'Colosseum',clue:'Róma híres amfiteátruma, a véres viadalok színhelye.'},
+ {token:'FORUM',label:'Forum Romanum',clue:'Róma politikai és vallási életének központi tere.'},
+ {token:'CIRCUS',label:'Circus Maximus',clue:'Róma kocsiversenyekre szolgáló hatalmas stadionja.'},
+ {token:'BAZILIKA',label:'bazilika',clue:'Ókori eredetű, hosszanti elrendezésű középületforma, amelyet a keresztény templomépítészet is átvett.'},
+ {token:'BUDDHIZMUS',label:'buddhizmus',clue:'Indiai eredetű vallás, amely a szenvedéstől való megszabadulás útját tanítja.'},
+ {token:'HINDUIZMUS',label:'hinduizmus',clue:'Az ókori India uralkodó vallása, amely szigorú társadalmi rendet is előírt.'},
+ {token:'LÉLEKVÁNDORLÁS',label:'lélekvándorlás',clue:'A hit, hogy a lélek halál után új testben éled újjá; más néven reinkarnáció.'},
+ // személyek
+ {token:'SZOLÓN',label:'Szolón',clue:'Athéni államférfi, aki az adósrabszolgaság eltörlésével alapozta meg a népuralmat.'},
+ {token:'PERIKLÉSZ',label:'Periklész',clue:'Athén vezető politikusa a városállam fénykorában, a Parthenón építtetője.'},
+ {token:'SÁNDOR',label:'Nagy Sándor',clue:'Makedón uralkodó, aki hatalmas birodalmat hódított meg Perzsiától Indiáig.'},
+ {token:'CAESAR',label:'Julius Caesar',clue:'Római hadvezér és államférfi, akit szenátorok gyilkoltak meg Kr. e. 44-ben.'},
+ {token:'AUGUSTUS',label:'Augustus',clue:'Az első római császár, aki Kr. e. 27-től egyeduralkodóként kormányzott.'},
+ {token:'HANNIBAL',label:'Hannibal',clue:'Karthágói hadvezér, aki elefántokkal kelt át az Alpokon Róma ellen.'},
+ {token:'SZÓKRATÉSZ',label:'Szókratész',clue:'Athéni filozófus, aki a párbeszéd módszerével kereste az igazságot; végül kivégezték.'},
+ {token:'PLATÓN',label:'Platón',clue:'Görög bölcselő, az Akadémia alapítója, az ideák tanának hirdetője.'},
+ {token:'ARISZTOTELÉSZ',label:'Arisztotelész',clue:'Görög tudós, a makedón trónörökös nevelője, a logika megalapozója.'},
+ {token:'POMPEIUS',label:'Pompeius',clue:'Római hadvezér, aki a polgárháborúban alulmaradt, és Egyiptomban lelte halálát.'},
+ {token:'ANTONIUS',label:'Antonius',clue:'Római hadvezér, aki Kleopátra oldalán vesztette el az actiumi csatát.'},
+ {token:'THEODOSIUS',label:'Nagy Theodosius',clue:'Római császár, aki 380-ban államvallássá tette az új hitet, és felosztotta a birodalmat.'},
+ {token:'ATTILA',label:'Attila',clue:'A hunok legendás nagykirálya, „Isten ostora".'},
+ {token:'BUDDHA',label:'Buddha',clue:'Indiai vallásalapító, akit „megvilágosodottnak” neveznek.'},
+ {token:'MÓZES',label:'Mózes',clue:'A zsidó nép hagyomány szerinti vezetője és törvényhozója.'},
+ {token:'ZEUSZ',label:'Zeusz',clue:'A görög istenek királya.'},
+ {token:'APHRODITÉ',label:'Aphrodité',clue:'A szerelem görög istennője.'},
+ {token:'ATHÉNÉ',label:'Athéné',clue:'A bölcsesség és a hadviselés görög istennője.'},
+ {token:'POSZEIDÓN',label:'Poszeidón',clue:'A tenger görög istene.'},
+ {token:'OLÜMPOSZ',label:'Olümposz',clue:'Hegy, amelyet a görög istenek lakóhelyének tartottak.'},
+ {token:'ARÉSZ',label:'Arész',clue:'A háború görög istene.'},
+ {token:'ÍZISZ',label:'Ízisz',clue:'Egyiptomi istennő, a termékenység és a varázslás úrnője.'},
+ {token:'OZIRISZ',label:'Ozirisz',clue:'Az egyiptomi túlvilág és a termékenység istene.'},
+];
+const ITEMS_KOZEPKOR=[
+ // fogalmak
+ {token:'HŰBÉRISÉG',label:'hűbériség',clue:'A középkori nyugat-európai birtok- és szolgálati rendszer: föld cserébe hűségért és katonai szolgálatért.'},
+ {token:'HŰBÉRÚR',label:'hűbérúr',clue:'Aki hűbérbirtokot adományoz alattvalójának.'},
+ {token:'VAZALLUS',label:'vazallus',clue:'Aki hűbérbirtokot kap, s cserébe hűséggel és szolgálattal tartozik urának.'},
+ {token:'JOBBÁGY',label:'jobbágy',clue:'A földesúri birtokon dolgozó, röghöz kötött paraszti népesség tagja.'},
+ {token:'URADALOM',label:'uradalom',clue:'A földesúr önellátó nagybirtoka, amelyet majorsági és telki földekre osztottak.'},
+ {token:'ROBOT',label:'robot',clue:'Ingyenes munkaszolgáltatás a földesúr saját kezelésű földjén.'},
+ {token:'RENDISÉG',label:'rendiség',clue:'Olyan társadalmi-politikai berendezkedés, amelyben a jogilag elkülönült rendek képviselik érdekeiket.'},
+ {token:'RENDIMONARCHIA',label:'rendi monarchia',clue:'Olyan államforma, amelyben az uralkodó hatalmát a rendi gyűlés korlátozza.'},
+ {token:'CÉHEK',label:'céhek',clue:'Az azonos mesterséget űző iparosok középkori érdekvédelmi szervezetei.'},
+ {token:'HOSPES',label:'hospes',clue:'Kiváltságokkal betelepült, gyakran idegen származású középkori városlakó.'},
+ {token:'SKOLASZTIKA',label:'skolasztika',clue:'A középkori egyetemek tudománya, amely a hitet és az észt igyekezett összeegyeztetni.'},
+ {token:'SZERZETESSÉG',label:'szerzetesség',clue:'Vallási közösségben, fogadalommal élő szerzetesek életformája.'},
+ {token:'KOLDULÓREND',label:'kolduló rend',clue:'Olyan szerzetesrend, amely lemondott a vagyonról, és alamizsnából élt.'},
+ {token:'EGYHÁZSZAKADÁS',label:'egyházszakadás',clue:'A keresztény egyház 1054-es kettéválása nyugati és keleti ágra.'},
+ {token:'VÁRMEGYE',label:'vármegye',clue:'A magyar királyi közigazgatás és birtokszervezet területi alapegysége.'},
+ {token:'ISPÁN',label:'ispán',clue:'A megye élén álló, a király által kinevezett tisztségviselő.'},
+ {token:'TIZED',label:'tized',clue:'Az egyháznak fizetett kötelező szolgáltatás, a termés meghatározott hányada.'},
+ {token:'ARANYBULLA',label:'Aranybulla',clue:'1222-ben kiadott oklevél, amely a köznemesség jogait rögzítette.'},
+ {token:'SERVIENS',label:'serviens',clue:'Királyi szolgálattevő kisbirtokos a középkori Magyarországon.'},
+ {token:'ZÁRADÉK',label:'ellenállási záradék',clue:'Az 1222-es oklevél pontja, amely felhatalmazta a nemességet a törvénysértő király elleni fellépésre.'},
+ {token:'ŐSISÉG',label:'ősiség',clue:'A nemesi birtok elidegeníthetetlensége; a család kihalása esetén a koronára száll.'},
+ {token:'TATÁRJÁRÁS',label:'tatárjárás',clue:'A mongol sereg 1241–42-es pusztítása Magyarországon.'},
+ {token:'KŐVÁR',label:'kővár',clue:'A 13. század közepétől elterjedt, kőből épített, védhető erődítmény.'},
+ {token:'DZSIHÁD',label:'dzsihád',clue:'Az iszlám vallásban a hitért folytatott küzdelem fogalma.'},
+ {token:'KORÁN',label:'Korán',clue:'Az iszlám vallás szent könyve, a próféta kinyilatkoztatásainak gyűjteménye.'},
+ {token:'DESPOTIZMUS',label:'despotizmus',clue:'Korlátlan, önkényes uralmi forma.'},
+ {token:'MAGNACHARTA',label:'Magna Charta Libertatum',clue:'1215-ös angol oklevél, amely korlátozta a királyi hatalmat.'},
+ {token:'NÁDOR',label:'nádor',clue:'A király helyettese, az ország legfőbb világi méltósága.'},
+ {token:'KÁPTALAN',label:'káptalan',clue:'A székesegyházhoz tartozó papi testület, amely hiteleshelyi feladatokat is ellátott.'},
+ {token:'HONORBIRTOK',label:'honorbirtok',clue:'Hivatali birtok, amelyet a tisztségviselő csak hivatala idejére kapott.'},
+ {token:'FAMILIARITÁS',label:'familiaritás',clue:'A köznemes önkéntes szolgálati viszonya egy nagyobb úr szolgálatában.'},
+ {token:'PRIMOGENITÚRA',label:'primogenitúra',clue:'Az elsőszülöttségi öröklési rend.'},
+ {token:'PÁTRIÁRKA',label:'pátriárka',clue:'A keleti egyház egyik legfőbb méltósága.'},
+ {token:'FEKETESEREG',label:'fekete sereg',clue:'A 15. század második felének állandó magyar zsoldos hadserege.'},
+ {token:'FÜSTPÉNZ',label:'füstpénz',clue:'Mátyás király háztartásonként kivetett adója.'},
+ {token:'CORVINA',label:'corvina',clue:'Mátyás király könyvtárának egy-egy díszes kódexe.'},
+ {token:'RENESZÁNSZ',label:'reneszánsz',clue:'Az ókori műveltség újjászületésén alapuló művelődési irányzat.'},
+ // személyek
+ {token:'MOHAMED',label:'Mohamed',clue:'Az iszlám vallás alapítója.'},
+ {token:'NAGYKÁROLY',label:'Nagy Károly',clue:'Frank uralkodó, akit 800-ban császárrá koronáztak.'},
+ {token:'GÉZAFEJEDELEM',label:'Géza fejedelem',clue:'A magyar törzsszövetség vezetője, aki megkezdte a nyugati térítés befogadását.'},
+ {token:'ISTVÁN',label:'I. (Szent) István',clue:'Az első magyar király, az államalapító.'},
+ {token:'LÁSZLÓ',label:'I. (Szent) László',clue:'A „lovagkirály", szigorú törvényeivel szilárdította meg a rendet.'},
+ {token:'KÁLMÁN',label:'Könyves Kálmán',clue:'Magyar király, aki enyhített a boszorkányperek szigorán.'},
+ {token:'IIIBÉLA',label:'III. Béla',clue:'Magyar király, aki megerősítette a királyi hatalmat és a kancelláriát.'},
+ {token:'IIANDRÁS',label:'II. András',clue:'Magyar király, aki 1222-ben adta ki nevezetes oklevelét.'},
+ {token:'IVBÉLA',label:'IV. Béla',clue:'Magyar király, a mongol pusztítás után az ország újjáépítője — „a második honalapító".'},
+ {token:'SZILVESZTER',label:'II. Szilveszter pápa',clue:'A hagyomány szerint ő küldte a koronát az első magyar királynak.'},
+ {token:'ANONYMUS',label:'Anonymus',clue:'Névtelen királyi jegyző, a Gesta Hungarorum szerzője.'},
+ {token:'KÁROLYRÓBERT',label:'I. (Anjou) Károly / Károly Róbert',clue:'Az Anjou-ház első magyar királya, gazdasági reformer.'},
+ {token:'NAGYLAJOS',label:'I. (Nagy) Lajos',clue:'Magyar és lengyel király, az 1351-es törvények megalkotója.'},
+ {token:'ZSIGMOND',label:'Luxemburgi Zsigmond',clue:'Magyar király és német-római császár, a déli végvárrendszer megalapozója.'},
+ {token:'HUNYADIJÁNOS',label:'Hunyadi János',clue:'A török elleni harc vezéralakja, az 1456-os nándorfehérvári diadal hőse.'},
+ {token:'HUNYADIMÁTYÁS',label:'Hunyadi Mátyás',clue:'Magyar király 1458–1490 között, aki központosított hatalmat és fényes udvart épített ki.'},
+ {token:'VITÉZJÁNOS',label:'Vitéz János',clue:'Humanista főpap, a későbbi király nevelője, egyetemalapítás kezdeményezője.'},
+ {token:'MEHMED',label:'II. Mehmed',clue:'Oszmán szultán, Konstantinápoly elfoglalója.'},
+ {token:'INVESZTITÚRA',label:'invesztitúraharc',clue:'A pápa és a császár küzdelme az egyházi tisztségek betöltésének jogáért.'},
+ {token:'KAPISZTRÁN',label:'Kapisztrán János',clue:'Ferences szerzetes, aki 1456-ban keresztes had toborzásával segítette a déli végvár védelmét.'},
+ {token:'SZILÁGYIMIHÁLY',label:'Szilágyi Mihály',clue:'Nándorfehérvár egykori kapitánya, unokaöccse királlyá választásának szervezője.'},
+ {token:'MEDICIEK',label:'Mediciek',clue:'Firenzei bankárcsalád, a művészetek kiemelkedő pártfogói.'},
+ {token:'MICHELANGELO',label:'Michelangelo',clue:'Itáliai szobrász és festő, a Dávid-szobor és a Sixtus-kápolna alkotója.'},
+];
+const ITEMS_10A=[
+ {token:'REFORMÁCIÓ',label:'reformáció',clue:'A 16. századi vallási megújulási mozgalom, amely a wittenbergi tételekkel indult.'},
+ {token:'PROTESTÁNS',label:'protestáns',clue:'A katolikus egyházból kiváló, hitújító irányzatok közös neve.'},
+ {token:'PREDESZTINÁCIÓ',label:'predesztináció',clue:'A genfi hitújító tanítása: Isten előre kiválasztja az üdvözülőket.'},
+ {token:'REKATOLIZÁCIÓ',label:'rekatolizáció',clue:'A katolikus egyház visszatérítő törekvése a hitújítás által elhódított területeken.'},
+ {token:'JEZSUITA',label:'jezsuita',clue:'A katolikus megújulás élharcos szerzetesrendjének tagja, az oktatás megszervezője.'},
+ {token:'BAROKK',label:'barokk',clue:'A katolikus megújulás korának pompázatos, mozgalmas művészeti stílusa.'},
+ {token:'PRESBITER',label:'presbiter',clue:'A református egyházközség világi vezetőségének tagja.'},
+ {token:'MANUFAKTÚRA',label:'manufaktúra',clue:'Kézi munkán és munkamegosztáson alapuló nagyüzem a korai kapitalizmusban.'},
+ {token:'ÁRFORRADALOM',label:'árforradalom',clue:'A tengerentúlról beáramló nemesfém okozta tartós pénzromlás a 16. századi Európában.'},
+ {token:'MERKANTILIZMUS',label:'merkantilizmus',clue:'Gazdaságpolitika, amely a kivitel támogatásával akarta növelni az ország nemesfémkészletét.'},
+ {token:'TŐZSDE',label:'tőzsde',clue:'Értékpapírok és áruk szervezett adásvételének piaca.'},
+ {token:'GYARMAT',label:'gyarmat',clue:'Európai hatalom által meghódított és kizsákmányolt tengerentúli terület.'},
+ {token:'ABSZOLUTIZMUS',label:'abszolutizmus',clue:'Korlátlan uralkodói hatalomra épülő kormányzati rendszer.'},
+ {token:'PARLAMENT',label:'parlament',clue:'Az angol rendi gyűlésből kialakult törvényhozó testület.'},
+ {token:'FELVILÁGOSODÁS',label:'felvilágosodás',clue:'18. századi eszmeáramlat, amely az ész erejében és a haladásban hitt.'},
+ {token:'TERMÉSZETJOG',label:'természetjog',clue:'Az elv, hogy az embert születésénél fogva elidegeníthetetlen jogok illetik meg.'},
+ {token:'HATALMIÁGAK',label:'hatalmi ágak',clue:'Az észszerű államberendezkedés elve: elválasztandó a törvényhozó, a végrehajtó és a bírói hatalom.'},
+ {token:'NÉPFELSÉG',label:'népfelség',clue:'Az elv, hogy minden hatalom forrása a közösség maga.'},
+ {token:'HÓDOLTSÁG',label:'hódoltság',clue:'Az ország oszmán uralom alatt álló középső része 1541 után.'},
+ {token:'VÉGVÁR',label:'végvár',clue:'Az oszmán terjeszkedés ellen kiépített határvédelmi erősség.'},
+ {token:'HAJDÚ',label:'hajdú',clue:'Marhahajtóból lett katona; egy erdélyi fejedelem telepítette le őket kiváltságokkal.'},
+ {token:'KURUC',label:'kuruc',clue:'A Habsburg-ellenes felkelők elnevezése a 17–18. században.'},
+ {token:'LABANC',label:'labanc',clue:'A császárpárti katonák gúnyneve a felkelések korában.'},
+ {token:'FEJEDELEMSÉG',label:'fejedelemség',clue:'Erdély önálló államalakulata a 16–17. században, a szultán fennhatósága alatt.'},
+ {token:'PRAGMATICA',label:'Pragmatica Sanctio',clue:'1723-ban elfogadott törvény a Habsburg-ház nőági örökösödéséről.'},
+ {token:'HELYTARTÓTANÁCS',label:'Helytartótanács',clue:'A 18. századi magyar közigazgatás legfőbb kormányszerve.'},
+ {token:'ÚRBÉRIRENDELET',label:'úrbéri rendelet',clue:'Uralkodói intézkedés 1767-ből, amely egységesen szabályozta a paraszti terheket.'},
+ {token:'RATIOEDUCATIONIS',label:'Ratio Educationis',clue:'Az oktatásügy első átfogó állami szabályozása Magyarországon, 1777-ben.'},
+ {token:'TÜRELMIRENDELET',label:'türelmi rendelet',clue:'A „kalapos király” rendelete, amely szabadabb vallásgyakorlatot adott a nem katolikus felekezeteknek.'},
+ {token:'JOBBÁGYRENDELET',label:'jobbágyrendelet',clue:'Uralkodói rendelet 1785-ből, amely megszüntette a paraszti röghöz kötöttséget.'},
+ {token:'JAKOBINUS',label:'jakobinus',clue:'A francia forradalom radikális, terrort alkalmazó irányzatának híve.'},
+ {token:'GIRONDISTA',label:'girondista',clue:'A francia forradalom mérsékelt, a vidéki polgárságra támaszkodó csoportjának tagja.'},
+ {token:'ZÁRLAT',label:'kontinentális zárlat',clue:'A francia császár gazdasági fegyvere Anglia ellen: a szárazföldi kikötők elzárása a brit áru elől.'},
+ {token:'SZENTSZÖVETSÉG',label:'Szent Szövetség',clue:'A bécsi kongresszus után létrejött uralkodói összefogás a forradalmak ellen.'},
+ {token:'LEGITIMITÁS',label:'legitimitás',clue:'A bécsi kongresszus elve: a forradalom előtti uralkodóházak jogfolytonossága.'},
+ {token:'LUTHER',label:'Luther Márton',clue:'Wittenbergi szerzetes, aki 1517-ben tételeivel elindította a hitújítást.'},
+ {token:'KÁLVIN',label:'Kálvin János',clue:'Genfi hitújító, az eleve elrendelés tanának hirdetője.'},
+ {token:'KOLUMBUSZ',label:'Kolumbusz',clue:'Genovai hajós, aki 1492-ben átszelte az Atlanti-óceánt.'},
+ {token:'MAGELLÁN',label:'Magellán',clue:'Portugál hajós, akinek expedíciója először kerülte meg a Földet.'},
+ {token:'KOPERNIKUSZ',label:'Kopernikusz',clue:'Lengyel csillagász, aki szerint a Föld kering a Nap körül.'},
+ {token:'GALILEI',label:'Galilei',clue:'Itáliai tudós, akit a Nap középpontú világkép hirdetéséért perbe fogtak.'},
+ {token:'NEWTON',label:'Newton',clue:'Angol tudós, az egyetemes tömegvonzás törvényének felfedezője.'},
+ {token:'MONTESQUIEU',label:'Montesquieu',clue:'Francia gondolkodó, aki a hatalom megosztásának elvét fogalmazta meg.'},
+ {token:'ROUSSEAU',label:'Rousseau',clue:'Francia gondolkodó, a társadalmi szerződés elméletének kidolgozója.'},
+ {token:'VOLTAIRE',label:'Voltaire',clue:'Francia író, a vallási türelem hirdetője, az ész századának nagy alakja.'},
+ {token:'CROMWELL',label:'Cromwell',clue:'Az angol polgári forradalom hadvezére, később lordprotektor.'},
+ {token:'NAPKIRÁLY',label:'Napkirály (XIV. Lajos)',clue:'A versailles-i udvart építő francia uralkodó ragadványneve.'},
+ {token:'WASHINGTON',label:'Washington',clue:'Az amerikai függetlenségi háború fővezére, az Egyesült Államok első elnöke.'},
+ {token:'ROBESPIERRE',label:'Robespierre',clue:'A francia forradalom radikális szakaszának vezetője, a terror irányítója.'},
+ {token:'NAPÓLEON',label:'Napóleon',clue:'Francia hadvezér, majd császár, aki 1804-ben maga tette fejére a koronát.'},
+ {token:'SZAPOLYAI',label:'Szapolyai János',clue:'Erdélyi vajda, akit 1526 után magyar királlyá választottak.'},
+ {token:'TOMORI',label:'Tomori Pál',clue:'Az 1526-os ütközetben elesett kalocsai érsek, a magyar sereg egyik vezére.'},
+ {token:'DOBÓISTVÁN',label:'Dobó István',clue:'Eger várának védője 1552-ben.'},
+ {token:'ZRÍNYIMIKLÓS',label:'Zrínyi Miklós',clue:'Horvát bán, aki 1566-ban a szultán ostromló seregével szemben esett el vára védelmében.'},
+ {token:'FRÁTERGYÖRGY',label:'Fráter György',clue:'„Barát" néven ismert államférfi, aki a keleti országrész egyben tartásán fáradozott.'},
+ {token:'BOCSKAI',label:'Bocskai István',clue:'Erdélyi fejedelem, aki 1604-ben Habsburg-ellenes felkelést indított.'},
+ {token:'BETHLENGÁBOR',label:'Bethlen Gábor',clue:'Erdély fejedelme 1613–1629 között, a harmincéves háború résztvevője.'},
+ {token:'PÁZMÁNY',label:'Pázmány Péter',clue:'Esztergomi érsek, a katolikus megújulás vezéralakja, egyetemalapító.'},
+ {token:'THÖKÖLY',label:'Thököly Imre',clue:'Felkelővezér, akit a török a Felvidék fejedelmévé nevezett ki.'},
+ {token:'RÁKÓCZIFERENC',label:'II. Rákóczi Ferenc',clue:'A kuruc küzdelem vezérlő fejedelme 1703–1711 között.'},
+ {token:'SAVOYAIJENŐ',label:'Savoyai Jenő',clue:'A török kiűzésének hadvezére, a zentai csata győztese.'},
+ {token:'MÁRIATERÉZIA',label:'Mária Terézia',clue:'Habsburg uralkodónő 1740–1780 között, a kettős vámrendszer bevezetője.'},
+ {token:'IIJÓZSEF',label:'II. József',clue:'A „kalapos király", aki rendeletekkel kormányzott, és nem koronáztatta meg magát.'},
+ {token:'MARTINOVICS',label:'Martinovics Ignác',clue:'A magyar összeesküvő mozgalom vezetője, akit 1795-ben kivégeztek.'},
+ {token:'MOHÁCS',label:'Mohács',clue:'A magyar sereg 1526-os vereségének színhelye.'},
+ {token:'SZIGETVÁR',label:'Szigetvár',clue:'Vár, amelyet 1566-ban a szultán seregével szemben védtek.'},
+ {token:'NAGYSZOMBAT',label:'Nagyszombat',clue:'Város, ahol 1635-ben egyetemet alapítottak.'},
+ {token:'SZATMÁR',label:'Szatmár',clue:'Város, ahol 1711-ben békével zárult a kuruc küzdelem.'},
+ {token:'WATERLOO',label:'Waterloo',clue:'Belga település, ahol 1815-ben végleg vereséget szenvedett a francia császár.'},
+];
+const ITEMS_10B=[
+ {token:'LIBERALIZMUS',label:'liberalizmus',clue:'Eszmeáramlat, amely az egyéni szabadságjogokat és a szabad versenyt hirdeti.'},
+ {token:'NACIONALIZMUS',label:'nacionalizmus',clue:'Eszme, amely a nemzeti közösséget tekinti a legfőbb értéknek.'},
+ {token:'KONZERVATIVIZMUS',label:'konzervativizmus',clue:'Eszme, amely a fokozatos változást és a hagyományok őrzését hirdeti.'},
+ {token:'IPARIFORRADALOM',label:'ipari forradalom',clue:'A gépi nagyüzem kialakulásával járó gazdasági és társadalmi átalakulás.'},
+ {token:'GŐZGÉP',label:'gőzgép',clue:'James Watt által tökéletesített erőgép, a 19. századi átalakulás hajtóereje.'},
+ {token:'URBANIZÁCIÓ',label:'urbanizáció',clue:'A városok gyors növekedése és a városi életforma terjedése.'},
+ {token:'ÖRÖKVÁLTSÁG',label:'örökváltság',clue:'A paraszt egy összegben megválthatja szolgáltatásait, és földje tulajdonosává válik.'},
+ {token:'KÖZTEHERVISELÉS',label:'közteherviselés',clue:'Az elv, hogy az ország terheiből a kiváltságosoknak is részt kell vállalniuk.'},
+ {token:'ÉRDEKEGYESÍTÉS',label:'érdekegyesítés',clue:'A nemesség és a parasztság érdekeinek összekapcsolása jogkiterjesztés útján.'},
+ {token:'VÉDEGYLET',label:'Védegylet',clue:'1844-ben alakult mozgalom a honi ipar pártolására.'},
+ {token:'CENZÚRA',label:'cenzúra',clue:'A sajtótermékek előzetes hatósági engedélyezése.'},
+ {token:'KÖVETUTASÍTÁS',label:'követutasítás',clue:'A vármegye írásos parancsa a diétára küldött emberének.'},
+ {token:'VEZÉRCIKK',label:'vezércikk',clue:'A hírlap első helyén álló, véleményformáló írás.'},
+ {token:'NÉPKÉPVISELET',label:'népképviselet',clue:'A küldötteket nem a rendek, hanem a választópolgárok küldik a törvényhozásba.'},
+ {token:'FELELŐSKORMÁNY',label:'felelős kormány',clue:'Olyan kormány, amely az országgyűlésnek tartozik számadással.'},
+ {token:'NEMZETŐRSÉG',label:'nemzetőrség',clue:'1848-ban szervezett fegyveres polgári testület a rend fenntartására.'},
+ {token:'HONVÉDSÉG',label:'honvédség',clue:'Az 1848-ban felállított önálló magyar hadsereg.'},
+ {token:'TAVASZIHADJÁRAT',label:'tavaszi hadjárat',clue:'A magyar sereg 1849-es győzelemsorozata a császári csapatok ellen.'},
+ {token:'TRÓNFOSZTÁS',label:'trónfosztás',clue:'1849 áprilisában kimondott döntés a Habsburg-ház uralmának megszüntetéséről.'},
+ {token:'MEGTORLÁS',label:'megtorlás',clue:'A fegyveres küzdelem leverését követő kivégzések és bebörtönzések időszaka.'},
+ {token:'OLMÜTZIALKOTMÁNY',label:'olmützi alkotmány',clue:'1849-ben kiadott birodalmi alaptörvény, amely felszámolta az ország önállóságát.'},
+ {token:'ŐSISÉG',label:'ősiség',clue:'A nemesi birtok elidegeníthetetlensége; 1848-ban törölték el.'},
+ {token:'CENTRALISTA',label:'centralista',clue:'A reformellenzék csoportja, amely a törvényhozásnak felelős központi kormányzatot akart.'},
+ {token:'MÁRCIUSIIFJAK',label:'márciusi ifjak',clue:'A pesti radikális fiatal értelmiség köre 1848-ban.'},
+ {token:'TIZENKÉTPONT',label:'tizenkét pont',clue:'A pesti forradalom követeléseinek nyomtatott jegyzéke.'},
+ {token:'SAJTÓSZABADSÁG',label:'sajtószabadság',clue:'Az előzetes hatósági engedélyezés eltörlésével kivívott jog a szabad véleményközlésre.'},
+ {token:'FŐISPÁN',label:'főispán',clue:'A vármegye élén álló, uralkodó által kinevezett tisztségviselő.'},
+ {token:'ALISPÁN',label:'alispán',clue:'A vármegye választott vezetője, a nemesi önkormányzat feje.'},
+ {token:'PESTIHÍRLAP',label:'Pesti Hírlap',clue:'1841-ben indult lap, a reformellenzék vezérének fóruma.'},
+ {token:'DIÉTA',label:'diéta',clue:'A rendi országgyűlés korabeli elnevezése.'},
+ {token:'VÉDŐVÁM',label:'védővám',clue:'A hazai ipart a külföldi versenytől óvó behozatali teher.'},
+ {token:'KAMARILLA',label:'kamarilla',clue:'A bécsi udvar háttérben működő, magyarellenes tanácsadói köre.'},
+ {token:'SZABADSÁGHARC',label:'szabadságharc',clue:'1848–49-es fegyveres küzdelem a magyar önállóságért.'},
+ {token:'ARADIVÉRTANÚK',label:'aradi vértanúk',clue:'1849. október 6-án kivégzett tizenhárom honvédtábornok.'},
+ {token:'SZÉCHENYI',label:'Széchenyi István',clue:'A „legnagyobb magyar", a Hitel szerzője, a Lánchíd kezdeményezője.'},
+ {token:'KOSSUTH',label:'Kossuth Lajos',clue:'A reformellenzék vezére, 1849-ben kormányzó-elnök.'},
+ {token:'DEÁKFERENC',label:'Deák Ferenc',clue:'„A haza bölcse", az Ellenzéki Nyilatkozat megfogalmazója.'},
+ {token:'WESSELÉNYI',label:'Wesselényi Miklós',clue:'„Az árvízi hajós", erdélyi báró, a Balítéletekről szerzője.'},
+ {token:'KÖLCSEY',label:'Kölcsey Ferenc',clue:'Vármegyei követ, a Himnusz költője, aki lemondott a rá kényszerített utasítás miatt.'},
+ {token:'BATTHYÁNY',label:'Batthyány Lajos',clue:'Az első felelős magyar kormány miniszterelnöke.'},
+ {token:'EÖTVÖSJÓZSEF',label:'Eötvös József',clue:'Báró és író, A falu jegyzője szerzője, a központosítás híve.'},
+ {token:'PETŐFI',label:'Petőfi Sándor',clue:'A forradalom költője, a Nemzeti dal szerzője.'},
+ {token:'TÁNCSICS',label:'Táncsics Mihály',clue:'A jobbágyfelszabadítás radikális szószólója, akit 1848. március 15-én szabadítottak ki.'},
+ {token:'GÖRGEI',label:'Görgei Artúr',clue:'A honvédsereg fővezére, aki 1849 augusztusában letette a fegyvert.'},
+ {token:'BEMJÓZSEF',label:'Bem József',clue:'Lengyel származású tábornok, az erdélyi hadsereg parancsnoka.'},
+ {token:'DAMJANICH',label:'Damjanich János',clue:'Tábornok, az 1849. október 6-án kivégzettek egyike.'},
+ {token:'GÁBORÁRON',label:'Gábor Áron',clue:'Székely ágyúöntő, aki 1848-ban a tüzérség megszervezését segítette.'},
+ {token:'JELLASICS',label:'Jellasics',clue:'Horvát bán, aki 1848 szeptemberében a magyar kormány ellen indult.'},
+ {token:'HAYNAU',label:'Haynau',clue:'Császári főparancsnok, a „bresciai hiéna", a kivégzések elrendelője.'},
+ {token:'METTERNICH',label:'Metternich',clue:'Osztrák államkancellár, akinek rendszere 1848 márciusában bukott meg.'},
+ {token:'FERENCJÓZSEF',label:'I. Ferenc József',clue:'1848 decemberében trónra lépő uralkodó, aki a magyar önállósági küzdelmet leverette.'},
+ {token:'DESSEWFFY',label:'Dessewffy Aurél',clue:'A fontolva haladó konzervatívok szervezője a negyvenes évek elején.'},
+ {token:'SZALAYLÁSZLÓ',label:'Szalay László',clue:'A központosítás híveinek vezéralakja, 1844-től egy jelentős reformkori lap szerkesztője.'},
+ {token:'POZSONY',label:'Pozsony',clue:'Város, ahol a reformkori rendi országgyűlések üléseztek.'},
+ {token:'DEBRECEN',label:'Debrecen',clue:'Város, ahová 1849-ben a kormány és az országgyűlés menekült.'},
+ {token:'ISASZEG',label:'Isaszeg',clue:'Település, ahol 1849 áprilisában a honvédsereg győztes csatát vívott.'},
+ {token:'VILÁGOS',label:'Világos',clue:'Település, ahol 1849 augusztusában a magyar fősereg letette a fegyvert.'},
+];
+const ITEMS_11A=[
+ {token:'KIEGYEZÉS',label:'kiegyezés',clue:'1867-es megállapodás az uralkodó és a magyar politikai vezetés között.'},
+ {token:'DUALIZMUS',label:'dualizmus',clue:'Az Osztrák–Magyar Monarchia kétközpontú államszerkezete.'},
+ {token:'KÖZÖSÜGYEK',label:'közös ügyek',clue:'A hadügy, a külügy és az ezeket fedező pénzügy együttes intézése 1867 után.'},
+ {token:'DELEGÁCIÓ',label:'delegáció',clue:'A két törvényhozás által küldött bizottság a birodalmi ügyek tárgyalására.'},
+ {token:'OBSTRUKCIÓ',label:'obstrukció',clue:'A parlamenti munka szándékos akadályozása hosszú beszédekkel.'},
+ {token:'KOALÍCIÓ',label:'koalíció',clue:'Több párt szövetsége a kormányzás érdekében.'},
+ {token:'KÖZJOGIELLENZÉK',label:'közjogi ellenzék',clue:'Az 1867-es megegyezés alapját bíráló politikai csoport.'},
+ {token:'NEMZETISÉG',label:'nemzetiség',clue:'Az országban élő, nem magyar anyanyelvű népcsoport.'},
+ {token:'ASSZIMILÁCIÓ',label:'asszimiláció',clue:'Beolvadás a többségi nemzetbe, nyelvi és kulturális azonosulás útján.'},
+ {token:'EMANCIPÁCIÓ',label:'emancipáció',clue:'Egyenjogúsítás; a zsidóság jogi egyenlőségének kimondása 1867-ben.'},
+ {token:'KIVÁNDORLÁS',label:'kivándorlás',clue:'A századfordulón tömegessé váló elvándorlás, főként Amerikába.'},
+ {token:'MONOPÓLIUM',label:'monopólium',clue:'Egyetlen vállalat vagy csoport kizárólagos piaci helyzete.'},
+ {token:'KARTELL',label:'kartell',clue:'Vállalatok megállapodása az árakról és a piac felosztásáról.'},
+ {token:'TŐKEKONCENTRÁCIÓ',label:'tőkekoncentráció',clue:'A vagyon egyre kevesebb, egyre nagyobb vállalat kezében gyűlik össze.'},
+ {token:'SZECESSZIÓ',label:'szecesszió',clue:'A századforduló díszítő, természeti formákat követő művészeti stílusa.'},
+ {token:'HISTORIZMUS',label:'historizmus',clue:'A 19. századi építészet irányzata, amely korábbi korok stílusait idézte fel.'},
+ {token:'MARXIZMUS',label:'marxizmus',clue:'Az osztályharcra és a termelési viszonyokra épülő társadalomelmélet.'},
+ {token:'SZOCIALIZMUS',label:'szocializmus',clue:'A társadalmi egyenlőséget és a közösségi tulajdont hirdető eszme.'},
+ {token:'INTERNACIONÁLÉ',label:'Internacionálé',clue:'A munkásmozgalom nemzetközi szervezete.'},
+ {token:'ANARCHIZMUS',label:'anarchizmus',clue:'Minden állami hatalmat elutasító politikai irányzat.'},
+ {token:'IMPERIALIZMUS',label:'imperializmus',clue:'A nagyhatalmak gyarmatszerző és befolyásépítő politikája a századfordulón.'},
+ {token:'GYARMATOSÍTÁS',label:'gyarmatosítás',clue:'Tengerentúli területek meghódítása és kizsákmányolása.'},
+ {token:'HÁRMASSZÖVETSÉG',label:'hármas szövetség',clue:'Németország, a Monarchia és Olaszország katonai tömbje.'},
+ {token:'ANTANT',label:'antant',clue:'Az első világháborúban Németországgal szemben álló hatalmi tömb.'},
+ {token:'PÁNSZLÁVIZMUS',label:'pánszlávizmus',clue:'A szláv népek összefogását hirdető eszme.'},
+ {token:'KULTÚRHARC',label:'kultúrharc',clue:'Az állam és az egyház küzdelme az iskola és a házasság ügyében.'},
+ {token:'POLGÁROSODÁS',label:'polgárosodás',clue:'A társadalom polgári jellegűvé válásának folyamata.'},
+ {token:'MILLENNIUM',label:'millennium',clue:'A honfoglalás ezredik évfordulójának 1896-os ünnepsége.'},
+ {token:'SZABADVERSENY',label:'szabad verseny',clue:'Az állami beavatkozástól mentes piaci küzdelem.'},
+ {token:'AGRÁRMOZGALOM',label:'agrármozgalom',clue:'A szegényparasztság és a mezőgazdasági munkások szervezkedése a századfordulón.'},
+ {token:'ANDRÁSSY',label:'Andrássy Gyula',clue:'A megegyezés utáni első magyar miniszterelnök, később közös külügyminiszter.'},
+ {token:'TISZAKÁLMÁN',label:'Tisza Kálmán',clue:'Miniszterelnök 1875–1890 között, a „generális".'},
+ {token:'TISZAISTVÁN',label:'Tisza István',clue:'Miniszterelnök, akit 1918 októberében meggyilkoltak.'},
+ {token:'BISMARCK',label:'Bismarck',clue:'A „vaskancellár", a német egység megteremtője.'},
+ {token:'LINCOLN',label:'Lincoln',clue:'Amerikai elnök, aki alatt eltörölték a rabszolgaságot.'},
+ {token:'KARLMARX',label:'Karl Marx',clue:'A Kommunista kiáltvány egyik szerzője.'},
+ {token:'PUSKÁS',label:'Puskás Tivadar',clue:'A telefonhírmondó feltalálója, Edison munkatársa.'},
+ {token:'KANDÓ',label:'Kandó Kálmán',clue:'Mérnök, a villamos vontatás úttörője a vasúton.'},
+ {token:'YBLMIKLÓS',label:'Ybl Miklós',clue:'Az Operaház tervezője.'},
+ {token:'HERZL',label:'Herzl Tivadar',clue:'A cionista mozgalom megalapítója, aki a magyar fővárosban született.'},
+ {token:'PROHÁSZKA',label:'Prohászka Ottokár',clue:'Székesfehérvári püspök, a keresztény társadalmi tanítás magyar képviselője.'},
+ {token:'FIUME',label:'Fiume',clue:'A Magyar Királyság tengeri kikötője az Adrián.'},
+ {token:'SZARAJEVÓ',label:'Szarajevó',clue:'Város, ahol 1914-ben meggyilkolták a trónörököst.'},
+ {token:'BUDAPEST',label:'Budapest',clue:'Főváros, amely 1873-ban három város egyesítésével jött létre.'},
+];
+const ITEMS_11B=[
+ {token:'VILLÁMHÁBORÚ',label:'villámháború',clue:'Gyors, döntő csapásra épülő hadviselési elképzelés.'},
+ {token:'ÁLLÓHÁBORÚ',label:'állóháború',clue:'Lövészárkokba merevedett, hosszan elhúzódó frontharc.'},
+ {token:'HADIGAZDASÁG',label:'hadigazdaság',clue:'A termelés háborús célokra való átállítása.'},
+ {token:'JEGYRENDSZER',label:'jegyrendszer',clue:'A hiánycikkek elosztása fejadagot igazoló szelvényekkel.'},
+ {token:'PACIFIZMUS',label:'pacifizmus',clue:'A háborút minden formájában elutasító mozgalom.'},
+ {token:'VÖRÖSTERROR',label:'vörösterror',clue:'Az 1919-es tanácshatalom megtorló erőszaka.'},
+ {token:'FEHÉRTERROR',label:'fehérterror',clue:'Az 1919–20-as ellenforradalmi megtorlások időszaka.'},
+ {token:'TRIANON',label:'Trianon',clue:'A magyar békediktátum aláírásának helye 1920-ban.'},
+ {token:'REVÍZIÓ',label:'revízió',clue:'A békeszerződés felülvizsgálatára irányuló törekvés.'},
+ {token:'KONSZOLIDÁCIÓ',label:'konszolidáció',clue:'A gazdaság és a politika rendezése, megszilárdítása a húszas években.'},
+ {token:'NUMERUSCLAUSUS',label:'numerus clausus',clue:'1920-as törvény, amely korlátozta a zsidó fiatalok egyetemi felvételét.'},
+ {token:'IRREDENTIZMUS',label:'irredentizmus',clue:'Az elszakított területek visszaszerzését célzó mozgalom.'},
+ {token:'FASIZMUS',label:'fasizmus',clue:'Olaszországi tekintélyuralmi rendszer és eszme a két világháború között.'},
+ {token:'NÁCIZMUS',label:'nácizmus',clue:'Fajelméletre épülő német mozgalom és rendszer a harmincas években.'},
+ {token:'BOLSEVIK',label:'bolsevik',clue:'Lenin pártjának híve az orosz munkásmozgalomban.'},
+ {token:'KOLHOZ',label:'kolhoz',clue:'Szovjet kollektív mezőgazdasági nagyüzem.'},
+ {token:'SZTAHANOVIZMUS',label:'sztahanovizmus',clue:'A termelési normák túlteljesítésére buzdító szovjet munkaverseny.'},
+ {token:'KONCEPCIÓSPER',label:'koncepciós per',clue:'Előre megírt vádakra épülő, koholt bírósági eljárás.'},
+ {token:'GULAG',label:'Gulag',clue:'A szovjet kényszermunkatáborok rendszere.'},
+ {token:'VILÁGVÁLSÁG',label:'világválság',clue:'Az 1929-ben kirobbant gazdasági összeomlás.'},
+ {token:'NEWDEAL',label:'New Deal',clue:'Amerikai gazdaságélénkítő program a nagy válság idején.'},
+ {token:'KÖZMUNKAPROGRAM',label:'közmunkaprogram',clue:'Állami beruházás, amely munkát ad a válság idején.'},
+ {token:'HOLOKAUSZT',label:'holokauszt',clue:'A zsidóság módszeres, iparszerű elpusztítása a második világháborúban.'},
+ {token:'GETTÓ',label:'gettó',clue:'Elkülönített városrész, ahová a zsidóságot zárták.'},
+ {token:'DEPORTÁLÁS',label:'deportálás',clue:'Tömeges elszállítás táborokba vagy idegen országba.'},
+ {token:'ZSIDÓTÖRVÉNY',label:'zsidótörvény',clue:'Jogfosztó jogszabály, amely korlátozta egy vallási közösség gazdasági és polgári jogait.'},
+ {token:'MUNKASZOLGÁLAT',label:'munkaszolgálat',clue:'Fegyver nélküli katonai szolgálat, amelyre a zsidó férfiakat kötelezték.'},
+ {token:'GENOCÍDIUM',label:'genocídium',clue:'Egy népcsoport szándékos, teljes elpusztítására irányuló bűntett.'},
+ {token:'PORRAJMOS',label:'porrajmos',clue:'A cigányság második világháborús népirtása.'},
+ {token:'NYILASOK',label:'nyilasok',clue:'A szélsőjobboldali magyar mozgalom hívei, akik 1944 októberében ragadták magukhoz a hatalmat.'},
+ {token:'KIUGRÁS',label:'kiugrási kísérlet',clue:'Sikertelen próbálkozás 1944 októberében a háborúból való kilépésre.'},
+ {token:'HÁTORSZÁG',label:'hátország',clue:'A front mögötti terület, amely a hadsereget ellátja.'},
+ {token:'KOLLABORÁNS',label:'kollaboráns',clue:'A megszállókkal együttműködő személy.'},
+ {token:'ELLENÁLLÁS',label:'ellenállás',clue:'A megszállók elleni szervezett, gyakran illegális küzdelem.'},
+ {token:'ANSCHLUSS',label:'Anschluss',clue:'Ausztria bekebelezése a Német Birodalomba 1938-ban.'},
+ {token:'BÉCSIDÖNTÉS',label:'bécsi döntés',clue:'Német–olasz döntőbíráskodás, amely magyar lakta területeket juttatott vissza.'},
+ {token:'KÁROLYIMIHÁLY',label:'Károlyi Mihály',clue:'Az 1918-as őszirózsás forradalom miniszterelnöke, majd köztársasági elnök.'},
+ {token:'KUNBÉLA',label:'Kun Béla',clue:'A magyarországi tanácshatalom vezetője 1919-ben.'},
+ {token:'HORTHY',label:'Horthy Miklós',clue:'Kormányzó 1920 és 1944 között.'},
+ {token:'BETHLENISTVÁN',label:'Bethlen István',clue:'Miniszterelnök a húszas években, a rendszer megszilárdítója.'},
+ {token:'TELEKIPÁL',label:'Teleki Pál',clue:'Miniszterelnök, aki 1941-ben önkezével vetett véget életének.'},
+ {token:'GÖMBÖSGYULA',label:'Gömbös Gyula',clue:'Miniszterelnök, aki a német és olasz kapcsolatokat erősítette.'},
+ {token:'SZÁLASI',label:'Szálasi Ferenc',clue:'A nyilas mozgalom vezetője, 1944 októberétől „nemzetvezető".'},
+ {token:'LENIN',label:'Lenin',clue:'Az 1917-es oroszországi hatalomátvétel vezetője.'},
+ {token:'SZTÁLIN',label:'Sztálin',clue:'A Szovjetunió diktátora, a tisztogatások irányítója.'},
+ {token:'HITLER',label:'Hitler',clue:'A Harmadik Birodalom vezére.'},
+ {token:'MUSSOLINI',label:'Mussolini',clue:'Az olasz fasiszta állam vezetője, a Duce.'},
+ {token:'CHURCHILL',label:'Churchill',clue:'Brit miniszterelnök a második világháború idején.'},
+ {token:'ROOSEVELT',label:'Roosevelt',clue:'Amerikai elnök, a válságkezelő program meghirdetője.'},
+ {token:'ZSUKOV',label:'Zsukov',clue:'Szovjet marsall, Berlin bevételének irányítója.'},
+ {token:'ROMMEL',label:'Rommel',clue:'Német tábornok, a „sivatagi róka".'},
+ {token:'EICHMANN',label:'Eichmann',clue:'SS-tiszt, a magyarországi elhurcolások szervezője.'},
+ {token:'WALLENBERG',label:'Wallenberg',clue:'Svéd diplomata, aki 1944-ben üldözöttek ezreit mentette meg a magyar fővárosban.'},
+ {token:'DONIKANYAR',label:'Doni-kanyar',clue:'Frontszakasz, ahol 1943 januárjában a 2. magyar hadsereg megsemmisült.'},
+ {token:'SZTÁLINGRÁD',label:'Sztálingrád',clue:'Város, ahol 1943-ban a német 6. hadsereg megadta magát.'},
+ {token:'AUSCHWITZ',label:'Auschwitz',clue:'A legnagyobb náci megsemmisítő tábor.'},
+];
+const ITEMS_12A=[
+ {token:'HIDEGHÁBORÚ',label:'hidegháború',clue:'A szovjet és az amerikai tömb fegyveres összecsapás nélküli szembenállása.'},
+ {token:'VASFÜGGÖNY',label:'vasfüggöny',clue:'Churchill képe az Európát kettéosztó zárt határról.'},
+ {token:'KÉTPÓLUSÚVILÁG',label:'kétpólusú világ',clue:'Nemzetközi rend, amelyben két szuperhatalom áll szemben egymással.'},
+ {token:'MARSHALLSEGÉLY',label:'Marshall-segély',clue:'Amerikai gazdasági támogatás Európa háború utáni újjáépítésére.'},
+ {token:'TRUMANDOKTRÍNA',label:'Truman-doktrína',clue:'Amerikai politika a kommunizmus terjedésének feltartóztatására.'},
+ {token:'VARSÓISZERZŐDÉS',label:'Varsói Szerződés',clue:'A szovjet tömb katonai szövetsége 1955-től.'},
+ {token:'ENYHÜLÉS',label:'enyhülés',clue:'A nagyhatalmi feszültség csökkenésének időszaka.'},
+ {token:'FEGYVERKEZÉS',label:'fegyverkezési verseny',clue:'A haderő és az arzenál folyamatos fejlesztésének versengése a két tömb között.'},
+ {token:'DEKOLONIZÁCIÓ',label:'dekolonizáció',clue:'A gyarmati rendszer felbomlása a második világháború után.'},
+ {token:'HARMADIKVILÁG',label:'harmadik világ',clue:'A két tömbön kívüli, fejlődő országok összefoglaló neve.'},
+ {token:'BERLINIFAL',label:'berlini fal',clue:'1961-ben emelt építmény, amely kettévágta a német fővárost.'},
+ {token:'PRÁGAITAVASZ',label:'prágai tavasz',clue:'Az 1968-as csehszlovák reformkísérlet, amelyet szovjet beavatkozás tört le.'},
+ {token:'PERESZTROJKA',label:'peresztrojka',clue:'Átalakítási program a nyolcvanas évek Szovjetuniójában.'},
+ {token:'GLASZNOSZTY',label:'glasznoszty',clue:'A nyíltság politikája a nyolcvanas évek Szovjetuniójában.'},
+ {token:'PÁRTÁLLAM',label:'pártállam',clue:'Olyan rendszer, amelyben egyetlen politikai szervezet gyakorolja az állami hatalmat.'},
+ {token:'ÁLLAMOSÍTÁS',label:'államosítás',clue:'A magántulajdon köztulajdonba vétele.'},
+ {token:'KOLLEKTIVIZÁLÁS',label:'kollektivizálás',clue:'A parasztgazdaságok szövetkezetbe kényszerítése.'},
+ {token:'TERVGAZDÁLKODÁS',label:'tervgazdálkodás',clue:'Központi utasításokra épülő gazdaságirányítás.'},
+ {token:'BESZOLGÁLTATÁS',label:'beszolgáltatás',clue:'A termény kötelező, alacsony áron történő átadása az államnak.'},
+ {token:'SZALÁMITAKTIKA',label:'szalámitaktika',clue:'A politikai ellenfelek szeletenkénti felszámolásának módszere.'},
+ {token:'KULÁK',label:'kulák',clue:'A gazdagparaszt megbélyegző neve az ötvenes években.'},
+ {token:'RECSK',label:'Recsk',clue:'A hírhedt kényszermunkatábor neve a Mátrában.'},
+ {token:'MUNKÁSTANÁCS',label:'munkástanács',clue:'1956-ban alakult üzemi testület, amely a dolgozók képviseletét látta el.'},
+ {token:'MEGTORLÁS',label:'megtorlás',clue:'Az 1956 utáni kivégzések és bebörtönzések időszaka.'},
+ {token:'KÁDÁRIALKU',label:'kádári alku',clue:'Hallgatólagos megegyezés: viszonylagos jólét a politikai passzivitásért cserébe.'},
+ {token:'SZAMIZDAT',label:'szamizdat',clue:'Illegálisan sokszorosított ellenzéki kiadvány.'},
+ {token:'MÁSODIKGAZDASÁG',label:'második gazdaság',clue:'A háztáji és a maszek munka a hivatalos rendszer keretein kívül.'},
+ {token:'RENDSZERVÁLTÁS',label:'rendszerváltoztatás',clue:'Az egypárti diktatúra békés felszámolása 1989–90-ben.'},
+ {token:'KEREKASZTAL',label:'Ellenzéki Kerekasztal',clue:'Az 1989-es tárgyalássorozat a hatalom és az ellenzék között.'},
+ {token:'TÉESZ',label:'téesz',clue:'A mezőgazdasági termelőszövetkezet rövidített neve.'},
+ {token:'RÁKOSI',label:'Rákosi Mátyás',clue:'A „Sztálin legjobb magyar tanítványának" nevezett pártvezető.'},
+ {token:'NAGYIMRE',label:'Nagy Imre',clue:'Az 1956-os forradalom miniszterelnöke, akit 1958-ban kivégeztek.'},
+ {token:'KÁDÁRJÁNOS',label:'Kádár János',clue:'Pártvezető 1956 novemberétől 1988-ig.'},
+ {token:'MINDSZENTY',label:'Mindszenty József',clue:'Hercegprímás, akit koholt perben ítéltek el, majd az amerikai követségen élt.'},
+ {token:'MALÉTER',label:'Maléter Pál',clue:'Az 1956-os kormány honvédelmi minisztere, akit kivégeztek.'},
+ {token:'HRUSCSOV',label:'Hruscsov',clue:'Szovjet pártvezető, aki leleplezte elődje bűneit.'},
+ {token:'BREZSNYEV',label:'Brezsnyev',clue:'Szovjet vezető a pangás korszakában.'},
+ {token:'GORBACSOV',label:'Gorbacsov',clue:'Az utolsó szovjet pártfőtitkár, a reformok elindítója.'},
+ {token:'KENNEDY',label:'Kennedy',clue:'Amerikai elnök a kubai rakétaválság idején.'},
+ {token:'REAGAN',label:'Reagan',clue:'Amerikai elnök, a csillagháborús terv meghirdetője.'},
+ {token:'ADENAUER',label:'Adenauer',clue:'Az NSZK első kancellárja.'},
+ {token:'ANTALLJÓZSEF',label:'Antall József',clue:'A rendszerváltoztatás utáni első szabadon választott miniszterelnök.'},
+ {token:'GÖNCZÁRPÁD',label:'Göncz Árpád',clue:'A köztársaság első szabadon választott elnöke.'},
+ {token:'POZSGAYIMRE',label:'Pozsgay Imre',clue:'Reformkommunista politikus, aki 1989-ben népfelkelésnek nevezte 1956-ot.'},
+ {token:'JALTA',label:'Jalta',clue:'Város, ahol 1945 februárjában a nagyhatalmak Európa sorsáról tárgyaltak.'},
+ {token:'POTSDAM',label:'Potsdam',clue:'Város, ahol 1945 nyarán a győztesek a háború utáni rendről döntöttek.'},
+ {token:'HELSINKI',label:'Helsinki',clue:'Város, ahol 1975-ben az európai biztonsági záróokmányt aláírták.'},
+];
+const ITEMS_12B=[
+ {token:'EURÓPAIUNIÓ',label:'Európai Unió',clue:'Az európai államok gazdasági és politikai közössége.'},
+ {token:'MAASTRICHT',label:'Maastricht',clue:'Város, ahol 1992-ben az uniót létrehozó szerződést aláírták.'},
+ {token:'SCHENGEN',label:'schengeni övezet',clue:'Az egyezmény, amely megszüntette a belső határellenőrzést.'},
+ {token:'NÉGYSZABADSÁG',label:'négy szabadság',clue:'Az áruk, a szolgáltatások, a tőke és a személyek szabad mozgása az unióban.'},
+ {token:'GLOBALIZÁCIÓ',label:'globalizáció',clue:'A világ gazdasági, kulturális és technikai összefonódásának folyamata.'},
+ {token:'TRANSZNACIONÁLIS',label:'transznacionális vállalat',clue:'Több országban működő, országhatárokon átnyúló nagyvállalat jelzője.'},
+ {token:'REGIONALIZMUS',label:'regionalizmus',clue:'A térségi együttműködést és a helyi önállóságot előtérbe helyező szemlélet.'},
+ {token:'INTEGRÁCIÓ',label:'integráció',clue:'Országok egyesülési, összekapcsolódási folyamata.'},
+ {token:'ALAPTÖRVÉNY',label:'Alaptörvény',clue:'Magyarország 2011-ben elfogadott alkotmánya.'},
+ {token:'ORSZÁGGYŰLÉS',label:'Országgyűlés',clue:'A magyar törvényhozó hatalom testülete.'},
+ {token:'ÁLLAMFŐ',label:'köztársasági elnök',clue:'Az ország első közjogi méltósága, akit a törvényhozás választ.'},
+ {token:'ALKOTMÁNYBÍRÓSÁG',label:'Alkotmánybíróság',clue:'Testület, amely a jogszabályok alaptörvénnyel való összhangját vizsgálja.'},
+ {token:'OMBUDSMAN',label:'ombudsman',clue:'Az alapvető jogok biztosának másik elnevezése.'},
+ {token:'MENTELMIJOG',label:'mentelmi jog',clue:'A képviselőt megillető védettség a felelősségre vonás ellen.'},
+ {token:'INTERPELLÁCIÓ',label:'interpelláció',clue:'Képviselői kérdés a kormány tagjához a parlamentben.'},
+ {token:'FRAKCIÓ',label:'frakció',clue:'Egy párt képviselőinek parlamenti csoportja.'},
+ {token:'KÚRIA',label:'Kúria',clue:'Magyarország legfőbb bírói fóruma.'},
+ {token:'ÜGYÉSZSÉG',label:'ügyészség',clue:'A vádemelést végző állami szervezet.'},
+ {token:'ÖNKORMÁNYZAT',label:'önkormányzat',clue:'A település ügyeit intéző választott helyi testület.'},
+ {token:'POLGÁRMESTER',label:'polgármester',clue:'A település választott vezetője.'},
+ {token:'SZÁMVEVŐSZÉK',label:'Állami Számvevőszék',clue:'A közpénzek felhasználását ellenőrző szerv.'},
+ {token:'VÁLASZTÓJOG',label:'választójog',clue:'Az állampolgár joga, hogy szavazzon és megválasztható legyen.'},
+ {token:'NÉPSZAVAZÁS',label:'népszavazás',clue:'Közvetlen döntéshozatal, amelyben a választópolgárok mondanak véleményt egy kérdésről.'},
+ {token:'AUTONÓMIA',label:'autonómia',clue:'Egy közösség önigazgatási joga saját ügyeiben.'},
+ {token:'KISEBBSÉG',label:'kisebbség',clue:'Az adott államban számbelileg alárendelt nemzeti vagy etnikai csoport.'},
+ {token:'DEMOGRÁFIA',label:'demográfia',clue:'A népesség számának és összetételének változásait vizsgáló tudomány.'},
+ {token:'ELVÁNDORLÁS',label:'elvándorlás',clue:'A lakosság kiáramlása az országból munka vagy tanulás céljából.'},
+ {token:'VISEGRÁDINÉGYEK',label:'visegrádi négyek',clue:'Négy közép-európai ország regionális együttműködése.'},
+ {token:'EURÓÖVEZET',label:'euróövezet',clue:'A közös európai fizetőeszközt használó tagállamok köre.'},
+ {token:'KOHÉZIÓSALAP',label:'kohéziós alap',clue:'Uniós pénzalap a fejletlenebb tagállamok felzárkóztatására.'},
+ {token:'ASSZIMILÁCIÓ',label:'asszimiláció',clue:'Beolvadás a többségi nemzetbe — a határon túli közösségek egyik fő kihívása.'},
+ {token:'JOGÁLLAM',label:'jogállam',clue:'Olyan állam, amelyben a közhatalom is a törvényeknek van alávetve.'},
+ {token:'PARLAMENTIKÜSZÖB',label:'parlamenti küszöb',clue:'A szavazatarány, amelyet egy pártnak el kell érnie a mandátumszerzéshez.'},
+ {token:'SCHUMAN',label:'Robert Schuman',clue:'Francia politikus, az európai egyesülés egyik atyja.'},
+ {token:'SÜTŐANDRÁS',label:'Sütő András',clue:'Erdélyi magyar író, a határon túli magyar sors krónikása.'},
+ {token:'STRASBOURG',label:'Strasbourg',clue:'Város, ahol az Európai Parlament ülésezik.'},
+ {token:'BRÜSSZEL',label:'Brüsszel',clue:'Az uniós intézmények fő székhelye.'},
+];
+
+const GRADES={
+  9 :{label:'Ókor és középkor',   span:'ókor – 1490',    accent:'#FFC24B', accent2:'#FF9A2E', ink:'#2A1B00',
+      A:{label:'Ókor',              items:ITEMS_OKOR},
+      B:{label:'Középkor',          items:ITEMS_KOZEPKOR}},
+  10:{label:'Kora újkor – 1849',   span:'1490 – 1849',   accent:'#3DDC97', accent2:'#17B87A', ink:'#00291A',
+      A:{label:'Kora újkor',        items:ITEMS_10A},
+      B:{label:'Reformkor, 1848',   items:ITEMS_10B}},
+  11:{label:'Dualizmus, világháborúk', span:'1849 – 1945', accent:'#FF7A8A', accent2:'#F0455F', ink:'#33020B',
+      A:{label:'Dualizmus kora',    items:ITEMS_11A},
+      B:{label:'Világháborúk',      items:ITEMS_11B}},
+  12:{label:'Hidegháború, jelenkor', span:'1945 – ma',   accent:'#9E8BFF', accent2:'#7B5CFF', ink:'#160A38',
+      A:{label:'Hidegháború',       items:ITEMS_12A},
+      B:{label:'Jelenkor',          items:ITEMS_12B}},
+};
+const ORDER=[9,10,11,12];
+function pool(g,t){ const G=GRADES[g]; return t==='A'?G.A.items : t==='B'?G.B.items : G.A.items.concat(G.B.items); }
+
+/* ===== rejtvénykód ===== */
+const LC={10:'R',16:'H'}, CL={R:10,H:16};
+function makeCode(g,t,l,s){ return String(g)+t+LC[l]+'-'+String(s).padStart(4,'0'); }
+function parseCode(x){
+  const m=(x||'').toUpperCase().replace(/\s+/g,'').match(/^(9|10|11|12)([ABV])([RH])-?([0-9]{1,4})$/);
+  if(!m) return null;
+  const s=parseInt(m[4],10); if(!s) return null;
+  return {grade:parseInt(m[1],10), topic:m[2], len:CL[m[3]], seed:s};
+}
+
+/* ===== állapot ===== */
+const CFG={grade:9,topic:'A',mode:'classic',len:10};
+const PRINT={variants:1,key:false};
+const S={size:16,grid:[],place:[],hit:0,err:0,hint:0,anchor:null,t0:0,timer:null,done:false,code:'',run:0,best:0};
+
+/* ===== képernyők ===== */
+function show(id){ document.querySelectorAll('.screen').forEach(e=>e.classList.remove('on'));
+  document.getElementById('sc-'+id).classList.add('on'); window.scrollTo({top:0,behavior:'smooth'}); }
+function goStart(){ clearInterval(S.timer); document.getElementById('stats').style.display='none';
+  document.getElementById('ctxLabel').textContent='történelem 9–12.'; paint(); show('start'); }
+
+function applyAccent(){
+  const G=GRADES[CFG.grade], d=document.documentElement.style;
+  d.setProperty('--acc',G.accent); d.setProperty('--acc-2',G.accent2); d.setProperty('--acc-ink',G.ink);
+}
+function paint(){
+  applyAccent();
+  document.getElementById('rail').innerHTML=ORDER.map(g=>{
+    const G=GRADES[g], on=CFG.grade===g;
+    return `<button class="era" aria-pressed="${on}" onclick="setCfg('grade',${g})">
+      <div class="gr">${g}.</div><div class="gl">${G.label}</div><div class="gs">${G.span}</div><div class="bar"></div></button>`;
+  }).join('');
+  const G=GRADES[CFG.grade];
+  const tp=[['A',G.A.label,G.A.items.length],['B',G.B.label,G.B.items.length],['V','Vegyes',G.A.items.length+G.B.items.length]];
+  document.getElementById('topicSeg').innerHTML=tp.map(([k,n,c])=>
+    `<button aria-pressed="${CFG.topic===k}" onclick="setCfg('topic','${k}')">${n}<span class="sm">${c} szó</span></button>`).join('');
+  document.getElementById('modeSeg').innerHTML=[['classic','Klasszikus','a szó látszik'],['hard','Nehéz','csak körülírás']]
+    .map(([k,n,d])=>`<button aria-pressed="${CFG.mode===k}" onclick="setCfg('mode','${k}')">${n}<span class="sm">${d}</span></button>`).join('');
+  document.getElementById('lenSeg').innerHTML=[[10,'Rövid','10 szó'],[16,'Hosszú','16 szó']]
+    .map(([k,n,d])=>`<button aria-pressed="${CFG.len===k}" onclick="setCfg('len',${k})">${n}<span class="sm">${d}</span></button>`).join('');
+  const vs=document.getElementById('varSeg');
+  if(vs){
+    vs.innerHTML=[[1,'Egy','minden lap azonos'],[2,'Kettő','A és B változat']]
+      .map(([k,n,d])=>`<button aria-pressed="${PRINT.variants===k}" onclick="setPrint('variants',${k})">${n}<span class="sm">${d}</span></button>`).join('');
+    document.getElementById('keySeg').innerHTML=[[false,'Nem','csak feladatlap'],[true,'Igen','külön lapon']]
+      .map(([k,n,d])=>`<button aria-pressed="${PRINT.key===k}" onclick="setPrint('key',${k})">${n}<span class="sm">${d}</span></button>`).join('');
+    const pages=PRINT.variants*(PRINT.key?2:1);
+    document.getElementById('printNote').textContent=pages+' oldal · '+CFG.len+' szó · '+(CFG.mode==='hard'?'körülírásos':'klasszikus');
+  }
+}
+function setPrint(k,v){ PRINT[k]=v; paint(); }
+function setCfg(k,v){ CFG[k]=v; paint(); }
+
+/* ===== rácsgenerálás ===== */
+const DIRS=[[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]];
+const FILL='AÁBCDEÉFGHIÍJKLMNOÓÖŐPRSTUÚÜŰVWXYZ';
+function tryGrid(items,n){
+  const grid=Array.from({length:n},()=>Array(n).fill(null)), place=[];
+  items.forEach(it=>{
+    const w=it.token; let ok=false;
+    for(let a=0;a<600&&!ok;a++){
+      const d=DIRS[Math.floor(rnd()*DIRS.length)];
+      const r0=d[0]===1?Math.floor(rnd()*(n-w.length+1)):d[0]===-1?Math.floor(rnd()*(n-w.length+1))+w.length-1:Math.floor(rnd()*n);
+      const c0=d[1]===1?Math.floor(rnd()*(n-w.length+1)):d[1]===-1?Math.floor(rnd()*(n-w.length+1))+w.length-1:Math.floor(rnd()*n);
+      const cells=[]; let fit=true;
+      for(let i=0;i<w.length;i++){
+        const r=r0+d[0]*i, c=c0+d[1]*i;
+        if(r<0||r>=n||c<0||c>=n){fit=false;break;}
+        if(grid[r][c]!==null&&grid[r][c]!==w[i]){fit=false;break;}
+        cells.push([r,c]);
+      }
+      if(fit){ cells.forEach(([r,c],i)=>grid[r][c]=w[i]); place.push({it,cells,found:false}); ok=true; }
+    }
+  });
+  return {grid,place};
+}
+function build(g,t,l){
+  const n=S.size, items=sample(pool(g,t),l).sort((a,b)=>b.token.length-a.token.length);
+  let best=null;
+  for(let i=0;i<12;i++){ const r=tryGrid(items,n);
+    if(!best||r.place.length>best.place.length) best=r;
+    if(best.place.length===items.length) break; }
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++) if(best.grid[r][c]===null) best.grid[r][c]=FILL[Math.floor(rnd()*FILL.length)];
+  return best;
+}
+
+/* ===== indítás ===== */
+function startFromCode(){
+  const m=document.getElementById('codeMsg'), p=parseCode(document.getElementById('codeInput').value);
+  if(!p){ m.className='msg show';
+    m.innerHTML='Ismeretlen kód. Felépítése: évfolyam (9/10/11/12) + témakör (A/B/V) + hossz (R vagy H) + kötőjel + négy számjegy. Példa: <b>11BH-4821</b>.';
+    return; }
+  m.className='msg'; m.textContent='';
+  CFG.grade=p.grade; CFG.topic=p.topic; CFG.len=p.len; paint(); startPuzzle(p.seed);
+}
+function copyCode(){
+  if(!S.code||!navigator.clipboard) return;
+  navigator.clipboard.writeText(S.code).then(()=>{
+    const b=document.getElementById('vCode'), o=b.textContent;
+    b.textContent='másolva'; setTimeout(()=>b.textContent=o,1100);
+  }).catch(()=>{});
+}
+function startPuzzle(seed){
+  const s=(typeof seed==='number'&&seed>0)?seed:(1000+Math.floor(Math.random()*9000));
+  S.code=makeCode(CFG.grade,CFG.topic,CFG.len,s);
+  seedRng(s+CFG.grade*100003+(CFG.topic==='A'?1:CFG.topic==='B'?2:3)*7919);
+  const b=build(CFG.grade,CFG.topic,CFG.len);
+  S.grid=b.grid; S.place=b.place; S.hit=0; S.err=0; S.hint=0; S.anchor=null; S.done=false; S.run=0; S.best=0;
+  clearInterval(S.timer); S.t0=Date.now(); S.timer=setInterval(()=>{ if(!S.done) tick(); },1000);
+  applyAccent();
+  const G=GRADES[CFG.grade];
+  document.getElementById('ctxLabel').textContent=CFG.grade+'. évfolyam · '+(CFG.topic==='A'?G.A.label:CFG.topic==='B'?G.B.label:'vegyes');
+  document.getElementById('stats').style.display='flex';
+  document.getElementById('vCode').textContent=S.code;
+  document.getElementById('listTitle').textContent=CFG.mode==='hard'?'Körülírások — idézd fel a fogalmat':'Keresendő szavak';
+  document.getElementById('progTotal').textContent=S.place.length;
+  drawGrid(); drawWords(); tick(); drawProgress(); show('game');
+}
+function secs(){ return Math.max(0,Math.floor((Date.now()-S.t0)/1000)); }
+function mmss(x){ return Math.floor(x/60)+':'+String(x%60).padStart(2,'0'); }
+function tick(){
+  document.getElementById('vTime').textContent=mmss(secs());
+  document.getElementById('vFound').textContent=S.hit+'/'+S.place.length;
+  document.getElementById('vErr').textContent=S.err;
+}
+function drawProgress(){
+  const pct=S.place.length? Math.round(100*S.hit/S.place.length):0;
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progText').textContent=S.hit;
+  const el=document.getElementById('streak');
+  if(S.run>=2){ el.textContent='sorozat ×'+S.run; el.className='streak on'+(S.run>=5?' hot':''); }
+  else { el.className='streak'; el.textContent=''; }
+}
+function drawGrid(){
+  const el=document.getElementById('grid');
+  el.style.gridTemplateColumns='repeat('+S.size+',1fr)';
+  el.style.maxWidth=(S.size*36)+'px';
+  let h='';
+  for(let r=0;r<S.size;r++) for(let c=0;c<S.size;c++)
+    h+=`<div class="cell" id="k${r}-${c}" onclick="tap(${r},${c})">${S.grid[r][c]}</div>`;
+  el.innerHTML=h;
+}
+function drawWords(){
+  document.getElementById('words').innerHTML=S.place.map(p=>{
+    const body = CFG.mode==='hard'
+      ? (p.found? `<span class="nm">${p.it.label}</span>` : `<span class="cl">${p.it.clue}</span>`)
+      : `<span class="nm">${p.it.label}</span>`;
+    return `<div class="w ${p.found?'hit':''}">${body}</div>`;
+  }).join('');
+}
+function tap(r,c){
+  if(S.done) return;
+  if(!S.anchor){ S.anchor={r,c}; document.getElementById('k'+r+'-'+c).classList.add('anchor'); return; }
+  const a=S.anchor; document.getElementById('k'+a.r+'-'+a.c).classList.remove('anchor');
+  if(a.r===r&&a.c===c){ S.anchor=null; return; }
+  const dr=r-a.r, dc=c-a.c;
+  if(!(dr===0||dc===0||Math.abs(dr)===Math.abs(dc))){ S.anchor=null; return; }
+  const n=Math.max(Math.abs(dr),Math.abs(dc)), sr=dr/n, sc=dc/n, path=[];
+  for(let i=0;i<=n;i++) path.push([a.r+sr*i, a.c+sc*i]);
+  const f=path.map(([x,y])=>S.grid[x][y]).join(''), b=f.split('').reverse().join('');
+  const m=S.place.find(p=>!p.found&&(p.it.token===f||p.it.token===b));
+  if(m){
+    m.found=true; S.hit++; S.run++; if(S.run>S.best) S.best=S.run;
+    path.forEach(([x,y])=>document.getElementById('k'+x+'-'+y).classList.add('found'));
+    drawWords(); tick(); drawProgress();
+    if(S.hit===S.place.length) finish();
+  }else{
+    S.err++; S.run=0;
+    path.forEach(([x,y])=>{ const e=document.getElementById('k'+x+'-'+y);
+      if(e.classList.contains('found')) return;
+      e.classList.add('miss'); setTimeout(()=>e.classList.remove('miss'),420); });
+    tick(); drawProgress();
+  }
+  S.anchor=null;
+}
+function useHint(){
+  if(S.done) return;
+  const left=S.place.filter(p=>!p.found); if(!left.length) return;
+  const p=left[Math.floor(Math.random()*left.length)], [r,c]=p.cells[0];
+  const e=document.getElementById('k'+r+'-'+c);
+  e.classList.add('ping'); setTimeout(()=>e.classList.remove('ping'),1700);
+  S.hint++; S.t0-=20000; tick();
+}
+/* ===== nyomtatható feladatlap ===== */
+function makePuzzle(g,t,l,seed){
+  seedRng(seed+g*100003+(t==='A'?1:t==='B'?2:3)*7919);
+  const b=build(g,t,l);
+  return {code:makeCode(g,t,l,seed), grid:b.grid, place:b.place};
+}
+function sheetPage(pz,vLabel,isKey){
+  const G=GRADES[CFG.grade];
+  const tname = CFG.topic==='A'?G.A.label : CFG.topic==='B'?G.B.label : 'Vegyes';
+  const sol=new Set();
+  if(isKey) pz.place.forEach(x=>x.cells.forEach(([r,c])=>sol.add(r+'-'+c)));
+  let cells='';
+  for(let r=0;r<S.size;r++) for(let c=0;c<S.size;c++)
+    cells+='<div'+(sol.has(r+'-'+c)?' class="sol"':'')+'>'+pz.grid[r][c]+'</div>';
+  const hard = CFG.mode==='hard';
+  const list = pz.place.map(x=>
+    isKey ? '<li><b>'+x.it.label+'</b>'+(hard?' — <span style="font-size:8.5pt;">'+x.it.clue+'</span>':'')+'</li>'
+          : '<li>'+(hard? x.it.clue : x.it.label)+'</li>').join('');
+  const head = isKey
+    ? '<span class="keytag">Megoldókulcs</span>'
+    : '<div class="pg-fields"><span>Név:</span><span>Osztály:</span><span>Dátum:</span></div>';
+  const note = isKey
+    ? '<div class="pg-note">A megjelölt mezők a megoldást mutatják. A szavak vízszintesen, függőlegesen és átlósan, oda- és visszafelé is szerepelhetnek.</div>'
+    : '<div class="pg-note">Keresd meg és húzd át a rácsban az alább felsorolt '+pz.place.length+' kifejezést. A szavak vízszintesen, függőlegesen és átlósan, oda- és visszafelé is szerepelhetnek; a többszavas kifejezések szóköz nélkül, egybeírva szerepelnek.'+(hard?' A listában csak a meghatározást találod — előbb idézd fel a fogalmat!':'')+'</div>';
+  return '<div class="pg">'
+    +'<div class="pg-head">'
+    +'<div class="pg-title">Szókereső — történelem</div>'
+    +'<div class="pg-meta"><span>'+CFG.grade+'. évfolyam &middot; '+tname+' &middot; '+G.span+(vLabel?' &middot; '+vLabel+' változat':'')+'</span>'
+    +'<span class="code">'+pz.code+'</span></div>'
+    +head+'</div>'
+    +note
+    +'<div class="sgrid">'+cells+'</div>'
+    +'<h4>'+(isKey?'Megoldások':(hard?'Meghatározások':'Keresendő kifejezések'))+'</h4>'
+    +'<ol'+(hard?' class="wide"':'')+'>'+list+'</ol>'
+    +'</div>';
+}
+function renderSheet(puzzles,labels){
+  let out=puzzles.map((pz,i)=>sheetPage(pz,labels[i],false)).join('');
+  if(PRINT.key) out+=puzzles.map((pz,i)=>sheetPage(pz,labels[i],true)).join('');
+  document.getElementById('sheet').innerHTML=out;
+  setTimeout(()=>window.print(),120);
+}
+function printSheet(){
+  const g=CFG.grade,t=CFG.topic,l=CFG.len;
+  const n=PRINT.variants, puzzles=[], labels=[];
+  for(let i=0;i<n;i++){
+    puzzles.push(makePuzzle(g,t,l,1000+Math.floor(Math.random()*9000)));
+    labels.push(n>1?String.fromCharCode(65+i):'');
+  }
+  renderSheet(puzzles,labels);
+}
+function printCurrent(){
+  renderSheet([{code:S.code,grid:S.grid,place:S.place}],['']);
+}
+
+function finish(){
+  S.done=true; clearInterval(S.timer);
+  const tot=secs(), per=tot/S.place.length;
+  let v;
+  if(per<=12&&S.err<=2) v='Ez már vizsgaszint. Gyors és pontos — kevés lexikát kell még csiszolni.';
+  else if(per<=20&&S.err<=5) v='Szép menet! A fogalmak nagy része ül, néhány még kérni fogja az ismétlést.';
+  else if(per<=30) v='Halad. Nézd át a lenti listát, és futtass rá még egy kört — látni fogod a különbséget.';
+  else v='Jó, hogy végigcsináltad. Olvasd át a lenti szavakat, és próbáld újra — a második kör mindig gyorsabb.';
+  if(S.err===0) v='Hibátlan futam! '+v;
+  document.getElementById('scoreline').innerHTML=
+    [['idő',mmss(tot)],['talált',S.hit+'/'+S.place.length],['leghosszabb sorozat','×'+S.best],['hiba',S.err],['segítség',S.hint],['kód',S.code]]
+    .map(([k,x])=>`<div class="sc"><div class="k">${k}</div><div class="v">${x}</div></div>`).join('');
+  document.getElementById('verdict').textContent=v;
+  document.getElementById('recap').innerHTML=S.place.map(p=>
+    `<div class="rc"><b>${p.it.label}</b><span>${p.it.clue}</span></div>`).join('');
+  show('result');
+}
+
+paint();
+</script>
+</body>
+</html>
