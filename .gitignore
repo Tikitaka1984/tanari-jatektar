@@ -1,0 +1,21 @@
+# Operációs rendszer
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Szerkesztők
+.idea/
+.vscode/
+*.swp
+*~
+
+# Ideiglenes és naplófájlok
+*.log
+*.tmp
+*.bak
+
+# Teszt- és lefedettségi kimenetek
+coverage/
+
+# Esetlegesen létrejövő csomagkezelői könyvtár
+node_modules/
