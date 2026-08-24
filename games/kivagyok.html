@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ki vagyok én? — érettségi portréjáték (v2)</title>
+<title>Ki vagyok én? — érettségi portréjáték (v3)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Literata:opsz,wght@18..144,400;18..144,500;18..144,600&family=Space+Mono&display=swap" rel="stylesheet">
 <style>
@@ -33,18 +33,34 @@
   .hud-right{display:flex;gap:10px;flex-wrap:wrap;}
   .pill{font-family:'Space Mono',monospace;font-size:.78rem;background:rgba(0,0,0,.3);border:1px solid rgba(242,231,201,.3);border-radius:999px;padding:7px 13px;}
   .pill b{color:var(--gold-light);}
+  .hud-back{display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.3);border:1px solid rgba(242,231,201,.3);
+    border-radius:999px;padding:7px 13px;font-size:.78rem;font-weight:600;color:var(--parchment);transition:.15s;}
+  .hud-back:hover{background:rgba(0,0,0,.5);border-color:var(--gold);}
+  .hud-back svg{width:13px;height:13px;flex:none;}
 
   .cover{text-align:center;padding:30px 0;}
   .cover h1{font-size:2.4rem;color:var(--gold-light);margin:10px 0;}
   .cover .sub{opacity:.88;max-width:560px;margin:0 auto 22px;line-height:1.6;}
   .story{text-align:left;background:rgba(0,0,0,.28);border:1px solid rgba(201,162,39,.3);border-radius:14px;padding:20px 22px;max-width:620px;margin:0 auto 26px;font-size:.94rem;line-height:1.65;}
   .story b{color:var(--gold-light);}
+  .story .disclaimer{margin-top:10px;padding-top:10px;border-top:1px dashed rgba(201,162,39,.3);font-size:.85rem;font-style:italic;opacity:.8;}
   .btn{display:inline-flex;align-items:center;gap:8px;background:var(--crimson);color:#fff2e6;border:none;border-radius:10px;padding:13px 24px;font-size:1rem;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .15s,background .15s;}
   .btn:hover:not(:disabled){background:var(--crimson-dark);transform:translateY(-2px);}
   .btn.secondary{background:transparent;border:1.5px solid var(--gold-light);color:var(--gold-light);box-shadow:none;}
   .btn.secondary:hover:not(:disabled){background:rgba(232,212,138,.12);}
   .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
   .btn.small{padding:9px 15px;font-size:.85rem;}
+
+  .era-panel{max-width:620px;margin:0 auto 26px;}
+  .eras{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+  @media(max-width:640px){.eras{grid-template-columns:repeat(2,1fr);}}
+  .era-chip{--eacc:var(--gold);background:rgba(0,0,0,.28);border:1.5px solid rgba(201,162,39,.35);border-radius:12px;
+    padding:11px 8px;text-align:center;transition:.18s;color:var(--parchment);}
+  .era-chip:hover{border-color:var(--eacc);}
+  .era-chip .ec-label{display:block;font-family:'Cinzel',serif;font-weight:700;font-size:.86rem;}
+  .era-chip .ec-span{display:block;font-family:'Space Mono',monospace;font-size:.63rem;opacity:.75;margin-top:3px;}
+  .era-chip[aria-pressed="true"]{border-color:var(--eacc);background:rgba(0,0,0,.4);box-shadow:0 0 0 1px var(--eacc) inset;}
+  .era-chip[aria-pressed="true"] .ec-label{color:var(--eacc);}
 
   .card{background:linear-gradient(180deg,#f6ecd1,var(--parchment));color:var(--ink);border-radius:16px;padding:24px;box-shadow:0 18px 44px rgba(0,0,0,.4);}
   .card h3{color:var(--crimson-dark);margin:0 0 10px;font-size:1.15rem;}
@@ -94,6 +110,10 @@
   <div class="hud" id="hud" style="display:none;">
     <div class="hud-title">Ki vagyok én?</div>
     <div class="hud-right">
+      <button class="hud-back" onclick="confirmBackToCover()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        Főoldal / új játék
+      </button>
       <div class="pill">Kör: <b id="hudRound">1/8</b></div>
       <div class="pill">Pontszám: <b id="hudScore">0</b></div>
     </div>
@@ -102,13 +122,18 @@
   <!-- COVER -->
   <section class="screen active" id="screen-cover">
     <div class="cover">
-      <div class="eyebrow">Érettségi felkészítő portréjáték &middot; a kötelező névsor személyei &middot; v2</div>
+      <div class="eyebrow">Érettségi felkészítő portréjáték &middot; a kötelező névsor személyei &middot; v3</div>
       <h1>Ki vagyok én?</h1>
-      <p class="sub">Nyolc történelmi személy lép eléd. Mindegyik öt nyomot ad magáról — a legnehezebbtől a legkönnyebbig. A nevet <b>fejből kell megnevezned</b>.</p>
+      <p class="sub">Történelmi személyek lépnek eléd a hivatalos érettségi vizsgakövetelmény névsorából — évfolyamonként válogatva. Mindegyik öt nyomot ad magáról, a legnehezebbtől a legkönnyebbig. A nevet <b>fejből kell megnevezned</b>.</p>
       <div class="story">
         <p><b>Pontozás:</b> az első nyom után <b>5 pont</b>, minden további nyommal eggyel kevesebb. Helyes válaszért mindig jár legalább 1 pont. Maximum: <b>40 pont</b>.</p>
         <p><b>Névtábla:</b> alapból rejtve van — a felidézés többet ér, mint a felismerés. Ha elakadsz, megnyithatod, de <b>1 pont az ára</b>.</p>
         <p><b>Tévedés:</b> a rossz tipp elégeti a következő nyomot. Az elgépelés viszont nem büntetés: ha nem ismerem fel a beírt nevet, szólok, és próbálkozhatsz újra.</p>
+        <p class="disclaimer"><b>Forrás:</b> a nyomok tartalmi rekonstrukciók — a szereplők egyes szám első személyben megfogalmazott, a hivatalos vizsgakövetelmény és a tankönyvi adatok alapján összeállított mondatai, nem szó szerinti korabeli idézetek.</p>
+      </div>
+      <div class="era-panel">
+        <div class="eyebrow" style="margin-bottom:8px;">Évfolyam</div>
+        <div class="eras" id="eraChips"></div>
       </div>
       <button class="btn" onclick="startGame()">Kezdjük &rarr;</button>
     </div>
@@ -160,8 +185,9 @@
       <h2>Minden arc felfedve</h2>
       <div class="stat-box" id="endStats"></div>
       <div class="recap" id="recap"></div>
-      <div style="margin-top:26px;">
-        <button class="btn secondary" onclick="location.reload()">Új játék (új sorsolással)</button>
+      <div style="margin-top:26px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn" onclick="startGame()">Új játék, ugyanez az évfolyam</button>
+        <button class="btn secondary" onclick="backToCover()">Másik évfolyam</button>
       </div>
     </div>
   </section>
@@ -175,7 +201,7 @@
    accept: elfogadott névalakok (ékezet és központozás nélkül)
    ========================================================= */
 const FIGURES=[
- {id:'istvan',name:'I. (Szent) István',
+ {id:'istvan',grade:9,cat:'B',name:'I. (Szent) István',
   accept:['i istvan','szent istvan','i szent istvan','istvan kiraly','szent istvan kiraly','vajk'],
   bio:'Az első magyar király (997/1000–1038): vármegyerendszer, egyházszervezet, Intelmek.',
   clues:[
@@ -185,7 +211,7 @@ const FIGURES=[
    'Fiamhoz latin nyelvű intelmeket intéztem az uralkodás művészetéről.',
    'Én vagyok az első magyar király: az 1000/1001. év fordulóján koronáztak meg, s a hagyomány szerint a koronát II. Szilveszter pápa küldte.']},
 
- {id:'laszlo',name:'I. (Szent) László',
+ {id:'laszlo',grade:9,cat:'B',name:'I. (Szent) László',
   accept:['i laszlo','szent laszlo','laszlo','i szent laszlo','laszlo kiraly','szent laszlo kiraly'],
   bio:'A lovagkirály (1077–1095): szigorú, tulajdonvédő törvények, Horvátország megszerzésének kezdete, az első magyar szentté avatások.',
   clues:[
@@ -195,7 +221,7 @@ const FIGURES=[
    'Horvátország megszerzését én kezdtem meg.',
    'A kun leányrabló elleni párviadalomat templomfalak sokaságára festették; „lovagkirályként" emlegetnek — és magam is szent lettem.']},
 
- {id:'bela4',name:'IV. Béla',
+ {id:'bela4',grade:9,cat:'B',name:'IV. Béla',
   accept:['iv bela','bela','bela iv','negyedik bela','iv bela kiraly'],
   bio:'A „második honalapító" (1235–1270): muhi vereség, majd kővárépítés, városi kiváltságok, a kunok visszahívása.',
   clues:[
@@ -205,7 +231,7 @@ const FIGURES=[
    'Kiváltságokat adtam a városoknak — nevemhez fűződik Buda felemelkedése is.',
    'A Sajó menti csatavesztés és az ország újjáépítése az én történetem: a történetírás a „második honalapítónak" nevez.']},
 
- {id:'karoly',name:'Károly Róbert',
+ {id:'karoly',grade:9,cat:'B',name:'Károly Róbert',
   accept:['karoly robert','i karoly','karoly','robert karoly','i karoly robert'],
   bio:'Az Anjou-ház első magyar királya (1308–1342): aranyforint, kapuadó, harmincad, visegrádi királytalálkozó.',
   clues:[
@@ -215,7 +241,7 @@ const FIGURES=[
    'Firenzei mintára értékálló aranypénzt verettem, és állandó adót vezettem be a jobbágytelkekre.',
    'Az Anjou-ház első magyar királya vagyok (1308–1342); visegrádi palotámban királytalálkozót tartottam a cseh és a lengyel uralkodóval.']},
 
- {id:'lajos',name:'I. (Nagy) Lajos',
+ {id:'lajos',grade:9,cat:'B',name:'I. (Nagy) Lajos',
   accept:['nagy lajos','i lajos','i nagy lajos','nagy lajos kiraly','lajos kiraly'],
   bio:'Anjou-király (1342–1382): 1351. évi törvények (ősiség, kilenced), lengyel–magyar perszonálunió (1370).',
   clues:[
@@ -225,7 +251,7 @@ const FIGURES=[
    '1370-től a lengyel trónon is én ültem, perszonálunióban.',
    'Én vagyok az egyetlen magyar király, akit a hagyomány a „Nagy" jelzővel tisztel.']},
 
- {id:'zsigmond',name:'Luxemburgi Zsigmond',
+ {id:'zsigmond',grade:9,cat:'B',name:'Luxemburgi Zsigmond',
   accept:['luxemburgi zsigmond','zsigmond','zsigmond kiraly','zsigmond luxemburgi'],
   bio:'Magyar, német és cseh király, német-római császár (magyar trónon 1387–1437): nikápolyi vereség, déli végvárrendszer, konstanzi zsinat.',
   clues:[
@@ -235,7 +261,7 @@ const FIGURES=[
    'Keresztes hadam 1396-ban súlyos vereséget szenvedett az Al-Dunánál; ezután kezdtem kiépíteni a déli végvárrendszert.',
    'Magyar, német és cseh király voltam, életem végén császár — fél évszázadig, 1387-től 1437-ig ültem a magyar trónon.']},
 
- {id:'hunyadij',name:'Hunyadi János',
+ {id:'hunyadij',grade:9,cat:'B',name:'Hunyadi János',
   accept:['hunyadi janos','janos hunyadi'],
   bio:'A törökverő (kormányzó 1446-tól): hosszú hadjárat, nándorfehérvári diadal (1456).',
   clues:[
@@ -245,7 +271,7 @@ const FIGURES=[
    'Legnagyobb győzelmemet 1456-ban arattam a Duna–Száva torkolatánál, de nem sokkal utána pestisjárvány vitt el.',
    'Nándorfehérvár védője vagyok — a törökverő; fiamból magyar király lett.']},
 
- {id:'matyas',name:'Hunyadi Mátyás',
+ {id:'matyas',grade:9,cat:'B',name:'Hunyadi Mátyás',
   accept:['hunyadi matyas','matyas','matyas kiraly','i matyas','igazsagos matyas','matyas hunyadi'],
   bio:'Reneszánsz király (1458–1490): fekete sereg, füstpénz, Bibliotheca Corviniana, Bécs elfoglalása (1485).',
   clues:[
@@ -255,7 +281,7 @@ const FIGURES=[
    'Könyvtáram kódexei koruk egyik leggazdagabb gyűjteményét alkották; 1485-ben elfoglaltam Bécset.',
    'A néphagyomány az „igazságos" jelzőt ragasztotta rám; 1458 és 1490 között uralkodtam, s apám Nándorfehérvár védője volt.']},
 
- {id:'dozsa',name:'Dózsa György',
+ {id:'dozsa',grade:9,cat:'B',name:'Dózsa György',
   accept:['dozsa gyorgy','dozsa','gyorgy dozsa'],
   bio:'Az 1514. évi parasztháború vezére; a temesvári vereség után kegyetlenül kivégezték.',
   clues:[
@@ -265,7 +291,7 @@ const FIGURES=[
    'Temesvárnál szenvedtem döntő vereséget az erdélyi vajdától.',
    'Az 1514. évi parasztháború vezére vagyok; kivégzésem kegyetlensége hírhedtté vált, s a megtorlás Werbőczy törvénykönyvébe is bekerült.']},
 
- {id:'rakoczi',name:'II. Rákóczi Ferenc',
+ {id:'rakoczi',grade:10,cat:'A',name:'II. Rákóczi Ferenc',
   accept:['ii rakoczi ferenc','rakoczi ferenc','rakoczi','ferenc rakoczi','ii rakoczi'],
   bio:'A szabadságharc (1703–1711) vezérlő fejedelme; ónodi trónfosztás, majd emigráció Rodostóban.',
   clues:[
@@ -275,7 +301,7 @@ const FIGURES=[
    'Az ónodi országgyűlésen mondtuk ki a Habsburg-ház trónfosztását.',
    'Nyolcéves küzdelmem a szatmári békével zárult; én az emigrációt választottam, és Rodostóban hunytam el.']},
 
- {id:'mterez',name:'Mária Terézia',
+ {id:'mterez',grade:10,cat:'A',name:'Mária Terézia',
   accept:['maria terezia','terezia','maria terezia kiralyno'],
   bio:'Habsburg uralkodó (1740–1780): kettős vámrendszer, úrbéri rendelet, Ratio Educationis.',
   clues:[
@@ -285,7 +311,7 @@ const FIGURES=[
    'Rendeletemmel országosan szabályoztam a jobbágyok földesúri terheit; uralkodásom végén jelent meg az oktatásügy első átfogó állami szabályozása is.',
    'Negyven évig, 1740-től 1780-ig uralkodtam; trónra lépésemkor a magyar rendek „életüket és vérüket" ajánlották fel nekem.']},
 
- {id:'jozsef2',name:'II. József',
+ {id:'jozsef2',grade:10,cat:'A',name:'II. József',
   accept:['ii jozsef','jozsef ii','kalapos kiraly','masodik jozsef'],
   bio:'A „kalapos király" (1780–1790): türelmi és jobbágyrendelet; halálos ágyán rendeletei többségét visszavonta.',
   clues:[
@@ -295,7 +321,7 @@ const FIGURES=[
    'Türelmi rendeletem a protestánsoknak adott szabadabb vallásgyakorlatot, jobbágyrendeletem pedig eltörölte a röghöz kötöttséget.',
    'Nem koronáztattam meg magam, hogy ne kössön a rendi alkotmány — ezért csúfoltak „kalapos királynak"; halálos ágyamon három kivétellel visszavontam rendeleteimet.']},
 
- {id:'szechenyi',name:'Széchenyi István',
+ {id:'szechenyi',grade:10,cat:'B',name:'Széchenyi István',
   accept:['szechenyi istvan','szechenyi','istvan szechenyi','grof szechenyi istvan'],
   bio:'„A legnagyobb magyar": MTA-felajánlás (1825), Hitel (1830), Lánchíd, Tisza-szabályozás; 1848-ban közlekedési miniszter.',
   clues:[
@@ -305,7 +331,7 @@ const FIGURES=[
    'Nevemhez fűződik az első állandó pest-budai híd és a Tisza szabályozásának ügye; 1848-ban közlekedési miniszter lettem.',
    'Egyévi birtokjövedelmemet ajánlottam fel egy tudós társaság alapítására — legnagyobb vitapartnerem nevezett „a legnagyobb magyarnak".']},
 
- {id:'kossuth',name:'Kossuth Lajos',
+ {id:'kossuth',grade:10,cat:'B',name:'Kossuth Lajos',
   accept:['kossuth lajos','kossuth','lajos kossuth'],
   bio:'A reformellenzék vezére, 1848-as pénzügyminiszter, kormányzó-elnök; a „turini remete".',
   clues:[
@@ -315,7 +341,7 @@ const FIGURES=[
    '1848-ban pénzügyminiszterként új bankjegyeket bocsátottam ki — a nép rólam nevezte el őket.',
    'A debreceni trónfosztás után kormányzó-elnökké választottak; emigrációban, Torinóban haltam meg.']},
 
- {id:'deak',name:'Deák Ferenc',
+ {id:'deak',grade:10,cat:'B',name:'Deák Ferenc',
   accept:['deak ferenc','deak','ferenc deak'],
   bio:'„A haza bölcse": passzív ellenállás, húsvéti cikk, a kiegyezés (1867) fő alkotója.',
   clues:[
@@ -325,7 +351,7 @@ const FIGURES=[
    'Húsvétkor megjelent cikkem nyitotta meg az utat az uralkodóval való megegyezés felé.',
    'Az 1867-es kiegyezés fő alkotójaként „a haza bölcsének" neveznek.']},
 
- {id:'ferencj',name:'Ferenc József',
+ {id:'ferencj',grade:11,cat:'A',name:'Ferenc József',
   accept:['ferenc jozsef','i ferenc jozsef','ferencz jozsef','ferenc jozsef csaszar'],
   bio:'Császár és király (1848–1916): önkényuralom, majd kiegyezés (1867); az I. világháború kitörésekor is uralkodott.',
   clues:[
@@ -334,6 +360,266 @@ const FIGURES=[
    'A königgrätzi vereség után kényszerültem megegyezni a magyarokkal.',
    '1867-ben magyar királlyá koronáztak; a birodalom ettől kezdve két államból állt.',
    'Közel hét évtizedig uralkodtam: az első világháború kitörésekor is én ültem a trónon, s 1916-ban haltam meg.']},
+
+ {id:'szolon',grade:9,cat:'A',name:'Szolón',
+  accept:['szolon'],
+  bio:'Athéni államférfi (i. e. 6. század): eltörölte az adósrabszolgaságot, vagyoni cenzus alapján osztotta meg a jogokat.',
+  clues:[
+   'Athénban választottak meg rendkívüli hatalommal, hogy orvosoljam a szabad polgárok eladósodásából fakadó válságot.',
+   'Első intézkedésem eltörölte a régi adósságokat, és megtiltottam, hogy szabad embert rabszolgaként adjanak el tartozásért.',
+   'A politikai jogokat nem születés, hanem vagyoni cenzus szerint osztottam szét a polgárok között.',
+   'Törvényeimet fatáblákra vésve tettem közzé, hogy mindenki megismerhesse azokat.',
+   'Reformjaimat a hagyomány az athéni népuralom egyik megalapozásaként tartja számon; a Kr. e. 6. század elején tevékenykedtem.']},
+
+ {id:'szokratesz',grade:9,cat:'A',name:'Szókratész',
+  accept:['szokratesz'],
+  bio:'Athéni filozófus (i. e. 5. század): a kérdezve tanítás módszere, halálra ítélték „istentelenség” vádjával.',
+  clues:[
+   'Sosem írtam le egyetlen tanítást sem — mégis a nyugati gondolkodás egyik alapítójaként tartanak számon.',
+   'Módszerem az volt, hogy kérdéseimmel vezettem rá beszélgetőtársaimat saját tudatlanságuk felismerésére.',
+   'Azt vallottam, hogy a helyes cselekvés forrása a tudás, s hogy „csak azt tudom, hogy semmit sem tudok”.',
+   'Athén bírósága istentelenség és az ifjúság megrontásának vádjával halálra ítélt.',
+   'Tanítványom, Platón örökítette meg alakomat és beszélgetéseimet; mérgezett pohárral zárult életem Kr. e. 399-ben.']},
+
+ {id:'caesar',grade:9,cat:'A',name:'Caesar',
+  accept:['caesar','iulius caesar','julius caesar'],
+  bio:'Római hadvezér és államférfi (i. e. 1. század): meghódította Galliát, polgárháborúban győzött, összeesküvők gyilkolták meg.',
+  clues:[
+   'Katonai sikereim Galliában emeltek Róma legbefolyásosabb hadvezérévé.',
+   'Amikor a szenátus leszerelésemet követelte, egy kis határfolyón átkelve indultam Róma ellen.',
+   'A polgárháborúban legyőztem fő vetélytársamat, majd korlátlan hatalmú vezetőként kormányoztam.',
+   'Naptárreformot vezettem be, és élethosszig tartó diktátorrá nyilváníttattam magam.',
+   'Kr. e. 44-ben, a szenátus ülésén, összeesküvő szenátorok gyilkoltak meg — köztük egykori bizalmasom is.']},
+
+ {id:'augustus',grade:9,cat:'A',name:'Augustus',
+  accept:['augustus','octavianus'],
+  bio:'Az első római császár (i. e. 27-től): Caesar örököse, a köztársasági formák megtartásával épített ki egyeduralmat.',
+  clues:[
+   'Meggyilkolt nagybátyám örökbefogadott fiaként, még fiatalon léptem be a hatalmi harcba.',
+   'Egykori szövetségesemmel és annak egyiptomi királynőjével vívott tengeri csatában döntöttem el a hatalmi kérdést.',
+   'Hivatalosan visszaadtam a hatalmat a szenátusnak és a népnek — a valóságban minden fontos tisztséget magamban egyesítettem.',
+   'Uralkodásom alatt évtizedekig tartó belső béke köszöntött Rómára.',
+   'Kr. e. 27-től viselem az „Augustus” (a felmagasztalt) címet — én vagyok Róma első császára.']},
+
+ {id:'buddha',grade:9,cat:'A',name:'Buddha',
+  accept:['buddha','sziddhartha gautama'],
+  bio:'Indiai vallásalapító (i. e. 6–5. század): a szenvedéstől való megszabadulás útjának tanítója.',
+  clues:[
+   'Indiai fejedelmi családba születtem, de fiatalon elhagytam a palota kényelmét.',
+   'Hosszú vándorlás és önsanyargatás után, egy fa alatt ülve jutottam el a megvilágosodásig.',
+   'Tanításom szerint a szenvedés oka a vágy, s ettől a nyolcrétű ösvény vezet a megszabaduláshoz.',
+   'Követőim szerzetesi közösségekbe szerveződve terjesztették tovább tanításomat.',
+   'A „megvilágosodott” jelentésű nevemen vallásalapítóként ismer a világ; tanításom Ázsia-szerte elterjedt.']},
+
+ {id:'mohamed',grade:9,cat:'B',name:'Mohamed',
+  accept:['mohamed'],
+  bio:'Az iszlám vallás alapítója (7. század): Mekkában született, a Korán kinyilatkoztatásainak közvetítője.',
+  clues:[
+   'Mekkai kereskedőként éltem, mielőtt életem gyökeresen megváltozott egy barlangi elvonulás után.',
+   'Azt hirdettem, hogy egyetlen isten létezik, és én vagyok az ő utolsó prófétája.',
+   'Üldözőim elől szülővárosomból egy másik városba kellett menekülnöm — ez az esemény jelöli ki követőim időszámításának kezdetét.',
+   'Kinyilatkoztatásaimat követőim egyetlen szent könyvbe gyűjtötték össze.',
+   'Az általam alapított vallás néhány évtized alatt egy egész birodalmat hódított meg Arábiától Hispániáig.']},
+
+ {id:'geza',grade:9,cat:'B',name:'Géza fejedelem',
+  accept:['geza','geza fejedelem'],
+  bio:'Magyar fejedelem (972–997): felvette a kereszténységet, előkészítette fia, István államalapítását.',
+  clues:[
+   'Elődeim kalandozó hadjáratai után én már a nyugati hatalmakkal való megbékélés útját kerestem.',
+   'Feleségemmel együtt felvettem a keresztény hitet, bár a hagyomány szerint „elég gazdag voltam ahhoz, hogy két istennek is áldozzak”.',
+   'Kemény kézzel törtem meg a törzsi vezetők ellenállását, hogy egységes fejedelmi hatalmat építsek ki.',
+   'Német hittérítőket hívtam az országba, és fiamat is keresztény szellemben neveltettem.',
+   'Fejedelemségem (972–997) készítette elő fiam, István államalapítását és királlyá koronázását.']},
+
+ {id:'kalman',grade:9,cat:'B',name:'Könyves Kálmán',
+  accept:['konyves kalman','kalman kiraly','i kalman'],
+  bio:'Magyar király (1095–1116): boszorkányperek egy részét eltörölte, megszerezte Horvátországot.',
+  clues:[
+   'Papi pályára szántak, mielőtt a trónöröklés váratlanul mégis engem szólított.',
+   'Törvényeim között olyan is volt, amely kimondta: a nem létező lényekről, boszorkányokról szóló pereket nem szabad indítani.',
+   'Horvátországot végleg a magyar korona alá vontam, s magamat horvát királlyá is koronáztattam.',
+   'Törvénykönyvem rendkívül szigorúan szabályozta a zsidók és a nem keresztények jogait is.',
+   'Tudós műveltségem miatt kapta nevem elé a „Könyves” jelzőt; 1095-től 1116-ig uralkodtam.']},
+
+ {id:'zrinyi',grade:10,cat:'A',name:'Zrínyi Miklós',
+  accept:['zrinyi miklos','zrinyi'],
+  bio:'Költő, hadvezér és politikus (17. század): a Szigeti veszedelem szerzője, téli hadjárat vezetője.',
+  clues:[
+   'Költőként és hadvezérként egyaránt a nemzeti önismeret felrázását tartottam célomnak.',
+   'Eposzomban dédapám szigetvári hősi halálát örökítettem meg.',
+   'Téli hadjáratom váratlan sikerével rövid időre egész Európa figyelmét a török elleni harcra irányítottam.',
+   'Politikai röpirataimban a magyar nemesség önálló haderejét és összefogását sürgettem a Habsburgoktól függetlenül is.',
+   'A Zrínyi család sarjaként, dédapám nevét viselve, a 17. század egyik legsokoldalúbb magyar főura voltam — vadkanvadászaton vesztettem életem.']},
+
+ {id:'bocskai',grade:10,cat:'A',name:'Bocskai István',
+  accept:['bocskai istvan','bocskai'],
+  bio:'Erdélyi fejedelem (1605–1606): a hajdúk vezetőjeként Habsburg-ellenes felkelést vezetett, megkötötte a bécsi békét.',
+  clues:[
+   'Kezdetben a Habsburg-udvar híveként politizáltam, mielőtt birtokaim elkobzása szembefordított velük.',
+   'A felkelésemhez csatlakozó könnyű lovas harcosokat letelepítettem, és nemességet adományoztam nekik.',
+   'Seregem élén az egész Magyar Királyság és Erdély területére kiterjedő felkelést vezettem.',
+   'A háborút lezáró béke vallásszabadságot biztosított a magyar rendeknek.',
+   'Az erdélyi fejedelmi trónra emelkedve, 1605–1606 között, nevemhez fűződik a hajdúk letelepítése és a bécsi béke.']},
+
+ {id:'bethlen',grade:10,cat:'A',name:'Bethlen Gábor',
+  accept:['bethlen gabor','bethlen'],
+  bio:'Erdélyi fejedelem (1613–1629): a harmincéves háború részese, Erdély aranykorának megteremtője.',
+  clues:[
+   'Trónra lépésem előtt évekig bujdostam, miután fejedelmi elődöm ellenségemmé vált.',
+   'Fejedelemségem alatt Erdély gazdasági és kulturális virágkorát élte — kereskedelmet, bányászatot, iskolákat fejlesztettem.',
+   'Bekapcsolódtam egy Európa nagy részét megrázó, felekezeti alapú nagy háborúba a protestáns oldalon.',
+   'Hadjárataim során többször is magyar királlyá választottak, bár a koronát végül nem tartottam meg.',
+   '1613 és 1629 között uralkodtam Erdély fejedelmeként — korszakomat az utókor Erdély aranykoraként emlegeti.']},
+
+ {id:'gaboraron',grade:10,cat:'B',name:'Gábor Áron',
+  accept:['gabor aron'],
+  bio:'Székely tüzértiszt (1848–49): ágyúöntő, a székely tüzérség megszervezője, csatában esett el.',
+  clues:[
+   'Székely tüzértisztként a szabadságharc kitörésekor égető szükség volt olyasvalakire, mint én.',
+   'Mivel az ágyúkat nem tudtuk máshonnan beszerezni, magam szerveztem meg az öntésüket harangokból és más rézeszközökből.',
+   '„Lesz ágyú!” — mondtam, amikor mindenki lehetetlennek tartotta a tüzérség megteremtését.',
+   'Az általam öntött ágyúk tették lehetővé, hogy Székelyföld önvédelmi harcot folytathasson.',
+   '1849-ben, egy csatában áldozatává váltam a harcnak, amelyhez magam kovácsoltam fegyvert — nevem összeforrt a székely önvédelemmel.']},
+
+ {id:'damjanich',grade:10,cat:'B',name:'Damjanich János',
+  accept:['damjanich janos','damjanich'],
+  bio:'Honvédtábornok (1848–49): a tápióbicskei és isaszegi győzelmek hőse, az aradi vértanúk egyike.',
+  clues:[
+   'Szerb származású tisztként a Habsburg hadseregben szolgáltam, mielőtt a magyar honvédsereghez csatlakoztam.',
+   'A tavaszi hadjárat egyik legvitézebb tábornokaként emlegettek — csapataim „vasas” néven híresültek el.',
+   'Több győztes csatában is részt vettem, amelyek megnyitották az utat Buda visszafoglalásához.',
+   'A szabadságharc bukása után a megtorlás áldozata lettem.',
+   'Az aradi vértanúk egyikeként végezték ki 1849 októberében — felesége az egyik leghíresebb özvegy lett a magyar történelemben.']},
+
+ {id:'tiszakalman',grade:11,cat:'A',name:'Tisza Kálmán',
+  accept:['tisza kalman'],
+  bio:'Miniszterelnök (1875–1890): a Szabadelvű Párt megalapítója, a dualizmus kori politikai stabilitás kiépítője.',
+  clues:[
+   'Pályámat a kiegyezést bíráló ellenzék soraiban kezdtem, mielőtt nézeteimet gyökeresen megváltoztattam.',
+   'Pártomat egy korábbi kormánypárttal egyesítve hoztam létre a dualizmus kori politika egyik legerősebb szervezetét.',
+   'Tizenöt éven át álltam a kormány élén — ez a leghosszabb miniszterelnökség volt a korszakban.',
+   'Időmben korszerűsödött a közigazgatás, és megszilárdult a kiegyezéses berendezkedés.',
+   '1875-től 1890-ig voltam miniszterelnök; fiam szintén e tisztséget töltötte majd be a századfordulón.']},
+
+ {id:'herzl',grade:11,cat:'A',name:'Herzl Tivadar',
+  accept:['herzl tivadar','theodor herzl','herzl'],
+  bio:'Újságíró, a cionista mozgalom megalapítója: Budapesten született, önálló zsidó állam létrehozását szorgalmazta.',
+  clues:[
+   'Budapesti születésű újságíróként egy franciaországi per tudósítójaként szembesültem a kontinens antiszemitizmusával.',
+   'A per hatására arra a következtetésre jutottam, hogy a zsidóság számára csak egy önálló állam jelenthet biztonságot.',
+   'Programomat egy röpiratban fogalmaztam meg, amely nagy nemzetközi visszhangot váltott ki.',
+   'Nevemhez fűződik az első nemzetközi kongresszus megszervezése, amely mozgalmam alapjait fektette le.',
+   'Az általam alapított mozgalom évtizedekkel halálom után vezetett egy önálló zsidó állam megalapításához.']},
+
+ {id:'puskastivadar',grade:11,cat:'A',name:'Puskás Tivadar',
+  accept:['puskas tivadar'],
+  bio:'Mérnök, feltaláló (19. század vége): a telefonhírmondó megalkotója, Edison munkatársa.',
+  clues:[
+   'Fiatal mérnökként külföldön, egy híres amerikai feltaláló laboratóriumában dolgoztam.',
+   'Egy New York-i város csatornahálózatának korszerűsítésekor javasoltam elsőként a telefonközpont ötletét.',
+   'Hazatérve olyan találmányt fejlesztettem ki, amely híreket és zenét sugárzott telefonvonalon keresztül az előfizetőknek.',
+   'Budapesti szolgáltatásom a világ egyik első ilyen jellegű hírközlő rendszere volt.',
+   'Nevem ma is a magyar távközlés-történet egyik legismertebb feltalálójaként él — a telefonhírmondó megalkotójaként.']},
+
+ {id:'trockij',grade:11,cat:'B',name:'Trockij',
+  accept:['trockij','leon trockij','lev trockij'],
+  bio:'Bolsevik forradalmár, a Vörös Hadsereg megszervezője; később Sztálin fő ellenfele, emigrációban gyilkolták meg.',
+  clues:[
+   'A februári forradalom után hazatérve csatlakoztam ahhoz a párthoz, amely néhány hónap múlva átvette a hatalmat.',
+   'A hatalomátvétel után szinte a semmiből szerveztem meg azt a hadsereget, amely megnyerte a polgárháborút.',
+   'Vezetőtársam halála után élet-halál harcot vívtam egy másik vezetővel a hatalom öröklésért — és alulmaradtam.',
+   'Száműzetésbe kényszerültem, majd évekig bujkáltam a világ különböző pontjain.',
+   'Mexikóvárosi emigrációmban jégcsákánnyal ölte meg egy ügynök 1940-ben — a világforradalom eszméjének egyik legismertebb alakja voltam.']},
+
+ {id:'rommel',grade:11,cat:'B',name:'Rommel',
+  accept:['rommel','erwin rommel'],
+  bio:'Német tábornok (második világháború): az észak-afrikai hadszíntér parancsnoka, a „sivatagi róka”.',
+  clues:[
+   'Az első világháborús frontszolgálat után páncélos hadviselésről írt könyvem sok tisztet formált.',
+   'Egy észak-afrikai hadszíntéren vezényelt seregem villámgyors előretöréseivel szereztem hírnevet.',
+   'Ellenfeleim is elismerték lovagiasságomat — ritka volt ez a háború e szakaszában.',
+   'Később a nyugat-európai partvédelem megszervezésével bíztak meg, hogy felkészüljek egy szövetséges partraszállásra.',
+   'Egy vezetőm elleni merénylet gyanúja miatt öngyilkosságra kényszerítettek 1944-ben — a „sivatagi róka” becenéven vált híressé pályafutásom.']},
+
+ {id:'zsukov',grade:11,cat:'B',name:'Zsukov',
+  accept:['zsukov','georgij zsukov'],
+  bio:'Szovjet marsall (második világháború): Moszkva, Sztálingrád és Berlin ostromának egyik fő hadvezére.',
+  clues:[
+   'Katonai pályámat még a polgárháborúban kezdtem, s a Távol-Keleten arattam első jelentős győzelmemet japán csapatok felett.',
+   'Amikor az ellenség fővárosunk kapujáig ért, engem bíztak meg a védelem megszervezésével — és sikerrel jártam.',
+   'Egy hírhedt volgai város ostrománál irányított ellentámadásom fordulópontot hozott a háborúban.',
+   'Seregeim jutottak el elsőként az ellenséges főváros romjaihoz 1945 tavaszán.',
+   'A győztes fővezérek egyikeként vettem részt a kapituláció aláírásánál — a szovjet hadvezetés legismertebb marsallja voltam.']},
+
+ {id:'eisenhower',grade:11,cat:'B',name:'Eisenhower',
+  accept:['eisenhower','dwight eisenhower'],
+  bio:'Amerikai tábornok, a normandiai partraszállás főparancsnoka; később az USA elnöke.',
+  clues:[
+   'Amerikai tisztként a háború előtt keveset harcoltam, mégis rendkívüli szervezői tehetségem miatt emelkedtem a legmagasabb rangokba.',
+   'Rám bízták egy hatalmas, sok nemzet csapataiból álló haderő összehangolását Nyugat-Európa felszabadítására.',
+   'Az időjárás bizonytalansága ellenére adtam ki a parancsot a történelem legnagyobb tengeri partraszállásának megindítására.',
+   'A háború után is politikai pályára léptem szülőhazámban.',
+   'A normandiai partraszállás főparancsnokaként váltam ismertté, majd az Amerikai Egyesült Államok elnöke lettem.']},
+
+ {id:'eichmann',grade:11,cat:'B',name:'Eichmann',
+  accept:['eichmann','adolf eichmann'],
+  bio:'Náci tisztviselő: a deportálások megszervezője, 1944-ben Magyarországon irányította a zsidóság elhurcolását.',
+  clues:[
+   'Alacsony rangú tisztviselőként kezdtem, mielőtt egy embercsoport elleni intézkedések „szervezési szakértőjévé” váltam.',
+   'Feladatom egy egész kontinens embercsoportjainak nyilvántartása és deportálása volt — a logisztika, nem a fegyver volt az eszközöm.',
+   '1944 tavaszán érkeztem egy közép-európai fővárosba, hogy néhány hónap alatt megszervezzem egy egész ország zsidóságának elhurcolását.',
+   'A háború után álnéven, Dél-Amerikába menekülve próbáltam elkerülni a felelősségre vonást.',
+   'Egy titkosszolgálat rabolt el, majd Jeruzsálemben állítottak bíróság elé és végeztek ki 1962-ben — a magyarországi deportálások egyik fő szervezője voltam.']},
+
+ {id:'sztalin',grade:12,cat:'A',name:'Sztálin',
+  accept:['sztalin','joszif sztalin'],
+  bio:'A Szovjetunió diktátora (1920-as évektől 1953-ig): erőltetett iparosítás, kollektivizálás, tömeges tisztogatások.',
+  clues:[
+   'Grúz cipész fiaként, papi szemináriumból kicsapva kezdtem forradalmi pályafutásomat.',
+   'Vezetőtársam halála után lassan, apró lépésekkel szorítottam ki a hatalomból egykori vetélytársaimat.',
+   'Ötéves terveimmel kényszerítettem országomat az iparosításra — sokmillió ember életébe került ez a folyamat.',
+   'Az 1930-as évek tisztogatásai saját pártom vezetőit is elérték.',
+   'Több mint két évtizedig uralkodtam korlátlan hatalommal a Szovjetunió felett; halálom 1953-ban egy egész korszak fordulópontja volt.']},
+
+ {id:'rakosi',grade:12,cat:'A',name:'Rákosi Mátyás',
+  accept:['rakosi matyas','rakosi'],
+  bio:'Magyar kommunista pártvezető (1948–1956): „Sztálin legjobb magyar tanítványa”, a diktatúra kiépítője.',
+  clues:[
+   'Fiatalon a Tanácsköztársaság bukása után emigrációba kényszerültem, majd évekig raboskodtam itthon.',
+   'A háború után „szalámitaktikának” nevezett módszerrel szorítottam ki fokozatosan a koalíciós partnereket a hatalomból.',
+   'Nevemhez fűződik egy koncepciós per, amelyben egykori harcostársamat végeztették ki koholt vádak alapján.',
+   'Önmagamat a nagy szovjet vezető „legjobb magyar tanítványaként” hirdettem.',
+   '1956-ban, néhány hónappal a forradalom előtt kényszerültek lemondatni — nevem a magyar sztálinizmus szinonimájává vált.']},
+
+ {id:'nagyimre',grade:12,cat:'A',name:'Nagy Imre',
+  accept:['nagy imre'],
+  bio:'Miniszterelnök (1953–55, majd 1956): az 1956-os forradalom miniszterelnöke, kivégezték.',
+  clues:[
+   'Moszkvai emigrációból hazatérve, agrárszakértőként kerültem be a kommunista vezetés soraiba.',
+   'Első kormányfői megbízatásom idején enyhítettem a beszolgáltatási terheken és leállítottam az internálásokat.',
+   'Sajátjaim buktattak meg, majd egy forradalmi tömeg nyomására tértem vissza a hatalomba másodszor is.',
+   'Kormányfőként bejelentettem a többpártrendszer visszaállítását és az ország semlegességét.',
+   'A forradalom leverése után elhurcolták, koncepciós perben halálra ítélték és kivégezték — 1989-es újratemetése a rendszerváltás egyik jelképes eseménye volt.']},
+
+ {id:'tito',grade:12,cat:'A',name:'Tito',
+  accept:['tito','josip broz tito'],
+  bio:'Jugoszláv kommunista vezető: a második világháborús partizánmozgalom vezetője, 1948-ban szembefordult a Szovjetunióval.',
+  clues:[
+   'Osztrák–magyar hadifogolyként éltem meg az első világháborús keleti front összeomlását és egy nagy forradalmat.',
+   'A második világháborúban partizánmozgalmat szerveztem, amely önerőből szabadította fel hazámat a megszállóktól.',
+   'Háború utáni vezetőként nem fogadtam el feltétel nélkül egy nagyhatalom utasításait — ezért országomat kizárták egy nemzetközi kommunista szervezetből.',
+   'Egy sajátos, önigazgatáson alapuló szocializmust építettem ki, amely különbözött a szovjet modelltől.',
+   'Több évtizedig tartottam egyben a soknemzetiségű balkáni államot — halálom után néhány évvel szét is hullott az ország, amelyet életem munkájával tartottam össze.']},
+
+ {id:'schuman',grade:12,cat:'B',name:'Robert Schuman',
+  accept:['robert schuman','schuman'],
+  bio:'Francia politikus (20. század közepe): az európai szén- és acélközösség tervének kezdeményezője, az európai egyesülés egyik atyja.',
+  clues:[
+   'Németországban születtem, francia állampolgárként, két kultúra határán nőttem fel.',
+   'A második világháború után külügyminiszterként azon dolgoztam, hogy két régi ellenség — országom és szomszédja — soha többé ne háborúzzon egymással.',
+   'Tervemben azt javasoltam, hogy a hadviseléshez nélkülözhetetlen két nyersanyag termelését közös irányítás alá vonják.',
+   'Az általam kezdeményezett szervezet vált a mai európai egyesülés első lépésévé.',
+   'Nevem ma is egy májusi ünnepnaphoz kötődik, amelyet az általam elindított folyamat emlékére tartanak Európa-szerte.']},
 ];
 
 /* Több személynél is előforduló, önmagában félreérthető keresztnevek */
@@ -342,10 +628,22 @@ const AMBIG={
   'lajos':'Több <b>Lajos</b> is szerepel — pontosítsd a nevet!',
   'jozsef':'Több <b>József</b> is szerepel — pontosítsd a nevet!',
   'ferenc':'Több <b>Ferenc</b> is szerepel — pontosítsd a nevet!',
-  'hunyadi':'Két <b>Hunyadi</b> is szerepel — melyikre gondolsz?'
+  'hunyadi':'Két <b>Hunyadi</b> is szerepel — melyikre gondolsz?',
+  'kalman':'Két <b>Kálmán</b> is szerepel a névtáblán — pontosítsd a teljes nevet!',
+  'tivadar':'Két <b>Tivadar</b> is szerepel a névtáblán — pontosítsd a teljes nevet!'
 };
 
-const ROUNDS=8;
+/* Évfolyamok — filter és megjelenített szín */
+const ERAS={
+  9:{label:'9. évfolyam',span:'ókor – középkor',accent:'#FFC24B'},
+  10:{label:'10. évfolyam',span:'kora újkor – reformkor',accent:'#3DDC97'},
+  11:{label:'11. évfolyam',span:'dualizmus – világháborúk',accent:'#FF7A8A'},
+  12:{label:'12. évfolyam',span:'hidegháború – jelenkor',accent:'#9E8BFF'},
+};
+const state={era:'mind'};
+function poolFor(era){ return era==='mind' ? FIGURES : FIGURES.filter(f=>String(f.grade)===String(era)); }
+
+let ROUNDS=8;
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 function norm(s){
   return (s||'').toLowerCase()
@@ -358,12 +656,43 @@ function norm(s){
 const G={order:[],round:0,revealed:0,boardOpen:false,score:0,solved:{},results:[],locked:false};
 
 function startGame(){
-  G.order=shuffle(FIGURES.map(f=>f.id)).slice(0,ROUNDS);
+  const pool=poolFor(state.era);
+  ROUNDS=Math.min(8,pool.length);
+  G.order=shuffle(pool.map(f=>f.id)).slice(0,ROUNDS);
   G.round=0; G.score=0; G.solved={}; G.results=[]; G.locked=false;
   document.getElementById('screen-cover').classList.remove('active');
+  document.getElementById('screen-ending').classList.remove('active');
   document.getElementById('screen-game').classList.add('active');
   document.getElementById('hud').style.display='flex';
   startRound();
+}
+function confirmBackToCover(){
+  const midRound = document.getElementById('screen-game').classList.contains('active') && !G.locked;
+  if(midRound){
+    if(!confirm('Biztosan visszalépsz a főoldalra? A folyamatban lévő kör és a pontszám elvész.')) return;
+  }
+  backToCover();
+}
+function backToCover(){
+  document.getElementById('screen-ending').classList.remove('active');
+  document.getElementById('screen-game').classList.remove('active');
+  document.getElementById('screen-cover').classList.add('active');
+  document.getElementById('hud').style.display='none';
+  renderEraChips();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function setEra(e){ state.era=e; renderEraChips(); }
+function renderEraChips(){
+  const el=document.getElementById('eraChips');
+  if(!el) return;
+  const chip=(id,label,span,accent)=>{
+    const arg = (id==='mind') ? "'mind'" : id;
+    return `<button class="era-chip" style="--eacc:${accent||'var(--gold)'}" aria-pressed="${String(state.era)===String(id)}" onclick="setEra(${arg})">
+      <span class="ec-label">${label}</span>${span?`<span class="ec-span">${span}</span>`:''}</button>`;
+  };
+  let html = chip('mind','Vegyes','minden évfolyam');
+  html += Object.keys(ERAS).map(g=>chip(Number(g),ERAS[g].label,ERAS[g].span,ERAS[g].accent)).join('');
+  el.innerHTML = html;
 }
 function cur(){ return FIGURES.find(f=>f.id===G.order[G.round]); }
 function boardPenalty(){ return G.boardOpen?1:0; }
@@ -410,7 +739,7 @@ function updateHud(){
 }
 function renderBoard(){
   document.getElementById('names').innerHTML =
-    FIGURES.map(f=>`<button class="nbtn ${G.solved[f.id]?'used':''}" id="nb-${f.id}" ${G.solved[f.id]?'disabled':''} onclick="resolveGuess('${f.id}')">${f.name}</button>`).join('');
+    poolFor(state.era).map(f=>`<button class="nbtn ${G.solved[f.id]?'used':''}" id="nb-${f.id}" ${G.solved[f.id]?'disabled':''} onclick="resolveGuess('${f.id}')">${f.name}</button>`).join('');
 }
 function fb(msg,kind){
   const el=document.getElementById('feedback');
@@ -501,6 +830,8 @@ function endGame(){
     G.results.map(r=>
       `<div class="recap-item"><span class="pts">+${r.pts} pont &middot; ${r.clues} nyom${r.board?' &middot; táblával':''}</span><b>${r.name}</b> — ${r.bio}</div>`).join('');
 }
+
+renderEraChips();
 </script>
 </body>
 </html>
