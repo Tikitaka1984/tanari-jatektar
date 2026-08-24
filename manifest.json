@@ -1,0 +1,58 @@
+{
+  "keresztrejtveny": {
+    "path": "games/keresztrejtveny.html",
+    "bytes": 47829,
+    "md5": "3fa1d78150df4842e275d9cc8ba577af"
+  },
+  "korona": {
+    "path": "games/korona.html",
+    "bytes": 88500,
+    "md5": "166cd8b16d7f25944c164656e0ddaaad"
+  },
+  "kivagyok": {
+    "path": "games/kivagyok.html",
+    "bytes": 57931,
+    "md5": "3e677e8e1fbde91915700a1dde51000f",
+    "note": "v3 javitott verzio, nem a hubban volt eredeti"
+  },
+  "reformkor": {
+    "path": "games/reformkor.html",
+    "bytes": 48414,
+    "md5": "1f721c21146615b62e2130fe325bd566"
+  },
+  "leveltar": {
+    "path": "games/leveltar.html",
+    "bytes": 65096,
+    "md5": "06c911fafc2b5c46499f52257bc0da7c"
+  },
+  "szokereso": {
+    "path": "games/szokereso.html",
+    "bytes": 86307,
+    "md5": "9c533af8adc753457cc243255346102f"
+  },
+  "ketforras": {
+    "path": "games/ketforras.html",
+    "bytes": 198755,
+    "md5": "27a5bee65e01d2fc53b03ff0b581925c"
+  },
+  "demo_felfedezesek": {
+    "path": "demos/demo_felfedezesek.html",
+    "bytes": 1000737,
+    "md5": "623124bdbe515f72a86eaa78cbece791"
+  },
+  "demo_roma": {
+    "path": "demos/demo_roma.html",
+    "bytes": 1968378,
+    "md5": "2ddec021dee73d190f3ad9f0839cbddb"
+  },
+  "demo_wwi": {
+    "path": "demos/demo_wwi.html",
+    "bytes": 818342,
+    "md5": "8161cc0f6dabe3fde818c9bde7a3fc7d"
+  },
+  "demo_legkor": {
+    "path": "demos/demo_legkor.html",
+    "bytes": 433600,
+    "md5": "c0f38827392251fbdcdf89a8363db7b9"
+  }
+}

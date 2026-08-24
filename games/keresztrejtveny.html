@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keresztrejtvény — történelem</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#150F31; --surf:#1F1749; --surf-2:#2B2160;
+    --edge:rgba(255,255,255,.09); --edge-2:rgba(255,255,255,.17);
+    --text:#F5F2FF; --muted:#A79CD8;
+    --k:#FFC24B; --k2:#FF9A2E; --k-ink:#2A1B00;
+    --win:#3DDC97; --win-bg:rgba(61,220,151,.18);
+    --fail:#FF6B6B; --fail-bg:rgba(255,107,107,.2);
+    --r:18px; --r-sm:11px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(900px 520px at 10% -8%, rgba(124,92,255,.22) 0%, transparent 60%),
+      radial-gradient(780px 470px at 94% 2%, rgba(255,122,138,.16) 0%, transparent 58%),
+      var(--bg);
+    background-attachment:fixed; color:var(--text);
+    font-family:'Manrope',system-ui,sans-serif; font-size:15px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;letter-spacing:-0.03em;margin:0;line-height:1.08;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  button:disabled{opacity:.4;cursor:not-allowed;}
+  :focus-visible{outline:3px solid var(--k);outline-offset:2px;border-radius:4px;}
+
+  .topbar{position:sticky;top:0;z-index:30;background:rgba(21,15,49,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--edge);}
+  .topbar-in{max-width:1180px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .brand{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1rem;letter-spacing:-0.02em;}
+  .hud{display:none;gap:8px;flex-wrap:wrap;align-items:center;}
+  .hud.on{display:flex;}
+  .stat{font-family:'JetBrains Mono',monospace;font-size:.74rem;background:rgba(255,255,255,.06);border:1px solid var(--edge);
+    border-radius:999px;padding:6px 12px;color:var(--muted);white-space:nowrap;}
+  .stat b{color:var(--text);}
+  .backbtn{display:flex;align-items:center;gap:6px;border:1.5px solid var(--edge-2);background:rgba(255,255,255,.05);
+    border-radius:999px;padding:7px 14px;font-size:.8rem;font-weight:700;color:var(--text);}
+  .backbtn:hover{background:rgba(255,255,255,.1);}
+  .backbtn svg{width:13px;height:13px;}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:32px 20px 70px;}
+  .screen{display:none;}
+  .screen.on{display:block;animation:rise .32s cubic-bezier(.2,.75,.3,1);}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .lede{max-width:680px;margin-bottom:26px;}
+  .lede h1{font-size:clamp(1.9rem,5vw,2.9rem);margin-bottom:12px;}
+  .lede h1 em{font-style:normal;background:linear-gradient(96deg,var(--k),#FF7A8A);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .lede p{color:var(--muted);font-size:1.02rem;margin:0;}
+
+  .panel{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:22px;margin-bottom:16px;}
+  .panel h3{font-size:.94rem;font-weight:700;margin:0 0 4px;}
+  .panel .note{font-size:.8rem;color:var(--muted);margin:0 0 14px;}
+
+  .rail{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;}
+  @media(max-width:600px){.rail{grid-template-columns:repeat(2,1fr);}}
+  .era{position:relative;background:var(--surf-2);border:1.5px solid var(--edge);border-radius:14px;padding:14px 12px;
+    text-align:left;transition:.2s;cursor:pointer;color:inherit;}
+  .era:hover{border-color:var(--edge-2);}
+  .era .gr{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.35rem;color:var(--muted);}
+  .era .gl{font-size:.76rem;color:var(--text);margin-top:3px;}
+  .era[aria-pressed="true"]{border-color:var(--eacc,var(--k));background:linear-gradient(160deg,rgba(255,194,75,.16),transparent);}
+  .era[aria-pressed="true"] .gr{color:var(--eacc,var(--k));}
+
+  .catrow{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px;}
+  @media(max-width:600px){.catrow{grid-template-columns:1fr;}}
+  .cat{background:var(--surf-2);border:1.5px solid var(--edge);border-radius:14px;padding:16px;text-align:left;cursor:pointer;color:inherit;transition:.2s;}
+  .cat:hover{border-color:var(--edge-2);}
+  .cat[aria-pressed="true"]{border-color:var(--eacc,var(--k));background:linear-gradient(160deg,rgba(255,194,75,.14),transparent);}
+  .cat .cl{font-weight:800;font-family:'Bricolage Grotesque',sans-serif;}
+  .cat .cn{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);margin-top:4px;}
+
+  .cta{background:linear-gradient(140deg,var(--k),var(--k2));color:var(--k-ink);border-radius:var(--r-sm);
+    padding:13px 24px;font-size:.95rem;font-weight:800;transition:.15s;}
+  .cta:hover:not(:disabled){transform:translateY(-2px);}
+  .ghost{border:1.5px solid var(--edge-2);background:rgba(255,255,255,.04);border-radius:var(--r-sm);
+    padding:9px 15px;font-size:.83rem;font-weight:700;color:var(--text);transition:.15s;}
+  .ghost:hover:not(:disabled){background:rgba(255,255,255,.1);}
+  .ghost.warn:hover:not(:disabled){background:var(--fail-bg);border-color:var(--fail);}
+
+  .play{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start;}
+  @media(max-width:920px){.play{grid-template-columns:1fr;}}
+  .gridcard{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:18px;overflow-x:auto;}
+  .xgrid{display:inline-grid;gap:2px;background:var(--edge);padding:2px;border-radius:8px;}
+  .xcell{position:relative;width:30px;height:30px;background:var(--surf-2);}
+  .xcell.block{background:transparent;}
+  .xcell input{
+    width:100%;height:100%;border:none;background:#fff;color:#1b1330;
+    text-align:center;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.92rem;
+    text-transform:uppercase;padding:0;border-radius:3px;caret-color:var(--k2);
+  }
+  .xcell input:focus{outline:none;box-shadow:inset 0 0 0 2.5px var(--k);}
+  .xcell.active input{box-shadow:inset 0 0 0 2px rgba(255,194,75,.55);}
+  .xcell.focus input{box-shadow:inset 0 0 0 2.5px var(--k2);background:#fff8e8;}
+  .xcell input.ok{color:var(--win);background:#eafff5;}
+  .xcell input.bad{color:var(--fail);background:#fff0ef;}
+  .xnum{position:absolute;top:1px;left:2px;font-family:'JetBrains Mono',monospace;font-size:.5rem;color:#7a6a2e;font-weight:700;pointer-events:none;line-height:1;}
+
+  .progwrap{margin-top:16px;}
+  .prog{height:9px;background:var(--surf-2);border-radius:999px;overflow:hidden;border:1px solid var(--edge);}
+  .prog-fill{height:100%;width:0;background:linear-gradient(90deg,var(--k),var(--k2));border-radius:999px;transition:width .4s;}
+  .prog-txt{font-family:'JetBrains Mono',monospace;font-size:.73rem;color:var(--muted);margin-top:7px;}
+
+  .clues{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:16px 16px 8px;
+    max-height:640px;overflow-y:auto;}
+  .clues h4{font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+    margin:14px 0 9px;font-weight:400;}
+  .clues h4:first-child{margin-top:0;}
+  .cl{display:flex;gap:8px;padding:7px 8px;border-radius:8px;cursor:pointer;font-size:.85rem;line-height:1.4;margin-bottom:3px;transition:.15s;}
+  .cl:hover{background:rgba(255,255,255,.05);}
+  .cl.cur{background:rgba(255,194,75,.14);}
+  .cl.done{opacity:.55;}
+  .cl .n{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--k);flex:none;width:20px;}
+  .cl.done .n{color:var(--win);}
+
+  .toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid var(--edge);}
+
+  .result-head h2{font-size:clamp(1.7rem,4.5vw,2.3rem);margin-bottom:16px;}
+  .scoreline{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:18px;}
+  .sc{background:var(--surf);border:1px solid var(--edge);border-radius:14px;padding:14px 16px;}
+  .sc .k2{font-family:'JetBrains Mono',monospace;font-size:.63rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+  .sc .v{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.5rem;margin-top:3px;color:var(--k);}
+  .verdict{background:rgba(255,194,75,.12);border:1.5px solid var(--k);border-radius:var(--r);padding:15px 18px;
+    font-size:.94rem;font-weight:600;margin-bottom:22px;}
+  .verdict.given{background:var(--fail-bg);border-color:var(--fail);}
+  .recap{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;}
+  .rc{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r-sm);padding:11px 13px;font-size:.83rem;}
+  .rc b{display:block;font-family:'Bricolage Grotesque',sans-serif;color:var(--k);margin-bottom:2px;}
+  .rc span{color:var(--muted);}
+
+  .foot{max-width:1180px;margin:40px auto 0;padding:0 20px 40px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted);opacity:.7;}
+
+  #sheet{display:none;}
+  .pg{page-break-after:always;break-after:page;color:#000;}
+  .pg:last-child{page-break-after:auto;break-after:auto;}
+  .pg-head{border-bottom:1.2pt solid #000;padding-bottom:6pt;margin-bottom:10pt;}
+  .pg-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15pt;}
+  .pg-meta{display:flex;justify-content:space-between;gap:12pt;font-size:9pt;margin-top:3pt;}
+  .pg-fields{display:flex;gap:16pt;font-size:9.5pt;margin-top:9pt;}
+  .pg-fields span{flex:1;border-bottom:.6pt solid #000;padding-bottom:2pt;}
+  .pxgrid{display:inline-grid;gap:1.4pt;margin:10pt auto;}
+  .pxcell{width:6.4mm;height:6.4mm;border:.4pt solid #999;position:relative;background:#fff;}
+  .pxcell.block{background:#111;border-color:#111;}
+  .pxcell.sol{background:#e2e2e2;}
+  .pxnum{position:absolute;top:.2mm;left:.5mm;font-size:5.4pt;font-family:'JetBrains Mono',monospace;}
+  .pxletter{display:flex;align-items:center;justify-content:center;height:100%;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:8pt;}
+  .pg h4{font-family:'JetBrains Mono',monospace;font-size:8pt;letter-spacing:.08em;text-transform:uppercase;margin:12pt 0 5pt;font-weight:400;}
+  .pg ol{margin:0;padding-left:16pt;font-size:9.3pt;line-height:1.55;}
+  .keytag{display:inline-block;border:.8pt solid #000;padding:1pt 6pt;font-size:8pt;font-family:'JetBrains Mono',monospace;letter-spacing:.06em;text-transform:uppercase;}
+
+  @media print{
+    .topbar,.wrap,.foot{display:none !important;}
+    #sheet{display:block;}
+    html,body{background:#fff !important;color:#000 !important;}
+    @page{size:A4 portrait;margin:13mm;}
+  }
+  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-in">
+    <span class="brand">Keresztrejtvény — történelem</span>
+    <div class="hud" id="hud">
+      <button class="backbtn" onclick="goPick()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+        Beállítások
+      </button>
+      <span class="stat">idő <b id="hTime">0:00</b></span>
+      <span class="stat">kész <b id="hPct">0%</b></span>
+      <span class="stat">hiba <b id="hErr">0</b></span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<section class="screen on" id="sc-pick">
+  <div class="lede">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Történelem &middot; klasszikus keresztrejtvény</div>
+    <h1>Nem elég a szó. <em>Kettő is stimmeljen.</em></h1>
+    <p>Minden betűnek két meghatározásnak kell egyszerre megfelelnie. Válaszd ki az évfolyamot és a témakört — a rejtvényt a gép generálja, mindig újat, ha kéred.</p>
+  </div>
+
+  <div class="panel">
+    <h3>Évfolyam</h3>
+    <p class="note">a négy tanév egymást követő korszakokat fed le</p>
+    <div class="rail" id="railGrade"></div>
+    <div class="catrow" id="railCat" style="display:none;"></div>
+  </div>
+
+  <div style="text-align:center;margin-top:18px;">
+    <button class="cta" id="btnGen" disabled onclick="genFromPick()">Rejtvény legenerálása &rarr;</button>
+  </div>
+</section>
+
+<section class="screen" id="sc-play">
+  <div class="play">
+    <div class="gridcard">
+      <div class="xgrid" id="xgrid"></div>
+      <div class="progwrap">
+        <div class="prog"><div class="prog-fill" id="progFill"></div></div>
+        <div class="prog-txt" id="progTxt"></div>
+      </div>
+      <div class="toolbar">
+        <button class="ghost" onclick="useHint()">Segítség (egy betű, &minus;20 mp)</button>
+        <button class="ghost" onclick="regenerate()">Új elrendezés</button>
+        <button class="ghost warn" onclick="askSolution()">Megoldás</button>
+        <button class="ghost" onclick="openPrintDialog()">PDF nyomtatás</button>
+      </div>
+    </div>
+    <div class="clues" id="clues"></div>
+  </div>
+</section>
+
+<section class="screen" id="sc-end">
+  <div class="result-head"><h2 id="endTitle">Kész a rejtvény.</h2></div>
+  <div class="scoreline" id="scoreline"></div>
+  <div class="verdict" id="verdict"></div>
+  <div class="recap" id="recap"></div>
+  <div class="toolbar" style="border:none;padding:0;margin-top:22px;">
+    <button class="cta" onclick="regenerate()">Új elrendezés, ugyanez a téma</button>
+    <button class="ghost" onclick="goPick()">Másik témakör</button>
+  </div>
+</section>
+
+</div>
+<div class="foot">A hivatalos történelem érettségi vizsgakövetelmény lexikája alapján &middot; a rácsokat a böngésző generálja, elhelyező algoritmussal ellenőrizve</div>
+
+<div id="sheet"></div>
+
+<div id="confirmBox" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(10,7,26,.72);align-items:center;justify-content:center;">
+  <div style="background:var(--surf);border:1px solid var(--edge-2);border-radius:16px;padding:24px;max-width:360px;text-align:center;">
+    <p id="confirmText" style="margin:0 0 18px;font-size:.94rem;"></p>
+    <div style="display:flex;gap:9px;justify-content:center;">
+      <button class="ghost" onclick="confirmNo()">Mégse</button>
+      <button class="ghost warn" onclick="confirmYes()">Igen, biztos</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const WORDBANKS = {"okor": [{"token": "SZENÁTUS", "clue": "Róma legfőbb tanácsadó testülete, a köztársaság korában a valódi hatalom birtokosa", "label": "szenátus"}, {"token": "KONZUL", "clue": "A római köztársaság két, egy évre választott legfőbb tisztségviselője", "label": "konzul"}, {"token": "LÉGIÓ", "clue": "A római hadsereg alapvető katonai egysége", "label": "légió"}, {"token": "CAESAR", "clue": "Római hadvezér és államférfi, akit szenátorok gyilkoltak meg Kr. e. 44-ben", "label": "Caesar"}, {"token": "ATTILA", "clue": "A hunok legendás nagykirálya, „Isten ostora\"", "label": "Attila"}, {"token": "ZEUSZ", "clue": "A görög istenek királya", "label": "Zeusz"}, {"token": "MÍTOSZ", "clue": "Istenekről és hősökről szóló elbeszélés az ókori népeknél", "label": "mítosz"}, {"token": "AGORA", "clue": "Az athéni piactér és gyülekezőhely, a közélet színtere", "label": "agora"}, {"token": "BUDDHA", "clue": "Indiai vallásalapító, a buddhizmus tanítója", "label": "Buddha"}, {"token": "SZOLÓN", "clue": "Athéni államférfi, aki az adósrabszolgaság eltörlésével alapozta meg a népuralmat", "label": "Szolón"}, {"token": "PLATÓN", "clue": "Görög bölcselő, az Akadémia alapítója, az ideák tanának hirdetője", "label": "Platón"}, {"token": "MÓZES", "clue": "A zsidó nép hagyomány szerinti vezetője és törvényhozója", "label": "Mózes"}, {"token": "AUGUSTUS", "clue": "Az első római császár, aki Kr. e. 27-től egyeduralkodóként kormányzott", "label": "Augustus"}, {"token": "DIKTÁTOR", "clue": "A római köztársaságban rendkívüli helyzetben, hat hónapra kinevezett korlátlan hatalmú vezető", "label": "diktátor"}], "kozepkor": [{"token": "VÁRMEGYE", "clue": "A magyar királyi közigazgatás és birtokszervezet területi alapegysége", "label": "vármegye"}, {"token": "ISPÁN", "clue": "A megye élén álló, király által kinevezett tisztségviselő", "label": "ispán"}, {"token": "ARANYBULLA", "clue": "1222-ben kiadott oklevél, amely a köznemesség jogait rögzítette", "label": "Aranybulla"}, {"token": "SERVIENS", "clue": "Királyi szolgálattevő kisbirtokos a középkori Magyarországon", "label": "serviens"}, {"token": "TATÁRJÁRÁS", "clue": "A mongol sereg 1241–42-es pusztítása Magyarországon", "label": "tatárjárás"}, {"token": "HŰBÉRISÉG", "clue": "A középkori nyugat-európai birtok- és szolgálati rendszer", "label": "hűbériség"}, {"token": "JOBBÁGY", "clue": "A középkori uradalom földjén dolgozó, röghöz kötött paraszti népesség tagja", "label": "jobbágy"}, {"token": "CÉH", "clue": "Az azonos mesterséget űző iparosok középkori érdekvédelmi szervezete", "label": "céh"}, {"token": "KORÁN", "clue": "Az iszlám vallás szent könyve, a próféta kinyilatkoztatásainak gyűjteménye", "label": "Korán"}, {"token": "MOHAMED", "clue": "Az iszlám vallás alapítója", "label": "Mohamed"}, {"token": "ISTVÁN", "clue": "Az első magyar király, az államalapító", "label": "I. (Szent) István"}, {"token": "LÁSZLÓ", "clue": "A „lovagkirály\", szigorú törvényeivel szilárdította meg a rendet", "label": "I. (Szent) László"}, {"token": "MÁTYÁS", "clue": "Reneszánsz magyar király, a fekete sereg és a Corvina megalapítója", "label": "Hunyadi Mátyás"}, {"token": "ZSIGMOND", "clue": "Magyar király és német-római császár, a déli végvárrendszer megalapozója", "label": "Luxemburgi Zsigmond"}], "kora_ujkor": [{"token": "REFORMÁCIÓ", "clue": "A 16. századi vallási megújulási mozgalom, amely a wittenbergi tételekkel indult", "label": "reformáció"}, {"token": "LUTHER", "clue": "Wittenbergi szerzetes, aki 1517-ben tételeivel elindította a hitújítást", "label": "Luther Márton"}, {"token": "KÁLVIN", "clue": "Genfi hitújító, az eleve elrendelés tanának hirdetője", "label": "Kálvin János"}, {"token": "ABSZOLUTIZMUS", "clue": "Korlátlan uralkodói hatalomra épülő kormányzati rendszer", "label": "abszolutizmus"}, {"token": "MOHÁCS", "clue": "A magyar sereg 1526-os vereségének színhelye", "label": "Mohács"}, {"token": "SZIGETVÁR", "clue": "Vár, amelyet 1566-ban a szultán seregével szemben védtek", "label": "Szigetvár"}, {"token": "VÉGVÁR", "clue": "Az oszmán terjeszkedés ellen kiépített határvédelmi erősség", "label": "végvár"}, {"token": "KURUC", "clue": "A Habsburg-ellenes felkelők elnevezése a 17–18. században", "label": "kuruc"}, {"token": "BOCSKAI", "clue": "Erdélyi fejedelem, aki 1604-ben Habsburg-ellenes felkelést indított", "label": "Bocskai István"}, {"token": "BETHLENGÁBOR", "clue": "Erdély fejedelme 1613–1629 között, a harmincéves háború résztvevője", "label": "Bethlen Gábor"}, {"token": "KOLUMBUSZ", "clue": "Genovai hajós, aki 1492-ben átszelte az Atlanti-óceánt", "label": "Kolumbusz"}, {"token": "GALILEI", "clue": "Itáliai tudós, akit a Nap középpontú világkép hirdetéséért perbe fogtak", "label": "Galilei"}, {"token": "MÁRIATERÉZIA", "clue": "Habsburg uralkodónő 1740–1780 között, a kettős vámrendszer bevezetője", "label": "Mária Terézia"}, {"token": "MANUFAKTÚRA", "clue": "Kézi munkán és munkamegosztáson alapuló nagyüzem a korai kapitalizmusban", "label": "manufaktúra"}], "reformkor": [{"token": "LIBERALIZMUS", "clue": "Eszmeáramlat, amely az egyéni szabadságjogokat és a szabad versenyt hirdeti", "label": "liberalizmus"}, {"token": "SZÉCHENYI", "clue": "A „legnagyobb magyar\", a Hitel szerzője, a Lánchíd kezdeményezője", "label": "Széchenyi István"}, {"token": "KOSSUTH", "clue": "A reformellenzék vezére, 1849-ben kormányzó-elnök", "label": "Kossuth Lajos"}, {"token": "DEÁKFERENC", "clue": "„A haza bölcse\", az Ellenzéki Nyilatkozat megfogalmazója", "label": "Deák Ferenc"}, {"token": "VÉDEGYLET", "clue": "1844-ben alakult mozgalom a honi ipar pártolására", "label": "Védegylet"}, {"token": "CENZÚRA", "clue": "A sajtótermékek előzetes hatósági engedélyezése", "label": "cenzúra"}, {"token": "ÖRÖKVÁLTSÁG", "clue": "A paraszt egy összegben megválthatja szolgáltatásait, és földje tulajdonosává válik", "label": "örökváltság"}, {"token": "KÖZTEHERVISELÉS", "clue": "Az elv, hogy az ország terheiből a kiváltságosoknak is részt kell vállalniuk", "label": "közteherviselés"}, {"token": "PETŐFI", "clue": "A forradalom költője, a Nemzeti dal szerzője", "label": "Petőfi Sándor"}, {"token": "BATTHYÁNY", "clue": "Az első felelős magyar kormány miniszterelnöke", "label": "Batthyány Lajos"}, {"token": "GÖRGEI", "clue": "A honvédsereg fővezére, aki Világosnál letette a fegyvert", "label": "Görgei Artúr"}, {"token": "VILÁGOS", "clue": "Település, ahol 1849 augusztusában a magyar fősereg letette a fegyvert", "label": "Világos"}, {"token": "POZSONY", "clue": "Város, ahol a reformkori rendi országgyűlések üléseztek", "label": "Pozsony"}, {"token": "NEMZETŐRSÉG", "clue": "1848-ban szervezett fegyveres polgári testület a rend fenntartására", "label": "nemzetőrség"}], "dualizmus": [{"token": "KIEGYEZÉS", "clue": "1867-es megállapodás az uralkodó és a magyar politikai vezetés között", "label": "kiegyezés"}, {"token": "DUALIZMUS", "clue": "Az Osztrák–Magyar Monarchia kétközpontú államszerkezete", "label": "dualizmus"}, {"token": "OBSTRUKCIÓ", "clue": "A parlamenti munka szándékos akadályozása hosszú beszédekkel", "label": "obstrukció"}, {"token": "KOALÍCIÓ", "clue": "Több párt szövetsége a kormányzás érdekében", "label": "koalíció"}, {"token": "BISMARCK", "clue": "A „vaskancellár\", a német egység megteremtője", "label": "Bismarck"}, {"token": "ANDRÁSSY", "clue": "A megegyezés utáni első magyar miniszterelnök, később közös külügyminiszter", "label": "Andrássy Gyula"}, {"token": "ANTANT", "clue": "Az első világháborúban Németországgal szemben álló hatalmi tömb", "label": "antant"}, {"token": "MARXIZMUS", "clue": "Az osztályharcra és a termelési viszonyokra épülő társadalomelmélet", "label": "marxizmus"}, {"token": "MILLENNIUM", "clue": "A honfoglalás ezredik évfordulójának 1896-os ünnepsége", "label": "millennium"}, {"token": "FIUME", "clue": "A Magyar Királyság tengeri kikötője az Adrián", "label": "Fiume"}, {"token": "LINCOLN", "clue": "Amerikai elnök, aki alatt eltörölték a rabszolgaságot", "label": "Lincoln"}, {"token": "HERZL", "clue": "A cionista mozgalom megalapítója, aki a magyar fővárosban született", "label": "Herzl Tivadar"}, {"token": "SZECESSZIÓ", "clue": "A századforduló díszítő, természeti formákat követő művészeti stílusa", "label": "szecesszió"}], "vilaghaboruk": [{"token": "TRIANON", "clue": "A magyar békediktátum aláírásának helye 1920-ban", "label": "Trianon"}, {"token": "HORTHY", "clue": "Kormányzó 1920 és 1944 között", "label": "Horthy Miklós"}, {"token": "NUMERUSCLAUSUS", "clue": "1920-as törvény, amely korlátozta a zsidó fiatalok egyetemi felvételét", "label": "numerus clausus"}, {"token": "HOLOKAUSZT", "clue": "A zsidóság módszeres, iparszerű elpusztítása a második világháborúban", "label": "holokauszt"}, {"token": "FASIZMUS", "clue": "Mussolini olaszországi tekintélyuralmi rendszere és eszméje", "label": "fasizmus"}, {"token": "HITLER", "clue": "A Harmadik Birodalom vezére", "label": "Hitler"}, {"token": "SZTÁLIN", "clue": "A Szovjetunió diktátora, a tisztogatások irányítója", "label": "Sztálin"}, {"token": "CHURCHILL", "clue": "Brit miniszterelnök a második világháború idején", "label": "Churchill"}, {"token": "VILÁGVÁLSÁG", "clue": "Az 1929-ben kirobbant gazdasági összeomlás", "label": "világválság"}, {"token": "TELEKIPÁL", "clue": "Miniszterelnök, aki 1941-ben önkezével vetett véget életének", "label": "Teleki Pál"}, {"token": "KÁROLYIMIHÁLY", "clue": "Az 1918-as őszirózsás forradalom miniszterelnöke, majd köztársasági elnök", "label": "Károlyi Mihály"}, {"token": "SZÁLASI", "clue": "A nyilas mozgalom vezetője, 1944 októberétől „nemzetvezető\"", "label": "Szálasi Ferenc"}, {"token": "JEGYRENDSZER", "clue": "A hiánycikkek elosztása fejadagot igazoló szelvényekkel", "label": "jegyrendszer"}, {"token": "GETTÓ", "clue": "Elkülönített városrész, ahová a zsidóságot zárták", "label": "gettó"}], "hideghaboru": [{"token": "VASFÜGGÖNY", "clue": "Churchill képe az Európát kettéosztó zárt határról", "label": "vasfüggöny"}, {"token": "PERESZTROJKA", "clue": "Gorbacsov átalakítási programja a Szovjetunióban", "label": "peresztrojka"}, {"token": "GLASZNOSZTY", "clue": "A nyíltság politikája a gorbacsovi Szovjetunióban", "label": "glasznoszty"}, {"token": "KÁDÁR", "clue": "Pártvezető 1956 novemberétől 1988-ig", "label": "Kádár János"}, {"token": "NAGYIMRE", "clue": "Az 1956-os forradalom miniszterelnöke, akit 1958-ban kivégeztek", "label": "Nagy Imre"}, {"token": "SZAMIZDAT", "clue": "Illegálisan sokszorosított ellenzéki kiadvány", "label": "szamizdat"}, {"token": "GORBACSOV", "clue": "Az utolsó szovjet pártfőtitkár, a reformok elindítója", "label": "Gorbacsov"}, {"token": "JALTA", "clue": "Város, ahol 1945 februárjában a nagyhatalmak Európa sorsáról tárgyaltak", "label": "Jalta"}, {"token": "RÁKOSI", "clue": "A „Sztálin legjobb magyar tanítványának\" nevezett pártvezető", "label": "Rákosi Mátyás"}, {"token": "ENYHÜLÉS", "clue": "A nagyhatalmi feszültség csökkenésének időszaka", "label": "enyhülés"}, {"token": "KULÁK", "clue": "A gazdagparaszt megbélyegző neve az ötvenes években", "label": "kulák"}, {"token": "TÉESZ", "clue": "A mezőgazdasági termelőszövetkezet rövidített neve", "label": "téesz"}, {"token": "HRUSCSOV", "clue": "Szovjet pártvezető, aki leleplezte elődje bűneit", "label": "Hruscsov"}], "jelenkor": [{"token": "EURÓPAIUNIÓ", "clue": "Az európai államok gazdasági és politikai közössége", "label": "Európai Unió"}, {"token": "SCHENGEN", "clue": "Az egyezmény, amely megszüntette a belső határellenőrzést", "label": "schengeni övezet"}, {"token": "GLOBALIZÁCIÓ", "clue": "A világ gazdasági, kulturális és technikai összefonódásának folyamata", "label": "globalizáció"}, {"token": "ALAPTÖRVÉNY", "clue": "Magyarország 2011-ben elfogadott alkotmánya", "label": "Alaptörvény"}, {"token": "ORSZÁGGYŰLÉS", "clue": "A magyar törvényhozó hatalom testülete", "label": "Országgyűlés"}, {"token": "ÖNKORMÁNYZAT", "clue": "A település ügyeit intéző választott helyi testület", "label": "önkormányzat"}, {"token": "NÉPSZAVAZÁS", "clue": "Közvetlen döntéshozatal, amelyben a választópolgárok mondanak véleményt egy kérdésről", "label": "népszavazás"}, {"token": "AUTONÓMIA", "clue": "Egy közösség önigazgatási joga saját ügyeiben", "label": "autonómia"}, {"token": "DEMOGRÁFIA", "clue": "A népesség számának és összetételének változásait vizsgáló tudomány", "label": "demográfia"}, {"token": "ANTALLJÓZSEF", "clue": "A rendszerváltoztatás utáni első szabadon választott miniszterelnök", "label": "Antall József"}, {"token": "GÖNCZÁRPÁD", "clue": "A köztársaság első szabadon választott elnöke", "label": "Göncz Árpád"}, {"token": "RENDSZERVÁLTÁS", "clue": "Az egypárti diktatúra békés felszámolása 1989–90-ben", "label": "rendszerváltoztatás"}, {"token": "KEREKASZTAL", "clue": "Az 1989-es tárgyalássorozat a hatalom és az ellenzék között", "label": "Ellenzéki Kerekasztal"}, {"token": "SCHUMAN", "clue": "Francia politikus, az európai egyesülés egyik atyja", "label": "Robert Schuman"}]};
+
+const GRADES = {
+ 9:  {label:'9. évfolyam',  span:'ókor – 1490',   accent:'#FFC24B', A:{key:'okor',       label:'Ókor'},        B:{key:'kozepkor',    label:'Középkor'}},
+ 10: {label:'10. évfolyam', span:'1490 – 1849',   accent:'#3DDC97', A:{key:'kora_ujkor', label:'Kora újkor'},  B:{key:'reformkor',   label:'Reformkor'}},
+ 11: {label:'11. évfolyam', span:'1849 – 1945',   accent:'#FF7A8A', A:{key:'dualizmus',  label:'Dualizmus'},   B:{key:'vilaghaboruk',label:'Világháborúk'}},
+ 12: {label:'12. évfolyam', span:'1945 – ma',     accent:'#9E8BFF', A:{key:'hideghaboru',label:'Hidegháború'}, B:{key:'jelenkor',    label:'Jelenkor'}},
+};
+
+const DIRS = {A:[0,1], D:[1,0]};
+function shuffleArr(a){ const b=[...a]; for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; }
+
+function canPlace(grid, word, r, c, d, size){
+  const [dr,dc]=DIRS[d], n=word.length;
+  const er=r+dr*(n-1), ec=c+dc*(n-1);
+  if(r<0||c<0||er<0||ec<0||er>=size||ec>=size) return 0;
+  const br=r-dr, bc=c-dc;
+  if(br>=0&&br<size&&bc>=0&&bc<size&&grid[br][bc]!==null) return 0;
+  const ar=er+dr, ac=ec+dc;
+  if(ar>=0&&ar<size&&ac>=0&&ac<size&&grid[ar][ac]!==null) return 0;
+  let crossings=0;
+  for(let i=0;i<n;i++){
+    const rr=r+dr*i, cc=c+dc*i, cur=grid[rr][cc];
+    if(cur!==null){
+      if(cur!==word[i]) return 0;
+      crossings++;
+    }else{
+      const perp = d==='A' ? [1,0] : [0,1];
+      for(const s of [-1,1]){
+        const nr=rr+perp[0]*s, nc=cc+perp[1]*s;
+        if(nr>=0&&nr<size&&nc>=0&&nc<size&&grid[nr][nc]!==null) return 0;
+      }
+    }
+  }
+  return crossings;
+}
+function placeWord(grid, word, r, c, d){
+  const [dr,dc]=DIRS[d];
+  for(let i=0;i<word.length;i++) grid[r+dr*i][c+dc*i]=word[i];
+}
+function findCandidates(grid, word, size){
+  const out=[];
+  for(let r=0;r<size;r++) for(let c=0;c<size;c++) for(const d of ['A','D']){
+    const cr=canPlace(grid,word,r,c,d,size);
+    if(cr>0) out.push([r,c,d,cr]);
+  }
+  return out;
+}
+function buildOnce(items, size){
+  const grid=Array.from({length:size},()=>Array(size).fill(null));
+  const placed=[];
+  const byLen=[...items].sort((a,b)=>b.token.length-a.token.length);
+  const seedPool=byLen.slice(0,Math.min(3,byLen.length));
+  const seed=seedPool[Math.floor(Math.random()*seedPool.length)];
+  const mid=Math.floor(size/2);
+  const startC=mid-Math.floor(seed.token.length/2);
+  placeWord(grid, seed.token, mid, startC, 'A');
+  placed.push({...seed, row:mid, col:startC, dir:'A'});
+
+  let remaining = shuffleArr(items.filter(it=>it!==seed));
+  let improved=true;
+  while(improved){
+    improved=false;
+    let bestScore=-1, bestList=[];
+    remaining.forEach((wc,idx)=>{
+      findCandidates(grid, wc.token, size).forEach(([r,c,d,cr])=>{
+        if(cr>bestScore){ bestScore=cr; bestList=[[idx,r,c,d]]; }
+        else if(cr===bestScore){ bestList.push([idx,r,c,d]); }
+      });
+    });
+    if(bestList.length){
+      const [idx,r,c,d]=bestList[Math.floor(Math.random()*bestList.length)];
+      const wc=remaining[idx];
+      placeWord(grid, wc.token, r, c, d);
+      placed.push({...wc, row:r, col:c, dir:d});
+      remaining.splice(idx,1);
+      improved=true;
+    }
+  }
+  return {placed};
+}
+function trimGrid(placed){
+  let minr=Infinity,maxr=-Infinity,minc=Infinity,maxc=-Infinity;
+  placed.forEach(e=>{
+    const [dr,dc]=DIRS[e.dir];
+    for(let i=0;i<e.token.length;i++){
+      const r=e.row+dr*i, c=e.col+dc*i;
+      if(r<minr)minr=r; if(r>maxr)maxr=r; if(c<minc)minc=c; if(c>maxc)maxc=c;
+    }
+  });
+  const h=maxr-minr+1, w=maxc-minc+1;
+  return {h,w, placed: placed.map(e=>({...e,row:e.row-minr,col:e.col-minc}))};
+}
+function numberEntries(placed,h,w){
+  const occ=new Set();
+  placed.forEach(e=>{ const [dr,dc]=DIRS[e.dir]; for(let i=0;i<e.token.length;i++) occ.add((e.row+dr*i)+','+(e.col+dc*i)); });
+  let num=1; const numbered={};
+  for(let r=0;r<h;r++) for(let c=0;c<w;c++){
+    if(!occ.has(r+','+c)) continue;
+    const sa=(c===0||!occ.has(r+','+(c-1))) && (c+1<w && occ.has(r+','+(c+1)));
+    const sd=(r===0||!occ.has((r-1)+','+c)) && (r+1<h && occ.has((r+1)+','+c));
+    if(sa||sd){ numbered[r+','+c]=num; num++; }
+  }
+  const entries=placed.map(e=>({
+    number:numbered[e.row+','+e.col], dir:e.dir, row:e.row, col:e.col, len:e.token.length,
+    answer:e.token, clue:e.clue, label:e.label
+  }));
+  entries.sort((a,b)=> (a.number-b.number) || (a.dir===b.dir?0:(a.dir==='A'?-1:1)));
+  return entries;
+}
+function verifyEntries(entries,h,w){
+  const grid=Array.from({length:h},()=>Array(w).fill(null));
+  let problems=0;
+  entries.forEach(e=>{
+    const [dr,dc]=DIRS[e.dir];
+    for(let i=0;i<e.len;i++){
+      const r=e.row+dr*i,c=e.col+dc*i;
+      if(grid[r][c]!==null && grid[r][c]!==e.answer[i]) problems++;
+      grid[r][c]=e.answer[i];
+    }
+  });
+  return problems;
+}
+function generatePuzzle(bankKey, size, attempts){
+  size=size||27; attempts=attempts||5;
+  const items=WORDBANKS[bankKey];
+  let best=null;
+  for(let a=0;a<attempts;a++){
+    const {placed}=buildOnce(items, size);
+    if(!best || placed.length>best.length) best=placed;
+    if(placed.length===items.length) break;
+  }
+  const {h,w,placed}=trimGrid(best);
+  const entries=numberEntries(placed,h,w);
+  const problems=verifyEntries(entries,h,w);
+  return {h,w,entries,problems};
+}
+
+const PICK={grade:null,cat:null};
+const G={bankKey:null,puzzle:null,cellLetter:{},cellNumber:{},acrossAt:{},downAt:{},entries:[],h:0,w:0,
+  answers:{},errCells:new Set(),curIdx:-1,curDir:'A',curCell:null,
+  errors:0,hints:0,t0:0,timer:null,done:false,gaveUp:false};
+let pendingAction=null;
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(e=>e.classList.remove('on'));
+  document.getElementById('sc-'+id).classList.add('on');
+  document.getElementById('hud').classList.toggle('on', id==='play');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goPick(){ clearInterval(G.timer); renderPick(); go('pick'); }
+
+function renderPick(){
+  document.getElementById('railGrade').innerHTML = Object.keys(GRADES).map(g=>{
+    const gr=GRADES[g];
+    return `<button class="era" style="--eacc:${gr.accent}" aria-pressed="${PICK.grade===g}" onclick="pickGrade('${g}')">
+      <div class="gr">${g}.</div><div class="gl">${gr.span}</div></button>`;
+  }).join('');
+  const cr=document.getElementById('railCat');
+  if(!PICK.grade){ cr.style.display='none'; document.getElementById('btnGen').disabled=true; return; }
+  const gr=GRADES[PICK.grade];
+  cr.style.display='grid';
+  cr.style.setProperty('--eacc',gr.accent);
+  cr.innerHTML = ['A','B'].map(k=>{
+    const cat=gr[k];
+    return `<button class="cat" style="--eacc:${gr.accent}" aria-pressed="${PICK.cat===k}" onclick="pickCat('${k}')">
+      <div class="cl">${cat.label}</div><div class="cn">${WORDBANKS[cat.key].length} bejegyzés (nagyjából)</div></button>`;
+  }).join('');
+  document.getElementById('btnGen').disabled = !(PICK.grade && PICK.cat);
+}
+function pickGrade(g){ PICK.grade=g; PICK.cat=null; renderPick(); }
+function pickCat(k){ PICK.cat=k; renderPick(); }
+function genFromPick(){
+  const gr=GRADES[PICK.grade], cat=gr[PICK.cat];
+  startPuzzle(cat.key, gr.accent, gr.label+' — '+cat.label);
+}
+
+function startPuzzle(bankKey, accent, title){
+  G.bankKey=bankKey; G.accent=accent||'#FFC24B'; G.title=title||'';
+  const p=generatePuzzle(bankKey, 27, 5);
+  G.puzzle=p; G.h=p.h; G.w=p.w; G.entries=p.entries;
+  G.cellLetter={}; G.cellNumber={}; G.acrossAt={}; G.downAt={};
+  G.answers={}; G.errCells=new Set(); G.errors=0; G.hints=0; G.done=false; G.gaveUp=false;
+  p.entries.forEach(e=>{
+    const [dr,dc]=DIRS[e.dir];
+    for(let i=0;i<e.len;i++){
+      const r=e.row+dr*i, c=e.col+dc*i, key=r+','+c;
+      G.cellLetter[key]=e.answer[i];
+      if(e.dir==='A') G.acrossAt[key]=G.entries.indexOf(e); else G.downAt[key]=G.entries.indexOf(e);
+    }
+    G.cellNumber[e.row+','+e.col]=e.number;
+  });
+  const firstA=G.entries.findIndex(e=>e.dir==='A');
+  G.curIdx = firstA>=0? firstA : 0;
+  G.curDir = G.entries[G.curIdx].dir;
+  G.curCell=[G.entries[G.curIdx].row, G.entries[G.curIdx].col];
+
+  document.documentElement.style.setProperty('--k', G.accent);
+
+  clearInterval(G.timer); G.t0=Date.now();
+  G.timer=setInterval(()=>{ if(!G.done) tick(); },1000);
+
+  drawGrid(); drawClues(); updateProgress(); tick();
+  go('play');
+  setTimeout(()=>focusCell(G.curCell[0],G.curCell[1]),50);
+}
+function regenerate(){
+  if(!G.bankKey) return;
+  startPuzzle(G.bankKey, G.accent, G.title);
+}
+
+function secs(){ return Math.max(0,Math.floor((Date.now()-G.t0)/1000)); }
+function mmss(s){ return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+function tick(){ document.getElementById('hTime').textContent=mmss(secs()); }
+
+function drawGrid(){
+  const el=document.getElementById('xgrid');
+  el.style.gridTemplateColumns='repeat('+G.w+',30px)';
+  el.style.gridTemplateRows='repeat('+G.h+',30px)';
+  let html='';
+  for(let r=0;r<G.h;r++) for(let c=0;c<G.w;c++){
+    const key=r+','+c;
+    if(G.cellLetter[key]===undefined){ html+='<div class="xcell block"></div>'; continue; }
+    const num=G.cellNumber[key];
+    html += '<div class="xcell" id="xc-'+r+'-'+c+'">'+
+      (num?'<span class="xnum">'+num+'</span>':'')+
+      '<input maxlength="1" autocomplete="off" spellcheck="false" inputmode="text" '+
+      'aria-label="cella '+r+' '+c+'" '+
+      'onclick="cellClick('+r+','+c+')" '+
+      'onfocus="cellFocus('+r+','+c+')" '+
+      'oninput="cellInput('+r+','+c+',this)" '+
+      'onkeydown="cellKey(event,'+r+','+c+')">'+
+      '</div>';
+  }
+  el.innerHTML=html;
+}
+function entryCells(idx){
+  const e=G.entries[idx]; const [dr,dc]=DIRS[e.dir]; const out=[];
+  for(let i=0;i<e.len;i++) out.push([e.row+dr*i, e.col+dc*i]);
+  return out;
+}
+function paintHighlight(){
+  document.querySelectorAll('.xcell').forEach(el=>el.classList.remove('active','focus'));
+  if(G.curIdx<0) return;
+  entryCells(G.curIdx).forEach(([r,c])=>{
+    const el=document.getElementById('xc-'+r+'-'+c);
+    if(el) el.classList.add('active');
+  });
+  if(G.curCell){
+    const el=document.getElementById('xc-'+G.curCell[0]+'-'+G.curCell[1]);
+    if(el) el.classList.add('focus');
+  }
+}
+function resolveDir(r,c,preferred){
+  const key=r+','+c;
+  const hasA=G.acrossAt[key]!==undefined, hasD=G.downAt[key]!==undefined;
+  if(preferred==='A' && hasA) return 'A';
+  if(preferred==='D' && hasD) return 'D';
+  return hasA? 'A' : (hasD? 'D' : null);
+}
+function syncCursor(r,c){
+  const dir=resolveDir(r,c,G.curDir);
+  if(dir===null) return;
+  G.curCell=[r,c]; G.curDir=dir;
+  const key=r+','+c;
+  G.curIdx = dir==='A' ? G.acrossAt[key] : G.downAt[key];
+  paintHighlight(); highlightClue();
+}
+function cellFocus(r,c){ syncCursor(r,c); }
+function focusCell(r,c){
+  syncCursor(r,c);
+  const el=document.getElementById('xc-'+r+'-'+c);
+  if(el){ const inp=el.querySelector('input'); if(inp) inp.focus(); }
+}
+function cellClick(r,c){
+  const key=r+','+c;
+  const hasA=G.acrossAt[key]!==undefined, hasD=G.downAt[key]!==undefined;
+  if(G.curCell && G.curCell[0]===r && G.curCell[1]===c && hasA && hasD){
+    G.curDir = G.curDir==='A' ? 'D' : 'A';
+  }
+  focusCell(r,c);
+}
+function nextCellInEntry(r,c,dir,step){
+  const key=r+','+c;
+  const idx = dir==='A' ? G.acrossAt[key] : G.downAt[key];
+  if(idx===undefined) return null;
+  const e=G.entries[idx];
+  const [dr,dc]=DIRS[e.dir];
+  const idxInWord = e.dir==='A' ? (c-e.col) : (r-e.row);
+  const ni=idxInWord+step;
+  if(ni<0||ni>=e.len) return null;
+  return [e.row+dr*ni, e.col+dc*ni];
+}
+function cellInput(r,c,input){
+  let v=(input.value||'').toUpperCase().slice(-1);
+  v=v.replace(/[^A-ZÁÉÍÓÖŐÚÜŰ]/g,'');
+  input.value=v;
+  const key=r+','+c;
+  input.classList.remove('ok','bad');
+  if(v){
+    G.answers[key]=v;
+    if(v===G.cellLetter[key]){ input.classList.add('ok'); G.errCells.delete(key); }
+    else { input.classList.add('bad'); if(!G.errCells.has(key)){ G.errCells.add(key); G.errors++; document.getElementById('hErr').textContent=G.errors; } }
+  } else { delete G.answers[key]; }
+  updateProgress();
+  if(checkComplete()){ finish(false); return; }
+  if(v){ const nxt=nextCellInEntry(r,c,G.curDir,1); if(nxt) focusCell(nxt[0],nxt[1]); }
+}
+function cellKey(ev,r,c){
+  if(ev.key==='Backspace'){
+    const input=document.getElementById('xc-'+r+'-'+c).querySelector('input');
+    if(input.value) return;
+    ev.preventDefault();
+    const prev=nextCellInEntry(r,c,G.curDir,-1);
+    if(prev){
+      focusCell(prev[0],prev[1]);
+      const pInput=document.getElementById('xc-'+prev[0]+'-'+prev[1]).querySelector('input');
+      pInput.value=''; pInput.classList.remove('ok','bad');
+      delete G.answers[prev[0]+','+prev[1]];
+      updateProgress();
+    }
+    return;
+  }
+  const moves={ArrowLeft:[0,-1],ArrowRight:[0,1],ArrowUp:[-1,0],ArrowDown:[1,0]};
+  if(moves[ev.key]){
+    ev.preventDefault();
+    const [dr,dc]=moves[ev.key];
+    const nr=r+dr, nc=c+dc;
+    if(G.cellLetter[nr+','+nc]!==undefined){
+      if(ev.key==='ArrowLeft'||ev.key==='ArrowRight') G.curDir='A';
+      if(ev.key==='ArrowUp'||ev.key==='ArrowDown') G.curDir='D';
+      focusCell(nr,nc);
+    }
+  }
+}
+
+function drawClues(){
+  const across=G.entries.map((e,i)=>({...e,idx:i})).filter(e=>e.dir==='A').sort((a,b)=>a.number-b.number);
+  const down=G.entries.map((e,i)=>({...e,idx:i})).filter(e=>e.dir==='D').sort((a,b)=>a.number-b.number);
+  function row(e){ return `<div class="cl" id="cl-${e.idx}" onclick="clueClick(${e.idx})"><span class="n">${e.number}.</span><span>${e.clue}</span></div>`; }
+  document.getElementById('clues').innerHTML = '<h4>Vízszintes</h4>'+across.map(row).join('')+'<h4>Függőleges</h4>'+down.map(row).join('');
+}
+function clueClick(idx){ const e=G.entries[idx]; G.curDir=e.dir; G.curIdx=idx; focusCell(e.row,e.col); }
+function highlightClue(){
+  document.querySelectorAll('.cl').forEach(el=>el.classList.remove('cur'));
+  if(G.curIdx>=0){ const el=document.getElementById('cl-'+G.curIdx); if(el) el.classList.add('cur'); }
+  G.entries.forEach((e,idx)=>{
+    const filled=entryCells(idx).every(([r,c])=>G.answers[r+','+c]===G.cellLetter[r+','+c]);
+    const el=document.getElementById('cl-'+idx); if(el) el.classList.toggle('done', filled);
+  });
+}
+
+function updateProgress(){
+  const total=Object.keys(G.cellLetter).length;
+  let ok=0; for(const k in G.cellLetter) if(G.answers[k]===G.cellLetter[k]) ok++;
+  const pct= total? Math.round(100*ok/total):0;
+  document.getElementById('progFill').style.width=pct+'%';
+  document.getElementById('progTxt').textContent=ok+' / '+total+' betű helyes';
+  document.getElementById('hPct').textContent=pct+'%';
+  highlightClue();
+}
+function checkComplete(){ for(const k in G.cellLetter) if(G.answers[k]!==G.cellLetter[k]) return false; return true; }
+function useHint(){
+  if(G.done || !G.curCell) return;
+  const [r,c]=G.curCell, key=r+','+c;
+  const input=document.getElementById('xc-'+r+'-'+c).querySelector('input');
+  input.value=G.cellLetter[key]; input.classList.remove('bad'); input.classList.add('ok');
+  G.answers[key]=G.cellLetter[key]; G.errCells.delete(key);
+  G.hints++; G.t0-=20000; tick(); updateProgress();
+  if(checkComplete()) finish(false);
+}
+
+function askSolution(){
+  if(G.done) return;
+  showConfirm('Biztosan felfeded a megoldást? Ez feladásnak számít, nem önálló megfejtésnek.', ()=>{
+    Object.keys(G.cellLetter).forEach(key=>{
+      const [r,c]=key.split(',').map(Number);
+      const input=document.getElementById('xc-'+r+'-'+c).querySelector('input');
+      input.value=G.cellLetter[key]; input.classList.remove('bad'); input.classList.add('ok');
+      G.answers[key]=G.cellLetter[key];
+    });
+    updateProgress();
+    finish(true);
+  });
+}
+function showConfirm(text, onYes){
+  document.getElementById('confirmText').textContent=text;
+  pendingAction=onYes;
+  document.getElementById('confirmBox').style.display='flex';
+}
+function confirmYes(){ document.getElementById('confirmBox').style.display='none'; if(pendingAction) pendingAction(); pendingAction=null; }
+function confirmNo(){ document.getElementById('confirmBox').style.display='none'; pendingAction=null; }
+
+function finish(gaveUp){
+  G.done=true; G.gaveUp=gaveUp; clearInterval(G.timer);
+  const tot=secs();
+  document.getElementById('endTitle').textContent = gaveUp? 'Megoldás felfedve.' : 'Kész a rejtvény.';
+  const vEl=document.getElementById('verdict');
+  vEl.classList.toggle('given', gaveUp);
+  if(gaveUp){
+    vEl.textContent='Megoldást kértél — ez nem számít önálló megfejtésnek. Nézd át az összefoglalót, és próbáld újra egy friss elrendezéssel.';
+  }else if(G.errors===0){
+    vEl.textContent='Hibátlan kitöltés — minden metszés elsőre stimmelt.';
+  }else if(G.errors<=4){
+    vEl.textContent='Szép munka — néhány betűt kellett csak javítani.';
+  }else{
+    vEl.textContent='Megvan — több javításra volt szükség, érdemes átismételni a listát.';
+  }
+  document.getElementById('scoreline').innerHTML =
+    [['idő',mmss(tot)],['hiba',G.errors],['segítség',G.hints],['bejegyzés',G.entries.length]]
+    .map(([k,x])=>`<div class="sc"><div class="k2">${k}</div><div class="v">${x}</div></div>`).join('');
+  document.getElementById('recap').innerHTML = G.entries.map(e=>
+    `<div class="rc"><b>${e.label}</b><span>${e.clue}</span></div>`).join('');
+  go('end');
+}
+
+function buildSheetGrid(showSolution){
+  let html='<div class="pxgrid" style="grid-template-columns:repeat('+G.w+',6.4mm);grid-template-rows:repeat('+G.h+',6.4mm);">';
+  for(let r=0;r<G.h;r++) for(let c=0;c<G.w;c++){
+    const key=r+','+c;
+    if(G.cellLetter[key]===undefined){ html+='<div class="pxcell block"></div>'; continue; }
+    const num=G.cellNumber[key];
+    const sol = showSolution ? '<div class="pxletter">'+G.cellLetter[key]+'</div>' : '';
+    html += '<div class="pxcell'+(showSolution?' sol':'')+'">'+(num?'<span class="pxnum">'+num+'</span>':'')+sol+'</div>';
+  }
+  return html+'</div>';
+}
+function buildSheetClues(){
+  const across=G.entries.filter(e=>e.dir==='A').sort((a,b)=>a.number-b.number);
+  const down=G.entries.filter(e=>e.dir==='D').sort((a,b)=>a.number-b.number);
+  const li=e=>'<li>'+e.number+'. '+e.clue+'</li>';
+  return '<h4>Vízszintes</h4><ol>'+across.map(li).join('')+'</ol><h4>Függőleges</h4><ol>'+down.map(li).join('')+'</ol>';
+}
+function sheetPage(showSolution){
+  const head = showSolution
+    ? '<span class="keytag">Megoldókulcs</span>'
+    : '<div class="pg-fields"><span>Név:</span><span>Osztály:</span><span>Dátum:</span></div>';
+  return '<div class="pg"><div class="pg-head"><div class="pg-title">Keresztrejtvény — történelem</div>'+
+    '<div class="pg-meta"><span>'+(G.title||'')+'</span></div>'+head+'</div>'+
+    buildSheetGrid(showSolution)+buildSheetClues()+'</div>';
+}
+function openPrintDialog(){
+  if(!G.puzzle) return;
+  showConfirm('A megoldókulcsot is nyomtassuk mellé, külön lapon?', ()=>doPrint(true));
+  const box=document.getElementById('confirmBox');
+  const cancelBtn=box.querySelector('.ghost:not(.warn)');
+  cancelBtn.textContent='Csak a feladatlap';
+  cancelBtn.onclick=()=>{ box.style.display='none'; doPrint(false); cancelBtn.textContent='Mégse'; cancelBtn.onclick=confirmNo; };
+}
+function doPrint(withKey){
+  document.getElementById('sheet').innerHTML = sheetPage(false) + (withKey? sheetPage(true) : '');
+  setTimeout(()=>window.print(), 100);
+}
+
+renderPick();
+</script>
+</body>
+</html>
