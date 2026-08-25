@@ -76,6 +76,19 @@
   .cluebox{background:var(--surf-2);border-left:4px solid var(--acc);border-radius:0 12px 12px 0;padding:20px 22px;margin-bottom:20px;}
   .cluebox p{font-family:'JetBrains Mono',monospace;font-size:1.05rem;line-height:1.7;margin:0;color:var(--text);}
 
+  .freelabel{display:block;font-size:.84rem;color:var(--muted);margin-bottom:8px;}
+  .freerow{display:flex;gap:10px;}
+  @media(max-width:480px){.freerow{flex-direction:column;}}
+  #freeInput{flex:1;background:var(--surf-2);border:1.5px solid var(--edge);border-radius:12px;padding:13px 16px;color:var(--text);font-family:'Manrope',sans-serif;font-size:1rem;}
+  #freeInput:focus{outline:none;border-color:var(--acc);}
+  #freeInput.wrong-shake{animation:shake .3s;border-color:var(--fail);}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+  .helprow{margin-top:14px;padding:14px 16px;background:var(--surf-2);border:1px dashed var(--edge-2);border-radius:12px;font-size:.88rem;color:var(--muted);display:none;}
+  .helprow.show{display:block;}
+  .helprow b{color:var(--text);}
+  .badge-onallo{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;background:var(--win-bg);color:var(--win);padding:3px 9px;border-radius:999px;margin-left:8px;}
+  .badge-segits{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;background:rgba(255,194,75,.16);color:var(--acc);padding:3px 9px;border-radius:999px;margin-left:8px;}
+
   .opts{display:grid;gap:10px;}
   .opt{background:var(--surf-2);border:1.5px solid var(--edge);border-radius:12px;padding:13px 16px;text-align:left;font-size:.95rem;transition:.15s;}
   .opt:hover{border-color:var(--acc);}
@@ -214,7 +227,16 @@
     <div class="card">
       <span class="diff-tag" id="diffTag"></span>
       <div class="cluebox"><p id="clueText"></p></div>
-      <div class="opts" id="optsBox"></div>
+
+      <div id="freeSection">
+        <label class="freelabel" for="freeInput">Írd be, ki vagy mi lehet ez:</label>
+        <div class="freerow">
+          <input type="text" id="freeInput" placeholder="Válaszod…" autocomplete="off">
+          <button class="btn" onclick="checkFreeAnswer()">Ellenőrzés</button>
+        </div>
+      </div>
+
+      <div class="opts" id="optsBox" style="display:none;"></div>
       <div class="feedback" id="fb"></div>
       <div class="actions" id="actionsBox"></div>
     </div>
@@ -240,46 +262,55 @@ const RIDDLES = [
 {"id":"szent_istvan","diff":"konnyu","grade":"9","cat":"szemely",
  "clue":"Ezerben egy fejedelem gyermeke kereszténnyé tette nemzetét. Kereszttel vezette népét, s kegyelmes kezekkel emelt rendet nemzetének.",
  "options":["Szent István","Könyves Kálmán","Szent László","IV. Béla"],"correct":0,
+ "accept":["szent istvan","istvan","i. istvan","szent istvan kiraly"],
  "explain":"Szent Istvánt 1000-ben (más számítás szerint 1001-ben) koronázták meg — államalapítóként kereszténnyé tette az országot."},
 
 {"id":"mohacs","diff":"konnyu","grade":"10","cat":"esemeny",
  "clue":"1526-ben ellenséges sereg vereséget mért egy nemzet seregén. Vezére elesett, s nemzete szétesett.",
  "options":["A mohácsi csata (1526)","A nikápolyi csata","A várnai csata","A budai várostrom"],"correct":0,
+ "accept":["mohacsi csata","mohacs","mohacsi vesz","1526"],
  "explain":"A mohácsi csatában az oszmán sereg legyőzte a magyar sereget, II. Lajos király életét vesztette, az ország a következő évtizedekben három részre szakadt."},
 
 {"id":"kossuth","diff":"konnyu","grade":"11","cat":"szemely",
  "clue":"Vezér lett, sereget szervezett. Nemzetét fegyverre kérte. Vereség lett vége, s elment: nemzetét elvesztette.",
  "options":["Kossuth Lajos","Görgei Artúr","Batthyány Lajos","Széchenyi István"],"correct":0,
+ "accept":["kossuth lajos","kossuth"],
  "explain":"Kossuth Lajos az 1848–49-es szabadságharc vezető politikusa volt; a fegyveres ellenállás bukása után emigrációba kényszerült, soha nem tért haza."},
 
 {"id":"matyas","diff":"kozepes","grade":"9","cat":"szemely",
  "clue":"Egy fejedelem fekete sereget vezetett, s kegyetlen ellenséggel szemben védte nemzetét. Nemzete felett nemes szellemet emelt, s emléke nemzedékek felett még él.",
  "options":["Hunyadi Mátyás","I. (Nagy) Lajos","Zsigmond király","II. Ulászló"],"correct":0,
+ "accept":["hunyadi matyas","matyas kiraly","matyas","i. matyas","matyas kiraly hunyadi"],
  "explain":"Hunyadi Mátyás fekete sereget tartott fenn, reneszánsz udvart és könyvtárat (Corvina) hozott létre — emléke ma is elevenen él a néphagyományban."},
 
 {"id":"kiegyezes","diff":"kozepes","grade":"11","cat":"esemeny",
  "clue":"1867-ben egy nemzet s egy fejedelem egyezményt szerzett. Ellenség helyett egyezséget, s kegyelmes rendet emeltek, mely nemzedékekre kelt.",
  "options":["Az 1867-es kiegyezés","Az 1848-as áprilisi törvények","A pragmatica sanctio","A trianoni békeszerződés"],"correct":0,
+ "accept":["kiegyezes","1867-es kiegyezes","az 1867-es kiegyezes","1867"],
  "explain":"Az 1867-es kiegyezés Magyarország és a Habsburg-udvar megegyezése volt, amely létrehozta az Osztrák–Magyar Monarchiát, és évtizedekre meghatározta az ország berendezkedését."},
 
 {"id":"nagy_imre","diff":"kozepes","grade":"12","cat":"szemely",
  "clue":"Vezér lett, nemzete mellett kelt fel ellenség ellen. Elveszejtették. Ezren temették el testét, emléke nemzedékek felett él.",
  "options":["Nagy Imre","Kádár János","Rákosi Mátyás","Rajk László"],"correct":0,
+ "accept":["nagy imre","imre nagy"],
  "explain":"Nagy Imre az 1956-os forradalom miniszterelnöke volt, a leverés után kivégezték; 1989-es újratemetése a rendszerváltás egyik jelképe lett."},
 
 {"id":"tatarjaras","diff":"nehez","grade":"9","cat":"esemeny",
  "clue":"1241-ben kegyetlen sereg kelt nemzet ellen. Vezér elment, nemzet embertelen veszedelmet szenvedett. Ezren estek el, ezer embert elveszejtett e veszedelem.",
  "options":["Az 1241-es tatárjárás","A honfoglalás","A török hódoltság kezdete","A husziták betörése"],"correct":0,
+ "accept":["tatarjaras","1241-es tatarjaras","az 1241-es tatarjaras","1241","mongol hadjarat","tatar hadjarat"],
  "explain":"Az 1241-es tatárjárás (mongol hadjárat) pusztító invázió volt; IV. Béla elmenekült, az ország súlyos népveszteséget szenvedett — ezt követte a kővárak építésének kora."},
 
 {"id":"trianon","diff":"nehez","grade":"11","cat":"esemeny",
  "clue":"1920-ben egyezményt szereztek nemzet ellen, mely nemzetet kevesebbé tette, s nemzet teste elveszett.",
  "options":["A trianoni békeszerződés (1920)","A saint-germaini békeszerződés","A versailles-i békeszerződés","A brest-litovszki béke"],"correct":0,
+ "accept":["trianon","trianoni bekeszerzodes","a trianoni bekeszerzodes","1920"],
  "explain":"A trianoni békeszerződés az első világháború utáni békerendezés része volt, amely Magyarország területének és népességének jelentős részét elcsatolta."},
 
 {"id":"rendszervaltas","diff":"nehez","grade":"12","cat":"esemeny",
  "clue":"1989-ben egy rendszer véget ért. Nemzet szerte nyert kegyelmet, s embereket kereshetett vezérként.",
  "options":["Az 1989–90-es rendszerváltás","Az 1956-os forradalom","A Kádár-korszak kezdete","Az 1968-as új gazdasági mechanizmus"],"correct":0,
+ "accept":["rendszervaltas","1989-90-es rendszervaltas","az 1989-90-es rendszervaltas","rendszervaltozas","1989"],
  "explain":"Az 1989–90-es rendszerváltás a szocialista rendszer békés lebontását és a többpárti választások bevezetését hozta; a folyamat jelképe a berlini fal leomlása is."}
 ];
 
@@ -287,7 +318,24 @@ const DIFF_LABEL = {konnyu:'Könnyű', kozepes:'Közepes', nehez:'Nehéz'};
 
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 
-const G = {pool:[], idx:0, score:0, byDiff:{konnyu:{ok:0,total:0},kozepes:{ok:0,total:0},nehez:{ok:0,total:0}}, locked:false};
+const G = {pool:[], idx:0, score:0, onallo:0, segitseggel:0, byDiff:{konnyu:{ok:0,total:0},kozepes:{ok:0,total:0},nehez:{ok:0,total:0}}, locked:false, helpShown:false};
+
+function normalize(s){
+  return s.toLowerCase()
+    .replace(/á/g,'a').replace(/é/g,'e').replace(/í/g,'i').replace(/ó/g,'o')
+    .replace(/ö/g,'o').replace(/ő/g,'o').replace(/ú/g,'u').replace(/ü/g,'u').replace(/ű/g,'u')
+    .replace(/[^a-z0-9 ]/g,'')
+    .replace(/\s+/g,' ').trim();
+}
+
+function isFreeAnswerCorrect(riddle, input){
+  const norm = normalize(input);
+  if(norm.length < 3) return false;
+  return riddle.accept.some(acc=>{
+    const a = normalize(acc);
+    return a===norm || (norm.length>=4 && (a.includes(norm) || norm.includes(a)));
+  });
+}
 
 function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -298,7 +346,7 @@ function go(id){
 function startGame(mode){
   const source = mode==='vegyes' ? RIDDLES : RIDDLES.filter(r=>r.diff===mode);
   G.pool = shuffle(source).map((r,i)=>({...r, optOrder: shuffle([0,1,2,3])}));
-  G.idx = 0; G.score = 0;
+  G.idx = 0; G.score = 0; G.onallo = 0; G.segitseggel = 0;
   G.byDiff = {konnyu:{ok:0,total:0},kozepes:{ok:0,total:0},nehez:{ok:0,total:0}};
   G.pool.forEach(r=>G.byDiff[r.diff].total++);
   document.getElementById('hudTotal').textContent = G.pool.length;
@@ -308,6 +356,7 @@ function startGame(mode){
 
 function renderCard(){
   G.locked = false;
+  G.helpShown = false;
   const r = G.pool[G.idx];
   document.getElementById('hudIdx').textContent = G.idx+1;
   document.getElementById('hudScore').textContent = G.score;
@@ -317,41 +366,96 @@ function renderCard(){
   tag.className = 'diff-tag ' + r.diff;
   document.getElementById('clueText').textContent = '„' + r.clue + '”';
 
+  document.getElementById('freeSection').style.display = 'block';
+  const freeInput = document.getElementById('freeInput');
+  freeInput.value = '';
+  freeInput.disabled = false;
+  freeInput.classList.remove('wrong-shake');
+  freeInput.onkeydown = (e)=>{ if(e.key==='Enter') checkFreeAnswer(); };
+
   const box = document.getElementById('optsBox');
+  box.style.display = 'none';
   box.innerHTML = '';
   r.optOrder.forEach(origIdx=>{
     const b = document.createElement('button');
     b.className = 'opt';
     b.textContent = r.options[origIdx];
-    b.onclick = ()=>answer(origIdx);
+    b.onclick = ()=>chooseOption(origIdx);
     box.appendChild(b);
   });
+
   document.getElementById('fb').className = 'feedback';
   document.getElementById('fb').textContent = '';
   document.getElementById('actionsBox').innerHTML = '';
+  freeInput.focus();
 }
 
-function answer(origIdx){
+function checkFreeAnswer(){
   if(G.locked) return;
-  G.locked = true;
+  const r = G.pool[G.idx];
+  const input = document.getElementById('freeInput');
+  const val = input.value.trim();
+  if(!val) return;
+
+  if(isFreeAnswerCorrect(r, val)){
+    finishRiddle(true, true);
+  } else {
+    input.classList.add('wrong-shake');
+    setTimeout(()=>input.classList.remove('wrong-shake'), 300);
+    if(!G.helpShown){
+      G.helpShown = true;
+      const fb = document.getElementById('fb');
+      fb.className = 'feedback bad';
+      fb.innerHTML = '<b>Még nem az.</b> Próbáld újra, vagy kérj segítséget — akkor feleletválasztásban folytatod.' +
+        '<div style="margin-top:12px;"><button class="btn ghost" onclick="requestHelp()">Kérek segítséget →</button></div>';
+    }
+    input.value = '';
+    input.focus();
+  }
+}
+
+function requestHelp(){
+  const r = G.pool[G.idx];
+  document.getElementById('freeSection').style.display = 'none';
+  document.getElementById('optsBox').style.display = 'grid';
+  document.getElementById('fb').className = 'feedback';
+  document.getElementById('fb').textContent = '';
+}
+
+function chooseOption(origIdx){
+  if(G.locked) return;
   const r = G.pool[G.idx];
   const buttons = [...document.getElementById('optsBox').children];
   const correctBtn = buttons.find(b=>b.textContent===r.options[r.correct]);
-  const fb = document.getElementById('fb');
+  const clickedBtn = buttons.find(b=>b.textContent===r.options[origIdx]);
   if(origIdx === r.correct){
-    G.score++;
-    G.byDiff[r.diff].ok++;
     correctBtn.classList.add('correct');
-    fb.className = 'feedback ok';
-    fb.innerHTML = '<b>Helyes!</b> ' + r.explain;
+    buttons.forEach(b=>b.disabled=true);
+    finishRiddle(true, false);
   } else {
-    const clickedBtn = buttons.find(b=>b.textContent===r.options[origIdx]);
     clickedBtn.classList.add('incorrect');
     correctBtn.classList.add('correct');
+    buttons.forEach(b=>b.disabled=true);
+    finishRiddle(false, false);
+  }
+}
+
+function finishRiddle(correct, independent){
+  G.locked = true;
+  const r = G.pool[G.idx];
+  document.getElementById('freeInput').disabled = true;
+  const fb = document.getElementById('fb');
+  if(correct){
+    G.score++;
+    G.byDiff[r.diff].ok++;
+    if(independent){ G.onallo++; } else { G.segitseggel++; }
+    const badge = independent ? '<span class="badge-onallo">önállóan</span>' : '<span class="badge-segits">segítséggel</span>';
+    fb.className = 'feedback ok';
+    fb.innerHTML = '<b>Helyes!</b>' + badge + ' ' + r.explain;
+  } else {
     fb.className = 'feedback bad';
     fb.innerHTML = '<b>Nem az.</b> ' + r.explain;
   }
-  buttons.forEach(b=>b.disabled=true);
   document.getElementById('hudScore').textContent = G.score;
   document.getElementById('actionsBox').innerHTML =
     (G.idx < G.pool.length-1)
@@ -460,6 +564,14 @@ function endGame(){
   document.getElementById('endSub').textContent = 'helyes válasz (' + pct + '%)';
   const bd = document.getElementById('endBreakdown');
   bd.innerHTML = '';
+  const p1 = document.createElement('span');
+  p1.className = 'bpill';
+  p1.textContent = 'Önállóan eltalálva: ' + G.onallo;
+  bd.appendChild(p1);
+  const p2 = document.createElement('span');
+  p2.className = 'bpill';
+  p2.textContent = 'Segítséggel: ' + G.segitseggel;
+  bd.appendChild(p2);
   ['konnyu','kozepes','nehez'].forEach(d=>{
     const s = G.byDiff[d];
     if(s.total>0){
