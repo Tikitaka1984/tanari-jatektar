@@ -54,5 +54,10 @@
     "path": "demos/demo_legkor.html",
     "bytes": 433600,
     "md5": "c0f38827392251fbdcdf89a8363db7b9"
+  },
+  "eszperente": {
+    "path": "games/eszperente.html",
+    "bytes": 25685,
+    "md5": "1510cfb257c34207b952974836480070"
   }
 }

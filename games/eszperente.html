@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Csak E! — eszperente történelmi rejtvények</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#150F31; --surf:#1F1749; --surf-2:#2B2160;
+    --edge:rgba(255,255,255,.09); --edge-2:rgba(255,255,255,.16);
+    --text:#F5F2FF; --muted:#A79CD8;
+    --win:#3DDC97; --win-bg:rgba(61,220,151,.16);
+    --fail:#FF6B6B; --fail-bg:rgba(255,107,107,.18);
+    --acc:#FFC24B; --acc-2:#FF9A2E; --acc-ink:#2A1B00;
+    --r:18px; --r-sm:11px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(900px 520px at 12% -8%, rgba(124,92,255,.30) 0%, transparent 62%),
+      radial-gradient(760px 460px at 92% 4%, rgba(255,110,160,.18) 0%, transparent 58%),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--text);
+    font-family:'Manrope',system-ui,sans-serif; font-size:15px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;letter-spacing:-0.03em;margin:0;line-height:1.05;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  :focus-visible{outline:3px solid var(--acc);outline-offset:3px;border-radius:6px;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  #app{max-width:760px;margin:0 auto;padding:28px 18px 70px;}
+  .screen{display:none;animation:fade .4s ease;}
+  .screen.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  .eyebrow{font-family:'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;font-size:.7rem;color:var(--acc);}
+  .hero{text-align:center;padding:20px 0 8px;}
+  .hero h1{font-size:2.4rem;background:linear-gradient(90deg,var(--acc),#FF6EA0);-webkit-background-clip:text;background-clip:text;color:transparent;margin:10px 0 6px;}
+  .hero p{color:var(--muted);max-width:560px;margin:0 auto;font-size:.96rem;}
+
+  .rulebox{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:18px 20px;margin:22px 0;font-size:.9rem;color:var(--muted);line-height:1.6;}
+  .rulebox b{color:var(--text);}
+  .rulebox code{font-family:'JetBrains Mono',monospace;background:var(--surf-2);padding:1px 6px;border-radius:6px;color:var(--acc);}
+
+  .diffgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;}
+  @media(max-width:520px){.diffgrid{grid-template-columns:1fr;}}
+  .diffcard{background:var(--surf);border:1.5px solid var(--edge);border-radius:var(--r);padding:18px;text-align:left;transition:.15s;}
+  .diffcard:hover{border-color:var(--acc);transform:translateY(-2px);}
+  .diffcard h3{font-size:1.05rem;margin-bottom:4px;}
+  .diffcard .cnt{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+  .diffcard p{margin:8px 0 0;font-size:.84rem;color:var(--muted);}
+  .diffcard.easy{border-top:4px solid var(--win);}
+  .diffcard.med{border-top:4px solid var(--acc);}
+  .diffcard.hard{border-top:4px solid var(--fail);}
+  .diffcard.mix{border-top:4px solid #7C5CFF;grid-column:1/-1;}
+
+  .hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+  .pill{font-family:'JetBrains Mono',monospace;font-size:.76rem;background:var(--surf);border:1px solid var(--edge);border-radius:999px;padding:7px 13px;color:var(--muted);}
+  .pill b{color:var(--text);}
+  .progress-bar{height:6px;background:var(--surf-2);border-radius:4px;overflow:hidden;margin-bottom:20px;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--acc),#FF6EA0);transition:width .3s ease;}
+
+  .card{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:26px;}
+  .diff-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;padding:4px 10px;border-radius:999px;margin-bottom:14px;}
+  .diff-tag.konnyu{background:var(--win-bg);color:var(--win);}
+  .diff-tag.kozepes{background:rgba(255,194,75,.16);color:var(--acc);}
+  .diff-tag.nehez{background:var(--fail-bg);color:var(--fail);}
+
+  .cluebox{background:var(--surf-2);border-left:4px solid var(--acc);border-radius:0 12px 12px 0;padding:20px 22px;margin-bottom:20px;}
+  .cluebox p{font-family:'JetBrains Mono',monospace;font-size:1.05rem;line-height:1.7;margin:0;color:var(--text);}
+
+  .opts{display:grid;gap:10px;}
+  .opt{background:var(--surf-2);border:1.5px solid var(--edge);border-radius:12px;padding:13px 16px;text-align:left;font-size:.95rem;transition:.15s;}
+  .opt:hover{border-color:var(--acc);}
+  .opt.correct{border-color:var(--win);background:var(--win-bg);}
+  .opt.incorrect{border-color:var(--fail);background:var(--fail-bg);}
+  .opt:disabled{cursor:default;}
+
+  .feedback{margin-top:16px;padding:14px 16px;border-radius:12px;font-size:.88rem;line-height:1.6;display:none;}
+  .feedback.ok{background:var(--win-bg);border:1px solid var(--win);color:var(--text);display:block;}
+  .feedback.bad{background:var(--fail-bg);border:1px solid var(--fail);color:var(--text);display:block;}
+  .feedback b{color:var(--acc);}
+
+  .actions{margin-top:18px;}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(90deg,var(--acc),var(--acc-2));color:var(--acc-ink);border-radius:12px;padding:13px 24px;font-weight:700;font-size:.95rem;}
+  .btn:hover{filter:brightness(1.06);}
+  .btn.ghost{background:transparent;border:1.5px solid var(--edge-2);color:var(--text);}
+
+  .end{text-align:center;padding:20px 0;}
+  .end h2{font-size:1.8rem;margin-bottom:6px;}
+  .scorebig{font-family:'JetBrains Mono',monospace;font-size:3rem;font-weight:700;color:var(--acc);margin:14px 0 4px;}
+  .scoresub{color:var(--muted);font-size:.9rem;margin-bottom:22px;}
+  .breakdown{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:26px;}
+  .bpill{font-family:'JetBrains Mono',monospace;font-size:.78rem;background:var(--surf);border:1px solid var(--edge);border-radius:999px;padding:8px 14px;}
+
+  footer.tiny{text-align:center;opacity:.45;font-size:.76rem;margin-top:50px;font-family:'JetBrains Mono',monospace;}
+
+  .toolcard{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:22px;margin-bottom:18px;}
+  .toolcard h3{font-size:1.1rem;margin-bottom:8px;}
+  .toolnote{font-size:.84rem;color:var(--muted);line-height:1.55;margin:0 0 14px;}
+  .toolnote b{color:var(--fail);}
+  textarea#funInput{width:100%;background:var(--surf-2);border:1.5px solid var(--edge);border-radius:12px;padding:12px 14px;color:var(--text);font-family:'Manrope',sans-serif;font-size:.95rem;resize:vertical;}
+  textarea#funInput:focus{outline:none;border-color:var(--acc);}
+  .funout{margin-top:14px;background:var(--fail-bg);border:1px solid var(--fail);border-radius:12px;padding:16px 18px;}
+  .funout .warn{font-family:'JetBrains Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--fail);margin-bottom:8px;display:block;}
+  .funout .result{font-family:'JetBrains Mono',monospace;font-size:1.05rem;color:var(--text);}
+
+  .reqform{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:14px;}
+  @media(max-width:560px){.reqform{grid-template-columns:1fr;}}
+  .reqform input{background:var(--surf-2);border:1.5px solid var(--edge);border-radius:10px;padding:10px 12px;color:var(--text);font-family:'Manrope',sans-serif;font-size:.9rem;}
+  .reqform input:focus{outline:none;border-color:var(--acc);}
+  .reqlist{list-style:none;padding:0;margin:0;}
+  .reqlist li{background:var(--surf-2);border:1px solid var(--edge);border-radius:10px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.88rem;}
+  .reqlist li .rtxt b{color:var(--acc);}
+  .reqlist li .rtxt span{color:var(--muted);font-size:.82rem;}
+  .reqlist li button{color:var(--fail);font-size:1.1rem;line-height:1;padding:2px 6px;}
+  .reqempty{color:var(--muted);font-size:.85rem;font-style:italic;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- COVER / DIFFICULTY PICK -->
+  <section class="screen active" id="screen-pick">
+    <div class="hero">
+      <div class="eyebrow">Nyelvi rejtvény · Történelem</div>
+      <h1>Csak E!</h1>
+      <p>Történelmi események és szereplők — de a leírásukban <b>csak "e" és "é" magánhangzó</b> szerepelhet. Találd ki, kiről vagy miről van szó!</p>
+    </div>
+
+    <div class="rulebox">
+      <b>A játékszabály (eszperente):</b> minden rejtvényszöveg a hagyományos "eszperente" nyelvi játék szabálya szerint készült — kizárólag <code>e</code> és <code>é</code> magánhangzót tartalmaz. Emiatt a mondatok néha tömörek, szokatlanok — ez a műfaj sajátja, nem hiba. A négy válaszlehetőség természetesen normál magyar nyelven szerepel.
+    </div>
+
+    <div class="diffgrid">
+      <button class="diffcard easy" onclick="startGame('konnyu')">
+        <span class="cnt">Könnyű · 3 rejtvény</span>
+        <h3>Ismerős nevek</h3>
+        <p>Jól ismert személyek és események — bemelegítésnek.</p>
+      </button>
+      <button class="diffcard med" onclick="startGame('kozepes')">
+        <span class="cnt">Közepes · 3 rejtvény</span>
+        <h3>Gondolkodtatóbb</h3>
+        <p>Kicsit rejtettebb megfogalmazás, több következtetés kell.</p>
+      </button>
+      <button class="diffcard hard" onclick="startGame('nehez')">
+        <span class="cnt">Nehéz · 3 rejtvény</span>
+        <h3>Csak profiknak</h3>
+        <p>Szűkszavú, csak a legfontosabb nyomokkal.</p>
+      </button>
+      <button class="diffcard mix" onclick="startGame('vegyes')">
+        <span class="cnt">Vegyes · mind a 9 rejtvény</span>
+        <h3>Mind a három szint egyben</h3>
+        <p>Végigjátszod az egész készletet, összekeverve.</p>
+      </button>
+    </div>
+
+    <div style="text-align:center;margin-top:26px;">
+      <button class="btn ghost" onclick="go('tools')">🎲 Egyéb eszközök: vicc-mód &amp; kéréslista</button>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="screen" id="screen-tools">
+    <div class="hero" style="padding-top:4px;">
+      <div class="eyebrow">Kiegészítő eszközök</div>
+      <h1 style="font-size:1.9rem;">Vicc-mód &amp; kéréslista</h1>
+      <p>Két segédeszköz — az egyik azonnali szórakozás, a másik a rejtvénykészlet jövőbeli bővítését készíti elő.</p>
+    </div>
+
+    <div class="toolcard">
+      <h3>🎲 Vicc-mód — eszperentésítő</h3>
+      <p class="toolnote">Írj be bármit (nevet, mondatot, diákjelmondatot) — a gép egy egyszerű betűcserével "eszperentésíti". <b>Figyelem:</b> ez <b>nem</b> valódi, nyelvtanilag helyes eszperente, csak vicces betűcsere-játék — ne használd tanulási tartalomként!</p>
+      <textarea id="funInput" placeholder="Írj be egy nevet vagy mondatot…" rows="2"></textarea>
+      <button class="btn" onclick="funify()" style="margin-top:10px;">Eszperentésítés</button>
+      <div class="funout" id="funOutput" style="display:none;"></div>
+    </div>
+
+    <div class="toolcard">
+      <h3>📋 Kéréslista — új rejtvényötletek</h3>
+      <p class="toolnote">Ha van olyan név vagy esemény, amit szeretnél viszontlátni a valódi rejtvények közt, vedd fel ide a listára. A lista <b>csak ebben a böngészőlapban</b> él — a végén töltsd le vagy másold ki, és küldd el, hogy bekerülhessen a validált készletbe.</p>
+      <div class="reqform">
+        <input type="text" id="reqName" placeholder="Név vagy esemény (pl. Rákóczi Ferenc)">
+        <input type="text" id="reqNote" placeholder="Megjegyzés (opcionális)">
+        <button class="btn" onclick="addRequest()">Hozzáadás</button>
+      </div>
+      <ul class="reqlist" id="reqList"></ul>
+      <div class="actions" id="reqActions" style="display:none;">
+        <button class="btn ghost" onclick="downloadRequests()">Letöltés .txt-ként</button>
+        <button class="btn ghost" onclick="copyRequests()">Másolás vágólapra</button>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:22px;">
+      <button class="btn ghost" onclick="go('pick')">&larr; Vissza a főoldalra</button>
+    </div>
+  </section>
+
+  <!-- PLAY -->
+  <section class="screen" id="screen-play">
+    <div class="hud">
+      <div class="pill">Rejtvény <b id="hudIdx">1</b> / <b id="hudTotal">3</b></div>
+      <div class="pill">Helyes: <b id="hudScore">0</b></div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
+
+    <div class="card">
+      <span class="diff-tag" id="diffTag"></span>
+      <div class="cluebox"><p id="clueText"></p></div>
+      <div class="opts" id="optsBox"></div>
+      <div class="feedback" id="fb"></div>
+      <div class="actions" id="actionsBox"></div>
+    </div>
+  </section>
+
+  <!-- END -->
+  <section class="screen" id="screen-end">
+    <div class="end">
+      <div class="eyebrow" style="display:block;">Vége a körnek</div>
+      <h2 id="endTitle">Szép munka!</h2>
+      <div class="scorebig" id="endScore">0/0</div>
+      <div class="scoresub" id="endSub">helyes válasz</div>
+      <div class="breakdown" id="endBreakdown"></div>
+      <button class="btn" onclick="location.reload()">Új kör indítása</button>
+    </div>
+  </section>
+
+</div>
+<footer class="tiny">Történelem érettségi felkészítő · Nyelvi rejtvény · a rejtvényszövegek tartalmi tömörítések, a hagyományos eszperente-szabály szerint (e/é magánhangzó, a toldalékok magánhangzó-illeszkedése helyenként a szabály miatt eltér a köznyelvitől)</footer>
+
+<script>
+const RIDDLES = [
+{"id":"szent_istvan","diff":"konnyu","grade":"9","cat":"szemely",
+ "clue":"Ezerben egy fejedelem gyermeke kereszténnyé tette nemzetét. Kereszttel vezette népét, s kegyelmes kezekkel emelt rendet nemzetének.",
+ "options":["Szent István","Könyves Kálmán","Szent László","IV. Béla"],"correct":0,
+ "explain":"Szent Istvánt 1000-ben (más számítás szerint 1001-ben) koronázták meg — államalapítóként kereszténnyé tette az országot."},
+
+{"id":"mohacs","diff":"konnyu","grade":"10","cat":"esemeny",
+ "clue":"1526-ben ellenséges sereg vereséget mért egy nemzet seregén. Vezére elesett, s nemzete szétesett.",
+ "options":["A mohácsi csata (1526)","A nikápolyi csata","A várnai csata","A budai várostrom"],"correct":0,
+ "explain":"A mohácsi csatában az oszmán sereg legyőzte a magyar sereget, II. Lajos király életét vesztette, az ország a következő évtizedekben három részre szakadt."},
+
+{"id":"kossuth","diff":"konnyu","grade":"11","cat":"szemely",
+ "clue":"Vezér lett, sereget szervezett. Nemzetét fegyverre kérte. Vereség lett vége, s elment: nemzetét elvesztette.",
+ "options":["Kossuth Lajos","Görgei Artúr","Batthyány Lajos","Széchenyi István"],"correct":0,
+ "explain":"Kossuth Lajos az 1848–49-es szabadságharc vezető politikusa volt; a fegyveres ellenállás bukása után emigrációba kényszerült, soha nem tért haza."},
+
+{"id":"matyas","diff":"kozepes","grade":"9","cat":"szemely",
+ "clue":"Egy fejedelem fekete sereget vezetett, s kegyetlen ellenséggel szemben védte nemzetét. Nemzete felett nemes szellemet emelt, s emléke nemzedékek felett még él.",
+ "options":["Hunyadi Mátyás","I. (Nagy) Lajos","Zsigmond király","II. Ulászló"],"correct":0,
+ "explain":"Hunyadi Mátyás fekete sereget tartott fenn, reneszánsz udvart és könyvtárat (Corvina) hozott létre — emléke ma is elevenen él a néphagyományban."},
+
+{"id":"kiegyezes","diff":"kozepes","grade":"11","cat":"esemeny",
+ "clue":"1867-ben egy nemzet s egy fejedelem egyezményt szerzett. Ellenség helyett egyezséget, s kegyelmes rendet emeltek, mely nemzedékekre kelt.",
+ "options":["Az 1867-es kiegyezés","Az 1848-as áprilisi törvények","A pragmatica sanctio","A trianoni békeszerződés"],"correct":0,
+ "explain":"Az 1867-es kiegyezés Magyarország és a Habsburg-udvar megegyezése volt, amely létrehozta az Osztrák–Magyar Monarchiát, és évtizedekre meghatározta az ország berendezkedését."},
+
+{"id":"nagy_imre","diff":"kozepes","grade":"12","cat":"szemely",
+ "clue":"Vezér lett, nemzete mellett kelt fel ellenség ellen. Elveszejtették. Ezren temették el testét, emléke nemzedékek felett él.",
+ "options":["Nagy Imre","Kádár János","Rákosi Mátyás","Rajk László"],"correct":0,
+ "explain":"Nagy Imre az 1956-os forradalom miniszterelnöke volt, a leverés után kivégezték; 1989-es újratemetése a rendszerváltás egyik jelképe lett."},
+
+{"id":"tatarjaras","diff":"nehez","grade":"9","cat":"esemeny",
+ "clue":"1241-ben kegyetlen sereg kelt nemzet ellen. Vezér elment, nemzet embertelen veszedelmet szenvedett. Ezren estek el, ezer embert elveszejtett e veszedelem.",
+ "options":["Az 1241-es tatárjárás","A honfoglalás","A török hódoltság kezdete","A husziták betörése"],"correct":0,
+ "explain":"Az 1241-es tatárjárás (mongol hadjárat) pusztító invázió volt; IV. Béla elmenekült, az ország súlyos népveszteséget szenvedett — ezt követte a kővárak építésének kora."},
+
+{"id":"trianon","diff":"nehez","grade":"11","cat":"esemeny",
+ "clue":"1920-ben egyezményt szereztek nemzet ellen, mely nemzetet kevesebbé tette, s nemzet teste elveszett.",
+ "options":["A trianoni békeszerződés (1920)","A saint-germaini békeszerződés","A versailles-i békeszerződés","A brest-litovszki béke"],"correct":0,
+ "explain":"A trianoni békeszerződés az első világháború utáni békerendezés része volt, amely Magyarország területének és népességének jelentős részét elcsatolta."},
+
+{"id":"rendszervaltas","diff":"nehez","grade":"12","cat":"esemeny",
+ "clue":"1989-ben egy rendszer véget ért. Nemzet szerte nyert kegyelmet, s embereket kereshetett vezérként.",
+ "options":["Az 1989–90-es rendszerváltás","Az 1956-os forradalom","A Kádár-korszak kezdete","Az 1968-as új gazdasági mechanizmus"],"correct":0,
+ "explain":"Az 1989–90-es rendszerváltás a szocialista rendszer békés lebontását és a többpárti választások bevezetését hozta; a folyamat jelképe a berlini fal leomlása is."}
+];
+
+const DIFF_LABEL = {konnyu:'Könnyű', kozepes:'Közepes', nehez:'Nehéz'};
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+const G = {pool:[], idx:0, score:0, byDiff:{konnyu:{ok:0,total:0},kozepes:{ok:0,total:0},nehez:{ok:0,total:0}}, locked:false};
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startGame(mode){
+  const source = mode==='vegyes' ? RIDDLES : RIDDLES.filter(r=>r.diff===mode);
+  G.pool = shuffle(source).map((r,i)=>({...r, optOrder: shuffle([0,1,2,3])}));
+  G.idx = 0; G.score = 0;
+  G.byDiff = {konnyu:{ok:0,total:0},kozepes:{ok:0,total:0},nehez:{ok:0,total:0}};
+  G.pool.forEach(r=>G.byDiff[r.diff].total++);
+  document.getElementById('hudTotal').textContent = G.pool.length;
+  go('play');
+  renderCard();
+}
+
+function renderCard(){
+  G.locked = false;
+  const r = G.pool[G.idx];
+  document.getElementById('hudIdx').textContent = G.idx+1;
+  document.getElementById('hudScore').textContent = G.score;
+  document.getElementById('progressFill').style.width = Math.round((G.idx/G.pool.length)*100)+'%';
+  const tag = document.getElementById('diffTag');
+  tag.textContent = DIFF_LABEL[r.diff];
+  tag.className = 'diff-tag ' + r.diff;
+  document.getElementById('clueText').textContent = '„' + r.clue + '”';
+
+  const box = document.getElementById('optsBox');
+  box.innerHTML = '';
+  r.optOrder.forEach(origIdx=>{
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = r.options[origIdx];
+    b.onclick = ()=>answer(origIdx);
+    box.appendChild(b);
+  });
+  document.getElementById('fb').className = 'feedback';
+  document.getElementById('fb').textContent = '';
+  document.getElementById('actionsBox').innerHTML = '';
+}
+
+function answer(origIdx){
+  if(G.locked) return;
+  G.locked = true;
+  const r = G.pool[G.idx];
+  const buttons = [...document.getElementById('optsBox').children];
+  const correctBtn = buttons.find(b=>b.textContent===r.options[r.correct]);
+  const fb = document.getElementById('fb');
+  if(origIdx === r.correct){
+    G.score++;
+    G.byDiff[r.diff].ok++;
+    correctBtn.classList.add('correct');
+    fb.className = 'feedback ok';
+    fb.innerHTML = '<b>Helyes!</b> ' + r.explain;
+  } else {
+    const clickedBtn = buttons.find(b=>b.textContent===r.options[origIdx]);
+    clickedBtn.classList.add('incorrect');
+    correctBtn.classList.add('correct');
+    fb.className = 'feedback bad';
+    fb.innerHTML = '<b>Nem az.</b> ' + r.explain;
+  }
+  buttons.forEach(b=>b.disabled=true);
+  document.getElementById('hudScore').textContent = G.score;
+  document.getElementById('actionsBox').innerHTML =
+    (G.idx < G.pool.length-1)
+      ? '<button class="btn" onclick="nextCard()">Következő rejtvény &rarr;</button>'
+      : '<button class="btn" onclick="endGame()">Eredmény &rarr;</button>';
+}
+
+function nextCard(){ G.idx++; renderCard(); }
+
+/* ============ Vicc-mód: eszperentésítő ============ */
+const SHORT_VOWELS = {'a':'e','e':'e','i':'e','o':'e','ö':'e','u':'e','ü':'e'};
+const LONG_VOWELS = {'á':'é','é':'é','í':'é','ó':'é','ő':'é','ú':'é','ű':'é'};
+
+function funify(){
+  const input = document.getElementById('funInput').value;
+  if(!input.trim()){ return; }
+  let out = '';
+  for(const ch of input){
+    const lower = ch.toLowerCase();
+    let repl = null;
+    if(SHORT_VOWELS[lower]) repl = SHORT_VOWELS[lower];
+    else if(LONG_VOWELS[lower]) repl = LONG_VOWELS[lower];
+    if(repl){
+      out += (ch === ch.toUpperCase() && ch !== ch.toLowerCase()) ? repl.toUpperCase() : repl;
+    } else {
+      out += ch;
+    }
+  }
+  const box = document.getElementById('funOutput');
+  box.style.display = 'block';
+  box.innerHTML = '<span class="warn">⚠ Nem valódi eszperente — csak vicces betűcsere</span><span class="result">„' + out + '”</span>';
+}
+
+/* ============ Kéréslista ============ */
+const REQUESTS = [];
+
+function addRequest(){
+  const nameEl = document.getElementById('reqName');
+  const noteEl = document.getElementById('reqNote');
+  const name = nameEl.value.trim();
+  if(!name) return;
+  REQUESTS.push({name, note: noteEl.value.trim()});
+  nameEl.value = ''; noteEl.value = '';
+  renderRequests();
+  nameEl.focus();
+}
+
+function removeRequest(idx){
+  REQUESTS.splice(idx,1);
+  renderRequests();
+}
+
+function renderRequests(){
+  const list = document.getElementById('reqList');
+  const actions = document.getElementById('reqActions');
+  if(REQUESTS.length === 0){
+    list.innerHTML = '<li class="reqempty" style="background:none;border:none;">Még nincs felvett ötlet.</li>';
+    actions.style.display = 'none';
+    return;
+  }
+  actions.style.display = 'flex';
+  list.innerHTML = REQUESTS.map((r,i)=>
+    '<li><span class="rtxt"><b>' + r.name + '</b>' + (r.note ? ' <span>— ' + r.note + '</span>' : '') + '</span>' +
+    '<button onclick="removeRequest(' + i + ')" aria-label="Törlés">&times;</button></li>'
+  ).join('');
+}
+
+function requestsAsText(){
+  const lines = REQUESTS.map(r => r.name + (r.note ? ' — ' + r.note : ''));
+  return 'Csak E! — kért új rejtvények\n' + '='.repeat(30) + '\n' + lines.join('\n') + '\n';
+}
+
+function downloadRequests(){
+  if(REQUESTS.length === 0) return;
+  const blob = new Blob([requestsAsText()], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'csak_e_kereslista.txt';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function copyRequests(){
+  if(REQUESTS.length === 0) return;
+  navigator.clipboard.writeText(requestsAsText()).then(()=>{
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = 'Másolva!';
+    setTimeout(()=>{ btn.textContent = orig; }, 1500);
+  });
+}
+
+renderRequests();
+
+function endGame(){
+  document.getElementById('progressFill').style.width = '100%';
+  go('end');
+  const pct = Math.round((G.score/G.pool.length)*100);
+  let title;
+  if(pct===100) title = 'Telitalálat!';
+  else if(pct>=70) title = 'Nagyon szép munka!';
+  else if(pct>=40) title = 'Jó alap, gyakorolj még!';
+  else title = 'Nehéz kör volt — próbáld újra!';
+  document.getElementById('endTitle').textContent = title;
+  document.getElementById('endScore').textContent = G.score + '/' + G.pool.length;
+  document.getElementById('endSub').textContent = 'helyes válasz (' + pct + '%)';
+  const bd = document.getElementById('endBreakdown');
+  bd.innerHTML = '';
+  ['konnyu','kozepes','nehez'].forEach(d=>{
+    const s = G.byDiff[d];
+    if(s.total>0){
+      const p = document.createElement('span');
+      p.className = 'bpill';
+      p.textContent = DIFF_LABEL[d] + ': ' + s.ok + '/' + s.total;
+      bd.appendChild(p);
+    }
+  });
+}
+</script>
+</body>
+</html>
