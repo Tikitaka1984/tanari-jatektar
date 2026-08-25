@@ -207,10 +207,10 @@
 <section class="screen" id="sc-play">
   <div class="play">
     <div class="gridcard">
-      <div class="xgrid" id="xgrid"></div>
+      <div class="xgrid" id="xgrid" role="grid" aria-label="Keresztrejtvény rács"></div>
       <div class="progwrap">
         <div class="prog"><div class="prog-fill" id="progFill"></div></div>
-        <div class="prog-txt" id="progTxt"></div>
+        <div class="prog-txt" id="progTxt" role="status" aria-live="polite"></div>
       </div>
       <div class="toolbar">
         <button class="ghost" onclick="useHint()">Segítség (egy betű, &minus;20 mp)</button>
@@ -225,7 +225,7 @@
 
 <section class="screen" id="sc-end">
   <div class="result-head"><h2 id="endTitle">Kész a rejtvény.</h2></div>
-  <div class="scoreline" id="scoreline"></div>
+  <div class="scoreline" id="scoreline" role="status" aria-live="polite"></div>
   <div class="verdict" id="verdict"></div>
   <div class="recap" id="recap"></div>
   <div class="toolbar" style="border:none;padding:0;margin-top:22px;">
@@ -472,9 +472,9 @@ function drawGrid(){
   let html='';
   for(let r=0;r<G.h;r++) for(let c=0;c<G.w;c++){
     const key=r+','+c;
-    if(G.cellLetter[key]===undefined){ html+='<div class="xcell block"></div>'; continue; }
+    if(G.cellLetter[key]===undefined){ html+='<div class="xcell block" role="gridcell"></div>'; continue; }
     const num=G.cellNumber[key];
-    html += '<div class="xcell" id="xc-'+r+'-'+c+'">'+
+    html += '<div class="xcell" id="xc-'+r+'-'+c+'" role="gridcell">'+
       (num?'<span class="xnum">'+num+'</span>':'')+
       '<input maxlength="1" autocomplete="off" spellcheck="false" inputmode="text" '+
       'aria-label="cella '+r+' '+c+'" '+

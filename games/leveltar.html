@@ -14,6 +14,7 @@
     --forest:#2f5d3a; --gold:#c9a227; --gold-light:#e8d48a;
     --steel:#3d5a80;
   }
+  :focus-visible{outline:3px solid var(--gold-light);outline-offset:3px;border-radius:6px;}
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
@@ -171,7 +172,7 @@
   <section class="screen" id="s-room">
     <p style="text-align:center;opacity:.85;font-size:.92rem;margin:0 0 16px;">Kattints egy zárra. Bármilyen sorrendben dolgozhatsz.</p>
     <div class="locks" id="locks"></div>
-    <div class="door" id="door" onclick="openFinale()">
+    <div class="door" id="door" onclick="openFinale()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openFinale();}" role="button" tabindex="0" aria-label="A vasajtó">
       <h3>A vasajtó</h3>
       <p id="doorTxt">Négy zár tartja. Nyisd ki mind, hogy hozzáférj az oklevelekhez.</p>
     </div>
@@ -592,7 +593,8 @@ function go(id){
 function renderRoom(){
   document.getElementById('locks').innerHTML=LOCKDEF.map(d=>{
     const done=L[d.id].o;
-    return `<div class="lock ${done?'done':''}" onclick="${done?'':'LOCKDEF.find(x=>x.id===\''+d.id+'\').open()'}" role="button" tabindex="0">
+    const act=done?'':'LOCKDEF.find(x=>x.id===\''+d.id+'\').open()';
+    return `<div class="lock ${done?'done':''}" onclick="${act}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${act}}" role="button" tabindex="0" aria-label="${d.name}${done?', nyitva':''}">
       ${done?'<svg viewBox="0 0 48 48"><path d="M13 25l7 8 15-17" fill="none" stroke="#4d8a5c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>':LOCK_SVG[d.id]}
       <div class="lname">${d.name}</div><div class="ltype">${done?'NYITVA':d.type}</div></div>`;
   }).join('');
@@ -813,7 +815,7 @@ function renderFinale(){
     <p style="font-size:.9rem;opacity:.8;">Ne a stílust nézd, hanem a <b>kronológiát</b>: van-e a szövegben olyan intézmény, mű vagy tisztség, amely a keltezés idején <b>még nem létezhetett</b>? Kattints arra a kiemelt szóra, amelyik elárulja a hamisítót.</p>`
    + S.docs.map(d=>
      `<div class="doc"><div class="dhead">${d.head}</div><div class="dtext">${
-        d.parts.map(p=>Array.isArray(p)?`<span class="tm" data-k="${p[0]}" onclick="clickTerm(this)">${p[1]}</span>`:p).join('')
+        d.parts.map(p=>Array.isArray(p)?`<span class="tm" data-k="${p[0]}" onclick="clickTerm(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();clickTerm(this);}" role="button" tabindex="0">${p[1]}</span>`:p).join('')
       }</div></div>`).join('')
    + `<div class="codebox">${hintBtn('fin')}</div>`;
   P('Finálé &middot; forráskritika &mdash; anakronizmus-keresés','Melyik oklevél hamis?',body);
