@@ -1,19 +1,13 @@
 {
-  "keresztrejtveny": {
-    "path": "games/keresztrejtveny.html",
-    "bytes": 47829,
-    "md5": "3fa1d78150df4842e275d9cc8ba577af"
-  },
   "korona": {
     "path": "games/korona.html",
-    "bytes": 88500,
-    "md5": "166cd8b16d7f25944c164656e0ddaaad"
+    "bytes": 88760,
+    "md5": "7603a3ffcd7aec62b851378849020f66"
   },
   "kivagyok": {
     "path": "games/kivagyok.html",
-    "bytes": 57931,
-    "md5": "3e677e8e1fbde91915700a1dde51000f",
-    "note": "v3 javitott verzio, nem a hubban volt eredeti"
+    "bytes": 58023,
+    "md5": "5b86905d19aa96ebdf16162feef0c296"
   },
   "reformkor": {
     "path": "games/reformkor.html",
@@ -22,18 +16,28 @@
   },
   "leveltar": {
     "path": "games/leveltar.html",
-    "bytes": 65096,
-    "md5": "06c911fafc2b5c46499f52257bc0da7c"
+    "bytes": 65598,
+    "md5": "ca317bcbc80f7d6ec9f278124f9164c5"
   },
   "szokereso": {
     "path": "games/szokereso.html",
-    "bytes": 86307,
-    "md5": "9c533af8adc753457cc243255346102f"
+    "bytes": 86465,
+    "md5": "ced30c7bf5369edd568cc2f2ef156631"
   },
   "ketforras": {
     "path": "games/ketforras.html",
-    "bytes": 198755,
-    "md5": "27a5bee65e01d2fc53b03ff0b581925c"
+    "bytes": 199019,
+    "md5": "8be4168ab4e5bce9ef4d1594cd32d991"
+  },
+  "keresztrejtveny": {
+    "path": "games/keresztrejtveny.html",
+    "bytes": 47975,
+    "md5": "94aa0cf85a9e6c65771ceaa1c4274c75"
+  },
+  "eszperente": {
+    "path": "games/eszperente.html",
+    "bytes": 31051,
+    "md5": "286c9032270a732df43d2bc4de16342d"
   },
   "demo_felfedezesek": {
     "path": "demos/demo_felfedezesek.html",
@@ -54,10 +58,5 @@
     "path": "demos/demo_legkor.html",
     "bytes": 433600,
     "md5": "c0f38827392251fbdcdf89a8363db7b9"
-  },
-  "eszperente": {
-    "path": "games/eszperente.html",
-    "bytes": 30952,
-    "md5": "6fc9c9dc29431ae67b7c2e7fe8c5c70b"
   }
 }
