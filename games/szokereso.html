@@ -216,8 +216,8 @@
     <div class="stats" id="stats" style="display:none;">
       <button class="stat code-chip" id="chipCode" onclick="copyCode()" title="Másolás">kód <b id="vCode">—</b></button>
       <span class="stat">idő <b id="vTime">0:00</b></span>
-      <span class="stat">talált <b id="vFound">0/0</b></span>
-      <span class="stat">hiba <b id="vErr">0</b></span>
+      <span class="stat" role="status" aria-live="polite">talált <b id="vFound">0/0</b></span>
+      <span class="stat" role="status" aria-live="polite">hiba <b id="vErr">0</b></span>
     </div>
   </div>
 </div>
@@ -304,7 +304,7 @@
           <span><b id="progText">0</b> / <span id="progTotal">0</span> megvan</span>
           <span class="streak" id="streak"></span>
         </div>
-        <div class="lgrid" id="grid"></div>
+        <div class="lgrid" id="grid" role="grid" aria-label="Szókereső rács"></div>
         <div class="tools">
           <button class="ghost" onclick="useHint()">Segítség &middot; &minus;20 mp</button>
           <button class="ghost" onclick="startPuzzle()">Új rejtvény</button>
@@ -328,7 +328,7 @@
         <button class="ghost" onclick="goStart()">Beállítások</button>
       </div>
     </div>
-    <div class="scoreline" id="scoreline"></div>
+    <div class="scoreline" id="scoreline" role="status" aria-live="polite"></div>
     <div class="verdict" id="verdict"></div>
     <div class="field-label">A rejtvény szavai — ismételd át</div>
     <div class="recap" id="recap"></div>
@@ -953,7 +953,7 @@ function drawGrid(){
   el.style.maxWidth=(S.size*36)+'px';
   let h='';
   for(let r=0;r<S.size;r++) for(let c=0;c<S.size;c++)
-    h+=`<div class="cell" id="k${r}-${c}" onclick="tap(${r},${c})">${S.grid[r][c]}</div>`;
+    h+=`<div class="cell" id="k${r}-${c}" onclick="tap(${r},${c})" role="gridcell">${S.grid[r][c]}</div>`;
   el.innerHTML=h;
 }
 function drawWords(){

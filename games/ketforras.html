@@ -173,7 +173,7 @@
       <span class="stp" id="s1">1 · szétválogatás</span>
       <span class="stp" id="s2">2 · miért térnek el?</span>
       <span class="stp" id="s3">3 · mit tudhatunk?</span>
-      <span class="errpill">hiba <b id="errN">0</b></span>
+      <span class="errpill" role="status" aria-live="polite">hiba <b id="errN">0</b></span>
     </div>
   </div>
 </div>
@@ -232,7 +232,7 @@
 <section class="screen" id="sc-end">
   <div class="kicker">Kész</div>
   <h2 style="font-size:clamp(1.7rem,4.5vw,2.4rem);margin-bottom:18px;">Ez a te esszévázad.</h2>
-  <div class="scoreline" id="scoreline"></div>
+  <div class="scoreline" id="scoreline" role="status" aria-live="polite"></div>
   <div class="panel" id="verdictBox" style="border-color:rgba(255,194,75,.5);"></div>
   <div class="outline" id="outline"></div>
   <div class="act">
@@ -489,7 +489,7 @@ function drawCards(){
       else if(x.tried.includes(z)) st=' wrong';
       return `<button class="pick ${cl}${st}" ${x.solved?'disabled':''} onclick="pick(${i},'${z}')">${lbl}</button>`;
     }).join('');
-    const w=x.solved? `<div class="why ok">&#10003; ${x.why}</div>` : (x.msg? `<div class="why no">${x.msg}</div>`:'');
+    const w=x.solved? `<div class="why ok" role="status" aria-live="polite">&#10003; ${x.why}</div>` : (x.msg? `<div class="why no" role="status" aria-live="polite">${x.msg}</div>`:'');
     return `<div class="card ${x.solved?'done':''}"><div class="txt">${x.txt}</div><div class="picks">${picks}</div>${w}</div>`;
   }).join('');
 }
@@ -515,7 +515,7 @@ function drawQs(){
       else if(q.tried.includes(j)) st=' wrong';
       return `<button class="opt${st}" ${q.solved?'disabled':''} onclick="ans(${i},${j})">${o.t}</button>`;
     }).join('');
-    const w=q.solved? `<div class="why ok">&#10003; ${q.ok}</div>` : (q.msg? `<div class="why no">${q.msg}</div>`:'');
+    const w=q.solved? `<div class="why ok" role="status" aria-live="polite">&#10003; ${q.ok}</div>` : (q.msg? `<div class="why no" role="status" aria-live="polite">${q.msg}</div>`:'');
     return `<div class="panel q"><div class="qt">${i+1}. ${q.q}</div>${opts}${w}</div>`;
   }).join('');
 }
@@ -538,7 +538,7 @@ function drawClaims(){
       else if(x.tried.includes(b)) st=' wrong';
       return `<button class="pick ${cl}${st}" ${x.solved?'disabled':''} onclick="band(${i},'${b}')">${BAND_LBL[b]}</button>`;
     }).join('');
-    const w=x.solved? `<div class="why ok">&#10003; ${x.why}</div>` : (x.msg? `<div class="why no">${x.msg}</div>`:'');
+    const w=x.solved? `<div class="why ok" role="status" aria-live="polite">&#10003; ${x.why}</div>` : (x.msg? `<div class="why no" role="status" aria-live="polite">${x.msg}</div>`:'');
     return `<div class="card ${x.solved?'done':''}"><div class="txt">${x.txt}</div><div class="picks">${picks}</div>${w}</div>`;
   }).join('');
 }

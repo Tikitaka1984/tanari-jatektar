@@ -220,7 +220,7 @@
   <section class="screen" id="screen-play">
     <div class="hud">
       <div class="pill">Rejtvény <b id="hudIdx">1</b> / <b id="hudTotal">3</b></div>
-      <div class="pill">Helyes: <b id="hudScore">0</b></div>
+      <div class="pill" role="status" aria-live="polite">Helyes: <b id="hudScore">0</b></div>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
 
@@ -237,7 +237,7 @@
       </div>
 
       <div class="opts" id="optsBox" style="display:none;"></div>
-      <div class="feedback" id="fb"></div>
+      <div class="feedback" id="fb" role="status" aria-live="polite"></div>
       <div class="actions" id="actionsBox"></div>
     </div>
   </section>
@@ -247,7 +247,7 @@
     <div class="end">
       <div class="eyebrow" style="display:block;">Vége a körnek</div>
       <h2 id="endTitle">Szép munka!</h2>
-      <div class="scorebig" id="endScore">0/0</div>
+      <div class="scorebig" id="endScore" role="status" aria-live="polite">0/0</div>
       <div class="scoresub" id="endSub">helyes válasz</div>
       <div class="breakdown" id="endBreakdown"></div>
       <button class="btn" onclick="location.reload()">Új kör indítása</button>
