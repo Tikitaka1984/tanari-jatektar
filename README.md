@@ -26,6 +26,7 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | Szókereső | `games/szokereso.html` | 9–12. | 428 fogalom, név és helyszín, klasszikus és nehéz móddal, nyomtatható feladatlappal. |
 | Két forrás, két igazság | `games/ketforras.html` | 9–12. | 21 esetpár forráselemzésre, mind a négy évfolyamról. |
 | Keresztrejtvény | `games/keresztrejtveny.html` | 9–12. | Generált keresztrejtvény évfolyam és téma szerint. |
+| Csak E! | `games/eszperente.html` | 9–12. | Eszperente nyelvi rejtvény — történelmi események és szereplők leírásában csak "e"/"é" magánhangzó szerepel, három nehézségi szinttel. |
 
 ## Szemléltető animációk
 
@@ -51,7 +52,8 @@ tanari-jatektar/
 │   ├── leveltar.html
 │   ├── szokereso.html
 │   ├── ketforras.html
-│   └── keresztrejtveny.html
+│   ├── keresztrejtveny.html
+│   └── eszperente.html
 ├── demos/
 │   ├── demo_felfedezesek.html
 │   ├── demo_roma.html

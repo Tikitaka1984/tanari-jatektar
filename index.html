@@ -129,8 +129,8 @@
 
 <div class="wrap" id="hub">
   <div class="kicker">Interaktív gyakorlófeladatok és szemléltetés</div>
-  <h1>Egy fájl. <em>Minden tantárgy.</em></h1>
-  <p class="lede">Minden feladat és bemutató ebbe az egyetlen oldalba van beépítve — nincs szükség külön fájlokra vagy internetkapcsolatra. Válassz tantárgyat, majd kattints egy kártyára.</p>
+  <h1 tabindex="-1">Egy helyen. <em>Többféle gyakorlás.</em></h1>
+  <p class="lede">A gyakorlófeladatok és szemléltető anyagok egy közös felületről érhetők el. Válassz tantárgyat, évfolyamot vagy feladattípust, majd kattints egy kártyára.</p>
 
   <div class="subjectbar" id="subjectbar"></div>
 
@@ -184,10 +184,10 @@
   <div class="foot" id="footText"></div>
 </div>
 
-<div class="player" id="player">
+<div class="player" id="player" role="dialog" aria-modal="true" aria-labelledby="ptitle">
   <div class="pbar">
     <div class="pleft">
-      <button class="pback" onclick="closeGame()">
+      <button class="pback" id="pback" onclick="closeGame()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
         Főoldal
       </button>
@@ -214,7 +214,7 @@ const SUBJECTS = [["tortenelem", "Történelem"], ["foldrajz", "Földrajz"]];
 
 const GRADES=['9','10','11','12'];
 const TYPES=[['kaland','Kaland'],['portre','Portré'],['vita','Vita'],['szabadulo','Szabaduló'],['szokereso','Szókereső'],['forras','Forrás'],['kereszt','Keresztrejtvény'],['eszperente','Nyelvi rejtvény']];
-const state={subject:null,grade:null,type:null,open:null,openKind:null};
+const state={subject:null,grade:null,type:null,open:null,openKind:null,openTrigger:null};
 
 function subjectLabel(id){ const s=SUBJECTS.filter(function(x){return x[0]===id;})[0]; return s?s[1]:id; }
 
@@ -243,7 +243,7 @@ function renderGrid(){
   document.getElementById('empty').style.display = list.length? 'none':'block';
   document.getElementById('count').textContent = list.length+' / '+GAMES.length+' feladat';
   document.getElementById('grid').innerHTML = list.map(function(g){
-    return '<button class="card" onclick="openItem(\''+g.id+'\',\'game\')">'+
+    return '<button class="card" onclick="openItem(\''+g.id+'\',\'game\',this)">'+
       '<div class="kind">'+g.kind+'</div><h2>'+g.title+'</h2><p>'+g.desc+'</p>'+
       '<div class="tags"><span class="tag fill">'+subjectLabel(g.subject)+'</span>'+g.grade.map(function(x){return '<span class="tag outline">'+x+'. évf.</span>';}).join('')+'</div>'+
       '<div class="go">Megnyitás <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></button>';
@@ -253,7 +253,7 @@ function renderDemos(){
   const list=DEMOS.filter(function(d){ return state.subject===null || d.subject===state.subject; });
   document.getElementById('demoEmpty').style.display = list.length? 'none':'block';
   document.getElementById('demoGrid').innerHTML = list.map(function(d){
-    return '<button class="card demo" onclick="openItem(\''+d.id+'\',\'demo\')">'+
+    return '<button class="card demo" onclick="openItem(\''+d.id+'\',\'demo\',this)">'+
       '<div class="kind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>Szemléltetés</div>'+
       '<h2>'+d.title+'</h2><p>'+d.desc+'</p>'+
       '<div class="tags"><span class="tag fill">'+subjectLabel(d.subject)+'</span><span class="tag outline">'+d.topic+'</span></div>'+
@@ -264,7 +264,7 @@ function renderFoot(){
   const gc=GAMES.filter(function(g){return state.subject===null||g.subject===state.subject;}).length;
   const dc=DEMOS.filter(function(d){return state.subject===null||d.subject===state.subject;}).length;
   document.getElementById('footText').textContent =
-    gc+' gyakorlófeladat + '+dc+' szemléltető anyag, egyetlen önálló fájlban · a történelmi tételek a hivatalos érettségi vizsgakövetelmény alapján készültek · internetkapcsolat nélkül is fut · másolható pendrive-ra, feltölthető bárhová.';
+    gc+' gyakorlófeladat + '+dc+' szemléltető anyag, külön HTML-fájlokban · a történelmi tételek a hivatalos érettségi vizsgakövetelmény alapján készültek · statikus oldal, build nélkül · a betűtípusok Google Fonts-ról töltődnek be, ezért internetkapcsolat szükséges.';
 }
 
 /* Blob URL-t adunk az iframe-nek srcdoc helyett: a srcdoc opak
@@ -274,11 +274,12 @@ function renderFoot(){
 function resolvePath(id, kind){
   return (kind==='demo' ? 'demos/' : 'games/') + id + '.html';
 }
-function openItem(id, kind){
+function openItem(id, kind, triggerEl){
   const src = kind==='demo' ? DEMOS : GAMES;
   const g = src.filter(function(x){return x.id===id;})[0];
   if(!g) return;
   state.open = g; state.openKind = kind;
+  state.openTrigger = triggerEl || null;
   const p = document.getElementById('player');
   p.style.setProperty('--pacc', g.accent);
   const label = kind==='demo' ? 'Szemléltetés' : g.kind;
@@ -289,6 +290,8 @@ function openItem(id, kind){
   frame.src = resolvePath(id, kind);
   p.classList.add('on');
   document.body.classList.add('playing');
+  document.getElementById('hub').inert = true;
+  document.getElementById('pback').focus();
   window._loaded = false;
   clearTimeout(window._loadWatch);
   window._loadWatch = setTimeout(function(){
@@ -307,7 +310,11 @@ function closeGame(){
   document.getElementById('pframe').src = 'about:blank';
   document.getElementById('phint').classList.remove('on');
   clearTimeout(window._loadWatch);
-  state.open = null; state.openKind = null;
+  document.getElementById('hub').inert = false;
+  const trigger = state.openTrigger;
+  const fallback = document.querySelector('h1');
+  (trigger && document.contains(trigger) ? trigger : fallback).focus();
+  state.open = null; state.openKind = null; state.openTrigger = null;
 }
 function openInTab(){
   if(!state.open) return;
