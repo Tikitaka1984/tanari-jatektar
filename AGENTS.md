@@ -8,7 +8,7 @@ Ez a fájl a repository teljes területére érvényes, tartós Codex-fejleszté
 - A játékok maradjanak statikus HTML-, CSS- és JavaScript-alkalmazások.
 - Ne kerüljön be frontend keretrendszer.
 - Ne vezess be buildfolyamatot, csomagkezelőt vagy futásidejű szerverfüggőséget, ha azt a feladat külön nem engedélyezi.
-- Minden játék közvetlenül a saját `games/<jatek-neve>/index.html` fájljából maradjon futtatható.
+- Minden játék önálló `games/<id>.html` fájlból fusson (pl. `games/kivagyok.html`), a szemléltető anyagok pedig `demos/<id>.html` fájlokból. A gyökér `index.html` hub tölti be ezeket relatív útvonalon, egy iframe-es beágyazott nézőben.
 
 ## Kötelező hatókörvédelem
 
