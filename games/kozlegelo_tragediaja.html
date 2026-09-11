@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A közlegelő tragédiája – falusi szimuláció</title>
+<style>
+  :root {
+    --sky: #D6E4EC;
+    --sky-deep: #B9CFDB;
+    --ink: #1E2B22;
+    --ink-soft: #46554B;
+    --meadow: #3E7B3A;
+    --fresh: #93B85A;
+    --dry: #C9AE6E;
+    --soil: #9C6B3F;
+    --wool: #FBFBF7;
+    --alarm: #A8322A;
+    --line: #9FB3BE;
+    --serif: "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    --sans: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; }
+  body {
+    background: var(--sky);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 18px;
+    line-height: 1.5;
+  }
+  h1, h2, h3 { font-family: var(--serif); font-weight: 700; line-height: 1.2; margin: 0 0 .5em; }
+  h1 { font-size: 2.4rem; }
+  h2 { font-size: 1.6rem; }
+  h3 { font-size: 1.2rem; }
+  p { margin: 0 0 .8em; }
+  button { font: inherit; cursor: pointer; }
+  button:focus-visible, input:focus-visible, summary:focus-visible, label:focus-within {
+    outline: 3px solid #1D4F91; outline-offset: 2px;
+  }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 24px; }
+
+  /* Gombok */
+  .btn {
+    border: 2px solid var(--ink); background: var(--ink); color: var(--wool);
+    padding: .6em 1.2em; border-radius: 6px; font-weight: 600;
+  }
+  .btn:hover { background: #33453A; }
+  .btn.secondary { background: transparent; color: var(--ink); }
+  .btn.secondary:hover { background: rgba(30,43,34,.08); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+
+  /* Kezdőképernyő */
+  .start-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: start; margin-top: 24px; }
+  .story { font-family: var(--serif); font-size: 1.2rem; line-height: 1.65; max-width: 62ch; }
+  .choice-group { border: 0; padding: 0; margin: 0 0 20px; }
+  .choice-group legend { font-weight: 700; margin-bottom: 8px; }
+  .choice {
+    display: flex; gap: 12px; align-items: flex-start; background: var(--wool);
+    border: 2px solid transparent; border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; cursor: pointer;
+  }
+  .choice:has(input:checked) { border-color: var(--meadow); }
+  .choice input { margin-top: 6px; transform: scale(1.3); }
+  .choice small { display: block; color: var(--ink-soft); font-size: .9rem; }
+  details.teacher { margin-top: 28px; background: rgba(251,251,247,.6); border-radius: 8px; padding: 12px 16px; }
+  details.teacher summary { font-weight: 700; cursor: pointer; }
+  details.teacher ul { padding-left: 1.2em; margin: .5em 0; }
+  .hero-field { border-radius: 10px; overflow: hidden; margin-top: 24px; max-width: 62ch; }
+
+  /* Falugyűlés */
+  .rules-card { background: var(--wool); border-radius: 10px; padding: 28px; max-width: 760px; margin: 24px auto; }
+  .quota-row { display: flex; align-items: center; gap: 18px; margin: 18px 0; }
+  .quota-row input[type=range] { flex: 1; accent-color: var(--meadow); height: 28px; }
+  .quota-value { font-family: var(--serif); font-size: 2.2rem; min-width: 2ch; text-align: center; }
+  .check-row { display: flex; gap: 12px; align-items: flex-start; margin: 16px 0; }
+  .check-row input { transform: scale(1.4); margin-top: 7px; }
+
+  /* Játéktér */
+  .topbar { display: flex; flex-wrap: wrap; gap: 16px 32px; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .topbar h1 { font-size: 1.7rem; margin: 0; }
+  .year { font-family: var(--serif); font-size: 1.5rem; }
+  .meter { display: flex; align-items: center; gap: 12px; min-width: 320px; }
+  .meter-bar { flex: 1; height: 22px; background: var(--sky-deep); border-radius: 11px; overflow: hidden; }
+  .meter-fill { height: 100%; background: var(--meadow); transition: width .6s ease, background-color .6s ease; }
+  .meter-text { font-weight: 700; min-width: 9.5em; }
+  .badge { background: var(--wool); border: 2px solid var(--meadow); border-radius: 999px; padding: 2px 12px; font-size: .9rem; font-weight: 600; }
+  .game-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(320px, 1fr); gap: 20px; align-items: start; }
+  .field-wrap { background: var(--wool); border-radius: 10px; padding: 10px; }
+  #field { width: 100%; height: auto; display: block; }
+  #field .patch { transition: fill .6s ease; }
+  .panel { background: var(--wool); border-radius: 10px; padding: 16px 18px; }
+  .family { display: grid; grid-template-columns: 18px 1fr auto; gap: 4px 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid #E3E8E4; }
+  .family:last-of-type { border-bottom: 0; }
+  .mark { width: 18px; height: 18px; border-radius: 50%; }
+  .family-name { font-weight: 700; }
+  .family-meta { grid-column: 2 / 4; font-size: .9rem; color: var(--ink-soft); }
+  .stepper { display: flex; align-items: center; gap: 6px; }
+  .stepper button { width: 40px; height: 40px; border-radius: 6px; border: 2px solid var(--ink); background: var(--wool); font-size: 1.3rem; font-weight: 700; line-height: 1; }
+  .stepper button:hover { background: #EEF2EE; }
+  .stepper output { font-family: var(--serif); font-size: 1.7rem; min-width: 1.6ch; text-align: center; }
+  .secret .stepper output { filter: blur(9px); }
+  .secret .stepper:hover output, .secret .stepper:focus-within output { filter: none; }
+  .wealth { font-weight: 700; text-align: right; white-space: nowrap; }
+  .hint { background: #EEF4E6; border-left: 5px solid var(--meadow); padding: 10px 14px; margin: 14px 0; font-size: .95rem; border-radius: 0 6px 6px 0; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
+  .secret-toggle { font-size: .9rem; display: flex; gap: 6px; align-items: center; }
+  .chronicle { margin-top: 20px; }
+  .chronicle ol { list-style: none; padding: 0; margin: 0; max-height: 240px; overflow-y: auto; }
+  .chronicle li { padding: 8px 0; border-bottom: 1px solid #E3E8E4; font-size: .95rem; }
+  .chronicle li .y { font-family: var(--serif); font-weight: 700; margin-right: 6px; }
+  .chronicle li.warn { color: var(--alarm); }
+  .banner { display: none; margin: 14px 0 0; padding: 12px 16px; border-radius: 8px; background: var(--alarm); color: var(--wool); font-weight: 600; }
+  .banner.show { display: block; }
+  .banner.good { background: var(--meadow); }
+
+  /* Végképernyő */
+  .end-head { font-family: var(--serif); font-size: 2rem; max-width: 30ch; }
+  .end-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 16px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #DCE3DE; }
+  th { font-size: .9rem; color: var(--ink-soft); font-weight: 600; }
+  td.num, th.num { text-align: right; }
+  .questions ol { padding-left: 1.3em; }
+  .questions li { margin-bottom: .6em; }
+  .terms dt { font-weight: 700; margin-top: .6em; }
+  .terms dd { margin: 0 0 .2em; }
+  .sources { font-size: .85rem; color: var(--ink-soft); margin-top: 16px; }
+
+  @media (max-width: 960px) {
+    .start-grid, .game-grid, .end-grid { grid-template-columns: 1fr; }
+    h1 { font-size: 1.9rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================== KEZDŐKÉPERNYŐ ===================== -->
+<section id="screen-start" class="screen active" aria-labelledby="t-start">
+  <div class="wrap">
+    <div class="start-grid">
+      <div>
+        <h1 id="t-start">A közlegelő tragédiája</h1>
+        <div class="story">
+          <p>Egy falu szélén van egy nagy, közös legelő. Bármelyik család kihajthatja rá a juhait: a fű mindenkié, de a juh és a gyapjú haszna a gazdájáé.</p>
+          <p>Négy család él itt. Minden tavasszal eldöntitek, hány juhot hajtotok ki. Minél dúsabb a legelő, annál kövérebb és értékesebb a juh. A lelegelt fű csak lassan nő vissza.</p>
+          <p>Tizenkét év áll előttetek. Mennyit ér a nyáj, ha elfogy alóla a fű?</p>
+        </div>
+        <div class="hero-field" aria-hidden="true">
+          <svg id="hero" viewBox="0 0 600 260" width="100%"></svg>
+        </div>
+      </div>
+      <div>
+        <fieldset class="choice-group">
+          <legend>Ki játszik?</legend>
+          <label class="choice"><input type="radio" name="mode" value="ai" checked>
+            <span>Az osztály egy család, a három szomszéd gépi<small>Közös döntés, kivetítve. Egy óra alatt kétszer is lejátszható.</small></span></label>
+          <label class="choice"><input type="radio" name="mode" value="groups">
+            <span>Négy csoport, négy család<small>Minden csoport titokban dönt, a tanár viszi be a számokat.</small></span></label>
+        </fieldset>
+        <fieldset class="choice-group">
+          <legend>Szabályok</legend>
+          <label class="choice"><input type="radio" name="rules" value="none" checked>
+            <span>Nincs falutörvény<small>Mindenki annyi juhot hajt ki, amennyit akar. Első körnek ezt javasoljuk.</small></span></label>
+          <label class="choice"><input type="radio" name="rules" value="law">
+            <span>Falugyűlés: közös szabály<small>Előbb megszavazzátok, családonként hány juh mehet ki, és lesz-e csősz.</small></span></label>
+        </fieldset>
+        <button class="btn" id="btn-start">Indul az első tavasz</button>
+      </div>
+    </div>
+
+    <details class="teacher">
+      <summary>Tanári jegyzet: így működik a modell</summary>
+      <ul>
+        <li>A legelő fűkészlete 0–100 egység, induláskor 80. Egy juh évente 1 egység füvet eszik.</li>
+        <li>A megmaradt fű évente visszanő (logisztikus növekedés, r = 0,5): félig lelegelt legelőn nő vissza a legtöbb, a kopár legelőn semmi.</li>
+        <li>Egy juh értéke a kihajtáskori fűkészlettől függ: 15 dénár × (fűkészlet/100)². Dús legelőn egy juh kb. 10 dénárt ér, ritkás legelőn jóval kevesebbet.</li>
+        <li>Hosszú távon a négy családnak együtt kb. 12 juh (családonként 3) hozza a legtöbbet. 16 vagy több juhnál a legelő fokozatosan kimerül.</li>
+        <li>A gépi szomszédok viselkedése előre megírt: az egyik minden évben eggyel több juhot hajt ki, a másik a legnagyobb szomszédot utánozza, a harmadik csak akkor hajt ki többet, ha a többiek is. Ezt a megbeszéléskor érdemes elárulni.</li>
+        <li>Falutörvénnyel: a csősz visszaküldi a kvóta feletti juhokat, és bírságot szab ki (első alkalommal juhonként 5, utána 12 dénár). Csősz nélkül a szabályt senki nem kéri számon.</li>
+      </ul>
+    </details>
+  </div>
+</section>
+
+<!-- ===================== FALUGYŰLÉS ===================== -->
+<section id="screen-rules" class="screen" aria-labelledby="t-rules">
+  <div class="wrap">
+    <div class="rules-card">
+      <h2 id="t-rules">Falugyűlés</h2>
+      <p>A falu összegyűlt a templom előtt. Döntsétek el közösen, milyen szabály vonatkozzon a legelőre a következő tizenkét évben.</p>
+      <label for="quota"><strong>Legfeljebb ennyi juhot hajthat ki egy család:</strong></label>
+      <div class="quota-row">
+        <input type="range" id="quota" min="1" max="6" step="1" value="3">
+        <output id="quota-out" class="quota-value" for="quota">3</output>
+      </div>
+      <p id="quota-total" class="hint">Négy családdal ez összesen legfeljebb 12 juh a legelőn.</p>
+      <label class="check-row"><input type="checkbox" id="monitor" checked>
+        <span><strong>Csőszt fogadunk.</strong> Minden tavasszal megszámolja a kihajtott juhokat. A kvóta feletti juhokat visszaküldi, a gazdát megbírságolja: első alkalommal juhonként 5, ismételt szabályszegésnél juhonként 12 dénárral.</span></label>
+      <div class="actions">
+        <button class="btn" id="btn-law">Elfogadjuk a falutörvényt</button>
+        <button class="btn secondary" id="btn-law-back">Vissza</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== JÁTÉKTÉR ===================== -->
+<section id="screen-game" class="screen" aria-labelledby="t-game">
+  <div class="wrap">
+    <div class="topbar">
+      <h1 id="t-game">A közlegelő</h1>
+      <div class="year" id="year-label" aria-live="polite">1. tavasz a 12-ből</div>
+      <div class="meter">
+        <span>Fű:</span>
+        <div class="meter-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="meter-bar"><div class="meter-fill" id="meter-fill"></div></div>
+        <span class="meter-text" id="meter-text">80% – dús</span>
+      </div>
+      <span class="badge" id="rules-badge">Nincs falutörvény</span>
+    </div>
+
+    <div class="game-grid">
+      <div>
+        <div class="field-wrap"><svg id="field" viewBox="0 0 600 380" role="img" aria-label="A közös legelő és a kihajtott juhok"></svg></div>
+        <div class="banner" id="banner" role="status"></div>
+      </div>
+      <div>
+        <div class="panel" id="families-panel">
+          <h2 style="font-size:1.3rem">Hány juhot hajtotok ki idén?</h2>
+          <div id="families"></div>
+          <div class="hint" id="hint"></div>
+          <div class="actions">
+            <button class="btn" id="btn-graze">Kihajtás</button>
+            <label class="secret-toggle" id="secret-wrap" hidden><input type="checkbox" id="secret"> Titkos bevitel</label>
+            <button class="btn" id="btn-results" hidden>Eredmények</button>
+          </div>
+        </div>
+        <div class="panel chronicle">
+          <h3>Falusi krónika</h3>
+          <ol id="log" aria-live="polite"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VÉGKÉPERNYŐ ===================== -->
+<section id="screen-end" class="screen" aria-labelledby="t-end">
+  <div class="wrap">
+    <h1 id="t-end" class="end-head">Eredmények</h1>
+    <p id="end-summary" class="story"></p>
+    <div class="end-grid">
+      <div class="panel">
+        <h3>A családok vagyona</h3>
+        <table>
+          <thead><tr><th>Család</th><th class="num">Átlag juh/év</th><th class="num">Szabályszegés</th><th class="num">Vagyon (dénár)</th></tr></thead>
+          <tbody id="end-table"></tbody>
+        </table>
+        <h3 style="margin-top:20px">A legelő és a nyáj évről évre</h3>
+        <svg id="chart" viewBox="0 0 560 260" width="100%" role="img" aria-label="Fűkészlet és juhlétszám grafikon"></svg>
+      </div>
+      <div class="panel questions">
+        <h3>Beszéljük meg</h3>
+        <ol>
+          <li>Miért érte meg egy-egy családnak még egy juhot kihajtani, amikor a legelő már fogyott?</li>
+          <li>Ki viselte a kárát egy plusz juhnak, és ki élvezte a hasznát?</li>
+          <li>Megmenthette volna-e a legelőt egyetlen család önmérséklete? Miért nem?</li>
+          <li>Mit változtatott a falutörvény? Működött-e csősz nélkül is?</li>
+          <li>Keressetek mai közlegelőket: mi a „fű” és mi a „juh” a halászatban, a talajvízben vagy a légszennyezésben?</li>
+        </ol>
+        <dl class="terms">
+          <dt>Közös erőforrás</dt><dd>Olyan jószág, amelyet sokan használhatnak, de ami az egyiknek jut, az a másiktól fogy: legelő, halállomány, erdő, talajvíz.</dd>
+          <dt>A közlegelő tragédiája</dt><dd>Garrett Hardin amerikai biológus gondolatkísérlete (1968): ha mindenki csak a saját hasznát nézi, a közös erőforrás kimerül, pedig ez senkinek sem érdeke.</dd>
+          <dt>Potyautas</dt><dd>Aki a közös szabály előnyeit élvezi, de maga nem tartja be.</dd>
+          <dt>Fenntartható használat</dt><dd>Csak annyit veszünk el, amennyi újratermelődik.</dd>
+          <dt>Ostrom tanulsága</dt><dd>Elinor Ostrom (közgazdasági Nobel-emlékdíj, 2009) kimutatta, hogy a helyi közösségek gyakran sikeresen gondozzák közös javaikat, ha világos szabályaik, ellenőrzésük és fokozatos büntetéseik vannak.</dd>
+        </dl>
+        <div class="actions">
+          <button class="btn" id="btn-again-law">Újra, falutörvénnyel</button>
+          <button class="btn secondary" id="btn-again-none">Újra, szabály nélkül</button>
+          <button class="btn secondary" id="btn-home">Kezdőlap</button>
+        </div>
+        <p class="sources">Források: G. Hardin: The Tragedy of the Commons. Science 162 (1968), 1243–1248. E. Ostrom: Governing the Commons. Cambridge University Press, 1990. NobelPrize.org: The Prize in Economic Sciences 2009. A játék egyszerűsített modell, nem történeti leírás.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- Modellparaméterek ---------- */
+  var CAP = 100;          // a legelő maximális fűkészlete
+  var START_GRASS = 80;   // kezdő fűkészlet
+  var GROWTH = 0.5;       // visszanövési ráta (logisztikus)
+  var YEARS = 12;
+  var MAX_SHEEP = 8;      // családonként kihajtható maximum
+  var PRICE = 15;         // egy juh értéke teljesen dús legelőn (dénár)
+  var FINE_FIRST = 5, FINE_REPEAT = 12;
+
+  var FAMILY_DEFS = [
+    { key: "human",  name: "Ti",          color: "#2E5AAC" },
+    { key: "szabo",  name: "Szabó család", color: "#D9A21B" },
+    { key: "kovacs", name: "Kovács család", color: "#B8433A" },
+    { key: "molnar", name: "Molnár család", color: "#7A3B8F" }
+  ];
+  var GROUP_NAMES = ["1. csoport", "2. csoport", "3. csoport", "4. csoport"];
+
+  /* ---------- Állapot ---------- */
+  var state = null;
+  var setup = { mode: "ai", rules: { quota: null, monitor: false } };
+
+  /* ---------- Segédfüggvények ---------- */
+  function $(id) { return document.getElementById(id); }
+  function fmt(n) { return (Math.round(n * 10) / 10).toLocaleString("hu-HU", { maximumFractionDigits: 1 }); }
+  function sum(a) { return a.reduce(function (s, x) { return s + x; }, 0); }
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+  function rng(seed) { // determinisztikus álvéletlen (mulberry32)
+    return function () {
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function sheepValue(grass) { return PRICE * Math.pow(grass / CAP, 2); }
+  function grassLabel(g) {
+    if (g <= 0) return "kopár";
+    if (g < 20) return "majdnem kopár";
+    if (g < 45) return "kiégett foltok";
+    if (g < 70) return "megritkult";
+    return "dús";
+  }
+  function showScreen(id) {
+    ["screen-start", "screen-rules", "screen-game", "screen-end"].forEach(function (s) {
+      $(s).classList.toggle("active", s === id);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  /* ---------- Modell: egy év lefutása ---------- */
+  function growGrass(g) {
+    var ng = g + GROWTH * g * (1 - g / CAP);
+    return ng < 0.5 ? 0 : Math.min(CAP, ng);
+  }
+
+  // A gépi családok döntése. last: az előző év kihajtási szándékai (tömb) vagy null.
+  function aiChoice(key, year, last, rules, fam) {
+    var q = rules.quota, base, violated = false;
+    if (last && q !== null) violated = last.some(function (v) { return v > q; });
+    var idx = FAMILY_DEFS.map(function (f) { return f.key; }).indexOf(key);
+    var others = last ? last.filter(function (_, i) { return i !== idx; }) : [];
+
+    if (key === "kovacs") { // kapzsi: minden évben eggyel többet
+      if (q === null) return clamp(4 + (year - 1), 0, MAX_SHEEP);
+      if (rules.monitor) return fam.offenses > 0 ? q : clamp(q + 2, 0, MAX_SHEEP);
+      return clamp(q + 2, 0, MAX_SHEEP);
+    }
+    if (key === "szabo") { // óvatos, de nem akar lemaradni
+      if (!last) base = 3;
+      else {
+        var avg = sum(others) / others.length;
+        base = avg > 3.5 ? clamp(Math.round(avg), 0, MAX_SHEEP) : 3;
+      }
+    } else { // molnar: a legnagyobb szomszédot utánozza
+      base = last ? clamp(Math.max.apply(null, others), 0, MAX_SHEEP) : 3;
+    }
+    if (q === null) return base;
+    if (rules.monitor || !violated) return Math.min(base, q);
+    return base; // csősz nélkül, ha más szabályt szegett, ő sem tartja be
+  }
+
+  function resolveYear(choices) {
+    var r = state.rules, events = [];
+    var grazing = choices.slice();
+    state.families.forEach(function (f, i) {
+      if (r.quota === null || choices[i] <= r.quota) return;
+      var excess = choices[i] - r.quota;
+      f.offenses += 1;
+      if (r.monitor) {
+        grazing[i] = r.quota;
+        var fine = excess * (f.offenses === 1 ? FINE_FIRST : FINE_REPEAT);
+        f.wealth -= fine; f.fines += fine;
+        events.push({ warn: true, text: "A csősz rajtakapta: " + f.name + " " + excess + " juhot a kvóta fölött hajtott ki. A juhokat visszaküldte, a bírság " + fine + " dénár." });
+      } else {
+        events.push({ warn: true, text: f.name + " " + excess + " juhhal több juhot hajtott ki, mint amennyit a falutörvény enged. Senki nem kéri számon." });
+      }
+    });
+
+    var n = sum(grazing), g = state.grass;
+    var value = n > 0 ? sheepValue(g) * Math.min(1, g / n) : 0;
+    state.families.forEach(function (f, i) {
+      var inc = grazing[i] * value;
+      f.wealth += inc; f.history.push(grazing[i]); f.lastIncome = inc;
+    });
+    var eaten = Math.min(n, g);
+    var after = growGrass(g - eaten);
+
+    state.log.unshift({ year: state.year, text: n + " juh legelt. Egy juh értéke " + fmt(value) + " dénár volt. A fűkészlet " + Math.round(g) + "% → " + Math.round(after) + "%.", warn: after < g - 5 });
+    events.reverse().forEach(function (e) { state.log.unshift({ year: state.year, text: e.text, warn: e.warn }); });
+
+    state.grassHist.push(after);
+    state.sheepHist.push(n);
+    state.lastChoices = choices.slice();
+    state.grass = after;
+    if (after <= 0) { state.collapsedYear = state.year; state.over = true; }
+    else if (state.year >= YEARS) { state.over = true; }
+    else { state.year += 1; }
+  }
+
+  /* ---------- Játék indítása ---------- */
+  function newGame() {
+    var names = setup.mode === "groups" ? GROUP_NAMES : FAMILY_DEFS.map(function (f) { return f.name; });
+    state = {
+      mode: setup.mode,
+      rules: { quota: setup.rules.quota, monitor: setup.rules.monitor },
+      year: 1, grass: START_GRASS, over: false, collapsedYear: null,
+      grassHist: [START_GRASS], sheepHist: [], log: [], lastChoices: null,
+      families: FAMILY_DEFS.map(function (d, i) {
+        return { key: d.key, name: names[i], color: d.color, human: setup.mode === "groups" || i === 0,
+                 pending: 3, wealth: 0, history: [], offenses: 0, fines: 0, lastIncome: 0 };
+      })
+    };
+    $("secret-wrap").hidden = state.mode !== "groups";
+    $("secret").checked = false;
+    $("families-panel").classList.remove("secret");
+    $("btn-graze").hidden = false; $("btn-results").hidden = true;
+    $("banner").className = "banner";
+    $("rules-badge").textContent = state.rules.quota === null ? "Nincs falutörvény"
+      : "Falutörvény: " + state.rules.quota + " juh/család" + (state.rules.monitor ? ", csősszel" : ", csősz nélkül");
+    renderAll();
+    showScreen("screen-game");
+  }
+
+  /* ---------- Megjelenítés ---------- */
+  var patches = null;
+  function buildPatches() {
+    var r = rng(1968), cols = 15, rows = 9, list = [], i;
+    for (var y = 0; y < rows; y++) for (var x = 0; x < cols; x++) list.push({ x: x, y: y });
+    var order = list.map(function (_, k) { return k; });
+    for (i = order.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    order.forEach(function (idx, rank) { list[idx].threshold = (rank + 1) / list.length * 100; });
+    list.forEach(function (p) { p.jx = (r() - 0.5) * 6; p.jy = (r() - 0.5) * 6; });
+    patches = { list: list, cols: cols, rows: rows };
+  }
+  function patchColor(g, t) {
+    if (g >= t + 12) return "#3E7B3A";
+    if (g >= t) return "#93B85A";
+    if (g >= t - 12) return "#C9AE6E";
+    return "#9C6B3F";
+  }
+  function sheepSvg(x, y, color, s) {
+    s = s || 1;
+    return '<g transform="translate(' + x.toFixed(1) + ' ' + y.toFixed(1) + ') scale(' + s + ')">' +
+      '<ellipse cx="0" cy="3" rx="11" ry="7.5" fill="#FBFBF7" stroke="#6F7B72" stroke-width="1"/>' +
+      '<circle cx="-5" cy="-1" r="4" fill="#FBFBF7"/><circle cx="3" cy="-2" r="4.5" fill="#FBFBF7"/>' +
+      '<ellipse cx="12" cy="1" rx="4" ry="3.3" fill="#2B2B2B"/>' +
+      '<rect x="-7" y="9" width="2" height="5" fill="#2B2B2B"/><rect x="5" y="9" width="2" height="5" fill="#2B2B2B"/>' +
+      '<circle cx="-1" cy="2" r="3.6" fill="' + color + '"/></g>';
+  }
+  function drawField(svg, grass, flock, seed) {
+    if (!patches) buildPatches();
+    var W = 600, H = svg.viewBox.baseVal.height || 380;
+    var pw = W / patches.cols, ph = H / patches.rows, out = [];
+    out.push('<rect x="0" y="0" width="' + W + '" height="' + H + '" fill="#9C6B3F"/>');
+    patches.list.forEach(function (p) {
+      out.push('<rect class="patch" x="' + (p.x * pw + 1 + p.jx / 3).toFixed(1) + '" y="' + (p.y * ph + 1 + p.jy / 3).toFixed(1) +
+        '" width="' + (pw - 2).toFixed(1) + '" height="' + (ph - 2).toFixed(1) + '" rx="6" fill="' + patchColor(grass, p.threshold) + '"/>');
+    });
+    // kerítés
+    out.push('<rect x="3" y="3" width="' + (W - 6) + '" height="' + (H - 6) + '" fill="none" stroke="#5B4630" stroke-width="4" stroke-dasharray="14 6" rx="8"/>');
+    // juhok
+    var r = rng(seed || 7), placed = [];
+    flock.forEach(function (f) {
+      for (var k = 0; k < f.count; k++) {
+        var x, y, tries = 0;
+        do { x = 26 + r() * (W - 52); y = 24 + r() * (H - 48); tries++; }
+        while (tries < 40 && placed.some(function (q) { return Math.abs(q[0] - x) < 30 && Math.abs(q[1] - y) < 22; }));
+        placed.push([x, y]);
+        out.push(sheepSvg(x, y, f.color, 1.25));
+      }
+    });
+    svg.innerHTML = out.join("");
+  }
+
+  function renderFamilies() {
+    var box = $("families"), html = [];
+    state.families.forEach(function (f, i) {
+      var last = f.history.length ? f.history[f.history.length - 1] : null;
+      var meta = last === null ? "Még nem hajtott ki." : "Tavaly " + last + " juh legelt, bevétel: " + fmt(f.lastIncome) + " dénár.";
+      if (f.fines > 0) meta += " Bírság összesen: " + f.fines + " dénár.";
+      html.push('<div class="family">' +
+        '<span class="mark" style="background:' + f.color + '" aria-hidden="true"></span>' +
+        '<span class="family-name">' + f.name + (f.human ? "" : ' <small style="font-weight:400;color:#46554B">(gépi)</small>') + '</span>' +
+        (f.human && !state.over
+          ? '<span class="stepper"><button type="button" data-i="' + i + '" data-d="-1" aria-label="' + f.name + ': eggyel kevesebb juh">−</button>' +
+            '<output aria-live="polite" id="out-' + i + '">' + f.pending + '</output>' +
+            '<button type="button" data-i="' + i + '" data-d="1" aria-label="' + f.name + ': eggyel több juh">+</button></span>'
+          : '<span class="wealth">' + fmt(f.wealth) + ' dénár</span>') +
+        '<span class="family-meta">' + meta + (f.human && !state.over ? " Vagyon: " + fmt(f.wealth) + " dénár." : "") + '</span>' +
+        '</div>');
+    });
+    box.innerHTML = html.join("");
+  }
+
+  function renderHint() {
+    var v = sheepValue(state.grass);
+    var txt = "Egy juh most kb. " + fmt(v) + " dénárt ér. Még egy juh: a gazdájának ennyi a haszon, a legelőről viszont mind a négy családnak fogy a fű.";
+    if (state.rules.quota !== null) txt += " A falutörvény családonként legfeljebb " + state.rules.quota + " juhot enged.";
+    if (state.mode === "groups") txt += " Tipp: a csoportok papíron döntsenek. Titkos bevitelnél a számok elmosódnak, és csak akkor látszanak, ha az egér a gombokon van.";
+    $("hint").textContent = txt;
+  }
+
+  function renderTop() {
+    var g = state.grass;
+    $("year-label").textContent = state.over ? "Vége" : state.year + ". tavasz a " + YEARS + "-ből";
+    $("meter-fill").style.width = Math.max(0, g) + "%";
+    $("meter-fill").style.backgroundColor = g >= 45 ? "#3E7B3A" : (g >= 20 ? "#C9AE6E" : "#A8322A");
+    $("meter-bar").setAttribute("aria-valuenow", String(Math.round(g)));
+    $("meter-text").textContent = Math.round(g) + "% – " + grassLabel(g);
+  }
+
+  function renderLog() {
+    $("log").innerHTML = state.log.map(function (e) {
+      return '<li class="' + (e.warn ? "warn" : "") + '"><span class="y">' + e.year + '. év</span>' + e.text + '</li>';
+    }).join("");
+  }
+
+  function renderField() {
+    var flock = state.families.map(function (f) {
+      return { color: f.color, count: f.history.length ? f.history[f.history.length - 1] : 0 };
+    });
+    drawField($("field"), state.grass, flock, state.year * 31 + 5);
+  }
+
+  function renderAll() { renderTop(); renderFamilies(); renderHint(); renderLog(); renderField(); }
+
+  /* ---------- Egy kör ---------- */
+  function graze() {
+    if (!state || state.over) return;
+    var last = state.lastChoices;
+    var choices = state.families.map(function (f) {
+      return f.human ? f.pending : aiChoice(f.key, state.year, last, state.rules, f);
+    });
+    resolveYear(choices);
+    if (state.over) finishRound();
+    renderAll();
+  }
+
+  function finishRound() {
+    $("btn-graze").hidden = true;
+    $("btn-results").hidden = false;
+    var b = $("banner");
+    if (state.collapsedYear) {
+      b.textContent = "A " + state.collapsedYear + ". évben a legelő teljesen kopár lett. A hátralévő években egyetlen juh sem talál rajta füvet.";
+      b.className = "banner show";
+    } else {
+      b.textContent = "Letelt a tizenkét év. A legelőn " + Math.round(state.grass) + "% fű maradt.";
+      b.className = "banner show" + (state.grass >= 60 ? " good" : "");
+    }
+    $("btn-results").focus();
+  }
+
+  /* ---------- Eredmények ---------- */
+  function drawChart() {
+    var svg = $("chart"), W = 560, H = 260, L = 44, R = 12, T = 14, B = 36;
+    var years = YEARS, pw = (W - L - R) / years, out = [];
+    function yG(v) { return T + (H - T - B) * (1 - v / 100); }
+    function yS(v) { return T + (H - T - B) * (1 - v / 32); }
+    for (var k = 0; k <= 4; k++) {
+      var yy = T + (H - T - B) * k / 4;
+      out.push('<line x1="' + L + '" x2="' + (W - R) + '" y1="' + yy + '" y2="' + yy + '" stroke="#DCE3DE"/>');
+      out.push('<text x="' + (L - 6) + '" y="' + (yy + 4) + '" font-size="11" text-anchor="end" fill="#46554B">' + (100 - k * 25) + '%</text>');
+    }
+    state.sheepHist.forEach(function (n, i) {
+      var x = L + i * pw + pw * 0.2;
+      out.push('<rect x="' + x.toFixed(1) + '" y="' + yS(n).toFixed(1) + '" width="' + (pw * 0.6).toFixed(1) + '" height="' + (H - B - yS(n)).toFixed(1) + '" fill="#B9CFDB"/>');
+      out.push('<text x="' + (x + pw * 0.3).toFixed(1) + '" y="' + (yS(n) - 4).toFixed(1) + '" font-size="11" text-anchor="middle" fill="#46554B">' + n + '</text>');
+    });
+    var pts = state.grassHist.map(function (g, i) { return (L + i * pw).toFixed(1) + "," + yG(g).toFixed(1); });
+    out.push('<polyline points="' + pts.join(" ") + '" fill="none" stroke="#3E7B3A" stroke-width="3.5" stroke-linejoin="round"/>');
+    for (var yr = 1; yr <= years; yr++) {
+      out.push('<text x="' + (L + (yr - 1) * pw + pw / 2).toFixed(1) + '" y="' + (H - B + 16) + '" font-size="11" text-anchor="middle" fill="#46554B">' + yr + '</text>');
+    }
+    out.push('<text x="' + L + '" y="' + (H - 4) + '" font-size="12" fill="#1E2B22">Zöld vonal: fűkészlet az év végén; kék oszlop: a legelő juhok száma</text>');
+    svg.innerHTML = out.join("");
+  }
+
+  function showResults() {
+    var s;
+    if (state.collapsedYear) {
+      s = "A legelő a " + state.collapsedYear + ". évben elpusztult. Innentől egyik család sem tudott volna juhot tartani rajta: a közös kár mindenkit utolért, azt a családot is, amelyik mértékletes volt.";
+      $("t-end").textContent = "A legelő elpusztult";
+    } else if (state.grass >= 60) {
+      s = "A legelő tizenkét év után is " + Math.round(state.grass) + "%-os. A falu fenntarthatóan használta a közös földet: a következő nemzedék is kihajthatja rá a juhait.";
+      $("t-end").textContent = "A legelő megmaradt";
+    } else {
+      s = "A falu kibírta a tizenkét évet, de a legelő " + Math.round(state.grass) + "%-ra fogyott. A következő években már sokkal kevesebb juhot tudna eltartani.";
+      $("t-end").textContent = "A legelő kimerült";
+    }
+    $("end-summary").textContent = s;
+    $("end-table").innerHTML = state.families.map(function (f) {
+      var avg = f.history.length ? sum(f.history) / f.history.length : 0;
+      return '<tr><td><span class="mark" style="display:inline-block;vertical-align:middle;margin-right:8px;background:' + f.color + '"></span>' + f.name + '</td>' +
+        '<td class="num">' + fmt(avg) + '</td><td class="num">' + f.offenses + '</td><td class="num"><strong>' + fmt(f.wealth) + '</strong></td></tr>';
+    }).join("");
+    drawChart();
+    showScreen("screen-end");
+  }
+
+  /* ---------- Eseménykezelők ---------- */
+  function readSetup() {
+    setup.mode = document.querySelector('input[name="mode"]:checked').value;
+    var rules = document.querySelector('input[name="rules"]:checked').value;
+    return rules;
+  }
+  $("btn-start").addEventListener("click", function () {
+    var rules = readSetup();
+    if (rules === "law") { showScreen("screen-rules"); $("quota").focus(); }
+    else { setup.rules = { quota: null, monitor: false }; newGame(); }
+  });
+  $("quota").addEventListener("input", function () {
+    var q = +this.value;
+    $("quota-out").textContent = q;
+    $("quota-total").textContent = "Négy családdal ez összesen legfeljebb " + (4 * q) + " juh a legelőn.";
+  });
+  $("btn-law").addEventListener("click", function () {
+    setup.rules = { quota: +$("quota").value, monitor: $("monitor").checked };
+    newGame();
+  });
+  $("btn-law-back").addEventListener("click", function () { showScreen("screen-start"); });
+  $("families").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-i]");
+    if (!b || !state || state.over) return;
+    var f = state.families[+b.getAttribute("data-i")];
+    f.pending = clamp(f.pending + (+b.getAttribute("data-d")), 0, MAX_SHEEP);
+    var o = $("out-" + b.getAttribute("data-i"));
+    if (o) o.textContent = f.pending;
+  });
+  $("secret").addEventListener("change", function () { $("families-panel").classList.toggle("secret", this.checked); });
+  $("btn-graze").addEventListener("click", graze);
+  $("btn-results").addEventListener("click", showResults);
+  $("btn-again-law").addEventListener("click", function () { showScreen("screen-rules"); });
+  $("btn-again-none").addEventListener("click", function () { setup.rules = { quota: null, monitor: false }; newGame(); });
+  $("btn-home").addEventListener("click", function () { showScreen("screen-start"); });
+
+  // Billentyűzet: fel/le = az osztály juhszáma (gépi módban), Enter = kihajtás
+  document.addEventListener("keydown", function (e) {
+    if (!$("screen-game").classList.contains("active") || !state || state.over) return;
+    var tag = (e.target.tagName || "").toLowerCase();
+    if (tag === "button" || tag === "input") return;
+    if (state.mode === "ai" && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
+      var f = state.families[0];
+      f.pending = clamp(f.pending + (e.key === "ArrowUp" ? 1 : -1), 0, MAX_SHEEP);
+      $("out-0").textContent = f.pending; e.preventDefault();
+    } else if (e.key === "Enter") { graze(); e.preventDefault(); }
+  });
+
+  // Kezdőkép: dús legelő néhány juhhal
+  (function hero() {
+    var svg = $("hero");
+    drawField(svg, 96, [{ color: "#2E5AAC", count: 3 }, { color: "#D9A21B", count: 3 }, { color: "#B8433A", count: 3 }, { color: "#7A3B8F", count: 3 }], 12);
+  })();
+
+  // Tesztekhez
+  window.__kozlegelo = { getState: function () { return state; }, setup: setup, newGame: newGame, graze: graze, showResults: showResults, aiChoice: aiChoice };
+})();
+</script>
+</body>
+</html>
