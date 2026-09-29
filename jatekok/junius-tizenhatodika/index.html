@@ -1,0 +1,1113 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Június tizenhatodika – 1956-os szabadulószoba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#efe8d8;--muted:#b9b2a1;--panel:rgba(22,28,24,.9);--line:rgba(239,232,216,.16);--accent:#c9a45c;--ok:#9cc596;--bad:#e3907a;--paper:#f0e6cf;--paperink:#2b241b;--scene:#15120f;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#efe8d8;--panel:rgba(22,28,24,.9);--scene:#15120f}}
+:root[data-theme="dark"]{--ink:#efe8d8;--panel:rgba(22,28,24,.9);--scene:#15120f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--scene);color:var(--ink);font:15px/1.5 'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab;outline:none}
+.hud{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
+.card{pointer-events:auto;background:var(--panel);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:10px;padding:12px 14px;max-width:350px}
+.card h1{font:600 19px/1.2 'Spectral',Georgia,serif;margin:0 0 6px}
+.goal{margin:0;font-size:13.5px;line-height:1.45}
+.goal b{color:var(--accent);font-weight:600}
+.prog{margin:8px 0 0;display:flex;gap:4px;flex-wrap:wrap}
+.prog i{font-style:normal;font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:1px 7px;color:var(--muted)}
+.prog i.on{color:#1d2a1c;background:var(--ok);border-color:var(--ok)}
+.right{display:flex;gap:8px;align-items:center;pointer-events:auto}
+#timer{font-variant-numeric:tabular-nums;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:13px}
+button{font:inherit;font-size:13px;font-weight:500;color:var(--ink);background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer}
+button:hover{border-color:rgba(201,164,92,.6);background:rgba(201,164,92,.16)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.primary{background:var(--accent);border-color:var(--accent);color:#231a0e;font-weight:600}
+.primary:hover{background:#d8b56f}
+#inv{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;gap:6px;flex-wrap:wrap;pointer-events:none;max-width:60vw}
+#inv span{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 9px;font-size:12.5px}
+#keys{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));font-size:12px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;line-height:1.6;max-width:300px}
+kbd{font:11px ui-monospace,Menlo,Consolas,monospace;padding:1px 5px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;color:var(--ink)}
+#dot{position:fixed;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:rgba(239,232,216,.75);box-shadow:0 0 0 2px rgba(0,0,0,.35);pointer-events:none}
+#tip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:12.5px;white-space:nowrap}
+#toast{position:fixed;left:50%;bottom:calc(70px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 14px;font-size:14px;max-width:min(520px,90vw);text-align:center;pointer-events:none;transition:opacity .25s}
+#toast.off{opacity:0}
+#joy{position:fixed;left:22px;bottom:calc(64px + env(safe-area-inset-bottom,0px));width:120px;height:120px;border-radius:50%;background:rgba(22,28,24,.55);border:1px solid var(--line);touch-action:none;display:none}
+#knob{position:absolute;left:50%;top:50%;width:50px;height:50px;margin:-25px 0 0 -25px;border-radius:50%;background:rgba(239,232,216,.85)}
+.touch{display:none}
+@media (pointer:coarse){#joy{display:block}.touch{display:inline}.desk{display:none}#dot{display:none}}
+@media (max-width:620px){.hud{flex-direction:column-reverse;align-items:stretch}.right{align-self:flex-end}.card{max-width:none}#keys{display:none}}
+/* Mobil */
+html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+#c,.hud,#joy,#inv{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+button{touch-action:manipulation}
+#nextBtn .sm{display:none}
+@media (pointer:coarse){#keys{display:none}.right button,#timer{min-height:44px;padding:10px 14px;font-size:14px;display:inline-flex;align-items:center}
+ #toast{bottom:calc(206px + env(safe-area-inset-bottom,0px))}#joy{width:132px;height:132px}}
+@media (max-width:620px){.card h1{display:none}.card{padding:10px 12px}.goal{font-size:13px}.prog{margin-top:6px}.prog i{font-size:11px}
+ #nextBtn .lg{display:none}#nextBtn .sm{display:inline}#mbox{padding:18px 16px}#mbox h2{font-size:20px}#mbox.doc{font-size:16px}
+ .pad{grid-template-columns:repeat(3,72px)}.pad button{padding:13px 0;font-size:19px}.big{font-size:54px}}
+@media (max-height:500px){.card h1,.prog{display:none}.card{padding:8px 12px}#mbox{padding:14px 16px;max-height:calc(100% - 12px)}
+ .code{margin:8px 0}.code span{height:44px}.pad button{padding:6px 0}.slots li{min-height:34px;padding-top:6px;padding-bottom:6px}}
+@media (pointer:coarse) and (max-height:500px){#toast{bottom:calc(16px + env(safe-area-inset-bottom,0px))}}
+@media (max-height:520px) and (orientation:landscape){.mapgrid{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;align-items:start}.mapwrap svg{max-height:80vh}}
+#modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,8,6,.55);padding:16px;z-index:5}
+#modal[hidden]{display:none}
+#mbox:focus{outline:none}
+#mbox{width:min(560px,100%);max-height:calc(100% - 24px);overflow:auto;border-radius:12px;padding:22px 24px;position:relative}
+#mbox.wide{width:min(760px,100%)}
+#mbox.panel{background:rgba(24,30,26,.97);border:1px solid var(--line)}
+#mbox.doc{background:var(--paper);color:var(--paperink);font:17px/1.6 'Spectral',Georgia,serif;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+#mbox h2{font:600 22px/1.25 'Spectral',Georgia,serif;margin:0 0 10px}
+#mbox p{margin:0 0 12px}
+#mbox .hand{font-style:italic}
+#mbox .sign{text-align:right;font-style:italic}
+#mbox .date{text-align:right;font-size:15px}
+#mbox .center{text-align:center}
+#mbox.doc button{color:var(--paperink);border-color:rgba(43,36,27,.35);background:rgba(43,36,27,.06)}
+#mbox.doc .primary{background:#3b4a36;border-color:#3b4a36;color:#f0e6cf}
+#mbox .cat{font-size:12.5px;color:var(--accent);font-weight:600;margin:0 0 4px}
+.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+.code{display:flex;gap:10px;justify-content:center;margin:14px 0}
+.code span{width:46px;height:56px;border:1px solid var(--line);border-radius:8px;display:grid;place-items:center;font:600 26px 'Spectral',Georgia,serif;background:rgba(255,255,255,.05)}
+.pad{display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-content:center}
+.pad button{border-radius:8px;padding:10px 0;font-size:17px}
+.msg{min-height:1.5em;margin:12px 0 0!important;font-size:14.5px}
+.msg.bad{color:var(--bad)}.msg.ok{color:var(--ok)}
+.slots{list-style:none;counter-reset:s;padding:0;margin:12px 0;display:grid;gap:6px}
+.slots li{counter-increment:s;border:1px dashed var(--line);border-radius:8px;padding:8px 10px 8px 38px;position:relative;min-height:40px;font-size:14px}
+.slots li::before{content:counter(s);position:absolute;left:12px;top:8px;color:var(--muted);font-weight:600}
+.slots li.filled{border-style:solid;border-color:rgba(156,197,150,.5);background:rgba(156,197,150,.08)}
+.slots li small{display:block;color:var(--ok);font-size:12.5px}
+.cards,.opts{display:grid;gap:6px}
+.cards button,.opts button{border-radius:8px;text-align:left;padding:9px 12px;font-size:14px;line-height:1.35}
+.opts button[disabled]{opacity:.45;cursor:default}
+.opts button.right{opacity:1;border-color:rgba(156,197,150,.65);background:rgba(156,197,150,.15)}
+.match{display:grid;grid-template-columns:1fr 1.4fr;gap:12px}
+.match .col{display:grid;gap:6px;align-content:start}
+.match .colh{font-size:12.5px;color:var(--muted);margin:0!important}
+.match button{border-radius:8px;text-align:left;padding:8px 10px;font-size:13.5px;line-height:1.35}
+.match button.sel{border-color:var(--accent);background:rgba(201,164,92,.24)}
+.match button.done{border-color:rgba(156,197,150,.55);background:rgba(156,197,150,.1);cursor:default}
+.match .n{font-weight:600;color:var(--ok)}
+@media (max-width:560px){.match{grid-template-columns:1fr}}
+.src{border-left:3px solid var(--accent);padding:8px 12px;margin:0 0 14px;font:italic 16.5px/1.55 'Spectral',Georgia,serif;background:rgba(255,255,255,.04)}
+.src cite{display:block;font:normal 12.5px/1.4 'Public Sans',sans-serif;color:var(--muted);margin-top:6px}
+.mapwrap svg{width:100%;max-height:52vh;height:auto;display:block;border-radius:8px}
+.pt{cursor:pointer}.pt circle.hit{fill:transparent;stroke:none}.pt:hover circle.hit,.pt:focus circle.hit,.pt.ok circle.hit{fill:transparent}.pt circle{fill:#7a2a22;stroke:#f0e6cf;stroke-width:2}.pt text{fill:#fff;font:600 13px 'Public Sans',sans-serif;pointer-events:none}
+.pt:hover circle,.pt:focus circle{fill:#b0473a}.pt:focus{outline:none}.pt.ok circle{fill:#4e7d4f}
+.note{font-size:12.5px;color:var(--muted)}
+.cards button.hintc,.match button.hintc{border-color:var(--accent);box-shadow:0 0 0 2px rgba(201,164,92,.55)}
+.pt.off{opacity:.18;pointer-events:none}
+.shake{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.shake{animation:none}#toast{transition:none}}
+.rep{width:100%;border-collapse:collapse;font-size:15px;margin:6px 0 12px}
+.rep th,.rep td{padding:5px 6px;border-top:1px solid rgba(43,36,27,.2);text-align:left;vertical-align:top}
+.rep th{font-weight:600}
+.rep td.num{text-align:center}
+.tl{list-style:none;padding:0;margin:8px 0 0;font-size:15px}
+.tl li{padding:5px 0;border-top:1px solid rgba(43,36,27,.18);display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:10px}
+#mbox .modes{display:grid;gap:10px;margin:14px 0}
+#mbox .mode{text-align:left;border-radius:10px;padding:12px 14px;display:grid;gap:3px}
+#mbox .mode b{font-size:16px}#mbox .mode span{font-size:14px;font-weight:400;line-height:1.4}
+.big{font:600 64px/1 'Spectral',Georgia,serif;text-align:center;margin:8px 0 2px;color:#3b4a36}
+.chk{font:600 22px ui-monospace,Menlo,Consolas,monospace;letter-spacing:3px}
+#mbox.doc .linkbtn{background:none;border:none;text-decoration:underline;padding:4px 2px;font-size:14px;color:#3b4a36}
+body.teach #c,body.teach .hud,body.teach #inv,body.teach #keys,body.teach #joy,body.teach #dot,body.teach #toast,body.teach #tip{display:none!important}
+#teacher{position:fixed;inset:0;z-index:4;overflow:auto;background:#161b17;padding:calc(18px + env(safe-area-inset-top,0px)) 22px calc(18px + env(safe-area-inset-bottom,0px))}
+#teacher[hidden]{display:none}
+.t-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.t-head h1{font:600 24px/1.2 'Spectral',Georgia,serif;margin:0}
+.t-tools,.t-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.t-grid{display:grid;grid-template-columns:minmax(300px,1fr) 2fr;gap:16px;align-items:start}
+@media (max-width:900px){.t-grid{grid-template-columns:1fr}}
+.t-card{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+.t-lab{font-size:13px;color:var(--muted);margin:0 0 6px;font-weight:600}
+.t-code{font:600 clamp(60px,9vw,140px)/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;color:var(--accent);margin:4px 0 12px}
+.t-clock{font:600 clamp(60px,9vw,150px)/1 'Spectral',Georgia,serif;font-variant-numeric:tabular-nums;margin:4px 0 14px}
+.t-clock.warn{color:#e3b35c}.t-clock.end{color:var(--bad)}
+.t-seg{display:flex;gap:6px;margin-bottom:14px}.t-seg button{min-width:58px;font-size:16px}
+.t-seg button.on{background:var(--accent);color:#231a0e;border-color:var(--accent)}
+.t-form{display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:8px}
+@media (max-width:700px){.t-form{grid-template-columns:1fr 1fr}}
+.t-form input{font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-width:0}
+.t-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.t-tablewrap{overflow-x:auto;margin:10px 0}
+.t-table{width:100%;border-collapse:collapse;font-size:clamp(15px,1.5vw,20px)}
+.t-table th{font-size:13px;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);font-weight:600}
+.t-table td{padding:8px;border-bottom:1px solid var(--line)}
+.t-table tr.top1 td{background:rgba(201,164,92,.22)}.t-table tr.top2 td{background:rgba(201,164,92,.13)}.t-table tr.top3 td{background:rgba(201,164,92,.07)}
+.t-table .bad{color:var(--bad)}.t-table .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.t-hint{font-size:13px;color:var(--muted);margin:6px 0 0}
+.t-del{padding:3px 9px;font-size:12px}
+#copyBox{width:100%;height:120px;font:13px ui-monospace,Menlo,monospace;margin-top:8px}
+#homeBtn .sm{display:none}
+@media (max-width:640px){#homeBtn .lg{display:none}#homeBtn .sm{display:inline}#homeBtn{min-width:44px;padding-left:12px;padding-right:12px}}
+#mbox .backbtn{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;margin:0 0 10px;font:600 15px 'Public Sans',system-ui,sans-serif;color:inherit;background:transparent;border:1px solid rgba(43,36,27,.4);border-radius:999px;cursor:pointer}
+#mbox .backbtn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<canvas id="c" tabindex="0" aria-label="A lakás háromdimenziós nézete"></canvas>
+<div id="dot"></div>
+<div class="hud">
+  <div class="card">
+    <h1>Június tizenhatodika</h1>
+    <p class="goal" id="goal">Budapest, 1989. június 16.</p>
+    <div class="prog" id="prog" aria-label="Teljesített témakörök"></div>
+  </div>
+  <div class="right">
+    <button id="homeBtn" aria-label="Vissza a főoldalra"><span class="lg">← Főoldal</span><span class="sm">←</span></button>
+    <span id="timer">00:00</span>
+    <button id="nextBtn" aria-label="Következő állomás"><span class="lg">Következő állomás</span><span class="sm">Következő</span></button>
+    <button id="hintBtn">Segítség</button>
+  </div>
+</div>
+<div id="inv" aria-label="Megtalált tárgyak"></div>
+<div id="keys"><span class="desk"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> vagy nyilak: mozgás · húzás egérrel: körülnézés · kattintás: vizsgálat</span></div>
+<div id="joy"><div id="knob"></div></div>
+<div id="tip" hidden></div>
+<div id="toast" class="off" role="status" aria-live="polite"></div>
+<section id="teacher" hidden aria-label="Tanári kivetítő nézet">
+ <header class="t-head"><h1>Június tizenhatodika – tanári nézet</h1><div class="t-tools"><button id="tFull">Teljes képernyő</button><button id="tBack">← Főoldal</button></div></header>
+ <div class="t-grid">
+  <div>
+   <div class="t-card"><p class="t-lab">Forduló</p><div class="t-seg" role="group" aria-label="Forduló választása"><button data-r="1">1.</button><button data-r="2">2.</button><button data-r="3">3.</button></div>
+    <p class="t-lab">Fordulókód</p><div id="tCode" class="t-code">----</div><div class="t-row"><button id="tNew">Új kód</button></div><p class="t-hint" id="tRoundInfo"></p></div>
+   <div class="t-card"><p class="t-lab">Hátralévő idő</p><div id="tClock" class="t-clock" aria-live="off">10:00</div><div class="t-row"><button id="tStart" class="primary">Rajt</button><button id="tReset">Visszaállítás</button></div></div>
+  </div>
+  <div class="t-card">
+   <p class="t-lab">Eredménytábla</p>
+   <div class="t-form"><input id="fName" placeholder="Becenév" maxlength="20" aria-label="Becenév"><input id="fTime" placeholder="Végidő (pl. 6:42)" inputmode="numeric" aria-label="Végidő"><input id="fChk" placeholder="Ellenőrző kód" maxlength="4" autocapitalize="characters" aria-label="Ellenőrző kód"><button id="tAdd" class="primary">Hozzáadás</button></div>
+   <p id="tMsg" class="msg" aria-live="polite"></p>
+   <div class="t-tablewrap"><table class="t-table"><thead><tr><th>Hely</th><th>Becenév</th><th>Végidő</th><th>Állomás</th><th>Hiba / segítség</th><th>Ellenőrző kód</th><th></th></tr></thead><tbody id="tBody"></tbody></table></div>
+   <div class="t-row"><button id="tClear">Tábla törlése</button></div>
+   <p class="t-hint">Sorrend: előbb a célba érők végidő szerint, utánuk az időkorlátig el nem készültek a teljesített állomások száma szerint. Az adatok csak ezen a gépen, a böngészőben maradnak; valódi nevek helyett becenév használata javasolt.</p>
+  </div>
+ </div>
+</section>
+<div id="modal" hidden><div id="mbox" role="dialog" aria-modal="true" tabindex="-1"></div></div>
+
+<script src="../_lib/three.min.js"></script>
+<script>window.THREE||document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>')</script>
+<script>
+(()=>{
+'use strict';
+const $=s=>document.querySelector(s);
+const canvas=$('#c'),modal=$('#modal'),mbox=$('#mbox'),toastEl=$('#toast'),tip=$('#tip');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const COARSE=matchMedia('(pointer:coarse)').matches;
+const LOW=COARSE||(navigator.hardwareConcurrency||8)<=4;
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+/* ================= PEDAGÓGIAI TARTALOM ================= */
+const CAT={code:'Évszámok',kron:'Kronológia',szem:'Személy–esemény',forras:'Forráselemzés',terkep:'Térképhasználat',fog:'Fogalmak',ok:'Ok-okozat',vegyes:'Vegyes ismétlés'};
+const FULLCATS=['code','kron','szem','forras','terkep','fog','ok'];
+
+const EV=[
+ {id:'alk',t:'Elfogadják a Magyar Népköztársaság alkotmányát',d:'1949. augusztus 20.'},
+ {id:'n53',t:'Nagy Imre először lesz miniszterelnök',d:'1953. július 4.'},
+ {id:'vsz',t:'Megalakul a Varsói Szerződés; Magyarország alapító tagként csatlakozik',d:'1955. május 14.'},
+ {id:'o23',t:'Budapesti egyetemisták tüntetése; ledöntik a Sztálin-szobrot',d:'1956. október 23.'},
+ {id:'n4',t:'A szovjet csapatok általános támadást indítanak Budapest ellen',d:'1956. november 4.'},
+ {id:'kiv',t:'Kivégzik Nagy Imrét, Maléter Pált és Gimes Miklóst',d:'1958. június 16.'}
+];
+
+const PERSONS=[
+ {a:'Nagy Imre',b:'1956. október 24-én a tüntetők követelésére miniszterelnök lesz',why:'Kinevezése a forradalom egyik fő követelése volt.'},
+ {a:'Maléter Pál',b:'A Kilián laktanyában a felkelők oldalára áll; november 3-án honvédelmi miniszter lesz',why:'1958. június 16-án Nagy Imrével együtt kivégezték.'},
+ {a:'Kádár János',b:'November 4-én bejelenti a Magyar Forradalmi Munkás-Paraszt Kormány megalakulását',why:'Kormánya a szovjet csapatok támogatásával vette át a hatalmat.'},
+ {a:'Gerő Ernő',b:'Az MDP első titkáraként október 23-án este a tüntetőket elítélő rádióbeszédet mond',why:'Beszéde tovább szította a tömeg elégedetlenségét.'},
+ {a:'Mindszenty József',b:'Október 30-án kiszabadul fogságából, november 3-án rádiószózatot intéz az országhoz',why:'November 4-én az amerikai nagykövetségen kapott menedéket.'},
+ {a:'Rákosi Mátyás',b:'1956 júliusában leváltják az MDP éléről, és a Szovjetunióba távozik',why:'Utódja az MDP élén Gerő Ernő lett.'}
+];
+
+const SOURCE=`<blockquote class="src">„Itt Nagy Imre beszél, a Magyar Népköztársaság Minisztertanácsának elnöke. Ma hajnalban a szovjet csapatok támadást indítottak fővárosunk ellen azzal a nyilvánvaló szándékkal, hogy megdöntsék a törvényes magyar demokratikus kormányt. Csapataink harcban állnak. A kormány a helyén van. Ezt közlöm az ország népével és a világ közvéleményével.”<cite>Nagy Imre rádiónyilatkozata, Szabad Kossuth Rádió, 1956. november 4., 5 óra 20 perc</cite></blockquote>`;
+const SRC_Q=[
+ {q:'Milyen tisztséget töltött be a közlemény szerzője?',o:['A Minisztertanács elnöke, azaz miniszterelnök','Az MDP első titkára','Az Elnöki Tanács elnöke','Honvédelmi miniszter'],why:'A szöveg első mondata megnevezi a tisztséget: a Magyar Népköztársaság Minisztertanácsának elnöke.'},
+ {q:'Melyik napon hangzott el a közlemény?',o:['1956. november 4.','1956. október 23.','1956. október 30.','1956. november 1.'],why:'A „ma hajnalban” indított szovjet támadás november 4-én kezdődött; a rádió 5 óra 20 perckor sugározta először a közleményt.'},
+ {q:'Kiknek szól a közlemény a szöveg szerint?',o:['Az ország népének és a világ közvéleményének','Kizárólag a szovjet vezetésnek','Az MDP tagjainak','A honvédség tisztjeinek'],why:'Az utolsó mondat nevezi meg a címzetteket; a közlemény a nemzetközi közvélemény figyelmét is fel akarta kelteni.'},
+ {q:'Forráskritika: a közlemény szerint „a kormány a helyén van”. Mit tudunk a valós helyzetről?',o:['A kormány tagjainak többsége reggel a jugoszláv nagykövetségre menekült','A kormány Szolnokra költözött','A kormány a Kilián laktanyába vonult','A kormány már október 30-án lemondott'],why:'Nagy Imre és a kormány tagjainak többsége reggel 6 óra után a jugoszláv nagykövetségen keresett menedéket; a Parlamentben Bibó István államminiszter maradt. Egy forrás állításait mindig össze kell vetni más forrásokkal.'}
+];
+
+const MAP_Q=[
+ {q:'Október 22-én a Budapesti Műszaki Egyetemen fogalmazták meg a 16 pontot. Az egyetem a budai Duna-parton, a Szabadság híd és a Petőfi híd között áll. Melyik betű jelöli?',a:'F',why:'A műegyetemisták gyűlésén született meg a követeléseket összefoglaló 16 pont.'},
+ {q:'Október 23-án délután a tüntetők a Bem-szoborhoz vonultak, amely a Margit híd budai hídfőjének közelében áll. Melyik betű jelöli?',a:'A',why:'Bem József az 1848–49-es szabadságharc lengyel származású tábornoka volt; a helyszín a lengyel reformokkal való szolidaritást fejezte ki.'},
+ {q:'Budapesten október 23-án este a Magyar Rádió székházánál dördültek el az első lövések. Az épület a Nemzeti Múzeum mögötti Bródy Sándor utcában áll. Melyik betű jelöli?',a:'C',why:'Budapesten a Rádió ostromával kezdődött a fegyveres felkelés.'},
+ {q:'Október 25-én a Parlament előtti Kossuth téren sortüzet adtak le a fegyvertelen tömegre. A tér a pesti Duna-parton, a Margit híd és a Lánchíd között van. Melyik betű jelöli?',a:'B',why:'A Kossuth téri sortűz áldozatainak pontos száma máig vitatott.'},
+ {q:'Az egyik legnagyobb felkelőcsoport a Corvin közben harcolt, a Nagykörút és az Üllői út kereszteződésénél. Melyik betű jelöli?',a:'E',why:'A Corvin köz a VIII. kerületben volt a fegyveres ellenállás egyik központja.'}
+];
+
+const FOG_Q=[
+ {q:'Melyik fogalomra illik a meghatározás? „Az üzemekben választott dolgozói testület, amely 1956-ban átvette a gyárak irányítását, és a forradalom leverése után is szervezte az ellenállást.”',o:['Munkástanács','Nemzetőrség','Hazafias Népfront','Termelőszövetkezet'],why:'A munkástanácsok a leverés után is sztrájkokat szerveztek; a Nagy-budapesti Központi Munkástanácsot 1956 decemberében számolták fel.'},
+ {q:'„A forradalom idején létrehozott fegyveres rendfenntartó testület, amelyben katonák, rendőrök és felkelők is szolgáltak.”',o:['Nemzetőrség','Munkásőrség','Államvédelmi Hatóság (ÁVH)','Munkástanács'],why:'A Nemzetőrség parancsnoka Király Béla volt. A Munkásőrséget ezzel szemben 1957-ben a Kádár-rendszer hozta létre.'},
+ {q:'„Olyan nemzetközi helyzet, amelyben az állam nem tagja katonai szövetségnek, és nem vesz részt más államok háborúiban.”',o:['Semlegesség','Szuverenitás','Desztalinizáció','Kollektivizálás'],why:'Nagy Imre 1956. november 1-jén jelentette be Magyarország semlegességét és a kilépést a Varsói Szerződésből.'},
+ {q:'„A forradalom leverése utáni üldözés: bírósági perek, kivégzések, internálás és elbocsátások.”',o:['Megtorlás','Konszolidáció','Kollektivizálás','Rehabilitáció'],why:'A megtorlás során több mint kétszáz embert végeztek ki, tízezreket börtönöztek be vagy internáltak.'},
+ {q:'Melyik évet nevezi a történetírás a „fordulat évének”, amikor a kommunista párt megszerezte a teljes hatalmat?',o:['1948','1945','1953','1956'],why:'1948 júniusában a Magyar Kommunista Párt és a Szociáldemokrata Párt egyesülésével létrejött a Magyar Dolgozók Pártja.'}
+];
+
+const CAUSES=[
+ {a:'Sztálin 1953-as halála után a szovjet vezetés mérsékeltebb politikát vár el',b:'Nagy Imre miniszterelnök lesz, és meghirdeti az „új szakasz” politikáját',why:'Nagy Imre 1953-as programja a kényszeriparosítás lassítását és a törvénytelenségek felszámolását ígérte.'},
+ {a:'Szolidaritás a lengyelországi reformmozgalommal',b:'Az egyetemisták október 23-ra tüntetést szerveznek a Bem-szoborhoz',why:'Bem József szobra a magyar–lengyel barátság jelképe volt.'},
+ {a:'A Rádió székházánál a tüntetők követeléseit nem olvassák be, az épületet védő ÁVH-sok a tömegre lőnek',b:'Október 23-án este kitör a fegyveres felkelés',why:'A Rádió ostroma után a harcok a város más részeire is átterjedtek.'},
+ {a:'Október végén újabb szovjet csapatok lépnek be az országba',b:'Nagy Imre november 1-jén bejelenti a kilépést a Varsói Szerződésből és a semlegességet',why:'Az összefüggés fordítva nem igaz: a szovjet vezetés már október 31-én döntött a beavatkozásról, a kilépés erre adott válasz volt.'},
+ {a:'A forradalom leverése és a megtorlástól való félelem',b:'Mintegy 200 ezer ember hagyja el az országot',why:'A menekültek többsége Ausztrián keresztül távozott.'}
+];
+
+const HINTS={
+ drawer:['Nagyapa levele az íróasztalon fekszik, fölötte a falinaptár októberi lapja lóg.','A kód egy 1956. októberi nap hónapja és napja; a naptár bejegyzése a Sztálin-szobor ledöntésére utal.','A tüntetés 1956. október 23-án kezdődött, a fiók kódja: 1023.'],
+ tube:['A kinyílt fiókban van valami. Kattints rá.','Az elektroncső a nyitott fiókban fekszik.','Kattints a fiókban fekvő elektroncsőre.'],
+ radio:['A rádió a jobb oldali komódon áll. Tedd bele az elektroncsövet, majd állítsd időrendbe az eseményeket.','Támpont: az 1949-es alkotmány a legkorábbi, Nagy Imre kivégzése (1958) a legkésőbbi esemény.','A helyes sorrend: 1949 alkotmány, 1953 Nagy Imre kormánya, 1955 Varsói Szerződés, 1956. október 23., 1956. november 4., 1958 kivégzés.'],
+ album:['A fényképalbum a fotelen fekszik. Párosítsd a személyeket a hozzájuk tartozó eseménnyel.','Támpont: Rákosi Mátyást 1956 nyarán leváltották, Mindszenty József bíboros volt.','Gerő Ernő az MDP első titkára volt, Maléter Pál katonatiszt, Kádár János a november 4-én alakult kormány vezetője, Nagy Imre október 24-én lett miniszterelnök.'],
+ tape:['A magnetofon a dohányzóasztalon áll. Olvasd el figyelmesen a forrás szövegét.','A szöveg első mondata megadja a szerzőt és tisztségét, az utolsó a címzetteket.','A forráskritikai kérdésnél gondolj arra, hová menekült november 4-én reggel a kormány tagjainak többsége: a jugoszláv nagykövetségre.'],
+ map:['A térkép a jobb oldali falon lóg, a vitrin és a komód között.','Tájékozódj a Duna, a hidak és a Nagykörút alapján: Buda a folyótól nyugatra, Pest keletre fekszik.','Keresd meg a térképen a kérdésben említett támpontot (híd, útkereszteződés, múzeum), és a hozzá legközelebbi betűt válaszd.'],
+ fog:['A fogalomtár a bal oldali könyvespolcon áll. Kattints a polcra.','Figyelj a hasonló fogalmakra: a Nemzetőrség a forradalom, a Munkásőrség a Kádár-rendszer testülete volt.','A fordulat éve 1948; a Nemzetőrség vezetője Király Béla volt, a Munkásőrséget 1957-ben hozták létre.'],
+ book:['A fogalomtár utolsó kérdésére adott válasz megmutatja, melyik kötetet kell kihúzni.','A kötet gerincén a fordulat évének száma áll.','A keresett kötet gerincén 1948 áll, a polc középső sorában.'],
+ vitrin:['A rézkulcs a szoba jobb hátsó sarkában álló vitrint nyitja.','A vitrin az üvegajtós szekrény a jobb hátsó sarokban.','Kattints a vitrinre: a kulcs már nálad van.'],
+ diary:['Nagyapa naplója a vitrin középső polcán áll. Párosítsd az okokat a következményekkel.','Minden következményhez azt az eseményt keresd, amely időben megelőzte.','Figyelj a sorrendre: a szovjet csapatmozgások megelőzték a Varsói Szerződésből való kilépés bejelentését.'],
+ tv:['A televízión vegyes ismétlő kérdések jelennek meg a korábbi fordulók anyagából.','A kérdésablakban is kérhetsz segítséget: a játék kizár két rossz választ.','Idézd fel az idővonalat: 1949. augusztus 20., 1953. július 4., 1955. május 14., 1956. október 23., 1956. november 4., 1958. június 16.'],
+ door:['A meghívó szerint a kivégzés 31 évvel az újratemetés előtt történt.','Számold ki: 1989 − 31.','1989 − 31 = 1958. Ez a bejárati ajtó kódja.']
+};
+const STAGE_KEYS=['drawer','tube','radio','album','tape','map','fog','book','vitrin','diary','door'];
+const GOALS=['','Vedd ki, amit a fiókban találsz.','Javítsd meg a rádiót a jobb oldali komódon.','Nézd át a fényképalbumot a fotelen.','Hallgasd meg a szalagot a dohányzóasztalon álló magnetofonon.','Vizsgáld meg a Budapest-térképet a jobb oldali falon.','Lapozd át a fogalomtárat a könyvespolcon.','Húzd ki a megfelelő kötetet a könyvespolcról.','Nyisd ki a vitrint.','Olvasd el nagyapa naplóját a vitrinben.','Nyisd ki a bejárati ajtót.'];
+
+/* ================= ÁLLAPOT ================= */
+const S={stage:0,letterRead:false,vitrinOpen:false,mistakes:0,inv:[],hint:{},hints:0,hintPen:0,start:0,playing:false,won:false,
+ err:{code:0,kron:0,szem:0,forras:0,terkep:0,fog:0,ok:0,vegyes:0},done:{},qi:{}};
+const miss=c=>{S.err[c]++;S.mistakes++;};
+let modalOpen=false,codeKeys=null;
+
+/* ================= UI SEGÉDEK ================= */
+let toastT;
+function toast(t,ms=3200){toastEl.textContent=t;toastEl.classList.remove('off');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.add('off'),ms);}
+function openModal(html,cls){mbox.className=cls;mbox.innerHTML=html;mbox.scrollTop=0;modal.hidden=false;modalOpen=true;tip.hidden=true;for(const k in keys)keys[k]=false;const f=mbox.querySelector('[data-focus]')||mbox;f.focus({preventScroll:true});}
+function closeModal(){modal.hidden=true;modalOpen=false;codeKeys=null;canvas.focus();}
+function doc(html,after){openModal(html+'<div class="actions"><button data-close data-focus>Bezárás</button></div>','doc');mbox.querySelector('[data-close]').onclick=()=>{closeModal();after&&after();};}
+function setGoal(){
+ if(Q){const n=Q.route.length,k=Q.route[Q.i];$('#goal').innerHTML=`${Q.round}. forduló, ${Math.min(Q.i+1,n)}/${n}. állomás: <b>${k?QGOAL[k]:'Célba értél.'}</b>`;}
+ else{const g=S.stage===0?(S.letterRead?'Nyisd ki az íróasztal fiókját.':'Olvasd el nagyapa levelét az íróasztalon.'):GOALS[S.stage];
+ $('#goal').innerHTML='Feladat: <b>'+g+'</b>';}
+ $('#prog').innerHTML=(Q?ROUNDS[Q.round].cats:FULLCATS).map(k=>`<i class="${S.done[k]?'on':''}" title="${CAT[k]}">${S.done[k]?'✓ ':''}${CAT[k]}</i>`).join('');
+ $('#inv').innerHTML=S.inv.map(i=>'<span>'+i+'</span>').join('');
+}
+const addInv=i=>{if(!S.inv.includes(i))S.inv.push(i);setGoal();};
+const remInv=i=>{S.inv=S.inv.filter(x=>x!==i);setGoal();};
+const fmt=ms=>{const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');};
+const shakeEl=el=>{el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');};
+const HINT_PEN=[15,30,60],MODAL_PEN=20;
+function modalHint(){S.hints++;if(Q)S.hintPen+=MODAL_PEN;}
+const hintBtnHTML=()=>`<button data-hint>Segítség${Q?' (+'+MODAL_PEN+' mp)':''}</button>`;
+function finishBtn(label,fn){const a=mbox.querySelector('.actions');a.innerHTML=`<button class="primary" data-next>${label}</button>`;const b=a.querySelector('[data-next]');b.onclick=fn;b.focus({preventScroll:true});}
+
+/* --- Számzár --- */
+function codeModal({title,prompt,answer,onOk}){
+ openModal(`<p class="cat">${CAT.code}</p><h2>${title}</h2><p>${prompt}</p><div class="code"><span></span><span></span><span></span><span></span></div>
+ <div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-d="${n}">${n}</button>`).join('')}<button data-b aria-label="Törlés">⌫</button><button data-d="0">0</button><button data-ok class="primary">OK</button></div>
+ <p class="msg" style="text-align:center" aria-live="polite"></p><div class="actions"><button data-close>Mégse</button></div>`,'panel');
+ let v='';const spans=[...mbox.querySelectorAll('.code span')],msg=mbox.querySelector('.msg'),codeEl=mbox.querySelector('.code');
+ const upd=()=>spans.forEach((s,i)=>s.textContent=v[i]||'');
+ const press=d=>{if(v.length<4){v+=d;upd();msg.textContent='';}};
+ const back=()=>{v=v.slice(0,-1);upd();};
+ const ok=()=>{if(v.length<4){msg.className='msg bad';msg.textContent='Adj meg négy számjegyet.';return;}
+  if(v===answer){closeModal();onOk();}else{miss('code');msg.className='msg bad';msg.textContent='Hibás kód. Próbáld újra.';v='';upd();shakeEl(codeEl);}};
+ mbox.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>press(b.dataset.d));
+ mbox.querySelector('[data-b]').onclick=back;mbox.querySelector('[data-ok]').onclick=ok;
+ mbox.querySelector('[data-close]').onclick=closeModal;
+ codeKeys=e=>{if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace')back();else if(e.key==='Enter')ok();};
+}
+
+/* --- Kronológia --- */
+function timelineModal(onDone,list=EV){
+ let order;do{order=shuffle(list);}while(order.every((e,i)=>e===list[i]));
+ openModal(`<p class="cat">${CAT.kron}</p><h2>A rádió skálája</h2><p>A készülék bemelegszik, de a hangolás elállítódott. Állítsd időrendbe az eseményeket: kattints rájuk a legkorábbitól a legkésőbbiig.</p>
+ <ol class="slots">${list.map(()=>'<li></li>').join('')}</ol><div class="cards">${order.map(e=>`<button data-id="${e.id}">${e.t}</button>`).join('')}</div>
+ <p class="msg" aria-live="polite"></p><div class="actions">${hintBtnHTML()}<button data-close>Később</button></div>`,'panel');
+ let n=0;const slots=[...mbox.querySelectorAll('.slots li')],btns=[...mbox.querySelectorAll('.cards button')],msg=mbox.querySelector('.msg');
+ const reset=()=>{n=0;slots.forEach(s=>{s.className='';s.innerHTML='';});btns.forEach(b=>b.hidden=false);};
+ btns.forEach(b=>b.onclick=()=>{
+  const e=list[n];
+  if(b.dataset.id===e.id){slots[n].className='filled';slots[n].innerHTML=e.t+'<small>'+e.d+'</small>';b.hidden=true;n++;msg.className='msg ok';
+   if(n<list.length)msg.textContent='Helyes.';else{msg.textContent='Az idővonal teljes.';finishBtn('Tovább',()=>{closeModal();onDone();});}
+  }else{miss('kron');msg.className='msg bad';msg.textContent='Nem ez az esemény következik. A sorrend elölről indul.';reset();shakeEl(mbox.querySelector('.slots'));}
+ });
+ mbox.querySelector('[data-close]').onclick=closeModal;
+ mbox.querySelector('[data-hint]').onclick=()=>{const e=list[n];if(!e)return;modalHint();btns.forEach(x=>x.classList.remove('hintc'));btns.find(x=>x.dataset.id===e.id).classList.add('hintc');msg.className='msg';msg.textContent='Segítség: a kiemelt esemény következik.';};
+}
+
+/* --- Párosítás (személy–esemény, ok-okozat) --- */
+function matchModal({cat,title,intro,pairs,lh,rh,onDone}){
+ const L=shuffle(pairs.map((p,i)=>({i,t:p.a}))),R=shuffle(pairs.map((p,i)=>({i,t:p.b})));
+ openModal(`<p class="cat">${CAT[cat]}</p><h2>${title}</h2><p>${intro}</p><div class="match">
+ <div class="col"><p class="colh">${lh}</p>${L.map(x=>`<button data-s="L" data-i="${x.i}">${x.t}</button>`).join('')}</div>
+ <div class="col"><p class="colh">${rh}</p>${R.map(x=>`<button data-s="R" data-i="${x.i}">${x.t}</button>`).join('')}</div></div>
+ <p class="msg" aria-live="polite"></p><div class="actions">${hintBtnHTML()}<button data-close>Később</button></div>`,'panel wide');
+ let sel=null,num=0;const msg=mbox.querySelector('.msg');
+ const pairUp=(lb,rb,pre)=>{num++;[lb,rb].forEach(x=>{x.classList.remove('sel','hintc');x.classList.add('done');x.setAttribute('aria-disabled','true');x.insertAdjacentHTML('afterbegin',`<span class="n">${num}.</span> `);});
+  msg.className='msg ok';msg.textContent=pre+pairs[+rb.dataset.i].why;sel=null;
+  if(num===pairs.length){msg.textContent+=' Minden pár a helyére került.';finishBtn('Tovább',()=>{closeModal();onDone();});}};
+ mbox.querySelectorAll('.match button').forEach(b=>b.onclick=()=>{
+  if(b.classList.contains('done'))return;
+  if(sel===b){b.classList.remove('sel');sel=null;return;}
+  if(!sel||sel.dataset.s===b.dataset.s){if(sel)sel.classList.remove('sel');sel=b;b.classList.add('sel');return;}
+  if(sel.dataset.i===b.dataset.i){pairUp(sel,b,'Helyes pár. ');}else{miss(cat);msg.className='msg bad';msg.textContent='Ez a két elem nem tartozik össze. Próbáld újra.';sel.classList.remove('sel');sel=null;shakeEl(mbox.querySelector('.match'));}
+ });
+ mbox.querySelector('[data-close]').onclick=closeModal;
+ mbox.querySelector('[data-hint]').onclick=()=>{const lb=mbox.querySelector('.match [data-s="L"]:not(.done)');if(!lb)return;const rb=mbox.querySelector(`.match [data-s="R"][data-i="${lb.dataset.i}"]`);if(sel)sel.classList.remove('sel');modalHint();pairUp(lb,rb,'Segítség: a játék összepárosított egy párt. ');};
+}
+
+/* --- Feleletválasztós sor (forráselemzés, fogalmak) --- */
+function quizModal({cat,title,intro,source,qs,onDone}){
+ const render=()=>{
+  const i=S.qi[cat]||0,q=qs[i];
+  openModal(`<p class="cat">${CAT[cat]}, ${i+1}/${qs.length}. kérdés</p><h2>${title}</h2>${intro?`<p>${intro}</p>`:''}${source||''}<p><b>${q.q}</b></p>
+  <div class="opts">${shuffle(q.o.map((t,k)=>({t,k}))).map(o=>`<button data-k="${o.k}">${o.t}</button>`).join('')}</div>
+  <p class="msg" aria-live="polite"></p><div class="actions">${hintBtnHTML()}<button data-close>Később</button></div>`,'panel wide');
+  const msg=mbox.querySelector('.msg');
+  const hb=mbox.querySelector('[data-hint]');hb.onclick=()=>{const wr=[...mbox.querySelectorAll('.opts button')].filter(x=>x.dataset.k!=='0'&&!x.disabled);const k=Math.min(2,wr.length);if(!k)return;shuffle(wr).slice(0,k).forEach(x=>x.disabled=true);modalHint();hb.remove();msg.className='msg';msg.textContent=`Segítség: a játék kizárt ${k===2?'két':'egy'} rossz választ.`;};
+  mbox.querySelectorAll('.opts button').forEach(b=>b.onclick=()=>{
+   if(b.dataset.k==='0'){mbox.querySelectorAll('.opts button').forEach(x=>x.disabled=true);b.classList.add('right');msg.className='msg ok';msg.textContent='Helyes. '+q.why;
+    S.qi[cat]=i+1;
+    if(i+1<qs.length)finishBtn('Következő kérdés',render);else finishBtn('Tovább',()=>{closeModal();onDone();});
+   }else{miss(cat);b.disabled=true;msg.className='msg bad';msg.textContent='Nem ez a helyes válasz. Próbáld újra.';}
+  });
+  mbox.querySelector('[data-close]').onclick=closeModal;
+ };
+ render();
+}
+
+/* --- Térkép --- */
+const PTS={A:[170,160],B:[224,182],C:[304,256],D:[352,202],E:[321,332],F:[176,334],G:[226,256]};
+const RIVER='M190 0 C188 80 198 120 196 170 C194 230 198 290 204 340 C208 390 210 420 212 440';
+function mapSVG(ok){
+ const lb='font:italic 11px Spectral,Georgia,serif;fill:#5a4a36';
+ return `<svg viewBox="0 0 420 440" role="img" aria-label="Budapest vázlatos térképe, betűkkel jelölt helyszínekkel">
+ <rect width="420" height="440" fill="#efe6cf"/>
+ <text x="70" y="260" style="font:600 28px Spectral,Georgia,serif;fill:rgba(90,74,54,.28);letter-spacing:4px">BUDA</text>
+ <text x="300" y="100" style="font:600 28px Spectral,Georgia,serif;fill:rgba(90,74,54,.28);letter-spacing:4px">PEST</text>
+ <rect x="362" y="140" width="48" height="78" rx="10" fill="#c9d8ae"/><text x="386" y="233" text-anchor="middle" style="${lb}">Városliget</text>
+ <path d="M210 145 C272 146 330 180 342 245 C348 290 330 330 312 345 C290 360 250 365 216 362" stroke="#c4955f" stroke-width="4" fill="none"/>
+ <text x="352" y="292" style="${lb}">Nagykörút</text>
+ <path d="M208 300 C250 302 282 282 280 252 C278 228 250 214 214 212" stroke="#c4955f" stroke-width="2.5" fill="none" stroke-dasharray="6 4"/>
+ <text x="238" y="240" style="${lb}">Kiskörút</text>
+ <path d="M226 212 L360 172" stroke="#c4955f" stroke-width="2" fill="none"/><text x="276" y="186" style="${lb}" transform="rotate(-16 276 186)">Andrássy út</text>
+ <path d="M272 290 L410 408" stroke="#c4955f" stroke-width="2.5" fill="none"/><text x="360" y="386" style="${lb}" transform="rotate(40 360 386)">Üllői út</text>
+ <rect x="282" y="266" width="16" height="12" fill="#8c7a5e"/><text x="290" y="292" text-anchor="middle" style="${lb}">Nemzeti Múzeum</text>
+ <path d="${RIVER}" stroke="#8fb3c4" stroke-width="24" fill="none"/>
+ <ellipse cx="193" cy="92" rx="7" ry="38" fill="#c9d8ae"/><text x="176" y="80" text-anchor="end" style="${lb}">Margitsziget</text>
+ <g stroke="#5e4c38" stroke-width="3.5">
+ <line x1="178" y1="145" x2="214" y2="145"/><line x1="180" y1="212" x2="215" y2="212"/><line x1="186" y1="300" x2="221" y2="300"/><line x1="190" y1="362" x2="226" y2="362"/></g>
+ <g style="${lb}" text-anchor="end"><text x="172" y="140">Margit híd</text><text x="174" y="207">Lánchíd</text><text x="180" y="296">Szabadság híd</text><text x="184" y="378">Petőfi híd</text></g>
+ <g transform="translate(395 28)"><path d="M0 -14 L6 4 L0 0 L-6 4 Z" fill="#5a4a36"/><text y="18" text-anchor="middle" style="font:600 11px Public Sans,sans-serif;fill:#5a4a36">É</text></g>
+ ${Object.entries(PTS).map(([k,[x,y]])=>`<g class="pt${ok.includes(k)?' ok':''}" data-p="${k}" tabindex="0" role="button" aria-label="${k} jelű helyszín"><circle class="hit" cx="${x}" cy="${y}" r="22"/><circle cx="${x}" cy="${y}" r="13"/><text x="${x}" y="${y+4.5}" text-anchor="middle">${k}</text></g>`).join('')}
+ </svg>`;
+}
+function mapModal(onDone,QS=MAP_Q){
+ const render=()=>{
+  const i=S.qi.terkep||0,q=QS[i],ok=QS.slice(0,i).map(x=>x.a);
+  openModal(`<p class="cat">${CAT.terkep}, ${i+1}/${QS.length}. kérdés</p><h2>Budapest, 1956</h2><div class="mapgrid"><div class="mapwrap">${mapSVG(ok)}</div><div>
+  <p class="note">Vázlatos térkép, nem méretarányos. Az Erzsébet híd 1956-ban nem állt: a háborúban lerombolt hidat 1964-ben adták át újra.</p>
+  <p><b>${q.q}</b></p><p class="msg" aria-live="polite"></p></div></div><div class="actions">${hintBtnHTML()}<button data-close>Később</button></div>`,'panel wide');
+  const msg=mbox.querySelector('.msg');let solved=false;
+  const choose=p=>{if(solved)return;
+   if(p===q.a){solved=true;mbox.querySelector(`.pt[data-p="${p}"]`).classList.add('ok');msg.className='msg ok';msg.textContent='Helyes. '+q.why;S.qi.terkep=i+1;
+    if(i+1<QS.length)finishBtn('Következő kérdés',render);else finishBtn('Tovább',()=>{closeModal();onDone();});}
+   else{miss('terkep');msg.className='msg bad';msg.textContent=`A(z) ${p} jelű pont nem ez a helyszín. Tájékozódj a Duna, a hidak és az utak alapján.`;}};
+  const hb=mbox.querySelector('[data-hint]');hb.onclick=()=>{const wr=[...mbox.querySelectorAll('.pt')].filter(g=>g.dataset.p!==q.a&&!g.classList.contains('off'));shuffle(wr).slice(0,Math.max(0,wr.length-2)).forEach(g=>{g.classList.add('off');g.setAttribute('tabindex','-1');});modalHint();hb.remove();msg.className='msg';msg.textContent='Segítség: a játék kizárt néhány helyszínt, három lehetőség maradt.';};
+  mbox.querySelectorAll('.pt').forEach(g=>{g.onclick=()=>{if(!g.classList.contains('off'))choose(g.dataset.p);};g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(g.dataset.p);}};});
+  mbox.querySelector('[data-close]').onclick=closeModal;
+ };
+ render();
+}
+
+/* ================= 3D JELENET ================= */
+const renderer=new THREE.WebGLRenderer({canvas,antialias:!LOW,powerPreference:'high-performance'});
+let PR=Math.min(window.devicePixelRatio||1,LOW?1.5:2);renderer.setPixelRatio(PR);
+renderer.outputEncoding=THREE.sRGBEncoding;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x14110e);
+const camera=new THREE.PerspectiveCamera(70,1,.05,40);camera.rotation.order='YXZ';
+function resize(){renderer.setSize(innerWidth,innerHeight,false);const a=innerWidth/innerHeight;camera.aspect=a;camera.fov=a<1?clamp(2*Math.atan(Math.tan(37.5*Math.PI/180)/a)*180/Math.PI,70,90):70;camera.updateProjectionMatrix();}
+addEventListener('resize',resize);resize();
+
+function cnv(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);return c;}
+function tex(c,rx,ry){const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=LOW?1:4;if(rx){t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx,ry);}return t;}
+const M=(c,o={})=>{const m=new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.8,metalness:0},o));m.color.convertSRGBToLinear();m.emissive.convertSRGBToLinear();return m;};
+function B(w,h,d,m,x,y,z,p=scene){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);p.add(o);return o;}
+function P(w,h,m,x,y,z,ry=0,rx=0,p=scene){const o=new THREE.Mesh(new THREE.PlaneGeometry(w,h),m);o.position.set(x,y,z);o.rotation.set(rx,ry,0);p.add(o);return o;}
+function tag(o,act,label){o.traverse(m=>{if(m.isMesh){m.userData.act=act;m.userData.label=label;}});return o;}
+const books=[];
+
+function build(){
+ const serif="'Spectral', Georgia, serif";
+ const walnut=M(0x4b301f,{roughness:.55}),dark=M(0x2c1c12,{roughness:.6}),brass=M(0xb28f4c,{metalness:.7,roughness:.35});
+ const veneerC=cnv(256,512,(g,w,h)=>{const gr=g.createLinearGradient(0,0,w,0);gr.addColorStop(0,'#a4561f');gr.addColorStop(.5,'#c0712f');gr.addColorStop(1,'#a15320');g.fillStyle=gr;g.fillRect(0,0,w,h);
+  for(let i=0;i<80;i++){g.strokeStyle=`rgba(${Math.random()<.5?'90,40,10':'235,170,100'},${.07+Math.random()*.14})`;g.lineWidth=1+Math.random()*3;g.beginPath();let x=Math.random()*w;g.moveTo(x,0);for(let y=0;y<=h;y+=16){x+=Math.sin(y*.02+i)*2+(Math.random()-.5)*2;g.lineTo(x,y);}g.stroke();}});
+ const veneer=M(0xffffff,{map:tex(veneerC),roughness:.38});
+ const edge=M(0xe3b77e,{roughness:.5}),beech=M(0xd9a766,{roughness:.55});
+ const mustard=M(0xc3922c,{roughness:.95}),cream=M(0xece6d8,{roughness:.6});
+ const glass=M(0xcfe3e6,{transparent:true,opacity:.22,roughness:.05,metalness:.1});
+ const glassware=M(0xdfeef0,{transparent:true,opacity:.5,roughness:.05});
+ const porcelain=M(0xf4efe6,{roughness:.25});
+ const cyl=(rt,rb,h,m,x,y,z,p=scene,seg=16)=>{const o=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg),m);o.position.set(x,y,z);p.add(o);return o;};
+
+ /* Falak: krémszínű, strukturált tapéta; padló: vörös padlószőnyeg */
+ const wallC=cnv(256,256,(g,w,h)=>{g.fillStyle='#e7dcc1';g.fillRect(0,0,w,h);for(let i=0;i<2600;i++){g.fillStyle=Math.random()<.5?'rgba(255,250,235,.35)':'rgba(150,120,80,.12)';g.fillRect(Math.random()*w,Math.random()*h,1+Math.random()*2,1+Math.random()*2);}
+  g.strokeStyle='rgba(160,130,90,.10)';g.lineWidth=2;for(let x=0;x<w;x+=64){g.beginPath();for(let y=0;y<=h;y+=8)g.lineTo(x+Math.sin(y/20)*8,y);g.stroke();}});
+ const wm=(w,h)=>M(0xffffff,{map:tex(wallC,w/1.4,h/1.4),roughness:.95});
+ P(7,2.9,wm(7,2.9),0,1.45,-3);
+ P(6,2.9,wm(6,2.9),-3.5,1.45,0,Math.PI/2);
+ P(6,2.9,wm(6,2.9),3.5,1.45,0,-Math.PI/2);
+ P(2.95,2.9,wm(2.95,2.9),-2.025,1.45,3,Math.PI);
+ P(2.95,2.9,wm(2.95,2.9),2.025,1.45,3,Math.PI);
+ P(1.1,.75,wm(1.1,.75),0,2.525,3,Math.PI);
+ const carpC=cnv(256,256,(g,w,h)=>{g.fillStyle='#a3352a';g.fillRect(0,0,w,h);for(let i=0;i<9000;i++){const r=Math.random();g.fillStyle=r<.45?'rgba(70,10,5,.35)':r<.9?'rgba(215,95,70,.3)':'rgba(240,170,120,.25)';g.fillRect(Math.random()*w,Math.random()*h,1.5,1.5);}});
+ P(7,6,M(0xffffff,{map:tex(carpC,6,5),roughness:1}),0,0,0,0,-Math.PI/2).userData.floor=true;
+ P(7,6,M(0xf1ebe0,{roughness:1}),0,2.9,0,0,Math.PI/2);
+ const base=M(0x6b4a30,{roughness:.6});
+ B(7,.08,.02,base,0,.04,-2.99);B(.02,.08,6,base,-3.49,.04,0);B(.02,.08,6,base,3.49,.04,0);
+ B(2.95,.08,.02,base,-2.025,.04,2.99);B(2.95,.08,.02,base,2.025,.04,2.99);
+
+ /* Lépcsőház az ajtó mögött */
+ P(1.1,2.2,M(0x3a3026),0,0,4.1,0,-Math.PI/2);
+ P(1.1,2.3,M(0x8c7b5a,{emissive:0x3b2d18}),0,1.15,5.2,Math.PI);
+ P(2.2,2.3,M(0x6e604a),-0.55,1.15,4.1,Math.PI/2);P(2.2,2.3,M(0x6e604a),0.55,1.15,4.1,-Math.PI/2);
+ if(!LOW){const hall=new THREE.PointLight(0xffe0ae,.7,2.6,1.5);hall.position.set(0,2,4.7);scene.add(hall);}
+
+ /* Bejárati ajtó */
+ B(.08,2.2,.12,dark,-.59,1.1,3);B(.08,2.2,.12,dark,.59,1.1,3);B(1.26,.08,.12,dark,0,2.19,3);
+ const doorP=new THREE.Group();doorP.position.set(-.54,0,2.985);scene.add(doorP);
+ B(1.08,2.12,.05,M(0x6a4930,{roughness:.5}),.54,1.06,0,doorP);
+ [[.3,1.55],[.78,1.55],[.3,.55],[.78,.55]].forEach(([x,y])=>B(.38,.78,.012,dark,x,y,-.031,doorP));
+ B(.12,.03,.03,brass,.95,1.0,-.05,doorP);
+ tag(doorP,'door','Bejárati ajtó');
+ const padC=cnv(64,96,(g,w,h)=>{g.fillStyle='#262626';g.fillRect(0,0,w,h);g.fillStyle='#8d8a82';for(let r=0;r<4;r++)for(let c=0;c<3;c++)g.fillRect(8+c*18,14+r*20,12,14);});
+ const keypad=tag(B(.13,.2,.03,M(0xffffff,{map:tex(padC),metalness:.3,roughness:.5}),.82,1.3,2.975),'door','Az ajtó számzára');
+
+ /* Íróasztal, fiók, levél, naptár, asztali lámpa, írógép, szék */
+ B(1.4,.04,.72,walnut,-1.6,.76,-2.62);
+ [[-2.25,-2.93],[-.95,-2.93],[-2.25,-2.31],[-.95,-2.31]].forEach(([x,z])=>B(.05,.74,.05,walnut,x,.37,z));
+ const drawer=new THREE.Group();drawer.position.set(-1.6,.66,-2.62);scene.add(drawer);
+ B(.7,.14,.02,walnut,0,0,.34,drawer);B(.66,.01,.66,dark,0,-.06,0,drawer);B(.01,.12,.66,dark,-.33,0,0,drawer);B(.01,.12,.66,dark,.33,0,0,drawer);
+ B(.1,.02,.03,brass,0,0,.36,drawer);
+ tag(drawer,'drawer','Íróasztal-fiók');
+ const tube=new THREE.Group();tube.position.set(.08,-.02,.12);drawer.add(tube);
+ cyl(.022,.022,.03,M(0x222222),0,-.03,0,tube);
+ cyl(.02,.02,.09,M(0xcfd8d6,{transparent:true,opacity:.6,roughness:.1,emissive:0x221a10}),0,.03,0,tube);
+ tube.rotation.z=Math.PI/2;tube.visible=false;tag(tube,'tube','Elektroncső');
+ const letterC=cnv(256,340,(g,w,h)=>{g.fillStyle='#efe4c9';g.fillRect(0,0,w,h);g.strokeStyle='rgba(40,40,70,.55)';g.lineWidth=2;for(let y=40;y<h-30;y+=18){g.beginPath();let x=24;g.moveTo(x,y);while(x<w-30){x+=6+Math.random()*10;g.lineTo(x,y+(Math.random()-.5)*4);}g.stroke();}});
+ const lt=P(.21,.28,M(0xffffff,{map:tex(letterC),roughness:1}),-1.3,.782,-2.48,0,-Math.PI/2);lt.rotation.z=.2;tag(lt,'letter','Nagyapa levele');
+ const calC=cnv(420,560,(g,w,h)=>{g.fillStyle='#ece2c6';g.fillRect(0,0,w,h);g.fillStyle='#7a2a22';g.fillRect(0,0,w,96);g.fillStyle='#f3ead4';g.textAlign='center';g.font='600 54px '+serif;g.fillText('1956',w/2,58);g.font='500 26px '+serif;g.fillText('OKTÓBER',w/2,88);
+  const d=['H','K','Sze','Cs','P','Szo','V'];g.fillStyle='#4a3c2c';g.font='600 20px '+serif;d.forEach((s,i)=>g.fillText(s,32+i*59,132));
+  g.font='500 26px '+serif;for(let n=1;n<=31;n++){const i=n-1,c=i%7,r=Math.floor(i/7);g.fillStyle=c===6?'#7a2a22':'#2b241b';g.fillText(String(n),32+c*59,178+r*62);}
+  g.fillStyle='rgba(60,60,60,.7)';g.font='italic 500 21px '+serif;g.fillText('Aznap este ledőlt a szobor…',w/2,h-26);});
+ tag(P(.42,.56,M(0xffffff,{map:tex(calC),roughness:1}),-1.6,1.62,-2.985),'calendar','Falinaptár, 1956. október');
+ // asztali lámpa
+ cyl(.08,.09,.02,dark,-2.12,.79,-2.82);cyl(.01,.01,.36,brass,-2.12,.97,-2.82);
+ cyl(.06,.13,.14,M(0x3e6b4a,{emissive:0x1c2a18,side:THREE.DoubleSide}),-2.12,1.18,-2.8,scene,20).material.side=THREE.DoubleSide;
+ // írógép
+ const tw=new THREE.Group();tw.position.set(-1.85,.78,-2.74);tw.rotation.y=.12;scene.add(tw);
+ B(.36,.1,.28,M(0x39413a,{roughness:.4}),0,.05,0,tw);B(.4,.05,.05,M(0x222222),0,.13,-.08,tw);
+ const keyC=cnv(128,64,(g,w,h)=>{g.fillStyle='#39413a';g.fillRect(0,0,w,h);g.fillStyle='#e6e0cf';for(let r=0;r<4;r++)for(let c=0;c<11;c++){g.beginPath();g.arc(8+c*11+r*3,10+r*14,4,0,7);g.fill();}});
+ P(.3,.12,M(0xffffff,{map:tex(keyC),roughness:.5}),0,.102,.07,0,-Math.PI/2+.25,tw);
+ P(.2,.14,M(0xf2ecdc),0,.2,-.1,0,-.35,tw);
+ // szék
+ const ch=new THREE.Group();ch.position.set(-1.6,0,-1.9);scene.add(ch);
+ B(.44,.04,.42,walnut,0,.46,0,ch);[[-.19,-.18],[.19,-.18],[-.19,.18],[.19,.18]].forEach(([x,z])=>B(.035,.46,.035,walnut,x,.23,z,ch));
+ B(.035,.5,.035,walnut,-.19,.73,.19,ch);B(.035,.5,.035,walnut,.19,.73,.19,ch);B(.42,.14,.025,walnut,0,.9,.19,ch);
+
+ /* Cserépkályha a bal hátsó sarokban */
+ const tileC=cnv(128,256,(g,w,h)=>{g.fillStyle='#3d6655';g.fillRect(0,0,w,h);for(let y=0;y<h;y+=64)for(let x=0;x<w;x+=64){const gr=g.createRadialGradient(x+32,y+32,4,x+32,y+32,40);gr.addColorStop(0,'#5d8b76');gr.addColorStop(1,'#2e5242');g.fillStyle=gr;g.fillRect(x+3,y+3,58,58);}});
+ const tileM=M(0xffffff,{map:tex(tileC,1,2),roughness:.3});
+ const stove=new THREE.Group();scene.add(stove);
+ B(.62,.22,.62,dark,-3.18,.11,-2.68,stove);B(.56,1.3,.56,tileM,-3.18,.87,-2.68,stove);B(.64,.07,.64,tileM,-3.18,1.555,-2.68,stove);
+ B(.5,.38,.5,tileM,-3.18,1.78,-2.68,stove);B(.56,.06,.56,tileM,-3.18,2.0,-2.68,stove);B(.18,.2,.01,M(0x1c1c1c,{metalness:.5}),-3.18,.45,-2.395,stove);
+ tag(stove,'stove','Cserépkályha');
+
+ /* Szekrénysor a bal falon: ruhásszekrény, könyvespolc, komód üveges felső szekrénnyel */
+ B(.55,2.05,1.45,veneer,-3.225,1.035,-1.325);B(.58,.05,1.48,edge,-3.225,2.08,-1.325);B(.55,.06,1.45,dark,-3.225,.03,-1.325);
+ B(.006,1.9,.012,dark,-2.947,1.06,-1.325);B(.01,2.05,.03,edge,-2.946,1.035,-2.035);B(.01,2.05,.03,edge,-2.946,1.035,-.615);
+ [-1.39,-1.26].forEach(z=>B(.02,.05,.02,brass,-2.94,1.1,z));
+ B(.32,2.1,.02,veneer,-3.33,1.05,-.5);B(.32,2.1,.02,veneer,-3.33,1.05,.9);B(.02,2.1,1.42,veneer,-3.48,1.05,.2);
+ [.04,.55,1.05,1.55,2.09].forEach(y=>B(.32,.03,1.4,edge,-3.33,y,.2));
+ // alsó komód
+ B(.45,.72,1.1,veneer,-3.275,.46,1.5);B(.47,.03,1.12,edge,-3.275,.835,1.5);
+ [[-3.1,1.0],[-3.1,2.0],[-3.45,1.0],[-3.45,2.0]].forEach(([x,z])=>B(.04,.1,.04,beech,x,.05,z));
+ B(.006,.01,1.06,dark,-3.049,.66,1.5);B(.006,.5,.01,dark,-3.049,.4,1.5);
+ [[.73,1.5],[.45,1.3],[.45,1.7]].forEach(([y,z])=>B(.02,.02,.08,brass,-3.04,y,z));
+ // üveges felső szekrény
+ B(.02,.7,1.1,veneer,-3.49,1.62,1.5);B(.3,.7,.02,veneer,-3.35,1.62,.96);B(.3,.7,.02,veneer,-3.35,1.62,2.04);
+ B(.3,.02,1.1,veneer,-3.35,1.96,1.5);B(.3,.02,1.1,veneer,-3.35,1.28,1.5);B(.28,.01,1.06,M(0xd7e6e4,{transparent:true,opacity:.35}),-3.35,1.62,1.5);
+ B(.005,.66,1.06,glass,-3.2,1.62,1.5);
+ for(let i=0;i<5;i++)cyl(.028,.022,.1,glassware,-3.35,1.345,1.1+i*.2);
+ for(let i=0;i<3;i++){const pl=cyl(.09,.09,.01,porcelain,-3.42,1.72,1.2+i*.3);pl.rotation.z=Math.PI/2-.2;}
+ // váza virággal és csipketerítő a komódon
+ const laceC=cnv(256,256,(g,w,h)=>{g.clearRect(0,0,w,h);g.fillStyle='#f6f1e4';g.beginPath();g.arc(128,128,112,0,7);g.fill();for(let a=0;a<Math.PI*2;a+=Math.PI/18){g.beginPath();g.arc(128+Math.cos(a)*114,128+Math.sin(a)*114,12,0,7);g.fill();}
+  g.globalCompositeOperation='destination-out';[[34,8,5],[56,14,6],[80,20,6],[102,26,5]].forEach(([r,n,hr])=>{for(let i=0;i<n;i++){const a=i/n*Math.PI*2+r;g.beginPath();g.arc(128+Math.cos(a)*r,128+Math.sin(a)*r,hr,0,7);g.fill();}});});
+ const lace=M(0xffffff,{map:tex(laceC),transparent:true,alphaTest:.3,roughness:1});
+ const doily=(x,y,z,r)=>{const d=new THREE.Mesh(new THREE.CircleGeometry(r,32),lace);d.rotation.x=-Math.PI/2;d.position.set(x,y,z);scene.add(d);};
+ doily(-3.27,.852,1.75,.16);
+ cyl(.045,.06,.2,M(0x2f5f7a,{roughness:.25}),-3.27,.95,1.75);
+ [[0xd8412f,.03,.02],[0xf0c24b,-.03,.03],[0xd8412f,.0,-.035],[0xffffff,.02,-.01]].forEach(([c,dx,dz],i)=>{cyl(.004,.004,.18,M(0x3d6b35),-3.27+dx*.5,1.13,1.75+dz*.5);const f=new THREE.Mesh(new THREE.SphereGeometry(.03,10,8),M(c));f.position.set(-3.27+dx,1.22+i*.012,1.75+dz);scene.add(f);});
+
+ /* Könyvek a polcon */
+ const fillCols=[0x6b2a26,0x2f4a5c,0x3d5a34,0x7a5a22,0x4b3350,0x5b3a2a,0x283c33,0x8a6a44];
+ [.55,1.55,.04].forEach(sy=>{let z=-.46;while(z<.82){const th=.04+Math.random()*.05,hh=.22+Math.random()*.1;tag(B(.2,hh,th,M(fillCols[Math.floor(Math.random()*fillCols.length)]),-3.31,sy+.015+hh/2,z+th/2),'shelf','Könyvespolc');z+=th+.004;}});
+ const YB=[[1953,'#6b2a26'],[1945,'#2f4a5c'],[1948,'#3d5a34'],[1956,'#7a5a22'],[1947,'#4b3350'],[1949,'#5b3a2a']];
+ let z=-.44;
+ YB.forEach(([yr,col])=>{const sp=cnv(64,256,(g,w,h)=>{g.fillStyle=col;g.fillRect(0,0,w,h);g.fillStyle='#d9bf7d';g.fillRect(0,18,w,4);g.fillRect(0,h-22,w,4);g.save();g.translate(w/2,h/2);g.rotate(-Math.PI/2);g.textAlign='center';g.textBaseline='middle';g.font='600 36px '+serif;g.fillText(String(yr),0,2);g.restore();g.font='500 11px '+serif;g.textAlign='center';g.fillText('KRÓNIKA',w/2,12);});
+  const cm=M(col,{roughness:.7});const bk=new THREE.Mesh(new THREE.BoxGeometry(.22,.28,.075),[M(0xffffff,{map:tex(sp),roughness:.7}),cm,M(0xe8dcc0),cm,cm,cm]);
+  bk.position.set(-3.3,1.205,z+.0375);scene.add(bk);bk.userData.x0=bk.position.x;bk.userData.year=yr;tag(bk,'book','Krónika '+yr);books.push(bk);z+=.083;});
+ const lexC=cnv(64,256,(g,w,h)=>{g.fillStyle='#1f2f45';g.fillRect(0,0,w,h);g.fillStyle='#d9bf7d';g.fillRect(0,18,w,4);g.fillRect(0,h-22,w,4);g.save();g.translate(w/2,h/2);g.rotate(-Math.PI/2);g.textAlign='center';g.textBaseline='middle';g.font='600 24px '+serif;g.fillText('FOGALOMTÁR',0,2);g.restore();});
+ const lc=M(0x1f2f45,{roughness:.7});const lex=new THREE.Mesh(new THREE.BoxGeometry(.24,.3,.09),[M(0xffffff,{map:tex(lexC),roughness:.7}),lc,M(0xe8dcc0),lc,lc,lc]);
+ lex.position.set(-3.29,1.215,z+.05);scene.add(lex);tag(lex,'shelf','Történelmi fogalomtár');z+=.1;
+ while(z<.8){const th=.045+Math.random()*.04;tag(B(.2,.25,th,M(fillCols[Math.floor(Math.random()*fillCols.length)]),-3.31,1.19,z+th/2),'shelf','Könyvespolc');z+=th+.004;}
+ // porcelán és fénykép a felső polcon
+ cyl(.05,.04,.12,porcelain,-3.3,1.63,-.3);cyl(.03,.05,.16,M(0x7a3b22,{roughness:.3}),-3.3,1.65,.1);
+ const photoC=cnv(120,150,(g,w,h)=>{g.fillStyle='#d8c7a0';g.fillRect(0,0,w,h);g.fillStyle='#8a7350';g.fillRect(12,12,w-24,h-24);g.fillStyle='#c9b387';g.beginPath();g.arc(w/2,58,20,0,7);g.fill();g.fillRect(w/2-28,82,56,50);});
+ const ph=P(.12,.15,M(0xffffff,{map:tex(photoC),roughness:.8}),-3.24,1.65,.5,Math.PI/2);ph.rotation.set(0,Math.PI/2,0);
+
+ /* Heverő falvédővel a hátsó falnál, fölötte a lyukas zászló */
+ B(2.0,.24,.8,beech,.3,.12,-2.6);B(1.96,.18,.76,mustard,.3,.33,-2.6);
+ const bol=cyl(.1,.1,.72,mustard,-.6,.52,-2.6,scene,20);bol.rotation.x=Math.PI/2;
+ const falC=cnv(512,180,(g,w,h)=>{g.fillStyle='#7a2d16';g.fillRect(0,0,w,h);for(let y=0;y<h;y+=30)for(let x=0;x<w;x+=30){const o=((x+y)/30)%2;g.fillStyle=o?'#d4862a':'#4a1a0c';g.beginPath();g.moveTo(x+15,y+3);g.lineTo(x+27,y+15);g.lineTo(x+15,y+27);g.lineTo(x+3,y+15);g.fill();g.fillStyle='#e9b04c';g.fillRect(x+13,y+13,4,4);}g.fillStyle='#4a1a0c';g.fillRect(0,0,w,8);g.fillRect(0,h-8,w,8);});
+ P(2.0,.7,M(0xffffff,{map:tex(falC),roughness:1}),.3,.83,-2.985);
+ const flagC=cnv(480,320,(g,w,h)=>{g.fillStyle='#b8322b';g.fillRect(0,0,w,h/3);g.fillStyle='#f1ede2';g.fillRect(0,h/3,w,h/3);g.fillStyle='#3f7a45';g.fillRect(0,2*h/3,w,h/3);
+  g.globalCompositeOperation='destination-out';g.beginPath();for(let a=0;a<=Math.PI*2+.01;a+=.2){const r=52+Math.random()*9;const x=w/2+Math.cos(a)*r*1.05,y=h/2+Math.sin(a)*r;a===0?g.moveTo(x,y):g.lineTo(x,y);}g.fill();});
+ tag(P(1.2,.8,M(0xffffff,{map:tex(flagC),transparent:true,alphaTest:.5,side:THREE.DoubleSide,roughness:1}),.3,1.78,-2.975),'flag','Lyukas zászló');
+ const rod=cyl(.012,.012,1.34,brass,.3,2.19,-2.96,scene,8);rod.rotation.z=Math.PI/2;
+ // éjjeliszekrény lámpával és fényképpel
+ B(.5,.5,.42,veneer,1.7,.25,-2.78);B(.006,.01,.46,dark,1.7,.36,-2.568);B(.08,.02,.02,brass,1.7,.42,-2.56);
+ cyl(.05,.07,.05,cream,1.6,.525,-2.85);cyl(.012,.012,.2,brass,1.6,.65,-2.85);
+ const ts=cyl(.07,.13,.15,M(0xefe2c4,{emissive:0x6a5230}),1.6,.8,-2.85,scene,20);ts.material.side=THREE.DoubleSide;
+ const pf=B(.14,.18,.015,brass,1.84,.6,-2.86);pf.rotation.x=-.15;
+ const pic=P(.11,.15,M(0xffffff,{map:tex(photoC),roughness:.8}),1.84,.6,-2.851,0,-.15);
+
+ /* Vitrin és napló (feladat) */
+ B(.9,1.95,.02,walnut,2.6,.975,-2.94);B(.03,1.95,.56,walnut,2.165,.975,-2.67);B(.03,1.95,.56,walnut,3.035,.975,-2.67);
+ B(.9,.04,.56,walnut,2.6,1.93,-2.67);B(.9,.15,.56,dark,2.6,.075,-2.67);
+ const shelfGlass=M(0xd7e6e4,{transparent:true,opacity:.35,roughness:.1});B(.84,.02,.5,shelfGlass,2.6,.8,-2.68);B(.84,.02,.5,shelfGlass,2.6,1.35,-2.68);
+ function vdoor(sign){const g=new THREE.Group();g.position.set(sign>0?2.18:3.02,0,-2.39);scene.add(g);const cx=.21*sign;
+  B(.42,1.7,.01,glass,cx,1.02,0,g);B(.44,.04,.03,walnut,cx,1.87,0,g);B(.44,.04,.03,walnut,cx,.17,0,g);B(.03,1.74,.03,walnut,0,1.02,0,g);B(.03,1.74,.03,walnut,cx*2,1.02,0,g);return g;}
+ const vl=vdoor(1),vr=vdoor(-1);B(.02,.05,.012,M(0x111111),-.42,1.0,.02,vr);
+ [[2.3,-2.72,0xe9e2d4],[2.9,-2.7,0x6f8fa8]].forEach(([x,z,c])=>cyl(.045,.035,.08,M(c,{roughness:.3}),x,1.4,z));
+ [2.4,2.52,2.64,2.76].forEach(x=>{cyl(.025,.025,.004,glassware,x,1.382,-2.8);cyl(.004,.004,.08,glassware,x,1.42,-2.8);cyl(.035,.012,.07,glassware,x,1.49,-2.8);});
+ [2.35,2.85].forEach(x=>{const pl=cyl(.1,.1,.01,porcelain,x,.26,-2.86);pl.rotation.x=Math.PI/2-.25;});
+ const diaryC=cnv(170,230,(g,w,h)=>{g.fillStyle='#2f4a33';g.fillRect(0,0,w,h);g.fillStyle='#e9dfc4';g.fillRect(30,70,w-60,56);g.fillStyle='#2b241b';g.textAlign='center';g.font='600 26px '+serif;g.fillText('NAPLÓ',w/2,106);});
+ const dc=M(0x2f4a33,{roughness:.7});
+ const diary=new THREE.Mesh(new THREE.BoxGeometry(.17,.23,.035),[dc,dc,M(0xe8dcc0),dc,M(0xffffff,{map:tex(diaryC),roughness:.7}),dc]);
+ diary.position.set(2.6,.93,-2.72);diary.rotation.x=-.1;scene.add(diary);tag(diary,'diary','Nagyapa naplója');
+ [vl,vr].forEach(g=>tag(g,'vitrin','Vitrin'));
+ scene.children.filter(o=>o.isMesh&&o.position.x>2.1&&o.position.x<3.1&&o.position.z<-2.3&&!o.userData.act).forEach(o=>tag(o,'vitrin','Vitrin'));
+
+ /* Jobb fal: térkép, festmény, komód tévével és rádióval */
+ const mapC=cnv(420,440,(g,w,h)=>{g.fillStyle='#ece2c8';g.fillRect(0,0,w,h);g.lineCap='round';
+  g.strokeStyle='#c4955f';g.lineWidth=4;g.stroke(new Path2D('M210 145 C272 146 330 180 342 245 C348 290 330 330 312 345 C290 360 250 365 216 362'));
+  g.lineWidth=2.5;g.stroke(new Path2D('M272 290 L410 408'));g.stroke(new Path2D('M226 212 L360 172'));
+  g.fillStyle='#c9d8ae';g.fillRect(362,140,48,78);
+  g.strokeStyle='#8fb3c4';g.lineWidth=24;g.stroke(new Path2D(RIVER));
+  g.strokeStyle='#5e4c38';g.lineWidth=4;[[145,178,214],[212,180,215],[300,186,221],[362,190,226]].forEach(([y,a,b])=>{g.beginPath();g.moveTo(a,y);g.lineTo(b,y);g.stroke();});
+  g.fillStyle='rgba(40,40,70,.5)';Object.values(PTS).forEach(([x,y])=>{g.beginPath();g.arc(x,y,7,0,7);g.fill();});
+  g.fillStyle='#3b2f22';g.font='600 30px '+serif;g.textAlign='center';g.fillText('BUDAPEST',w/2,40);});
+ B(.02,.8,.76,dark,3.495,1.62,-1.5);
+ const mapP=tag(P(.7,.74,M(0xffffff,{map:tex(mapC),roughness:1}),3.48,1.62,-1.5,-Math.PI/2),'map','Budapest-térkép');
+ const paintC=cnv(360,240,(g,w,h)=>{const sk=g.createLinearGradient(0,0,0,h*.55);sk.addColorStop(0,'#e6a45a');sk.addColorStop(1,'#f3d9a4');g.fillStyle=sk;g.fillRect(0,0,w,h);
+  g.fillStyle='#f6e7b0';g.beginPath();g.arc(250,108,22,0,7);g.fill();g.fillStyle='#7d8a5a';g.beginPath();g.moveTo(0,130);g.quadraticCurveTo(90,70,200,125);g.quadraticCurveTo(280,100,360,128);g.lineTo(360,140);g.lineTo(0,140);g.fill();
+  const wa=g.createLinearGradient(0,140,0,h);wa.addColorStop(0,'#8fa7a0');wa.addColorStop(1,'#4f6a70');g.fillStyle=wa;g.fillRect(0,138,w,h);g.fillStyle='rgba(255,230,170,.5)';for(let i=0;i<8;i++)g.fillRect(230+Math.random()*40,150+i*10,20+Math.random()*20,2);
+  g.fillStyle='#f4efe2';g.beginPath();g.moveTo(90,200);g.lineTo(110,150);g.lineTo(112,200);g.fill();g.fillStyle='#3b2f22';g.fillRect(80,200,40,5);});
+ B(.03,.56,.81,M(0xa8823e,{metalness:.5,roughness:.4}),3.485,1.72,0);
+ P(.75,.5,M(0xffffff,{map:tex(paintC),roughness:.9}),3.468,1.72,0,-Math.PI/2);
+ B(.5,.8,1.4,veneer,3.24,.4,0);B(.52,.03,1.42,edge,3.24,.815,0);
+ B(.006,.6,.01,dark,2.989,.4,-.23);B(.006,.6,.01,dark,2.989,.4,.23);[-.3,-.16,.16,.3].forEach(z=>B(.02,.08,.02,brass,2.985,.45,z));
+ doily(3.2,.832,-.36,.22);
+ const tv=new THREE.Group();tv.position.set(3.22,.84,-.36);scene.add(tv);
+ B(.42,.44,.54,veneer,0,.22,0,tv);B(.36,.04,.48,dark,0,.02,0,tv);
+ const scrC=cnv(256,210,(g,w,h)=>{const gr=g.createRadialGradient(w*.4,h*.35,10,w/2,h/2,w*.7);gr.addColorStop(0,'#56625b');gr.addColorStop(1,'#141a17');g.fillStyle=gr;g.fillRect(0,0,w,h);g.fillStyle='rgba(255,255,255,.08)';g.beginPath();g.ellipse(w*.35,h*.3,w*.22,h*.12,-.4,0,7);g.fill();});
+ P(.36,.3,M(0xffffff,{map:tex(scrC),roughness:.15,metalness:.1}),-.212,.25,-.06,-Math.PI/2,0,tv);
+ [.12,.2].forEach(y=>{const k=cyl(.022,.022,.02,M(0x1d1d1d),-.215,y+.1,.19,tv);k.rotation.z=Math.PI/2;});
+ [[.5],[-.5]].forEach(([a])=>{const an=cyl(.004,.004,.42,M(0xcfcfcf,{metalness:.8,roughness:.3}),0,.62,a*.2,tv);an.rotation.x=a;});
+ cyl(.03,.035,.03,dark,0,.455,0,tv);
+ tag(tv,'tv','Televízió');
+ const radC=cnv(512,280,(g,w,h)=>{g.fillStyle='#5a3a22';g.fillRect(0,0,w,h);g.fillStyle='#b99a6c';g.fillRect(24,20,w-48,110);for(let y=24;y<128;y+=6){g.fillStyle='rgba(60,40,20,.35)';g.fillRect(24,y,w-48,2);}
+  g.fillStyle='#e9dcb8';g.fillRect(40,150,w-80,70);g.fillStyle='#2b241b';g.font='600 18px '+serif;g.textAlign='center';['Budapest I.','Kossuth','Petőfi','Szombathely','Pécs'].forEach((s,i)=>g.fillText(s,80+i*88,176));
+  g.fillStyle='#3a2a1a';for(let x=50;x<w-50;x+=11)g.fillRect(x,196,2,x%55<11?18:9);g.fillStyle='#8a1c14';g.fillRect(250,188,3,30);
+  g.fillStyle='#2a1a10';g.beginPath();g.arc(90,252,16,0,7);g.arc(w-90,252,16,0,7);g.fill();});
+ const radTex=tex(radC);const radFront=M(0xffffff,{map:radTex,roughness:.6,emissive:0x000000,emissiveMap:radTex});
+ const radio=new THREE.Mesh(new THREE.BoxGeometry(.32,.3,.52),[walnut,radFront,walnut,walnut,walnut,walnut]);radio.position.set(3.22,.98,.36);scene.add(radio);
+ tag(radio,'radio','Rádió');
+ const radLight=LOW?null:new THREE.PointLight(0xffc27a,0,1.6,2);if(radLight){radLight.position.set(2.9,1.0,.36);scene.add(radLight);}
+
+ /* Ablak nappali kilátással, tüll függöny, sötétítő, radiátor, növény */
+ const winC=cnv(256,320,(g,w,h)=>{const sk=g.createLinearGradient(0,0,0,h);sk.addColorStop(0,'#8fb7d8');sk.addColorStop(1,'#d7e6ee');g.fillStyle=sk;g.fillRect(0,0,w,h);
+  g.fillStyle='#cdbb98';g.fillRect(0,120,w,200);g.fillStyle='#b9a47e';g.fillRect(0,110,w,14);
+  g.fillStyle='#5b6a72';for(let y=140;y<h;y+=58)for(let x=14;x<w;x+=52){g.fillRect(x,y,26,36);}
+  g.fillStyle='#4f7a3e';g.beginPath();g.arc(40,300,60,0,7);g.arc(210,310,55,0,7);g.fill();});
+ P(1.0,1.3,new THREE.MeshBasicMaterial({map:tex(winC)}),3.49,1.55,1.9,-Math.PI/2);
+ B(.06,1.42,.06,cream,3.47,1.55,1.37);B(.06,1.42,.06,cream,3.47,1.55,2.43);B(.06,.06,1.12,cream,3.47,2.23,1.9);B(.06,.06,1.12,cream,3.47,.87,1.9);B(.06,1.3,.03,cream,3.47,1.55,1.9);
+ B(.2,.03,1.2,cream,3.4,.855,1.9);
+ const tulC=cnv(128,256,(g,w,h)=>{g.fillStyle='rgba(250,248,240,.55)';g.fillRect(0,0,w,h);g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=1.5;for(let y=0;y<h;y+=16)for(let x=0;x<w;x+=16){g.beginPath();g.arc(x+8,y+8,5,0,7);g.stroke();}for(let x=0;x<w;x+=10){g.fillStyle='rgba(255,255,255,.18)';g.fillRect(x,0,4,h);}});
+ P(1.16,1.56,M(0xffffff,{map:tex(tulC),transparent:true,opacity:.75,roughness:1,side:THREE.DoubleSide,depthWrite:false}),3.43,1.66,1.9,-Math.PI/2);
+ const drC=cnv(64,256,(g,w,h)=>{for(let x=0;x<w;x++){const v=Math.sin(x/w*Math.PI*4);g.fillStyle=`rgb(${190+v*22},${105+v*14},${38+v*8})`;g.fillRect(x,0,1,h);}});
+ const drape=M(0xffffff,{map:tex(drC),roughness:1});B(.06,2.35,.34,drape,3.42,1.45,1.12);B(.06,2.35,.34,drape,3.42,1.45,2.68);
+ cyl(.012,.012,1.9,brass,3.4,2.64,1.9,scene,8).rotation.x=Math.PI/2;
+ for(let i=0;i<14;i++)B(.07,.5,.03,cream,3.42,.44,1.56+i*.052);B(.06,.03,.72,cream,3.42,.7,1.9);B(.06,.03,.72,cream,3.42,.18,1.9);
+ cyl(.14,.11,.3,M(0xa4552f,{roughness:.8}),3.05,.15,2.7);
+ for(let i=0;i<9;i++){const lf=new THREE.Mesh(new THREE.ConeGeometry(.035,.55+Math.random()*.35,4),M(i%2?0x3f6d36:0x557f3c,{roughness:.7}));const a=i/9*Math.PI*2;lf.position.set(3.05+Math.cos(a)*.05,.55+Math.random()*.08,2.7+Math.sin(a)*.05);lf.rotation.set(Math.sin(a)*.25,0,-Math.cos(a)*.25);scene.add(lf);}
+
+ /* Ülőgarnitúra: két fotel fa karfával, dohányzóasztal */
+ function armchair(x,zz,ry){const g=new THREE.Group();g.position.set(x,0,zz);g.rotation.y=ry;scene.add(g);
+  [-.36,.36].forEach(sx=>{B(.06,.05,.72,beech,sx,.58,0,g);B(.05,.58,.05,beech,sx,.29,-.31,g);B(.05,.58,.05,beech,sx,.29,.31,g);B(.04,.04,.62,beech,sx,.12,0,g);});
+  B(.66,.14,.62,mustard,0,.4,-.02,g);const bk=B(.66,.6,.12,mustard,0,.74,.3,g);bk.rotation.x=.18;
+  [[-.14,.8],[.14,.8],[0,.62]].forEach(([bx,by])=>{const s=new THREE.Mesh(new THREE.SphereGeometry(.015,8,6),M(0x8a6520));s.position.set(bx,by,.23);g.add(s);});
+  return g;}
+ armchair(-1.3,1.75,0);armchair(-1.3,-.25,Math.PI);
+ const album=B(.3,.05,.24,M(0x3a2a44,{roughness:.6}),-1.3,.495,1.66);album.rotation.y=.25;tag(album,'album','Fényképalbum');
+ B(.62,.04,1.05,M(0x5a2f18,{roughness:.25}),-1.3,.5,.75);
+ [[-1.55,.3],[-1.05,.3],[-1.55,1.2],[-1.05,1.2]].forEach(([x,zz])=>B(.05,.48,.05,beech,x,.24,zz));B(.52,.02,.95,beech,-1.3,.14,.75);
+ doily(-1.3,.521,.45,.14);
+ const tape=new THREE.Group();tape.position.set(-1.3,.52,.95);tape.rotation.y=-.2;scene.add(tape);
+ B(.38,.1,.26,M(0x6a665e,{roughness:.45,metalness:.2}),0,.05,0,tape);B(.34,.01,.04,M(0x222222),0,.105,.1,tape);
+ [-.09,.09].forEach(x=>{const r=cyl(.06,.06,.012,M(0x2a2a2a),x,.108,-.03,tape,24);});
+ tag(tape,'tape','Magnetofon');
+ cyl(.06,.05,.03,M(0x7a3f22,{roughness:.3}),-1.35,.535,.5);
+
+ /* Állólámpa rojtos ernyővel */
+ cyl(.13,.15,.03,dark,-2.85,.015,2.45);cyl(.015,.015,1.5,brass,-2.85,.75,2.45,scene,8);
+ const shade=cyl(.16,.26,.3,M(0xefe0bd,{emissive:0x8a6630}),-2.85,1.58,2.45,scene,24);shade.material.side=THREE.DoubleSide;shade.geometry=new THREE.CylinderGeometry(.16,.26,.3,24,1,true);
+ const fr=new THREE.Mesh(new THREE.TorusGeometry(.26,.012,6,32),M(0xd6b36a));fr.rotation.x=Math.PI/2;fr.position.set(-2.85,1.42,2.45);scene.add(fr);
+ const frC=cnv(256,32,(g,w,h)=>{g.clearRect(0,0,w,h);g.fillStyle='#d6b36a';for(let x=0;x<w;x+=4)g.fillRect(x,0,2,h);});
+ const fringe=new THREE.Mesh(new THREE.CylinderGeometry(.262,.262,.06,32,1,true),M(0xffffff,{map:tex(frC,6,1),transparent:true,alphaTest:.4,side:THREE.DoubleSide}));fringe.position.set(-2.85,1.39,2.45);scene.add(fringe);
+
+ /* Ajtó melletti tárgyak: fogas, telefonasztal, falióra */
+ cyl(.02,.02,1.8,dark,-1.0,.9,2.75,scene,8);
+ [0,Math.PI/2].forEach(a=>{const f=B(.5,.03,.04,dark,-1.0,.03,2.75);f.rotation.y=a;});
+ for(let i=0;i<4;i++){const a=i*Math.PI/2;const hk=cyl(.008,.008,.14,brass,-1.0+Math.cos(a)*.06,1.72,2.75+Math.sin(a)*.06,scene,6);hk.rotation.set(Math.sin(a)*.8,0,-Math.cos(a)*.8);}
+ B(.36,.95,.14,M(0x4a4a3f,{roughness:.95}),-1.0,1.2,2.83);cyl(.1,.11,.1,M(0x3a3025),-1.0,1.86,2.75);cyl(.17,.17,.01,M(0x3a3025),-1.0,1.81,2.75,scene,24);
+ B(.5,.03,.36,veneer,1.35,.66,2.8);[[1.13,2.65],[1.57,2.65],[1.13,2.95],[1.57,2.95]].forEach(([x,zz])=>B(.035,.64,.035,beech,x,.32,zz));B(.46,.02,.32,beech,1.35,.25,2.8);
+ const phone=new THREE.Group();phone.position.set(1.33,.675,2.8);phone.rotation.y=Math.PI;scene.add(phone);
+ const pm=M(0xd7cdb6,{roughness:.4});B(.2,.08,.22,pm,0,.04,0,phone);B(.24,.04,.06,pm,0,.1,-.05,phone);
+ const dialC=cnv(128,128,(g,w,h)=>{g.fillStyle='#d7cdb6';g.fillRect(0,0,w,h);g.fillStyle='#f4efe4';g.beginPath();g.arc(64,64,56,0,7);g.fill();g.fillStyle='#8c8577';for(let i=0;i<10;i++){const a=-Math.PI/3+i*.48;g.beginPath();g.arc(64+Math.cos(a)*40,64+Math.sin(a)*40,9,0,7);g.fill();}});
+ const dial=P(.1,.1,M(0xffffff,{map:tex(dialC),roughness:.4}),0,.082,.05,0,-Math.PI/2+.35,phone);
+ tag(phone,'phone','Telefon');
+ const clk=new THREE.Group();clk.position.set(1.95,1.85,2.975);clk.rotation.y=Math.PI;scene.add(clk);
+ B(.3,.66,.1,walnut,0,0,0,clk);B(.34,.05,.12,walnut,0,.35,0,clk);
+ const faceC=cnv(128,128,(g,w,h)=>{g.fillStyle='#efe6cf';g.beginPath();g.arc(64,64,62,0,7);g.fill();g.fillStyle='#2b241b';g.font='600 14px '+serif;g.textAlign='center';g.textBaseline='middle';for(let i=1;i<=12;i++){const a=i/12*Math.PI*2-Math.PI/2;g.fillText(String(i),64+Math.cos(a)*48,64+Math.sin(a)*48);}
+  g.strokeStyle='#2b241b';g.lineCap='round';g.lineWidth=4;g.beginPath();g.moveTo(64,64);g.lineTo(64+Math.cos(-2.35)*26,64+Math.sin(-2.35)*26);g.stroke();g.lineWidth=2.5;g.beginPath();g.moveTo(64,64);g.lineTo(64+Math.cos(-Math.PI/2)*40,64+Math.sin(-Math.PI/2)*40);g.stroke();});
+ const cf=new THREE.Mesh(new THREE.CircleGeometry(.11,32),M(0xffffff,{map:tex(faceC),roughness:.5}));cf.position.set(0,.16,.051);clk.add(cf);
+ P(.2,.3,M(0x1f1712),0,-.14,.051,0,0,clk);
+ const pend=new THREE.Group();pend.position.set(0,.0,.055);clk.add(pend);B(.008,.24,.004,brass,0,-.12,0,pend);cyl(.035,.035,.006,brass,0,-.25,0,pend,20).rotation.x=Math.PI/2;
+ tag(clk,'clock','Falióra');
+
+ /* Háromkarú csillár bordázott üvegburákkal */
+ cyl(.008,.008,.42,brass,0,2.69,0,scene,8);cyl(.05,.03,.03,brass,0,2.89,0);
+ const hub=new THREE.Mesh(new THREE.SphereGeometry(.045,12,10),brass);hub.position.set(0,2.47,0);scene.add(hub);
+ const ribC=cnv(128,64,(g,w,h)=>{for(let x=0;x<w;x++){const v=Math.abs(Math.sin(x/w*Math.PI*10));g.fillStyle=`rgb(${230+v*25},${228+v*25},${220+v*25})`;g.fillRect(x,0,1,h);}});
+ const shadeM=M(0xffffff,{map:tex(ribC),emissive:0xfff0cc,emissiveIntensity:.55,transparent:true,opacity:.9,side:THREE.DoubleSide,roughness:.2});
+ for(let i=0;i<3;i++){const a=i/3*Math.PI*2;const ax=Math.cos(a)*.16,az=Math.sin(a)*.16;
+  const arm=cyl(.007,.007,.34,brass,ax,2.5,az,scene,6);arm.rotation.set(Math.sin(a)*1.2,0,-Math.cos(a)*1.2);
+  const sh=new THREE.Mesh(new THREE.CylinderGeometry(.05,.075,.15,20,1,true),shadeM);sh.position.set(Math.cos(a)*.31,2.52,Math.sin(a)*.31);scene.add(sh);
+  const cap=cyl(.052,.052,.02,brass,Math.cos(a)*.31,2.6,Math.sin(a)*.31,scene,16);}
+
+ /* Fények */
+ scene.add(new THREE.HemisphereLight(0xfff4e2,0x5a2a1c,.5));
+ const sun=new THREE.DirectionalLight(0xfff1d8,.35);sun.position.set(6,4,2);scene.add(sun);
+ const top=new THREE.PointLight(0xffdca5,1.0,12,1.4);top.position.set(0,2.35,0);scene.add(top);
+ const lamp=new THREE.PointLight(0xffc57e,.6,5,1.6);lamp.position.set(-2.85,1.5,2.45);scene.add(lamp);
+
+ return {doorP,drawer,tube,vl,vr,radFront,radLight,pend,letter:lt,radio,tv,album,tape,map:mapP,lex,diary,keypad,book48:books.find(b=>b.userData.year===1948)};
+}
+
+/* ================= MOZGÁS, VEZÉRLÉS ================= */
+const pos={x:.3,z:1.9};let yaw=0,pitch=-.06,walkT=null;
+const OB=[[-2.3,-.9,-3,-2.2],[-1.85,-1.35,-2.15,-1.65],[-3.5,-2.86,-3,-2.36],[-3.5,-2.95,-2.05,-.6],[-3.5,-3.12,-.54,.94],[-3.5,-3.05,.95,2.05],[-3.02,-2.68,2.28,2.62],[-1.75,-.85,-.62,2.12],[-1.2,-.8,2.55,2.95],[-.7,1.3,-3,-2.2],[1.45,1.95,-3,-2.57],[2.1,3.1,-3,-2.25],[2.95,3.5,-.72,.72],[2.88,3.22,2.52,2.88],[1.1,1.6,2.6,3]];
+function free(x,z){if(x<-3.25||x>3.25||z<-2.75||z>2.75)return false;const r=.22;for(const[a,b,c,d]of OB)if(x>a-r&&x<b+r&&z>c-r&&z<d+r)return false;return true;}
+function tryMove(dx,dz){if(free(pos.x+dx,pos.z+dz)){pos.x+=dx;pos.z+=dz;}}
+
+const keys={};
+addEventListener('keydown',e=>{
+ if(modalOpen){if(e.key==='Escape'&&S.playing&&!S.won)closeModal();else if(codeKeys)codeKeys(e);return;}
+ if(!S.playing)return;
+ keys[e.code]=true;
+ if(e.code==='KeyF'||e.code==='Enter')interact(innerWidth/2,innerHeight/2);
+ if(e.code.startsWith('Arrow'))e.preventDefault();
+});
+addEventListener('keyup',e=>{keys[e.code]=false;});
+
+const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
+const vis=o=>{while(o){if(!o.visible)return false;o=o.parent;}return true;};
+function pickFloor(x,y){ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,camera);const hs=ray.intersectObjects(scene.children,true);for(const h of hs){if(!vis(h.object))continue;const m=h.object.material;if(m&&!Array.isArray(m)&&m.transparent&&m.opacity<.3)continue;return h.object.userData.floor?h.point:null;}return null;}
+function pick(x,y){ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,camera);const hs=ray.intersectObjects(scene.children,true);for(const h of hs){if(!vis(h.object))continue;const m=h.object.material;if(m&&!Array.isArray(m)&&m.transparent&&m.opacity<.3&&!h.object.userData.act)continue;return h.object.userData.act?h:null;}return null;}
+
+let drag=null;
+canvas.addEventListener('pointerdown',e=>{if(!S.playing||modalOpen)return;drag={x:e.clientX,y:e.clientY,moved:0,id:e.pointerId};canvas.setPointerCapture(e.pointerId);canvas.style.cursor='grabbing';});
+canvas.addEventListener('pointermove',e=>{
+ if(drag&&e.pointerId===drag.id){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.moved+=Math.abs(dx)+Math.abs(dy);drag.x=e.clientX;drag.y=e.clientY;yaw+=dx*.0045;pitch=clamp(pitch+dy*.0045,-1.2,1.2);tip.hidden=true;return;}
+ if(e.pointerType==='mouse'&&S.playing&&!modalOpen){const h=pick(e.clientX,e.clientY);if(h){canvas.style.cursor='pointer';tip.textContent=h.object.userData.label;tip.hidden=false;tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+14)+'px';}else{canvas.style.cursor='grab';tip.hidden=true;}}
+});
+const endDrag=e=>{if(drag&&e.pointerId===drag.id){if(drag.moved<8&&e.type==='pointerup')interact(e.clientX,e.clientY);drag=null;canvas.style.cursor='grab';}};
+canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);
+
+const joy=$('#joy'),knob=$('#knob');let jx=0,jy=0,jid=null;
+function jmove(e){const r=joy.getBoundingClientRect();let dx=(e.clientX-r.left-r.width/2)/(r.width/2),dy=(e.clientY-r.top-r.height/2)/(r.height/2);const l=Math.hypot(dx,dy);if(l>1){dx/=l;dy/=l;}jx=dx;jy=dy;knob.style.transform=`translate(${dx*35}px,${dy*35}px)`;}
+joy.addEventListener('pointerdown',e=>{jid=e.pointerId;joy.setPointerCapture(jid);jmove(e);});
+joy.addEventListener('pointermove',e=>{if(e.pointerId===jid)jmove(e);});
+const jend=e=>{if(e.pointerId===jid){jid=null;jx=jy=0;knob.style.transform='';}};
+joy.addEventListener('pointerup',jend);joy.addEventListener('pointercancel',jend);
+
+const tweens=[];
+function tween(fn,dur,done){tweens.push({t:0,dur,fn,done});}
+
+/* ================= INTERAKCIÓK ================= */
+let W;
+function radioOn(){W.radFront.emissive.setHex(0x6a5230);if(W.radLight)W.radLight.intensity=.8;}
+function interact(x,y){
+ if(!S.playing||modalOpen||S.won)return;
+ let h=pick(x,y);
+ if(!h&&COARSE){for(const r of [14,26]){for(let a=0;a<8&&!h;a++)h=pick(x+Math.cos(a*Math.PI/4)*r,y+Math.sin(a*Math.PI/4)*r);if(h)break;}}
+ if(!h){const f=pickFloor(x,y);if(f)walkT={x:f.x,z:f.z};return;}
+ if(h.distance>3.3){toast('Menj közelebb.');return;}
+ const o=h.object,act=o.userData.act;
+ if(Q){quickInteract(act,o);return;}
+ A[act]&&A[act](o);
+}
+const later='Még nem tudod, mit keress itt. Kövesd a feladatot a bal felső sarokban.';
+const A={
+ letter(){doc(`<p class="date">Budapest, 1989. június 16.</p><p>Kedves Unokám!</p>
+  <p>Ma a Hősök terén újratemetik Nagy Imrét és mártírtársait. Harminchárom éve magam is ott voltam az utcán, és szeretném, ha értenéd, mi történt velünk.</p>
+  <p>Ahogy gyerekkorodban, most is feladványokat hagytam neked a lakásban. Minden állomáson más oldalról kell megvizsgálnod a korszakot: dátumokat, személyeket, forrásokat, helyszíneket, fogalmakat és összefüggéseket. A bejárati ajtó kódját az tudja meg, aki mindet megoldja.</p>
+  <p>Az első lépés: az íróasztal fiókjának kódja annak a napnak a hónapja és napja (HHNN), amelyen 1956-ban a budapesti egyetemisták tüntetése forradalommá vált.</p><p class="sign">Nagyapád</p>`,()=>{S.letterRead=true;setGoal();});},
+ calendar(){doc(`<h2>Falinaptár, 1956. október</h2><p>A megsárgult lapon egyetlen napot sem jelöltek meg. Az alján ceruzás bejegyzés olvasható:</p><p class="hand">„Aznap este ledőlt a szobor a Dózsa György úton.”</p>`);},
+ flag(){doc(`<h2>Lyukas zászló</h2><p>1956 októberében a felkelők kivágták a nemzeti zászlók közepéből a Rákosi-címert. A lyukas zászló a forradalom jelképe lett.</p>`);},
+ drawer(){
+  if(S.stage>=1){toast(W.tube.visible?'A fiókban egy elektroncső fekszik.':'A fiók üres.');return;}
+  codeModal({title:'Az íróasztal fiókja',prompt:'Négyjegyű számzár. A kód formátuma: HHNN (hónap, nap).',answer:'1023',onOk(){
+   const z0=W.drawer.position.z;W.tube.visible=true;tween(k=>W.drawer.position.z=z0+.34*k,.7);S.stage=1;setGoal();toast('A fiók kinyílt.');}});
+ },
+ tube(){W.tube.visible=false;addInv('Elektroncső');S.stage=2;setGoal();toast('Felvetted az elektroncsövet. Egy régi rádióba való.');},
+ radio(){
+  if(S.stage<2){toast('A rádió néma. A hátlapja mögött egy üres foglalat látszik: hiányzik egy elektroncső.',3800);return;}
+  if(S.stage===2){if(S.inv.includes('Elektroncső')){remInv('Elektroncső');toast('Behelyezted az elektroncsövet.');}
+   timelineModal(()=>{S.stage=3;S.done.kron=true;radioOn();setGoal();
+    doc(`<h2>A rádió megszólal</h2><p>A skála fénye kigyullad, a hangszóróból halk zene szól. A hátlap mögül kicsúszik egy összehajtott cédula, rajta nagyapa kézírása:</p><p class="hand">„Most már ismered a sorrendet. De tudod-e, ki mit tett azokban a napokban? Nézd meg a fényképalbumot a fotelen.”</p>`);});
+   return;}
+  toast('A hangszóróból halk zene szól.');
+ },
+ album(){
+  if(S.stage<3){toast('Egy régi fényképalbum. '+later,3800);return;}
+  if(S.stage>3){toast('Az albumot már átnézted.');return;}
+  matchModal({cat:'szem',title:'A fényképalbum',intro:'Az album képei alá nagyapa csak neveket írt. Párosítsd a személyeket azzal az eseménnyel, amelyhez a szerepük köthető: válassz egy nevet, majd a hozzá tartozó eseményt.',pairs:PERSONS,lh:'Személy',rh:'Esemény',
+   onDone(){S.stage=4;S.done.szem=true;addInv('Magnószalag');
+    doc(`<h2>Az album hátsó borítója</h2><p>A hátsó borító bélése alól egy magnószalag csúszik ki. A dobozán ceruzás felirat:</p><p class="hand">„1956. november 4., hajnal. Hallgasd meg, és gondold végig, mennyire hihetsz egy forrásnak.”</p>`);}});
+ },
+ tape(){
+  if(S.stage<4){toast('Egy régi magnetofon. Nincs benne szalag.');return;}
+  if(S.stage>4){toast('A szalagot már meghallgattad.');return;}
+  if(S.inv.includes('Magnószalag')){remInv('Magnószalag');toast('Befűzted a szalagot.');}
+  quizModal({cat:'forras',title:'A magnószalag',intro:'A szalagon egy rádióközlemény felvétele hallható. Olvasd el az átiratot, és válaszolj a kérdésekre.',source:SOURCE,qs:SRC_Q,
+   onDone(){S.stage=5;S.done.forras=true;setGoal();
+    doc(`<h2>A szalag vége</h2><p>A közlemény után nagyapa hangja szól a felvételről:</p><p class="hand">„Azokban a napokban bejártam a várost. A falon lévő térképen megjelöltem a helyeket. Tudod, hol mi történt?”</p>`);}});
+ },
+ map(){
+  if(S.stage<5){toast('Budapest térképe, rajta nagyapa ceruzás jelölései. '+later,4000);return;}
+  if(S.stage>5){toast('A térkép helyszíneit már azonosítottad.');return;}
+  mapModal(()=>{S.stage=6;S.done.terkep=true;setGoal();
+   doc(`<h2>A térkép keretében</h2><p>A keret mögül egy cédula esik ki:</p><p class="hand">„A helyszíneket ismered. A szavakat is? Lapozd át a fogalomtárat a könyvespolcon.”</p>`);});
+ },
+ tv(){toast('Televízió. 1989. június 16-án a televízió egyenes adásban közvetítette a Hősök terén tartott gyászszertartást.',4200);},
+ phone(){toast('Tárcsás telefon. A vonal süket.');},
+ stove(){toast('Cserépkályha. Júniusban nem fűtenek vele.');},
+ clock(){toast('Falióra. Egyenletesen ketyeg.');},
+ shelf(){
+  if(S.stage===6){quizModal({cat:'fog',title:'Történelmi fogalomtár',intro:'A fogalomtár lapjain nagyapa kérdései állnak.',qs:FOG_Q,
+   onDone(){S.stage=7;S.done.fog=true;setGoal();
+    doc(`<h2>A fogalomtár utolsó lapja</h2><p class="hand">„A vitrin kulcsát a fordulat évének kötete mögé rejtettem. Az évszámot most már tudod.”</p>`);}});return;}
+  toast(S.stage<6?'Régi könyvek és egy fogalomtár. '+later:'Régi könyvek, semmi különös.',3800);
+ },
+ book(o){
+  if(S.stage===6){A.shelf();return;}
+  const yr=o.userData.year,x0=o.userData.x0;
+  if(S.stage===7&&yr===1948){tween(k=>o.position.x=x0+.15*k,.6);S.stage=8;addInv('Rézkulcs');
+   doc(`<h2>A kötet mögött</h2><p>A „Krónika 1948” kötet mögött egy kis rézkulcs lapul.</p>`);return;}
+  if(S.stage>7&&yr===1948){toast('Ebből a kötetből már kivetted a kulcsot.');return;}
+  if(S.stage===7)miss('fog');
+  tween(k=>o.position.x=x0+.07*Math.sin(k*Math.PI),.6);toast(`„Krónika ${yr}”. Mögötte nincs semmi.`);
+ },
+ vitrin(){
+  if(S.vitrinOpen){toast('A vitrin nyitva. Nagyapa naplója a középső polcon áll.');return;}
+  if(!S.inv.includes('Rézkulcs')){toast('A vitrin zárva. Az ajtaján kulcslyuk van.');return;}
+  remInv('Rézkulcs');S.vitrinOpen=true;S.stage=9;setGoal();tween(k=>{W.vl.rotation.y=-1.7*k;W.vr.rotation.y=1.7*k;},1);toast('A kulcs illik a zárba. A vitrin kinyílt.');
+ },
+ diary(){
+  if(!S.vitrinOpen){A.vitrin();return;}
+  if(S.stage>9){showInvite();return;}
+  matchModal({cat:'ok',title:'Nagyapa naplója',intro:'A napló bal oldali lapjain okok, a jobb oldaliakon következmények állnak, de a lapok összekeveredtek. Párosítsd az okot a következményével.',pairs:CAUSES,lh:'Ok',rh:'Következmény',
+   onDone(){S.stage=10;S.done.ok=true;setGoal();showInvite();}});
+ },
+ door(){
+  if(S.stage<10){toast('A számzár kódját még nem ismered. Kövesd nagyapa nyomait.');return;}
+  codeModal({title:'Bejárati ajtó',prompt:'Négyjegyű számzár.',answer:'1958',onOk(){
+   S.won=true;S.done.code=true;setGoal();tween(k=>W.doorP.rotation.y=1.45*k,1.3,()=>setTimeout(win,300));toast('A zár kattan, az ajtó kinyílik.');}});
+ }
+};
+function showInvite(){doc(`<h2>Meghívó</h2><p>A napló utolsó lapjai közé egy meghívót tűztek.</p><p class="center">Nagy Imre és mártírtársai<br>temetésére<br><br>1989. június 16.<br>Hősök tere, majd Rákoskeresztúri új köztemető, 301-es parcella</p><p class="center">Harmincegy esztendővel ezelőtt ítélték halálra és végezték ki őket.</p><p class="hand">A lap alján ceruzával: „Az ajtó kódja: a kivégzés éve.”</p>`);}
+
+/* ================= ÉRTÉKELÉS ================= */
+const eva=n=>n===0?'hibátlan':n<=2?'kisebb bizonytalanság':'ismétlés javasolt';
+function win(){
+ const t=fmt(performance.now()-S.start);
+ const rows=FULLCATS.map(k=>`<tr><td>${CAT[k]}</td><td class="num">${S.err[k]}</td><td>${eva(S.err[k])}</td></tr>`).join('');
+ const txt=`Június tizenhatodika – eredmény\nIdő: ${t}\nSegítségkérések: ${S.hints}\nHibás próbálkozások összesen: ${S.mistakes}\n`+FULLCATS.map(k=>`${CAT[k]}: ${S.err[k]} hiba (${eva(S.err[k])})`).join('\n');
+ openModal(`<h2>Kijutottál</h2><p>Időd: <b>${t}</b>. Segítségkérések: <b>${S.hints}</b>. Hibás próbálkozások összesen: <b>${S.mistakes}</b>.</p>
+ <table class="rep"><thead><tr><th>Témakör</th><th>Hibák</th><th>Értékelés</th></tr></thead><tbody>${rows}</tbody></table>
+ <p>A játék során érintett legfontosabb dátumok:</p>
+ <ul class="tl"><li><b>1948</b>A fordulat éve; létrejön a Magyar Dolgozók Pártja.</li>
+ ${EV.map(e=>`<li><b>${e.d}</b>${e.t}.</li>`).join('')}
+ <li><b>1989. június 16.</b>Nagy Imre és mártírtársai újratemetése.</li></ul>
+ <div id="copyArea"></div>
+ <div class="actions"><button id="copyBtn">Eredmény másolása</button><button class="primary" data-focus id="again">Új játék</button></div>`,'doc');
+ $('#again').onclick=()=>location.reload();
+ $('#copyBtn').onclick=async()=>{
+  try{await navigator.clipboard.writeText(txt);$('#copyBtn').textContent='Kimásolva';}
+  catch(e){$('#copyArea').innerHTML='<textarea id="copyBox" readonly></textarea><p style="font-size:14px">A böngésző nem engedte a közvetlen másolást. Jelöld ki a szöveget, és másold ki kézzel.</p>';const b=$('#copyBox');b.value=txt;b.focus();b.select();}
+ };
+}
+
+$('#hintBtn').onclick=()=>{
+ if(!S.playing||S.won||modalOpen)return;
+ const k=Q?curKey():STAGE_KEYS[S.stage];const hs=(Q&&k==='door')?ROUNDS[Q.round].dh:HINTS[k];if(!hs)return;
+ const used=S.hint[k]||0,repeat=used>=hs.length,l=Math.min(used,hs.length-1);
+ const show=()=>{if(!repeat){S.hints++;if(Q)S.hintPen+=HINT_PEN[l];S.hint[k]=used+1;}
+  doc(`<h2>Segítség, ${l+1}. fokozat</h2><p>${hs[l]}</p><p style="font-size:14px;opacity:.7">${l<hs.length-1?'Ha újra kéred, pontosabb útmutatást kapsz.':'Ez a legpontosabb segítség; újra megnézni már nem jár büntetéssel.'}${Q?'':' A segítségkérések száma megjelenik a végső értékelésben.'}</p>`);};
+ if(!Q||repeat){show();return;}
+ openModal(`<h2>Segítséget kérsz?</h2><p>${l+1}. fokozat: ${['irány','támpont','megoldás'][l]}. Büntetőidő: <b>+${HINT_PEN[l]} mp</b>.</p><div class="actions"><button data-close>Mégse</button><button class="primary" data-yes>Kérem</button></div>`,'doc');
+ mbox.querySelector('[data-close]').onclick=closeModal;mbox.querySelector('[data-yes]').onclick=()=>{closeModal();show();};
+};
+
+/* ================= GYORS KÖR ================= */
+let Q=null,marker=null;
+const LIMIT=600;
+const penalty=()=>S.mistakes*15+S.hintPen;
+const fmtS=sec=>String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');
+const pickN=(arr,n)=>shuffle(arr.map((_,i)=>i)).slice(0,n).sort((a,b)=>a-b).map(i=>arr[i]);
+const MIX=()=>[...FOG_Q,...EV.map(e=>({q:`Mikor történt? „${e.t}.”`,o:[e.d,...shuffle(EV.filter(x=>x!==e)).slice(0,3).map(x=>x.d)],why:`${e.d}: ${e.t}.`}))];
+const ROUNDS={
+ 1:{route:['drawer','radio','album','door'],cats:['code','kron','szem'],door:'1953',
+  clue:`<h2>Az album hátsó borítója</h2><p>A borító belsejében nagyapa ceruzás jegyzete:</p><p class="hand">„Az ajtó kódja: annak az évnek a száma, amikor Nagy Imre először lett miniszterelnök.”</p>`,
+  dh:['Nagy Imre a Sztálin halála utáni szovjet irányváltás nyomán lett először miniszterelnök.','Az évszám az 1950-es évek első felébe esik; kormánya július 4-én alakult meg.','Az ajtó kódja: 1953.']},
+ 2:{route:['tape','map','fog','door'],cats:['forras','terkep','fog','code'],door:'1955',
+  clue:`<h2>A fogalomtár utolsó lapja</h2><p>Nagyapa ceruzás jegyzete:</p><p class="hand">„Az ajtó kódja: annak az évnek a száma, amikor megalakult a Varsói Szerződés.”</p>`,
+  dh:['A Varsói Szerződés Sztálin halála után, de még 1956 előtt alakult meg.','Ugyanabban az évben, amikor Magyarország az ENSZ tagja lett.','Az ajtó kódja: 1955.']},
+ 3:{route:['tv','diary','door'],cats:['vegyes','ok','code'],door:'1958',dh:HINTS.door}
+};
+const QGOAL={drawer:'Nyisd ki az íróasztal fiókját.',radio:'Javítsd meg a rádiót a jobb oldali komódon.',album:'Nézd át a fényképalbumot a fotelen.',
+ tape:'Hallgasd meg a szalagot a dohányzóasztalon.',map:'Oldd meg a térkép feladatait a jobb oldali falon.',fog:'Lapozd át a fogalomtárat a könyvespolcon.',
+ tv:'Kapcsold be a televíziót a jobb oldali komódon.',diary:'Olvasd el nagyapa naplóját a vitrinben.',door:'Nyisd ki a bejárati ajtót.'};
+const STAND={letter:[-1.0,-1.3],drawer:[-1.0,-1.3],tube:[-1.0,-1.3],radio:[2.2,.36],tv:[2.2,-.4],album:[-.35,1.7],tape:[-.35,.95],map:[2.3,-1.4],
+ fog:[-2.35,.4],book:[-2.35,0],vitrin:[2.6,-1.55],diary:[2.6,-1.55],door:[.4,1.9]};
+function curKey(){if(Q)return Q.route[Q.i];const k=STAGE_KEYS[S.stage];return (k==='drawer'&&!S.letterRead)?'letter':k;}
+function targetObj(k){if(!W||!k)return null;return {letter:W.letter,drawer:W.drawer,tube:W.tube,radio:W.radio,tv:W.tv,album:W.album,tape:W.tape,map:W.map,fog:W.lex,book:W.book48,vitrin:W.vl,diary:W.diary,door:W.keypad}[k]||null;}
+const mkBox=new THREE.Box3(),mkC=new THREE.Vector3();
+function updateMarker(){
+ if(!marker)return;const o=(S.playing&&!S.won)?targetObj(curKey()):null;
+ if(!o||!vis(o)){marker.visible=false;return;}
+ mkBox.setFromObject(o);mkBox.getCenter(mkC);marker.visible=true;
+ marker.position.set(mkC.x,mkBox.max.y+.2+(RM?0:Math.sin(tAcc*3)*.04),mkC.z);
+}
+function lookAtObj(o){mkBox.setFromObject(o);const c=mkBox.getCenter(new THREE.Vector3());const dx=c.x-pos.x,dz=c.z-pos.z;yaw=Math.atan2(-dx,-dz);pitch=clamp(Math.atan2(c.y-1.6,Math.hypot(dx,dz)),-1.2,1.2);}
+$('#nextBtn').onclick=()=>{
+ if(!S.playing||S.won||modalOpen)return;const k=curKey(),o=targetObj(k);if(!o)return;
+ walkT=null;if(Q&&STAND[k]){pos.x=STAND[k][0];pos.z=STAND[k][1];}
+ lookAtObj(o);
+};
+const sub=(key,make)=>Q.sub[key]||(Q.sub[key]=make());
+function qdone(){Q.i++;setGoal();}
+const QKEY={shelf:'fog',book:'fog'};
+const QFLAVOR=['letter','calendar','flag','stove','phone','clock','tv','vitrin'];
+function quickInteract(act,o){
+ const k=QKEY[act]||act;
+ if(Q.route.includes(k)){
+  if(k!==curKey()){toast(Q.route.indexOf(k)<Q.i?'Ezt az állomást már teljesítetted.':'Ez még nem a következő állomás. Kövesd a jelzést.');return;}
+  QA[k](o);return;
+ }
+ if(QFLAVOR.includes(act)&&A[act]){A[act](o);return;}
+ toast('Ebben a fordulóban ennek nincs szerepe.');
+}
+const QA={
+ drawer(){codeModal({title:'Az íróasztal fiókja',prompt:'Négyjegyű számzár: annak a napnak a hónapja és napja (HHNN), amelyen 1956-ban a budapesti tüntetés forradalommá vált.',answer:'1023',onOk(){
+  const z0=W.drawer.position.z;tween(k=>W.drawer.position.z=z0+.34*k,.7);addInv('Elektroncső');qdone();toast('A fiók kinyílt. Elvetted a benne lévő elektroncsövet: a rádióba való.',3800);}});},
+ radio(){if(S.inv.includes('Elektroncső'))remInv('Elektroncső');
+  timelineModal(()=>{S.done.kron=true;radioOn();qdone();toast('A rádió megszólalt. A hátlap mögötti cédula: „Nézd át a fényképalbumot a fotelen.”',4200);},sub('radio',()=>pickN(EV,4)));},
+ album(){matchModal({cat:'szem',title:'A fényképalbum',intro:'Párosítsd a személyeket azzal az eseménnyel, amelyhez a szerepük köthető: válassz egy nevet, majd a hozzá tartozó eseményt.',pairs:sub('album',()=>pickN(PERSONS,4)),lh:'Személy',rh:'Esemény',
+  onDone(){S.done.szem=true;qdone();doc(ROUNDS[1].clue);}});},
+ tape(){quizModal({cat:'forras',title:'A magnószalag',intro:'A szalagon egy rádióközlemény felvétele hallható. Olvasd el az átiratot, és válaszolj a kérdésekre.',source:SOURCE,qs:sub('tape',()=>pickN(SRC_Q,3)),
+  onDone(){S.done.forras=true;qdone();toast('A szalag végén nagyapa hangja: „Nézd meg a térképet a jobb oldali falon.”',4200);}});},
+ map(){mapModal(()=>{S.done.terkep=true;qdone();toast('A térkép keretéből cédula esik ki: „Lapozd át a fogalomtárat a könyvespolcon.”',4200);},sub('map',()=>pickN(MAP_Q,3)));},
+ fog(){quizModal({cat:'fog',title:'Történelmi fogalomtár',intro:'',qs:sub('fog',()=>pickN(FOG_Q,3)),onDone(){S.done.fog=true;qdone();doc(ROUNDS[2].clue);}});},
+ tv(){quizModal({cat:'vegyes',title:'A televízió',intro:'A képernyőn ismétlő kérdések jelennek meg.',qs:sub('tv',()=>pickN(MIX(),4)),
+  onDone(){S.done.vegyes=true;qdone();toast('A képernyőn felirat jelenik meg: „Nagyapa naplója a vitrinben vár.”',4200);}});},
+ diary(){matchModal({cat:'ok',title:'Nagyapa naplója',intro:'A napló lapjai összekeveredtek. Párosítsd az okot a következményével.',pairs:sub('diary',()=>pickN(CAUSES,4)),lh:'Ok',rh:'Következmény',
+  onDone(){S.done.ok=true;qdone();showInvite();}});},
+ door(){codeModal({title:'Bejárati ajtó',prompt:'Négyjegyű számzár.',answer:ROUNDS[Q.round].door,onOk(){
+  S.done.code=true;qdone();tween(k=>W.doorP.rotation.y=1.45*k,1.3);toast('A zár kattan, az ajtó kinyílik.');endQuick(true);}});}
+};
+function startQuick(round,code){
+ Q={round,code,route:ROUNDS[round].route,i:0,sub:{}};
+ if(round===3){S.vitrinOpen=true;W.vl.rotation.y=-1.7;W.vr.rotation.y=1.7;}
+ const k=Q.route[0];pos.x=STAND[k][0];pos.z=STAND[k][1];lookAtObj(targetObj(k));
+ S.playing=true;S.start=performance.now();lastSec=-1;setGoal();toast('Rajt! Az időmérés elindult.');
+}
+function checkCode(str){let h=5381;for(const c of str)h=(((h*33)>>>0)^c.charCodeAt(0))>>>0;const al='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let o='';for(let i=0;i<4;i++){o+=al[h%32];h=Math.floor(h/32);}return o;}
+function endQuick(ok){
+ if(S.won)return;S.won=true;if(modalOpen)closeModal();
+ const raw=Math.min(Math.floor((performance.now()-S.start)/1000),LIMIT),pen=penalty(),fin=raw+pen,n=Q.route.length,dn=Math.min(Q.i,n);
+ $('#timer').textContent=fmtS(raw)+(pen?` +${pen} mp`:'');setGoal();
+ let w=null;ROUNDS[Q.round].cats.forEach(c=>{if(S.err[c]>0&&(!w||S.err[c]>S.err[w]))w=c;});
+ const chk=checkCode(`${Q.code}|${fin}|${S.mistakes}|${S.hints}|${dn}`);
+ const txt=`Június tizenhatodika – ${Q.round}. forduló (kód: ${Q.code})\nVégidő: ${fmtS(fin)}\nNyers idő: ${fmtS(raw)}\nHibák: ${S.mistakes}\nSegítségkérések: ${S.hints}\nTeljesített állomások: ${dn}/${n}\nEllenőrző kód: ${chk}`;
+ setTimeout(()=>{
+  openModal(`<p class="cat" style="color:#3b4a36">${Q.round}. forduló</p><h2>${ok?'Célba értél!':'Lejárt az idő'}</h2>
+  <div class="big">${fmtS(fin)}</div><p class="center" style="margin-top:0">végidő</p>
+  <table class="rep"><tbody>
+  <tr><td>Nyers idő</td><td class="num">${fmtS(raw)}</td></tr>
+  <tr><td>Büntetőidő (hibánként 15 mp, segítségkérésenként 15–60 mp)</td><td class="num">${pen} mp</td></tr>
+  <tr><td>Hibák / segítségkérések</td><td class="num">${S.mistakes} / ${S.hints}</td></tr>
+  <tr><td>Teljesített állomások</td><td class="num">${dn}/${n}</td></tr>
+  <tr><td>Legtöbb hibát okozó témakör</td><td class="num">${w?CAT[w]+' ('+S.err[w]+')':'nem volt hiba'}</td></tr>
+  <tr><td>Ellenőrző kód</td><td class="num"><span class="chk">${chk}</span></td></tr>
+  </tbody></table>
+  ${ok?'':'<p>Ha a tanár engedi, a teljes játékban otthon végigjátszhatod az egészet.</p>'}
+  <div id="copyArea"></div>
+  <div class="actions"><button id="copyBtn">Eredmény másolása</button><button class="primary" data-focus id="again">Új kör</button></div>`,'doc');
+  $('#again').onclick=()=>location.reload();
+  $('#copyBtn').onclick=async()=>{try{await navigator.clipboard.writeText(txt);$('#copyBtn').textContent='Kimásolva';}
+   catch(e){$('#copyArea').innerHTML='<textarea id="copyBox" readonly></textarea>';const b=$('#copyBox');b.value=txt;b.focus();b.select();}};
+ },ok?1500:0);
+}
+
+/* ================= TANÁRI KIVETÍTŐ NÉZET ================= */
+let TEACH=false,tTimer=null,tAudio=null;
+const TK='j16-tanar';
+const T=(()=>{try{return JSON.parse(localStorage.getItem(TK))||{};}catch(e){return {};}})();
+T.round=T.round||1;T.byCode=T.byCode||{};T.end=null;T.left=LIMIT;
+const CHK_AL='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const esc=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+function tSave(){try{const ks=Object.keys(T.byCode);while(ks.length>10)delete T.byCode[ks.shift()];localStorage.setItem(TK,JSON.stringify({round:T.round,code:T.code,byCode:T.byCode}));}catch(e){}}
+const genCode=r=>String(Math.floor(Math.random()*1000)).padStart(3,'0')+r;
+function parseTime(v){const m=String(v).trim().match(/^(\d{1,2})[:.,](\d{2})$/);if(!m||+m[2]>59)return null;return +m[1]*60+(+m[2]);}
+function verify(code,fin,chk){const n=ROUNDS[+code[3]].route.length;for(let dn=n;dn>=0;dn--)for(let m=0;m<=60;m++)for(let h=0;h<=30;h++)if(checkCode(`${code}|${fin}|${m}|${h}|${dn}`)===chk)return {m,h,dn,n};return null;}
+function renderT(){
+ document.querySelectorAll('.t-seg button').forEach(b=>b.classList.toggle('on',+b.dataset.r===T.round));
+ $('#tCode').textContent=T.code||'----';
+ const r=ROUNDS[T.round];$('#tRoundInfo').textContent=`${T.round}. forduló: ${r.route.length} állomás (${r.cats.map(c=>CAT[c]).join(', ')}). A tanulók ezt a kódot írják be a Gyors kör indításakor.`;
+ const fin=x=>x.v&&x.v.dn===x.v.n;
+ const rows=(T.byCode[T.code]||[]).slice().sort((a,b)=>(!!b.v-!!a.v)||(fin(b)-fin(a))||((a.v&&b.v)?b.v.dn-a.v.dn:0)||(a.fin-b.fin));
+ let rank=0;
+ $('#tBody').innerHTML=rows.map(x=>{const ok=!!x.v;if(ok)rank++;return `<tr class="${ok&&rank<=3?'top'+rank:''}"><td class="num">${ok?rank+'.':'–'}</td><td>${esc(x.name)}</td><td class="num">${fmtS(x.fin)}</td><td class="num">${ok?x.v.dn+'/'+x.v.n:'?'}</td><td class="num">${ok?x.v.m+' / '+x.v.h:'?'}</td><td>${ok?esc(x.chk):'<span class="bad">'+esc(x.chk)+': érvénytelen</span>'}</td><td><button class="t-del" data-id="${x.id}" aria-label="Sor törlése">Törlés</button></td></tr>`;}).join('')
+  ||'<tr><td colspan="7" class="t-hint">Még nincs eredmény. A tanulók célképernyőjéről írja be a becenevet, a végidőt és az ellenőrző kódot.</td></tr>';
+ $('#tBody').querySelectorAll('.t-del').forEach(b=>b.onclick=()=>{T.byCode[T.code]=(T.byCode[T.code]||[]).filter(x=>String(x.id)!==b.dataset.id);tSave();renderT();});
+}
+function tAdd(){
+ const name=$('#fName').value.trim(),fin=parseTime($('#fTime').value),chk=$('#fChk').value.trim().toUpperCase(),msg=$('#tMsg');
+ if(!T.code){msg.className='msg bad';msg.textContent='Előbb válasszon fordulót.';return;}
+ if(!name||fin===null||!new RegExp('^['+CHK_AL+']{4}$').test(chk)){msg.className='msg bad';msg.textContent='Adja meg a becenevet, a végidőt perc:másodperc formában (pl. 6:42) és a négykarakteres ellenőrző kódot.';return;}
+ const v=verify(T.code,fin,chk);(T.byCode[T.code]=T.byCode[T.code]||[]).push({id:Date.now(),name,fin,chk,v});tSave();renderT();
+ msg.className=v?'msg ok':'msg bad';
+ msg.textContent=v?`${name}: érvényes eredmény.`:`${name}: az ellenőrző kód nem egyezik a végidővel vagy a fordulókóddal. Kérje meg a tanulót, hogy mutassa meg a célképernyőt.`;
+ ['fName','fTime','fChk'].forEach(i=>$('#'+i).value='');$('#fName').focus();
+}
+function beep(){try{if(!tAudio)return;const a=tAudio;[0,.35,.7].forEach(t=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=880;g.gain.setValueAtTime(.0001,a.currentTime+t);g.gain.exponentialRampToValueAtTime(.3,a.currentTime+t+.02);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+t+.25);o.connect(g).connect(a.destination);o.start(a.currentTime+t);o.stop(a.currentTime+t+.3);});}catch(e){}}
+function tTick(){
+ const left=T.end?Math.max(0,Math.ceil((T.end-Date.now())/1000)):T.left,c=$('#tClock');
+ c.textContent=fmtS(left);c.classList.toggle('warn',left<=60&&left>0);c.classList.toggle('end',left===0);
+ if(T.end&&left===0){clearInterval(tTimer);tTimer=null;T.end=null;T.left=0;$('#tStart').textContent='Rajt';beep();}
+}
+function openTeacher(){
+ TEACH=true;if(modalOpen)closeModal();document.body.classList.add('teach');$('#teacher').hidden=false;
+ if(!T.code)T.code=genCode(T.round);tSave();renderT();tTick();
+}
+document.querySelectorAll('.t-seg button').forEach(b=>b.onclick=()=>{T.round=+b.dataset.r;T.code=genCode(T.round);tSave();renderT();$('#tMsg').textContent='';});
+$('#tNew').onclick=()=>{T.code=genCode(T.round);tSave();renderT();$('#tMsg').textContent='';};
+$('#tStart').onclick=()=>{
+ try{if(!tAudio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)tAudio=new AC();}if(tAudio&&tAudio.state==='suspended')tAudio.resume();}catch(e){}
+ if(T.end){T.left=Math.max(0,Math.ceil((T.end-Date.now())/1000));T.end=null;clearInterval(tTimer);tTimer=null;$('#tStart').textContent='Folytatás';}
+ else{if(T.left<=0)T.left=LIMIT;T.end=Date.now()+T.left*1000;tTimer=setInterval(tTick,250);$('#tStart').textContent='Szünet';}
+ tTick();
+};
+$('#tReset').onclick=()=>{T.end=null;clearInterval(tTimer);tTimer=null;T.left=LIMIT;$('#tStart').textContent='Rajt';tTick();};
+$('#tAdd').onclick=tAdd;
+['fName','fTime','fChk'].forEach(i=>$('#'+i).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();tAdd();}}));
+let clearArm=0;
+$('#tClear').onclick=()=>{if(Date.now()-clearArm<4000){T.byCode[T.code]=[];tSave();renderT();$('#tClear').textContent='Tábla törlése';clearArm=0;}else{clearArm=Date.now();$('#tClear').textContent='Biztosan? Kattintson újra';setTimeout(()=>{$('#tClear').textContent='Tábla törlése';},4000);}};
+$('#tFull').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}catch(e){}};
+$('#homeBtn').onclick=()=>{openModal(`<h2>Visszatérsz a főoldalra?</h2><p>A jelenlegi játékállás elvész.</p><div class="actions"><button data-focus id="homeNo">Mégse</button><button class="primary" id="homeYes">Igen, a főoldalra</button></div>`,'doc');$('#homeNo').onclick=closeModal;$('#homeYes').onclick=()=>{location.href=location.pathname+location.search;};};
+$('#tBack').onclick=()=>{TEACH=false;document.body.classList.remove('teach');$('#teacher').hidden=true;intro();};
+
+/* ================= FŐ CIKLUS ================= */
+const clock=new THREE.Clock();let lastSec=-1,tAcc=0,perfT=0,perfN=0;const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function frame(){
+ if(TEACH){clock.getDelta();requestAnimationFrame(frame);return;}
+ const dt=Math.min(clock.getDelta(),.05);
+ if(S.playing&&!modalOpen&&!S.won){
+  let f=0,s=0,turn=0;
+  if(keys.KeyW||keys.ArrowUp)f++;if(keys.KeyS||keys.ArrowDown)f--;if(keys.KeyD)s++;if(keys.KeyA)s--;
+  if(keys.ArrowLeft||keys.KeyQ)turn++;if(keys.ArrowRight||keys.KeyE)turn--;
+  f-=jy;s+=jx;yaw+=turn*1.9*dt;
+  const l=Math.hypot(f,s);if(l>1){f/=l;s/=l;}
+  if(l>.05){const sp=(keys.ShiftLeft||keys.ShiftRight)?2.6:1.5;const fx=-Math.sin(yaw),fz=-Math.cos(yaw),rx=Math.cos(yaw),rz=-Math.sin(yaw);tryMove((fx*f+rx*s)*sp*dt,0);tryMove(0,(fz*f+rz*s)*sp*dt);walkT=null;}
+  if(walkT){const dx=walkT.x-pos.x,dz=walkT.z-pos.z,d=Math.hypot(dx,dz);if(d<.15)walkT=null;else{const st=Math.min(d,1.7*dt),ox=pos.x,oz=pos.z;tryMove(dx/d*st,0);tryMove(0,dz/d*st);if(Math.hypot(pos.x-ox,pos.z-oz)<st*.2)walkT=null;}}
+ }
+ if(S.playing&&!S.won){const ms=performance.now()-S.start,sec=Math.floor(ms/1000);if(sec!==lastSec){lastSec=sec;if(Q){const pen=penalty();$('#timer').textContent=fmt(ms)+(pen?` +${pen} mp`:'');if(sec>=LIMIT)endQuick(false);}else $('#timer').textContent=fmt(ms);}}
+ updateMarker();
+ perfT+=dt;perfN++;if(perfT>3){const fps=perfN/perfT;perfT=0;perfN=0;if(fps<24&&PR>.75){PR=Math.max(.75,PR-.25);renderer.setPixelRatio(PR);resize();}}
+ tAcc+=dt;if(W&&W.pend&&!RM)W.pend.rotation.z=Math.sin(tAcc*2.4)*.12;
+ camera.position.set(pos.x,1.6,pos.z);camera.rotation.set(pitch,yaw,0);
+ for(let i=tweens.length-1;i>=0;i--){const tw=tweens[i];tw.t=Math.min(1,tw.t+dt/tw.dur);tw.fn(ease(tw.t));if(tw.t>=1){tweens.splice(i,1);tw.done&&tw.done();}}
+ renderer.render(scene,camera);requestAnimationFrame(frame);
+}
+
+const BACK_URL='/';
+function goBack(){try{if(history.length>1&&document.referrer){history.back();return;}}catch(e){}
+ try{window.top.location.href=BACK_URL;}catch(e){location.href=BACK_URL;}}
+function intro(){
+ openModal(`<button class="backbtn" id="goBack" aria-label="Vissza az előző oldalra">← Vissza</button>
+ <h2>Június tizenhatodika</h2>
+ <p style="font-size:18px">Budapest, 1989. június 16. Ma temetik újra Nagy Imrét és mártírtársait a Hősök terén.</p>
+ <p>Nagyapád lakásában vagy. Ő 1956-ban a forradalom résztvevője volt, és feladványsort hagyott rád. A bejárati ajtó zárva: a kódot a lakás állomásain találod meg.</p>
+ <div class="modes">
+  <button class="mode primary" id="goQuick" data-focus><b>Gyors kör</b><span>Óra eleji verseny, 6–8 perc. A tanártól kapott fordulókóddal indul. Hibánként 15, segítségkérésenként 15–60 másodperc büntetőidő jár.</span></button>
+  <button class="mode" id="goFull"><b>Teljes játék</b><span>Mind a hét témakör, 25–40 perc, témakörönkénti értékeléssel.</span></button>
+ </div>
+ <p style="font-size:15px"><span class="desk">Mozgás: <b>W A S D</b> vagy nyilak. Körülnézés: húzás egérrel. Vizsgálat: kattintás vagy <b>F</b>. A sárga nyíl a következő állomást jelzi.</span><span class="touch">Mozgás: bal alsó joystick. Körülnézés: húzás ujjal. Vizsgálat: koppintás. A sárga nyíl a következő állomást jelzi.</span></p>
+ <p style="margin:0;text-align:right"><button class="linkbtn" id="goTeach">Tanári kivetítő nézet</button></p>`,'doc');
+ $('#goBack').onclick=goBack;
+ $('#goQuick').onclick=roundCodeModal;
+ $('#goTeach').onclick=openTeacher;
+ $('#goFull').onclick=()=>{closeModal();S.playing=true;S.start=performance.now();setGoal();};
+}
+function roundCodeModal(){
+ openModal(`<h2>Fordulókód</h2><p>Add meg a tanártól kapott négyjegyű kódot. Az időmérés a kód elfogadásakor indul.</p><div class="code"><span></span><span></span><span></span><span></span></div>
+ <div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-d="${n}">${n}</button>`).join('')}<button data-b aria-label="Törlés">⌫</button><button data-d="0">0</button><button data-ok class="primary">Rajt</button></div>
+ <p class="msg" style="text-align:center" aria-live="polite"></p><div class="actions"><button data-back>Vissza</button></div>`,'panel');
+ let v='';const spans=[...mbox.querySelectorAll('.code span')],msg=mbox.querySelector('.msg');
+ const upd=()=>spans.forEach((s,i)=>s.textContent=v[i]||'');
+ const press=d=>{if(v.length<4){v+=d;upd();msg.textContent='';}};
+ const back=()=>{v=v.slice(0,-1);upd();};
+ const ok=()=>{const r=+v[3];if(v.length<4||!(r>=1&&r<=3)){msg.className='msg bad';msg.textContent='Érvénytelen kód. Kérd a tanártól a forduló kódját.';v='';upd();return;}
+  closeModal();startQuick(r,v);};
+ mbox.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>press(b.dataset.d));
+ mbox.querySelector('[data-b]').onclick=back;mbox.querySelector('[data-ok]').onclick=ok;
+ mbox.querySelector('[data-back]').onclick=intro;
+ codeKeys=e=>{if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace')back();else if(e.key==='Enter')ok();};
+}
+const ready=document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]):Promise.resolve();
+ready.then(()=>{try{W=build();marker=new THREE.Mesh(new THREE.ConeGeometry(.06,.15,4),new THREE.MeshBasicMaterial({color:0xf2c14e}));marker.rotation.x=Math.PI;marker.raycast=()=>{};marker.visible=false;scene.add(marker);}catch(err){console.error(err);}setGoal();$('#goal').textContent='Budapest, 1989. június 16.';requestAnimationFrame(frame);if(location.hash==='#tanar')openTeacher();else intro();});
+
+})();
+</script>
+</body>
+</html>
