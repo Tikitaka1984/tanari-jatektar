@@ -1,0 +1,1018 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nyolckor indul a busz – Magyarország nevezetességei, szabadulószoba</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#efe8d8;--muted:#b9b2a1;--panel:rgba(22,28,24,.9);--line:rgba(239,232,216,.16);--accent:#c9a45c;--ok:#9cc596;--bad:#e3907a;--paper:#f0e6cf;--paperink:#2b241b;--scene:#15120f;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#efe8d8;--panel:rgba(22,28,24,.9);--scene:#15120f}}
+:root[data-theme="dark"]{--ink:#efe8d8;--panel:rgba(22,28,24,.9);--scene:#15120f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--scene);color:var(--ink);font:15px/1.5 'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab;outline:none}
+.hud{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
+.card{pointer-events:auto;background:var(--panel);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:10px;padding:12px 14px;max-width:350px}
+.card h1{font:600 19px/1.2 'Spectral',Georgia,serif;margin:0 0 6px}
+.goal{margin:0;font-size:13.5px;line-height:1.45}
+.goal b{color:var(--accent);font-weight:600}
+.prog{margin:8px 0 0;display:flex;gap:4px;flex-wrap:wrap}
+.prog i{font-style:normal;font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:1px 7px;color:var(--muted)}
+.prog i.on{color:#1d2a1c;background:var(--ok);border-color:var(--ok)}
+.right{display:flex;gap:8px;align-items:center;pointer-events:auto}
+#timer{font-variant-numeric:tabular-nums;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:13px}
+button{font:inherit;font-size:13px;font-weight:500;color:var(--ink);background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer}
+button:hover{border-color:rgba(201,164,92,.6);background:rgba(201,164,92,.16)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.primary{background:var(--accent);border-color:var(--accent);color:#231a0e;font-weight:600}
+.primary:hover{background:#d8b56f}
+#inv{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;gap:6px;flex-wrap:wrap;pointer-events:none;max-width:60vw}
+#inv span{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 9px;font-size:12.5px}
+#keys{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));font-size:12px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;line-height:1.6;max-width:300px}
+kbd{font:11px ui-monospace,Menlo,Consolas,monospace;padding:1px 5px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;color:var(--ink)}
+#dot{position:fixed;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:rgba(239,232,216,.75);box-shadow:0 0 0 2px rgba(0,0,0,.35);pointer-events:none}
+#tip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:12.5px;white-space:nowrap}
+#toast{position:fixed;left:50%;bottom:calc(70px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 14px;font-size:14px;max-width:min(520px,90vw);text-align:center;pointer-events:none;transition:opacity .25s}
+#toast.off{opacity:0}
+#joy{position:fixed;left:22px;bottom:calc(64px + env(safe-area-inset-bottom,0px));width:120px;height:120px;border-radius:50%;background:rgba(22,28,24,.55);border:1px solid var(--line);touch-action:none;display:none}
+#knob{position:absolute;left:50%;top:50%;width:50px;height:50px;margin:-25px 0 0 -25px;border-radius:50%;background:rgba(239,232,216,.85)}
+.touch{display:none}
+@media (pointer:coarse){#joy{display:block}.touch{display:inline}.desk{display:none}#dot{display:none}}
+@media (max-width:620px){.hud{flex-direction:column-reverse;align-items:stretch}.right{align-self:flex-end}.card{max-width:none}#keys{display:none}}
+/* Mobil */
+html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+#c,.hud,#joy,#inv{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+button{touch-action:manipulation}
+#nextBtn .sm{display:none}
+@media (pointer:coarse){#keys{display:none}.right button,#timer{min-height:44px;padding:10px 14px;font-size:14px;display:inline-flex;align-items:center}
+ #toast{bottom:calc(206px + env(safe-area-inset-bottom,0px))}#joy{width:132px;height:132px}}
+@media (max-width:620px){.card h1{display:none}.card{padding:10px 12px}.goal{font-size:13px}.prog{margin-top:6px}.prog i{font-size:11px}
+ #nextBtn .lg{display:none}#nextBtn .sm{display:inline}#mbox{padding:18px 16px}#mbox h2{font-size:20px}#mbox.doc{font-size:16px}
+ .pad{grid-template-columns:repeat(3,72px)}.pad button{padding:13px 0;font-size:19px}.big{font-size:54px}}
+@media (max-height:500px){.card h1,.prog{display:none}.card{padding:8px 12px}#mbox{padding:14px 16px;max-height:calc(100% - 12px)}
+ .code{margin:8px 0}.code span{height:44px}.pad button{padding:6px 0}.slots li{min-height:34px;padding-top:6px;padding-bottom:6px}}
+@media (pointer:coarse) and (max-height:500px){#toast{bottom:calc(16px + env(safe-area-inset-bottom,0px))}}
+@media (max-height:520px) and (orientation:landscape){.mapgrid{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;align-items:start}.mapwrap svg{max-height:80vh}}
+#modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,8,6,.55);padding:16px;z-index:5}
+#modal[hidden]{display:none}
+#mbox:focus{outline:none}
+#mbox{width:min(560px,100%);max-height:calc(100% - 24px);overflow:auto;border-radius:12px;padding:22px 24px;position:relative}
+#mbox.wide{width:min(760px,100%)}
+#mbox.panel{background:rgba(24,30,26,.97);border:1px solid var(--line)}
+#mbox.doc{background:var(--paper);color:var(--paperink);font:17px/1.6 'Spectral',Georgia,serif;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+#mbox h2{font:600 22px/1.25 'Spectral',Georgia,serif;margin:0 0 10px}
+#mbox p{margin:0 0 12px}
+#mbox .hand{font-style:italic}
+#mbox .sign{text-align:right;font-style:italic}
+#mbox .date{text-align:right;font-size:15px}
+#mbox .center{text-align:center}
+#mbox.doc button{color:var(--paperink);border-color:rgba(43,36,27,.35);background:rgba(43,36,27,.06)}
+#mbox.doc .primary{background:#3b4a36;border-color:#3b4a36;color:#f0e6cf}
+#mbox .cat{font-size:12.5px;color:var(--accent);font-weight:600;margin:0 0 4px}
+.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+.code{display:flex;gap:10px;justify-content:center;margin:14px 0}
+.code span{width:46px;height:56px;border:1px solid var(--line);border-radius:8px;display:grid;place-items:center;font:600 26px 'Spectral',Georgia,serif;background:rgba(255,255,255,.05)}
+.pad{display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-content:center}
+.pad button{border-radius:8px;padding:10px 0;font-size:17px}
+.msg{min-height:1.5em;margin:12px 0 0!important;font-size:14.5px}
+.msg.bad{color:var(--bad)}.msg.ok{color:var(--ok)}
+.slots{list-style:none;counter-reset:s;padding:0;margin:12px 0;display:grid;gap:6px}
+.slots li{counter-increment:s;border:1px dashed var(--line);border-radius:8px;padding:8px 10px 8px 38px;position:relative;min-height:40px;font-size:14px}
+.slots li::before{content:counter(s);position:absolute;left:12px;top:8px;color:var(--muted);font-weight:600}
+.slots li.filled{border-style:solid;border-color:rgba(156,197,150,.5);background:rgba(156,197,150,.08)}
+.slots li small{display:block;color:var(--ok);font-size:12.5px}
+.cards,.opts{display:grid;gap:6px}
+.cards button,.opts button{border-radius:8px;text-align:left;padding:9px 12px;font-size:14px;line-height:1.35}
+.opts button[disabled]{opacity:.45;cursor:default}
+.opts button.right{opacity:1;border-color:rgba(156,197,150,.65);background:rgba(156,197,150,.15)}
+.match{display:grid;grid-template-columns:1fr 1.4fr;gap:12px}
+.match .col{display:grid;gap:6px;align-content:start}
+.match .colh{font-size:12.5px;color:var(--muted);margin:0!important}
+.match button{border-radius:8px;text-align:left;padding:8px 10px;font-size:13.5px;line-height:1.35}
+.match button.sel{border-color:var(--accent);background:rgba(201,164,92,.24)}
+.match button.done{border-color:rgba(156,197,150,.55);background:rgba(156,197,150,.1);cursor:default}
+.match .n{font-weight:600;color:var(--ok)}
+@media (max-width:560px){.match{grid-template-columns:1fr}}
+.src{border-left:3px solid var(--accent);padding:8px 12px;margin:0 0 14px;font:italic 16.5px/1.55 'Spectral',Georgia,serif;background:rgba(255,255,255,.04)}
+.src cite{display:block;font:normal 12.5px/1.4 'Public Sans',sans-serif;color:var(--muted);margin-top:6px}
+.mapwrap svg{width:100%;max-height:52vh;height:auto;display:block;border-radius:8px}
+.pt{cursor:pointer}.pt circle.hit{fill:transparent;stroke:none}.pt:hover circle.hit,.pt:focus circle.hit,.pt.ok circle.hit{fill:transparent}.pt circle{fill:#7a2a22;stroke:#f0e6cf;stroke-width:2}.pt text{fill:#fff;font:600 13px 'Public Sans',sans-serif;pointer-events:none}
+.pt:hover circle,.pt:focus circle{fill:#b0473a}.pt:focus{outline:none}.pt.ok circle{fill:#4e7d4f}
+.note{font-size:12.5px;color:var(--muted)}
+.cards button.hintc,.match button.hintc{border-color:var(--accent);box-shadow:0 0 0 2px rgba(201,164,92,.55)}
+.pt.off{opacity:.18;pointer-events:none}
+.shake{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.shake{animation:none}#toast{transition:none}}
+.rep{width:100%;border-collapse:collapse;font-size:15px;margin:6px 0 12px}
+.rep th,.rep td{padding:5px 6px;border-top:1px solid rgba(43,36,27,.2);text-align:left;vertical-align:top}
+.rep th{font-weight:600}
+.rep td.num{text-align:center}
+.tl{list-style:none;padding:0;margin:8px 0 0;font-size:15px}
+.tl li{padding:5px 0;border-top:1px solid rgba(43,36,27,.18);display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:10px}
+#mbox .modes{display:grid;gap:10px;margin:14px 0}
+#mbox .mode{text-align:left;border-radius:10px;padding:12px 14px;display:grid;gap:3px}
+#mbox .mode b{font-size:16px}#mbox .mode span{font-size:14px;font-weight:400;line-height:1.4}
+.big{font:600 64px/1 'Spectral',Georgia,serif;text-align:center;margin:8px 0 2px;color:#3b4a36}
+.chk{font:600 22px ui-monospace,Menlo,Consolas,monospace;letter-spacing:3px}
+#mbox.doc .linkbtn{background:none;border:none;text-decoration:underline;padding:4px 2px;font-size:14px;color:#3b4a36}
+body.teach #c,body.teach .hud,body.teach #inv,body.teach #keys,body.teach #joy,body.teach #dot,body.teach #toast,body.teach #tip{display:none!important}
+#teacher{position:fixed;inset:0;z-index:4;overflow:auto;background:#161b17;padding:calc(18px + env(safe-area-inset-top,0px)) 22px calc(18px + env(safe-area-inset-bottom,0px))}
+#teacher[hidden]{display:none}
+.t-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.t-head h1{font:600 24px/1.2 'Spectral',Georgia,serif;margin:0}
+.t-tools,.t-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.t-grid{display:grid;grid-template-columns:minmax(300px,1fr) 2fr;gap:16px;align-items:start}
+@media (max-width:900px){.t-grid{grid-template-columns:1fr}}
+.t-card{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+.t-lab{font-size:13px;color:var(--muted);margin:0 0 6px;font-weight:600}
+.t-code{font:600 clamp(60px,9vw,140px)/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;color:var(--accent);margin:4px 0 12px}
+.t-clock{font:600 clamp(60px,9vw,150px)/1 'Spectral',Georgia,serif;font-variant-numeric:tabular-nums;margin:4px 0 14px}
+.t-clock.warn{color:#e3b35c}.t-clock.end{color:var(--bad)}
+.t-seg{display:flex;gap:6px;margin-bottom:14px}.t-seg button{min-width:58px;font-size:16px}
+.t-seg button.on{background:var(--accent);color:#231a0e;border-color:var(--accent)}
+.t-form{display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:8px}
+@media (max-width:700px){.t-form{grid-template-columns:1fr 1fr}}
+.t-form input{font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-width:0}
+.t-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.t-tablewrap{overflow-x:auto;margin:10px 0}
+.t-table{width:100%;border-collapse:collapse;font-size:clamp(15px,1.5vw,20px)}
+.t-table th{font-size:13px;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);font-weight:600}
+.t-table td{padding:8px;border-bottom:1px solid var(--line)}
+.t-table tr.top1 td{background:rgba(201,164,92,.22)}.t-table tr.top2 td{background:rgba(201,164,92,.13)}.t-table tr.top3 td{background:rgba(201,164,92,.07)}
+.t-table .bad{color:var(--bad)}.t-table .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.t-hint{font-size:13px;color:var(--muted);margin:6px 0 0}
+.t-del{padding:3px 9px;font-size:12px}
+#copyBox{width:100%;height:120px;font:13px ui-monospace,Menlo,monospace;margin-top:8px}
+#mbox .backbtn{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;margin:0 0 10px;font:600 15px 'Public Sans',system-ui,sans-serif;color:inherit;background:transparent;border:1px solid rgba(43,36,27,.4);border-radius:999px;cursor:pointer}
+#mbox .backbtn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+#homeBtn .sm{display:none}
+@media (max-width:640px){#homeBtn .lg{display:none}#homeBtn .sm{display:inline}#homeBtn{min-width:44px;padding-left:12px;padding-right:12px}}
+#mbox .tp{border:1px dashed rgba(43,36,27,.55);background:rgba(31,111,120,.09);padding:8px 12px;border-radius:6px;font:15px/1.5 'Public Sans',system-ui,sans-serif;margin:8px 0 12px}
+@media (max-height:520px) and (orientation:landscape){.mapwrap svg{max-height:58vh}#mbox h2{font-size:18px;margin-bottom:6px}#mbox .cat{margin-bottom:2px}}
+@media (max-height:520px){#mbox.panel .actions{position:sticky;bottom:-14px;padding:8px 0 4px;margin-top:6px;background:linear-gradient(rgba(24,30,26,0),rgba(24,30,26,.98) 35%)}}
+</style>
+</head>
+<body>
+<canvas id="c" tabindex="0" aria-label="Az utazási iroda háromdimenziós nézete"></canvas>
+<div id="dot"></div>
+<div class="hud">
+  <div class="card">
+    <h1>Nyolckor indul a busz</h1>
+    <p class="goal" id="goal">Budapest, reggel 7 óra 20 perc</p>
+    <div class="prog" id="prog" aria-label="Teljesített témakörök"></div>
+  </div>
+  <div class="right">
+    <button id="homeBtn" aria-label="Vissza a főoldalra"><span class="lg">← Főoldal</span><span class="sm">←</span></button>
+    <span id="timer">00:00</span>
+    <button id="nextBtn" aria-label="Következő állomás"><span class="lg">Következő állomás</span><span class="sm">Következő</span></button>
+    <button id="hintBtn">Segítség</button>
+  </div>
+</div>
+<div id="inv" aria-label="Megtalált tárgyak"></div>
+<div id="keys"><span class="desk"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> vagy nyilak: mozgás · húzás egérrel: körülnézés · kattintás: vizsgálat</span></div>
+<div id="joy"><div id="knob"></div></div>
+<div id="tip" hidden></div>
+<div id="toast" class="off" role="status" aria-live="polite"></div>
+<section id="teacher" hidden aria-label="Tanári kivetítő nézet">
+ <header class="t-head"><h1>Nyolckor indul a busz – tanári nézet</h1><div class="t-tools"><button id="tFull">Teljes képernyő</button><button id="tBack">← Főoldal</button></div></header>
+ <div class="t-grid">
+  <div>
+   <div class="t-card"><p class="t-lab">Forduló</p><div class="t-seg" role="group" aria-label="Forduló választása"><button data-r="1">1.</button><button data-r="2">2.</button><button data-r="3">3.</button></div>
+    <p class="t-lab">Fordulókód</p><div id="tCode" class="t-code">----</div><div class="t-row"><button id="tNew">Új kód</button></div><p class="t-hint" id="tRoundInfo"></p></div>
+   <div class="t-card"><p class="t-lab">Hátralévő idő</p><div id="tClock" class="t-clock" aria-live="off">10:00</div><div class="t-row"><button id="tStart" class="primary">Rajt</button><button id="tReset">Visszaállítás</button></div></div>
+  </div>
+  <div class="t-card">
+   <p class="t-lab">Eredménytábla</p>
+   <div class="t-form"><input id="fName" placeholder="Becenév" maxlength="20" aria-label="Becenév"><input id="fTime" placeholder="Végidő (pl. 6:42)" inputmode="numeric" aria-label="Végidő"><input id="fChk" placeholder="Ellenőrző kód" maxlength="4" autocapitalize="characters" aria-label="Ellenőrző kód"><button id="tAdd" class="primary">Hozzáadás</button></div>
+   <p id="tMsg" class="msg" aria-live="polite"></p>
+   <div class="t-tablewrap"><table class="t-table"><thead><tr><th>Hely</th><th>Becenév</th><th>Végidő</th><th>Állomás</th><th>Hiba / segítség</th><th>Ellenőrző kód</th><th></th></tr></thead><tbody id="tBody"></tbody></table></div>
+   <div class="t-row"><button id="tClear">Tábla törlése</button></div>
+   <p class="t-hint">Sorrend: előbb a célba érők végidő szerint, utánuk az időkorlátig el nem készültek a teljesített állomások száma szerint. Az adatok csak ezen a gépen, a böngészőben maradnak; valódi nevek helyett becenév használata javasolt.</p>
+  </div>
+ </div>
+</section>
+<div id="modal" hidden><div id="mbox" role="dialog" aria-modal="true" tabindex="-1"></div></div>
+
+<script src="../_lib/three.min.js"></script>
+<script>window.THREE||document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>')</script>
+<script>
+(()=>{
+'use strict';
+const $=s=>document.querySelector(s);
+const canvas=$('#c'),modal=$('#modal'),mbox=$('#mbox'),toastEl=$('#toast'),tip=$('#tip');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const COARSE=matchMedia('(pointer:coarse)').matches;
+const LOW=COARSE||(navigator.hardwareConcurrency||8)<=4;
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+/* ================= PEDAGÓGIAI TARTALOM =================
+   Források: UNESCO WHC (whc.unesco.org, lekérve 2026-09-28), hungarikum.hu (Hungarikumok Gyűjteménye, 2025.02.11),
+   vizugy.hu (Tisza-szabályozás), Petőfi Sándor: Az alföld (1844, Arcanum Verstár). Részletek: docs/, tanári kísérőanyag. */
+const CAT={code:'Számadatok',kron:'Sorrend',szem:'Nevezetesség–helyszín',forras:'Forráselemzés',terkep:'Térképhasználat',fog:'Fogalmak',ok:'Ok-okozat',vegyes:'Vegyes ismétlés'};
+const FULLCATS=['code','kron','szem','forras','terkep','fog','ok'];
+
+const EV=[
+ {id:'hol',t:'Hollókő ófaluja és környezete',d:'1987'},
+ {id:'agg',t:'Az Aggteleki-karszt és a Szlovák-karszt barlangjai',d:'1995'},
+ {id:'pan',t:'Az ezeréves Pannonhalmi Bencés Főapátság és természeti környezete',d:'1996'},
+ {id:'hor',t:'Hortobágyi Nemzeti Park – a puszta',d:'1999'},
+ {id:'pec',t:'A pécsi (sopianae-i) ókeresztény sírkamrák',d:'2000'},
+ {id:'tok',t:'A tokaji történelmi borvidék kultúrtája',d:'2002'}
+];
+
+const PERSONS=[
+ {a:'Hollókő',b:'Palóc ófalu, a hagyományos falusi élet élő példája (világörökség, 1987)',why:'Ne tévesszük össze Hollóházával: ott porcelánmanufaktúra működik.'},
+ {a:'Hollóháza',b:'Porcelánmanufaktúra; a Hollóházi porcelán hungarikum',why:'A Hollóházi porcelán szerepel a Hungarikumok Gyűjteményében.'},
+ {a:'Aggtelek',b:'Cseppköves barlangok, köztük a Baradla-barlang (világörökség, 1995)',why:'A Baradla–Domica-barlangrendszer átnyúlik Szlovákiába.'},
+ {a:'Pannonhalma',b:'Ezeréves bencés főapátság (világörökség, 1996)',why:'A világörökségi név is ezeréves főapátságként említi.'},
+ {a:'Hortobágy',b:'Kilenclyukú híd, csárdák, legeltető pásztorkodás a pusztán (világörökség, 1999)',why:'A kilenclyukú híd és a csárdák a 18–19. századból fennmaradt építmények.'},
+ {a:'Pécs',b:'Ókeresztény sírkamrák a római kori Sopianae temetőjében (világörökség, 2000)',why:'Sopianae Pécs római kori neve.'}
+];
+
+const SOURCE=`<blockquote class="src">Mit nekem te zordon Kárpátoknak<br>Fenyvesekkel vadregényes tája!<br>Tán csodállak, ámde nem szeretlek,<br>S képzetem hegyvölgyedet nem járja.<br><br>Lenn az alföld tengersík vidékin<br>Ott vagyok honn, ott az én világom;<br>Börtönéből szabadúlt sas lelkem,<br>Ha a rónák végtelenjét látom.<br><br>Felröpűlök ekkor gondolatban<br>Túl a földön felhők közelébe,<br>S mosolyogva néz rám a Dunától<br>A Tiszáig nyúló róna képe.<br><br>Délibábos ég alatt kolompol<br>Kis-Kunságnak száz kövér gulyája;<br>Deleléskor hosszu gémü kútnál<br>Széles vályu kettős ága várja.<cite>Petőfi Sándor: Az alföld (Pest, 1844. július), részlet: 1–4. versszak.</cite></blockquote>`;
+const SRC_Q=[
+ {q:'Melyik két tájat állítja szembe a vers?',o:['A Kárpátok hegyvidékét és az alföldi rónát','A Balatont és a Dunát','A Mátrát és a Bükköt','A tengerpartot és a sivatagot'],why:'Az első versszak a Kárpátokat, a második az alföldet szólítja meg.'},
+ {q:'A vers szerint mely két folyó között nyúlik el a róna?',o:['A Duna és a Tisza között','A Rába és a Dráva között','A Tisza és a Maros között','A Duna és a Rába között'],why:'A harmadik versszak a Dunától a Tiszáig nyúló rónát festi le.'},
+ {q:'Milyen gazdálkodásra utal a negyedik versszak (gulya, gémeskút, vályú)?',o:['Legeltető állattartásra','Szőlőtermesztésre','Bányászatra','Halászatra'],why:'A gulya legelő szarvasmarha-csorda. A Hortobágyon a legeltető pásztorkodás ma is világörökségi érték.'},
+ {q:'Forráskritika: a vers 1844-ben született. Mit kell figyelembe venni, ha egy mai turisztikai kiadvány az Alföld leírásaként idézi?',o:['Költői, személyes élményt rögzít, és a táj azóta átalakult: 1846-tól szabályozták a Tiszát, a vizes területek egy része kiszáradt','Pontos, mai földrajzi leírás, ezért ellenőrzés nélkül átvehető','A verset egy mai útikönyv számára írták','Petőfi a Kárpátokban élt, ezért a leírás hiteles'],why:'A Tisza szabályozása 1846. augusztus 27-én kezdődött. Egy vers érték, de mai tájleírásként csak más forrásokkal összevetve használható.'}
+];
+
+const MAP_Q=[
+ {q:'A Pannonhalmi Bencés Főapátság a Dunántúl északi részén áll, Budapesttől nyugatra, de nem az országhatáron. Melyik betű jelöli Pannonhalmát?',a:'B',why:'Az ezeréves főapátság 1996 óta világörökség.'},
+ {q:'Pécs az ország déli részén, a Dunától nyugatra fekszik; itt vannak a sopianae-i ókeresztény sírkamrák. Melyik betű jelöli Pécset?',a:'C',why:'A pécsi sírkamrák 2000-ben kerültek a világörökségi listára.'},
+ {q:'Az Aggteleki-karszt barlangjai Magyarország északkeleti határánál, Szlovákia szomszédságában találhatók. Melyik betű jelöli Aggteleket?',a:'D',why:'A barlangrendszer egy része Szlovákiában folytatódik.'},
+ {q:'A Kékes, az ország legmagasabb pontja a Mátrában emelkedik, Budapesttől északkeletre. Melyik betű jelöli a Kékest?',a:'E',why:'A Kékes magassága 1014 m.'},
+ {q:'Tokaj a Tisza mentén, az ország északkeleti részén fekszik; róla kapta nevét a tokaji borvidék. Melyik betű jelöli Tokajt?',a:'F',why:'A tokaji borvidék kultúrtája 2002-ben lett világörökség.'}
+];
+
+const FOG_Q=[
+ {q:'Melyik fogalomra illik a meghatározás? „A magyarságra jellemző, egyedi, különleges és kiváló minőségű érték, a magyarság csúcsteljesítménye; hivatalos gyűjteményét a Hungarikum Bizottság gondozza.”',o:['Hungarikum','Világörökség','Nemzeti park','Márkanév'],why:'A fogalmat a 2012. évi XXX. törvény határozza meg. Hungarikum például a Herendi porcelán és az Országos Kéktúra.'},
+ {q:'„Kiemelkedő egyetemes értékű kulturális vagy természeti helyszín, amelyet az UNESCO nemzetközi listára vett.”',o:['Világörökség','Hungarikum','Műemlék','Tájvédelmi körzet'],why:'Magyarországnak 8 világörökségi helyszíne van; ebből egy természeti: az Aggteleki-karszt és a Szlovák-karszt barlangjai.'},
+ {q:'„Mészkővidék, ahol a víz oldó hatására barlangok és cseppkövek alakulnak ki.”',o:['Karszt','Delta','Löszfal','Kráter'],why:'Az Aggteleki-karszt barlangjait a karsztosodás formálta; a Baradla-barlang cseppkövei híresek.'},
+ {q:'„Olyan táj, amelyet az ember és a természet hosszú együttélése formált, például hagyományos legeltetéssel vagy szőlőműveléssel.”',o:['Kultúrtáj','Őserdő','Szurdokvölgy','Vulkáni kráter'],why:'A Hortobágy, a Fertő és a tokaji borvidék kultúrtájként került a világörökségi listára.'},
+ {q:'Melyik évben került fel az első két magyar helyszín, Budapest és Hollókő a világörökségi listára?',o:['1987','1995','2002','1985'],why:'1987-ben. Magyarország 1985-ben csatlakozott a világörökségi egyezményhez.'}
+];
+
+const TL_Q=[
+ {q:'Melyik helyszín került fel a legkorábban a világörökségi listára?',o:['Hollókő ófaluja','A tokaji borvidék kultúrtája','A Hortobágy','A pécsi ókeresztény sírkamrák'],why:'Hollókő 1987-ben, a többi 1999 és 2002 között került fel.'},
+ {q:'Melyik helyszín került fel a legkésőbb a világörökségi listára?',o:['A tokaji borvidék kultúrtája','Hollókő ófaluja','Az Aggteleki-karszt barlangjai','A Pannonhalmi Bencés Főapátság'],why:'A tokaji borvidék 2002-ben, a többi 1987 és 1996 között került fel.'}
+];
+
+const CAUSES=[
+ {a:'Mészkőhegységben a víz évmilliókon át oldja a kőzetet',b:'Kialakulnak az Aggteleki-karszt cseppköves barlangjai',why:'A barlangok kis része bemutatóbarlang, évente mintegy 300 ezer látogatóval.'},
+ {a:'A pusztán több mint kétezer éve legeltető pásztorkodás folyik',b:'A Hortobágy kultúrtájként világörökség lett',why:'Az UNESCO az ember és a természet harmonikus együttélésének példájaként vette fel.'},
+ {a:'A 19. század közepétől szabályozzák a Tiszát',b:'A korábbi vizes területek egy része kiszárad, legelővé vagy szántóvá alakul',why:'A Tisza szabályozása 1846. augusztus 27-én kezdődött.'},
+ {a:'1972-ben létrejön a Hortobágyi Nemzeti Park, amely védi a tájat',b:'Megmaradnak a hagyományos tájhasználat emlékei: hidak, csárdák, gémeskutak',why:'A nemzeti park védelme teremtette meg ezek megőrzésének feltételeit.'},
+ {a:'Magyarország 1985-ben csatlakozik a világörökségi egyezményhez',b:'1987-ben felkerül a listára az első két magyar helyszín',why:'Az első két helyszín Budapest és Hollókő volt.'}
+];
+
+const KEY_DATES=[
+ ['1985','Magyarország csatlakozik a világörökségi egyezményhez'],
+ ['1987','Budapest (Duna-part, Budai Várnegyed; 2002-ben bővítve az Andrássy úttal) és Hollókő ófaluja'],
+ ['1995','Az Aggteleki-karszt és a Szlovák-karszt barlangjai'],
+ ['1996','Az ezeréves Pannonhalmi Bencés Főapátság'],
+ ['1999','Hortobágyi Nemzeti Park – a puszta'],
+ ['2000','A pécsi ókeresztény sírkamrák'],
+ ['2001','Fertő / Neusiedlersee kultúrtáj'],
+ ['2002','A tokaji történelmi borvidék kultúrtája']
+];
+
+const HINTS={
+ letter:['A levél a pulton fekszik, a számítógép mellett. Kattints rá.','A levél végén egy feladvány-cédula a bőrönd számzárjának kódját kérdezi.','Olvasd el a levelet, majd nyisd ki a bőröndöt.'],
+ drawer:['A bőrönd a pult bal oldalán, a padon áll. A kód egy magasság méterben.','Magyarország legmagasabb pontja a Kékes. Régi könyvekben 1015 m szerepel, a mai hivatalos adat egy méterrel kevesebb.','A Kékes magassága 1014 m: a kód 1014.'],
+ tube:['A kinyílt bőröndben van valami. Kattints rá.','A mágneses jelölő a bőrönd belsejében fekszik.','Kattints a bőröndben fekvő piros mágneses jelölőre.'],
+ radio:['A világörökség-tabló a jobb oldali falon függ. Tedd rá a jelölőt, majd állítsd sorba a kártyákat.','Támpont: Hollókő került fel elsőként (1987), a tokaji borvidék utolsóként (2002).','A sorrend: Hollókő (1987) → Aggtelek (1995) → Pannonhalma (1996) → Hortobágy (1999) → Pécs (2000) → Tokaj (2002).'],
+ album:['A képeslap-állvány a bal oldalon áll. Párosítsd a helyszíneket a nevezetességekkel.','Figyelj a hasonló nevekre: Hollókő ófalu, Hollóháza porcelánmanufaktúra.','Hollókő – palóc ófalu; Hollóháza – porcelán; Aggtelek – barlangok; Pannonhalma – főapátság; Hortobágy – kilenclyukú híd, puszta; Pécs – ókeresztény sírkamrák.'],
+ tape:['A verseskötet a dohányzóasztalon fekszik. Olvasd el figyelmesen a részletet.','Az első versszak a Kárpátokat, a második az alföldet szólítja meg; a harmadikban két folyó neve szerepel. A forráskritikai kérdésnél gondolj a keletkezés évére.','Kárpátok és alföld; Duna és Tisza; legeltető állattartás; a vers 1844-es költői élmény, a táj azóta átalakult (Tisza-szabályozás 1846-tól).'],
+ map:['A térkép a jobb oldali falon függ. Kattints rá.','Tájékozódj Budapest, a Duna, a Tisza és a Balaton alapján: az északkelet jobbra fent, a dél lent van.','Pannonhalma: B; Pécs: C; Aggtelek: D; Kékes: E; Tokaj: F. Az A (Sopron) és a G (Szeged) tévesztő.'],
+ fog:['A könyvespolc a bal oldali falon áll. Kattints a Turisztikai kislexikonra.','Figyelj a rokon fogalmakra: a hungarikum magyar érték, a világörökség az UNESCO listája; a karszt mészkővidék.','Hungarikum; világörökség; karszt; kultúrtáj; 1987.'],
+ book:['Az utolsó lexikonkérdés válasza megmutatja, melyik könyvet kell kihúzni.','A könyv gerincén az első magyar világörökségi helyszínek felvételének éve áll.','Húzd ki az „1987” feliratú könyvet a polc középső sorából.'],
+ vitrin:['A kulcs a jobb hátsó sarokban álló szuvenír-vitrinhez tartozik.','A vitrin a naptár mellett áll.','Kattints a vitrinre: a kulcs már nálad van.'],
+ diary:['Az úti napló a vitrin középső polcán fekszik. Párosítsd az okokat a következményekkel.','Minden következményhez azt az okot keresd, amely időben és logikailag megelőzte.','Mészkő oldódása → barlangok; legeltetés → Hortobágy világörökség; Tisza-szabályozás → kiszáradó vizes területek; nemzeti park → megmaradt hidak, csárdák; 1985-ös csatlakozás → 1987-es első helyszínek.'],
+ tv:['A hirdetőtábla az ajtó mellett függ. Ismétlő kérdések jelennek meg rajta.','A kérdésablakban segítséget kérhetsz: a játék kizár két rossz választ.','Idézd fel a világörökségi sorrendet (1987 Hollókő … 2002 Tokaj) és a fogalmakat.'],
+ door:['Az ajtókód támpontját az úti napló utolsó lapján találod.','A kód egy évszám: ekkor került fel az első két magyar helyszín a világörökségi listára.','Az ajtó kódja: 1987.']
+};
+const STAGE_KEYS=['drawer','tube','radio','album','tape','map','fog','book','vitrin','diary','door'];
+const GOALS=['','Vedd ki, amit a bőröndben találsz.','Tedd fel a jelölőt a világörökség-tablóra a jobb oldali falon.','Nézd át a képeslap-állványt a bal oldalon.','Olvasd el a verseskötetet a dohányzóasztalon.','Vizsgáld meg a Magyarország-térképet a jobb oldali falon.','Lapozd át a Turisztikai kislexikont a könyvespolcon.','Húzd ki a megfelelő könyvet a polcról.','Nyisd ki a szuvenír-vitrint a jobb hátsó sarokban.','Olvasd el az úti naplót a vitrinben.','Nyisd ki az iroda ajtaját.'];
+/* ================= ÁLLAPOT ================= */
+const S={stage:0,letterRead:false,vitrinOpen:false,mistakes:0,inv:[],hint:{},hints:0,hintPen:0,start:0,playing:false,won:false,
+ err:{code:0,kron:0,szem:0,forras:0,terkep:0,fog:0,ok:0,vegyes:0},done:{},qi:{}};
+const miss=c=>{S.err[c]++;S.mistakes++;};
+let modalOpen=false,codeKeys=null;
+
+/* ================= UI SEGÉDEK ================= */
+let toastT;
+function toast(t,ms=3200){toastEl.textContent=t;toastEl.classList.remove('off');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.add('off'),ms);}
+function openModal(html,cls){mbox.className=cls;mbox.innerHTML=html;mbox.scrollTop=0;modal.hidden=false;modalOpen=true;tip.hidden=true;for(const k in keys)keys[k]=false;const f=mbox.querySelector('[data-focus]')||mbox;f.focus({preventScroll:true});}
+function closeModal(){modal.hidden=true;modalOpen=false;codeKeys=null;canvas.focus();}
+function doc(html,after){openModal(html+'<div class="actions"><button data-close data-focus>Bezárás</button></div>','doc');mbox.querySelector('[data-close]').onclick=()=>{closeModal();after&&after();};}
+function setGoal(){
+ if(Q){const n=Q.route.length,k=Q.route[Q.i];$('#goal').innerHTML=`${Q.round}. forduló, ${Math.min(Q.i+1,n)}/${n}. állomás: <b>${k?QGOAL[k]:'Célba értél.'}</b>`;}
+ else{const g=S.stage===0?(S.letterRead?'Nyisd ki a bőrönd számzárát a pult mellett.':'Olvasd el Réka levelét a pulton.'):GOALS[S.stage];
+ $('#goal').innerHTML='Feladat: <b>'+g+'</b>';}
+ $('#prog').innerHTML=(Q?ROUNDS[Q.round].cats:FULLCATS).map(k=>`<i class="${S.done[k]?'on':''}" title="${CAT[k]}">${S.done[k]?'✓ ':''}${CAT[k]}</i>`).join('');
+ $('#inv').innerHTML=S.inv.map(i=>'<span>'+i+'</span>').join('');
+}
+const addInv=i=>{if(!S.inv.includes(i))S.inv.push(i);setGoal();};
+const remInv=i=>{S.inv=S.inv.filter(x=>x!==i);setGoal();};
+const fmt=ms=>{const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');};
+const shakeEl=el=>{el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');};
+const HINT_PEN=[15,30,60],MODAL_PEN=20;
+function modalHint(){S.hints++;if(Q)S.hintPen+=MODAL_PEN;}
+const hintBtnHTML=()=>`<button data-hint>Segítség${Q?' (+'+MODAL_PEN+' mp)':''}</button>`;
+function finishBtn(label,fn){const a=mbox.querySelector('.actions');a.innerHTML=`<button class="primary" data-next>${label}</button>`;const b=a.querySelector('[data-next]');b.onclick=fn;b.focus({preventScroll:true});}
+
+/* --- Számzár --- */
+function codeModal({title,prompt,answer,onOk}){
+ openModal(`<p class="cat">${CAT.code}</p><h2>${title}</h2><p>${prompt}</p><div class="code"><span></span><span></span><span></span><span></span></div>
+ <div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-d="${n}">${n}</button>`).join('')}<button data-b aria-label="Törlés">⌫</button><button data-d="0">0</button><button data-ok class="primary">OK</button></div>
+ <p class="msg" style="text-align:center" aria-live="polite"></p><div class="actions"><button data-close>Mégse</button></div>`,'panel');
+ let v='';const spans=[...mbox.querySelectorAll('.code span')],msg=mbox.querySelector('.msg'),codeEl=mbox.querySelector('.code');
+ const upd=()=>spans.forEach((s,i)=>s.textContent=v[i]||'');
+ const press=d=>{if(v.length<4){v+=d;upd();msg.textContent='';}};
+ const back=()=>{v=v.slice(0,-1);upd();};
+ const ok=()=>{if(v.length<4){msg.className='msg bad';msg.textContent='Adj meg négy számjegyet.';return;}
+  if(v===answer){closeModal();onOk();}else{miss('code');msg.className='msg bad';msg.textContent='Hibás kód. Próbáld újra.';v='';upd();shakeEl(codeEl);}};
+ mbox.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>press(b.dataset.d));
+ mbox.querySelector('[data-b]').onclick=back;mbox.querySelector('[data-ok]').onclick=ok;
+ mbox.querySelector('[data-close]').onclick=closeModal;
+ codeKeys=e=>{if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace')back();else if(e.key==='Enter')ok();};
+}
+
+/* --- Kronológia --- */
+function timelineModal(onDone,list=EV){
+ let order;do{order=shuffle(list);}while(order.every((e,i)=>e===list[i]));
+ openModal(`<p class="cat">${CAT.kron}</p><h2>A világörökség-tabló</h2><p>A tabló kártyái összekeveredtek. Állítsd a helyszíneket abba a sorrendbe, ahogyan felkerültek a világörökségi listára: kattints rájuk a legkorábbitól a legkésőbbiig.</p>
+ <ol class="slots">${list.map(()=>'<li></li>').join('')}</ol><div class="cards">${order.map(e=>`<button data-id="${e.id}">${e.t}</button>`).join('')}</div>
+ <p class="msg" aria-live="polite"></p><div class="actions">${hintBtnHTML()}<button data-close>Később</button></div>`,'panel');
+ let n=0;const slots=[...mbox.querySelectorAll('.slots li')],btns=[...mbox.querySelectorAll('.cards button')],msg=mbox.querySelector('.msg');
+ const reset=()=>{n=0;slots.forEach(s=>{s.className='';s.innerHTML='';});btns.forEach(b=>b.hidden=false);};
+ btns.forEach(b=>b.onclick=()=>{
+  const e=list[n];
+  if(b.dataset.id===e.id){slots[n].className='filled';slots[n].innerHTML=e.t+'<small>'+e.d+'</small>';b.hidden=true;n++;msg.className='msg ok';
+   if(n<list.length)msg.textContent='Helyes.';else{msg.textContent='Az idővonal teljes.';finishBtn('Tovább',()=>{closeModal();onDone();});}
+  }else{miss('kron');msg.className='msg bad';msg.textContent='Nem ez az esemény következik. A sorrend elölről indul.';reset();shakeEl(mbox.querySelector('.slots'));}
+ });
+ mbox.querySelector('[data-close]').onclick=closeModal;
+ mbox.querySelector('[data-hint]').onclick=()=>{const e=list[n];if(!e)return;modalHint();btns.forEach(x=>x.classList.remove('hintc'));btns.find(x=>x.dataset.id===e.id).classList.add('hintc');msg.className='msg';msg.textContent='Segítség: a kiemelt esemény következik.';};
+}
+
+/* --- Párosítás (személy–esemény, ok-okozat) --- */
+function matchModal({cat,title,intro,pairs,lh,rh,onDone}){
+ const L=shuffle(pairs.map((p,i)=>({i,t:p.a}))),R=shuffle(pairs.map((p,i)=>({i,t:p.b})));
+ openModal(`<p class="cat">${CAT[cat]}</p><h2>${title}</h2><p>${intro}</p><div class="match">
+ <div class="col"><p class="colh">${lh}</p>${L.map(x=>`<button data-s="L" data-i="${x.i}">${x.t}</button>`).join('')}</div>
+ <div class="col"><p class="colh">${rh}</p>${R.map(x=>`<button data-s="R" data-i="${x.i}">${x.t}</button>`).join('')}</div></div>
+ <p class="msg" aria-live="polite"></p><div class="actions">${hintBtnHTML()}<button data-close>Később</button></div>`,'panel wide');
+ let sel=null,num=0;const msg=mbox.querySelector('.msg');
+ const pairUp=(lb,rb,pre)=>{num++;[lb,rb].forEach(x=>{x.classList.remove('sel','hintc');x.classList.add('done');x.setAttribute('aria-disabled','true');x.insertAdjacentHTML('afterbegin',`<span class="n">${num}.</span> `);});
+  msg.className='msg ok';msg.textContent=pre+pairs[+rb.dataset.i].why;sel=null;
+  if(num===pairs.length){msg.textContent+=' Minden pár a helyére került.';finishBtn('Tovább',()=>{closeModal();onDone();});}};
+ mbox.querySelectorAll('.match button').forEach(b=>b.onclick=()=>{
+  if(b.classList.contains('done'))return;
+  if(sel===b){b.classList.remove('sel');sel=null;return;}
+  if(!sel||sel.dataset.s===b.dataset.s){if(sel)sel.classList.remove('sel');sel=b;b.classList.add('sel');return;}
+  if(sel.dataset.i===b.dataset.i){pairUp(sel,b,'Helyes pár. ');}else{miss(cat);msg.className='msg bad';msg.textContent='Ez a két elem nem tartozik össze. Próbáld újra.';sel.classList.remove('sel');sel=null;shakeEl(mbox.querySelector('.match'));}
+ });
+ mbox.querySelector('[data-close]').onclick=closeModal;
+ mbox.querySelector('[data-hint]').onclick=()=>{const lb=mbox.querySelector('.match [data-s="L"]:not(.done)');if(!lb)return;const rb=mbox.querySelector(`.match [data-s="R"][data-i="${lb.dataset.i}"]`);if(sel)sel.classList.remove('sel');modalHint();pairUp(lb,rb,'Segítség: a játék összepárosított egy párt. ');};
+}
+
+/* --- Feleletválasztós sor (forráselemzés, fogalmak) --- */
+function quizModal({cat,title,intro,source,qs,onDone}){
+ const render=()=>{
+  const i=S.qi[cat]||0,q=qs[i];
+  openModal(`<p class="cat">${CAT[cat]}, ${i+1}/${qs.length}. kérdés</p><h2>${title}</h2>${intro?`<p>${intro}</p>`:''}${source||''}<p><b>${q.q}</b></p>
+  <div class="opts">${shuffle(q.o.map((t,k)=>({t,k}))).map(o=>`<button data-k="${o.k}">${o.t}</button>`).join('')}</div>
+  <p class="msg" aria-live="polite"></p><div class="actions">${hintBtnHTML()}<button data-close>Később</button></div>`,'panel wide');
+  const msg=mbox.querySelector('.msg');
+  const hb=mbox.querySelector('[data-hint]');hb.onclick=()=>{const wr=[...mbox.querySelectorAll('.opts button')].filter(x=>x.dataset.k!=='0'&&!x.disabled);const k=Math.min(2,wr.length);if(!k)return;shuffle(wr).slice(0,k).forEach(x=>x.disabled=true);modalHint();hb.remove();msg.className='msg';msg.textContent=`Segítség: a játék kizárt ${k===2?'két':'egy'} rossz választ.`;};
+  mbox.querySelectorAll('.opts button').forEach(b=>b.onclick=()=>{
+   if(b.dataset.k==='0'){mbox.querySelectorAll('.opts button').forEach(x=>x.disabled=true);b.classList.add('right');msg.className='msg ok';msg.textContent='Helyes. '+q.why;
+    S.qi[cat]=i+1;
+    if(i+1<qs.length)finishBtn('Következő kérdés',render);else finishBtn('Tovább',()=>{closeModal();onDone();});
+   }else{miss(cat);b.disabled=true;msg.className='msg bad';msg.textContent='Nem ez a helyes válasz. Próbáld újra.';}
+  });
+  mbox.querySelector('[data-close]').onclick=closeModal;
+ };
+ render();
+}
+
+/* --- Térkép: Magyarország (Natural Earth, közkincs; egyszerűsített vetület; pontok: közelítő WGS84-koordináták) --- */
+const PTS={"A": [53.6, 136.6], "B": [152.6, 153.1], "C": [192.5, 336.3], "D": [384.4, 39.0], "E": [343.0, 112.9], "F": [460.6, 82.5], "G": [354.2, 314.3]};
+const HU_CANVAS={"hun": "M585.4 103.6 581.9 109.1 575.8 112.6 574.8 118.4 570.7 119.8 565.2 125.4 558.8 127.2 549.7 123.5 547.1 124.1 544.7 129.9 537.4 130.0 534.3 131.4 528.8 137.6 525.0 148.5 519.7 150.4 511.9 157.0 510.3 160.1 511.4 172.4 509.7 175.9 504.4 177.9 499.6 184.4 496.0 199.9 492.7 203.9 491.3 208.3 480.2 218.6 483.5 222.2 481.6 228.5 476.6 232.7 476.1 240.3 472.1 241.9 469.3 245.6 466.5 253.4 469.5 255.8 469.2 258.3 467.6 260.6 463.6 262.0 460.2 267.9 453.5 269.1 452.2 270.7 451.4 277.8 447.5 286.5 450.5 294.0 443.3 296.3 441.0 300.7 439.0 310.5 435.1 311.4 431.1 316.4 429.6 317.0 426.7 314.5 409.7 312.5 404.7 316.2 405.2 321.9 402.3 322.4 401.3 326.3 398.4 328.6 393.0 329.6 388.6 326.3 381.8 324.1 379.8 327.5 366.2 327.9 362.8 332.3 358.2 328.3 353.9 328.8 350.6 326.5 345.2 328.0 341.7 325.9 336.3 325.4 324.5 329.7 314.3 324.2 304.2 325.4 298.9 329.1 299.9 332.3 296.1 336.1 291.9 338.3 289.8 341.6 283.7 342.5 280.0 348.1 270.3 347.8 265.2 343.4 261.9 346.6 261.9 350.3 256.2 351.9 256.2 355.5 248.2 354.4 243.2 357.5 241.3 356.5 238.8 360.3 228.6 357.3 221.7 368.6 218.1 371.8 214.0 371.7 208.0 377.7 205.7 377.7 204.3 375.8 200.1 377.2 191.1 372.5 184.1 372.5 180.0 374.2 171.2 371.6 163.9 371.6 161.2 374.2 157.1 368.9 144.2 365.0 143.3 359.2 138.7 353.7 132.0 351.5 124.8 351.2 123.1 352.8 121.6 350.4 117.9 351.3 117.3 347.7 116.4 349.2 113.3 347.7 115.5 346.1 112.0 344.3 109.7 335.8 106.4 331.3 98.6 330.5 93.2 326.7 79.4 309.4 78.2 303.1 75.0 298.3 74.2 299.2 69.2 296.5 68.0 298.3 59.9 288.0 54.4 285.7 53.0 287.2 47.8 283.4 46.5 278.0 40.6 270.6 36.0 267.5 35.4 265.8 38.9 262.6 38.5 260.3 34.4 258.8 34.4 256.7 32.5 256.0 29.4 249.3 32.1 242.0 28.1 238.8 12.2 238.5 23.2 228.7 27.5 220.9 37.0 221.1 39.3 222.7 45.3 221.6 43.7 219.1 40.1 218.4 45.9 215.3 42.6 211.2 47.3 204.3 46.3 202.8 40.9 203.3 41.6 199.4 39.1 198.1 39.8 191.2 44.2 187.0 40.1 178.5 40.9 172.0 42.8 170.2 45.0 172.6 54.0 168.5 58.4 165.1 58.0 160.0 62.4 156.4 61.8 152.9 59.2 150.9 59.7 148.5 57.5 144.0 47.3 141.4 45.0 141.9 38.7 139.1 41.3 135.5 42.6 136.6 47.6 133.6 49.1 129.0 52.2 127.6 62.5 130.6 65.9 136.1 71.6 137.4 76.1 132.7 77.3 136.0 80.5 136.6 95.1 133.3 93.0 130.5 92.2 121.8 93.4 120.4 89.1 114.0 94.4 111.7 96.1 106.6 95.0 105.5 96.8 102.5 96.0 100.7 104.4 94.5 117.3 97.2 128.6 110.8 133.2 112.9 137.1 118.2 139.8 117.6 145.9 123.2 158.5 128.1 182.8 126.6 193.2 127.6 202.6 124.8 219.9 122.8 231.8 124.6 238.1 119.1 242.2 117.8 236.5 113.1 236.0 100.6 240.4 97.9 244.1 92.0 257.5 88.8 276.6 89.5 282.5 86.1 293.9 86.3 298.5 83.2 301.2 71.6 310.4 68.8 315.8 72.5 321.7 72.1 323.2 73.9 323.3 78.4 327.2 77.4 332.5 80.9 336.2 80.8 342.0 76.1 351.1 71.8 353.6 66.3 356.7 66.7 361.6 63.3 365.3 65.6 369.7 62.2 377.8 43.6 383.0 37.5 383.0 31.6 409.9 26.2 422.2 32.5 429.8 33.0 436.0 36.2 445.3 32.5 448.9 34.4 454.0 28.9 462.6 27.2 469.0 30.5 470.9 34.8 476.8 35.7 478.6 42.2 484.0 50.7 490.9 55.5 505.3 50.6 517.8 50.3 522.5 46.7 524.7 47.0 528.3 45.0 534.2 46.8 533.0 52.6 536.5 53.6 537.3 60.5 541.4 66.8 552.0 66.8 558.2 75.0 562.4 84.9 574.3 82.6 579.0 85.7 583.5 91.1 584.1 93.5 581.6 99.6 585.4 103.6 Z", "riv": [[1.2, "M-207.1 201.1 -197.1 208.3 -193.6 208.9 -189.7 208.4 -181.8 205.1 -179.8 210.1 -174.4 211.4 -165.7 208.9 -162.0 205.9 -160.2 205.5 -156.6 207.2 -146.3 206.2 -141.7 203.9 -132.9 202.8 -125.2 194.6 -118.0 192.8 -115.4 193.1 -110.6 196.3 -104.4 194.9 -95.7 195.5 -93.6 193.8 -93.0 188.7 -88.3 186.0 -87.4 183.5 -81.2 177.1 -75.6 176.0 -68.6 170.1 -62.3 169.5 -59.1 170.4 -56.5 169.5 -55.9 171.7 -54.4 172.6 -49.3 181.1 -50.0 182.5 -54.2 185.1 -52.4 186.6 -54.2 189.2 -51.8 193.0 -51.3 197.3 -53.0 201.0 -51.9 204.7 -45.5 208.5 -43.2 211.2 -42.6 216.4 -37.9 226.7 -37.9 233.5 -35.5 235.4 -32.1 242.0 -31.0 244.9 -31.6 251.4 -29.1 255.0 -25.2 257.3 -18.8 258.3 -10.8 255.8 -6.1 256.1 -0.4 259.0 3.1 259.6 14.4 268.8 21.4 272.1 26.9 278.6 28.0 277.7 28.9 279.3 30.4 279.7 33.3 277.7 33.9 278.6 34.4 277.7 38.5 278.6 41.4 281.2 45.7 281.7 53.0 287.2 54.4 285.7 58.1 286.7 64.4 294.4 67.0 296.0 68.0 298.2 69.2 296.5 72.5 297.6 74.1 299.2 75.0 298.2 76.1 299.3 78.1 303.1 77.9 305.0 79.3 309.4 83.7 314.5 86.6 319.5 91.1 323.3 93.1 326.6 98.5 330.4 106.3 331.2 109.7 335.8 112.0 344.2 114.7 344.9 115.5 346.0 113.2 346.8 113.2 347.6 116.3 349.2 117.2 347.6 117.9 351.3 121.6 350.3 123.0 352.7 124.7 351.1 132.0 351.5 138.7 353.7 143.3 359.2 144.2 365.0 157.1 368.8 159.5 370.7 161.2 374.1 163.9 371.6 171.1 371.6 180.0 374.1 184.1 372.4 191.0 372.4 195.2 374.9 197.1 375.0 199.2 378.6 205.0 380.3 206.4 382.6 214.0 384.0 214.9 385.0 214.5 386.9 216.0 386.9 218.6 390.3 223.3 392.0 225.2 395.9 227.4 397.9 238.6 401.1 251.6 401.4"], [3.2, "M106.2 89.4 109.3 91.9 110.9 95.9 117.2 97.1 119.9 99.3 128.6 110.8 133.2 112.9 137.1 118.2 139.8 117.6 142.8 119.5 145.9 123.2 151.4 126.2 158.5 128.1 182.7 126.5 193.1 127.6 196.3 127.3 202.6 124.8 219.9 122.7 229.3 124.9 231.8 124.6 238.1 119.1 240.0 118.6 249.1 118.9 251.7 121.5 253.4 121.5 258.9 118.3 261.0 118.1 263.1 118.6 266.8 121.5 268.1 124.9 268.2 135.1 262.3 154.2 262.0 158.4 263.2 161.9 261.7 168.5 253.7 177.0 247.7 197.8 247.5 202.8 249.0 210.2 255.0 217.3 253.9 220.7 254.9 231.7 251.9 236.7 251.5 241.9 256.5 249.3 257.9 257.6 256.2 261.6 253.8 264.2 248.1 266.7 245.8 269.3 251.0 283.7 251.2 287.5 248.6 298.7 250.4 304.6 250.6 321.5 249.6 324.2 247.0 323.0 242.0 330.1 232.4 340.2 231.7 343.5 243.5 358.8 243.5 361.3 244.9 361.5 245.4 363.3 244.9 369.4 249.3 375.0 250.7 382.2 254.5 385.2 254.6 388.0 250.3 393.1 249.6 398.8 252.8 403.1 254.3 403.1 259.2 399.6 261.2 402.3 265.7 404.7 266.7 406.5 264.2 409.0 258.5 408.1 257.4 411.2 258.0 413.5 260.9 417.6 260.1 418.9 255.7 421.0 258.0 424.6 259.5 425.7 265.5 426.6 266.1 430.3 268.2 433.0 271.4 434.7 288.4 439.2 302.5 437.0 304.9 438.3 306.8 441.4 308.3 441.8 316.8 439.5 320.4 439.7 326.3 441.8 332.2 435.0 335.0 436.7 339.3 445.5 341.0 446.5 347.7 448.3 357.9 447.1 361.0 448.3 366.7 453.7 371.5 461.1 372.4 465.9 366.8 472.9 369.2 478.3 375.8 487.0 380.7 490.0 388.4 490.1 391.3 487.9 396.0 488.9 395.8 499.3 399.0 502.0 403.1 507.9 406.8 511.4 412.1 512.3 416.9 510.9 425.9 505.4 433.3 504.2 436.2 501.9 440.6 501.5 442.7 497.7 449.5 493.3 457.2 491.7 460.2 496.2 461.5 496.9 475.6 497.8 477.0 499.2 479.1 505.7 482.2 509.0 486.3 510.3 490.7 510.3 499.0 507.6 508.0 512.1 510.7 512.6 514.6 522.7 517.7 526.0 518.6 529.6 520.0 531.1 523.8 532.2 526.9 530.4 537.0 510.2 543.4 507.4 547.2 503.2 550.9 503.7 560.9 513.7 563.7 515.2 570.4 516.1 575.9 522.0 573.9 525.9 570.4 527.1 563.7 523.7 560.3 524.2 559.0 525.4 557.6 530.8 552.1 532.3 551.5 536.8 553.9 540.4 553.9 544.2 555.4 547.8 560.5 553.6 568.8 556.5 569.6 566.0 587.8 579.2 598.4 582.9 599.1 586.7 597.7 590.6 586.1 595.2 583.1 607.3 584.2 612.5 586.3 614.4 588.9 615.1 606.9 613.4 615.5 609.8 623.2 608.6M623.2 608.6 623.2 608.6M623.2 608.6 636.7 609.3 645.8 614.7 649.5 615.4 656.6 613.7 658.5 614.1 663.3 617.1 693.7 625.2 710.5 624.3 719.6 619.1 722.5 619.4 739.9 626.4 743.8 627.0 761.7 625.6 771.6 629.5 786.1 631.2 795.1 637.5 798.8 638.0 804.2 635.8 811.8 635.5 816.8 633.3 821.5 629.6 827.2 629.5 830.7 627.8 832.9 623.9 838.2 619.3 843.7 610.6 853.8 602.7 859.1 594.6 875.5 588.0 901.2 583.9 909.1 581.0 912.9 581.0 924.0 575.0 933.9 574.0 936.1 572.5 942.2 576.5 952.9 579.5 958.5 575.7 971.4 577.9 972.8 577.4 981.9 570.2 985.2 569.0 995.7 568.4 1000.4 564.7 1012.7 561.4 1015.5 559.7 1017.7 556.7 1022.4 545.0 1027.6 539.5 1025.6 531.8 1020.0 529.6 1018.6 527.4 1020.1 525.8 1020.9 515.3 1016.4 510.1 1011.2 508.2 1009.7 506.5 1007.9 502.0 1007.9 499.3 1003.8 497.6 1002.7 493.4 1008.1 484.8 1009.4 475.5 1007.9 469.5 1014.2 454.2 1013.1 450.0 1013.4 442.3 1019.8 427.5 1021.2 420.1 1024.0 417.6 1027.3 416.7 1034.0 418.5 1035.4 415.0 1038.3 413.9 1040.8 415.3 1042.5 417.7 1042.0 420.1 1044.5 426.9 1046.2 430.0 1048.1 431.3 1060.0 435.4 1067.0 439.3 1078.3 441.9 1081.4 441.4"], [1.6, "M263.1 162.6 264.9 164.4 266.6 171.0 257.2 186.3 253.9 195.2 254.2 202.9 257.9 208.8 254.1 212.3 254.5 214.3 255.7 214.7 255.0 217.3"], [2.6, "M357.4 313.3 354.4 314.4 351.8 320.3 347.6 326.0 347.6 330.4 345.4 334.0 349.5 338.7 348.1 342.0 345.4 342.6 347.0 345.3 350.2 346.7 350.6 352.3 353.5 358.3 349.5 362.6 350.1 364.2 354.1 367.3 354.9 369.3 354.6 375.0 356.0 377.8 350.0 380.9 350.9 388.9 347.6 395.1 352.5 395.7 352.9 397.1 351.0 400.0 351.0 403.3 361.7 415.0 359.3 421.0 364.6 427.8 362.2 432.0 363.6 434.5 367.7 438.0 369.2 444.1 369.0 445.8 366.7 447.3 365.7 452.5"], [3.2, "M106.2 89.4 102.1 86.4 101.1 83.6 101.6 80.1 100.0 79.0 93.5 79.2 87.7 75.0 85.4 75.0 84.3 77.5 81.5 77.7 77.3 80.0 67.6 81.0 53.8 79.2 50.7 77.7 39.6 68.7 35.6 62.1 31.4 50.4 29.4 49.1 12.2 52.3 -0.4 51.8 -9.8 46.2 -15.8 46.9 -20.3 45.1 -28.9 43.9 -35.9 45.5 -37.3 44.2 -38.9 44.4 -40.8 45.6 -45.5 51.5 -47.8 62.1 -52.9 66.7 -59.9 69.0 -67.2 69.9 -72.9 74.2 -76.0 72.1 -81.3 71.0 -85.3 66.9 -90.4 66.9 -95.6 71.5 -107.7 74.3 -110.9 72.5 -115.6 67.2 -126.0 66.5 -131.3 63.9 -135.8 60.5 -138.8 56.2 -141.3 58.3 -150.6 55.3 -156.6 57.0 -160.6 56.1 -164.8 44.6 -169.7 43.9 -175.6 40.0 -181.6 38.8 -186.2 33.7 -192.4 30.4 -196.6 26.7 -205.3 24.3 -213.4 24.6 -217.2 22.2 -227.4 21.2 -229.4 20.2 -239.5 13.1 -242.4 9.4 -241.2 8.4 -242.3 7.6 -246.1 6.0 -247.5 7.7 -248.4 6.9 -248.8 5.7 -246.8 4.6 -247.0 1.6 -253.1 -6.9 -260.9 -8.6 -264.4 -6.0 -268.7 -6.9 -270.6 -12.4 -276.5 -15.5 -280.9 -16.3 -285.2 -13.7 -288.1 -15.4 -287.0 -17.1 -290.4 -17.4 -290.8 -18.4"], [1.2, "M-60.9 340.1 -59.4 340.8 -55.2 340.4 -41.7 344.5 -38.0 351.1 -34.2 353.1 -29.8 353.6 -22.2 361.9 -14.9 365.6 -11.8 365.6 -7.0 371.7 2.9 372.1 8.4 375.0 11.2 371.6 16.1 371.5 17.3 374.1 21.8 376.3 23.4 375.8 23.5 377.8 22.3 379.1 23.4 380.8 22.3 382.6 25.1 382.6 25.6 386.5 28.3 386.5 30.1 389.6 33.1 389.9 32.7 392.8 34.3 393.0 33.3 395.4 38.5 398.8 36.3 403.4 36.8 404.8 40.2 404.8 38.5 408.2 38.5 406.5 36.8 406.5 37.0 409.8 41.4 415.0 49.6 419.3 51.7 418.7 53.5 416.7 54.5 418.8 55.8 418.5 57.0 419.9 61.6 421.8 61.3 423.7 62.3 424.8 63.7 424.9 66.0 423.2 69.7 426.1 69.7 427.5 70.9 427.8 70.4 430.3 72.7 431.3 73.7 430.7 73.9 432.0 72.1 435.4 76.4 436.6 78.6 435.1 80.0 436.8 82.3 434.7 84.2 440.8 86.0 440.6 85.4 438.9 88.6 441.3 89.4 439.7 89.4 443.2 91.8 441.4 93.4 445.2 97.0 448.0 104.5 451.6 109.4 450.8 111.4 446.5 121.0 452.8 125.4 451.6 126.2 450.0 127.4 451.9 126.5 453.4 128.6 453.6 130.6 452.5 129.4 455.9 137.1 455.1 141.9 450.5 143.8 449.5 146.6 449.7 151.3 453.5 156.1 459.9 159.3 462.1 165.7 460.0 173.5 451.5 176.1 452.3 180.8 456.7 186.2 458.0 189.5 456.6 190.3 452.2 191.2 451.0 193.3 450.5 200.4 454.8 208.0 456.1 212.6 460.9 216.9 463.2 218.9 463.2 218.4 458.9 222.4 458.8 224.7 457.7 228.0 462.3 229.9 459.3 231.0 459.6 235.6 468.1 239.9 469.4 241.2 473.4 238.5 477.3 239.4 480.8 242.3 484.1 248.4 487.4 258.1 487.1 263.5 485.7 273.5 479.1 274.8 481.5 277.9 480.7 281.7 481.5 283.9 481.0 285.6 482.7 287.3 482.9 288.1 482.4 285.2 479.8 290.4 480.7 291.2 478.6 289.2 477.2 292.4 475.1 295.6 475.6 295.8 473.7 298.7 472.2 312.4 474.7 314.2 478.1 321.7 480.7 321.4 483.6 317.0 494.1 319.4 500.3 325.1 501.0 335.0 508.0 340.8 508.0 343.1 508.8 336.4 512.5 335.5 513.9 337.2 515.9 340.0 514.8 346.1 508.7 352.9 505.4 355.3 506.1 355.8 508.8 358.0 509.6 359.3 509.2 360.3 506.0 362.3 504.5 362.2 508.7 365.4 511.8 367.0 510.1 369.4 502.0 372.8 497.0 379.5 493.7 380.7 490.0"], [1.2, "M176.9 231.8 179.9 233.7 185.0 234.7 193.0 238.3 206.9 250.8 210.4 252.4 214.0 253.1 220.7 252.0 223.6 252.8 226.1 256.6 226.7 259.2 223.8 275.3 224.3 280.7 225.3 282.8 228.0 285.0 228.4 292.3 226.9 294.1 227.0 296.3 235.7 298.2 238.3 300.9 241.1 300.9 242.3 302.5 243.5 300.9 244.3 301.1 245.2 303.3 249.8 302.5"], [1.8, "M821.7 266.7 816.7 266.2 808.4 262.4 803.4 257.5 802.5 252.4 804.2 245.2 803.7 239.6 802.0 235.7 799.2 233.1 779.7 225.4 770.4 225.8 764.8 223.3 761.2 223.3 757.6 225.0 749.5 232.3 744.4 241.9 740.1 248.0 732.0 266.8 726.3 276.0 718.7 282.8 710.3 286.9 702.3 288.3 693.7 285.1 692.4 285.8 691.0 289.1 689.7 289.3 689.4 286.4 688.0 285.9 684.4 290.0 682.9 288.5 679.5 292.1 658.3 300.7 657.5 301.7 659.4 304.9 656.1 314.1 657.5 315.8 654.5 328.5 653.1 330.6 650.6 331.7 645.4 340.9 640.2 343.3 637.5 343.0 632.8 345.4 627.6 350.4 625.6 349.7 622.8 350.4 616.5 353.9 613.4 357.6 609.3 358.7 603.5 362.1 601.2 361.8 594.5 357.0 584.8 352.7 575.8 353.2 566.1 351.5 555.3 351.6 550.8 349.0 546.5 343.6 544.7 343.0 537.4 343.7 531.9 342.5 528.4 343.6 521.5 343.3 516.8 339.3 512.6 333.0 510.1 332.0 493.1 332.3 489.4 330.9 484.0 332.8 469.6 327.3 460.4 326.7 455.4 321.6 453.7 321.2 440.9 325.2 436.4 325.5 429.0 324.4 426.8 325.0 420.8 333.7 418.6 335.3 416.1 335.7 411.4 333.8 407.5 328.8 405.9 328.1 393.2 328.1 376.2 319.1 368.8 316.5 359.9 316.1 357.5 313.5"], [2, "M-268.6 241.5 -252.9 250.9 -247.2 252.7 -237.5 253.2 -222.0 249.5 -219.8 247.7 -218.1 242.0 -215.4 242.0 -212.3 243.0 -197.7 252.6 -189.5 259.9 -176.7 268.1 -171.1 268.8 -162.6 271.8 -156.4 276.8 -153.0 278.0 -129.4 275.6 -123.1 273.3 -120.8 269.8 -114.7 265.5 -111.5 264.5 -108.4 265.8 -98.3 265.6 -92.3 262.3 -85.4 264.7 -81.7 269.7 -78.7 271.3 -72.8 269.3 -67.8 270.4 -64.6 268.9 -59.4 271.0 -48.9 271.6 -44.6 273.7 -42.9 273.3 -40.9 277.7 -32.1 274.6 -29.3 274.3 -23.2 275.8 -21.1 276.7 -18.9 282.6 -12.7 286.6 -0.6 298.2 1.5 298.7 8.3 296.3 12.6 297.2 16.4 295.1 20.5 297.0 25.4 297.2 31.1 299.9 33.0 302.0 34.5 305.9 45.1 308.2 47.8 308.3 54.5 306.2 65.1 307.0 69.0 305.9 78.4 306.7"], [2, "M123.0 352.7 121.9 355.0 122.3 356.5 130.5 357.5 139.2 364.5 142.0 366.0 144.9 365.4"], [1.2, "M-12.4 155.5 -17.3 158.2 -21.1 163.8 -21.6 183.8 -20.6 187.0 -18.5 189.2 -12.6 192.2 -6.1 201.1 2.5 209.9 4.4 211.5 11.8 213.4 18.9 220.6 25.9 223.3 34.9 224.4 41.4 227.1 44.1 226.9 52.1 221.4 59.7 217.7 63.2 213.7 71.4 210.1 74.8 207.5 80.8 194.4 85.4 188.7 86.8 181.9 94.2 170.8 103.4 165.6 114.0 166.5 118.8 165.6 120.8 162.4 123.1 150.8 126.3 146.4 131.7 142.1 138.5 139.0 144.0 132.3 146.9 130.5 158.5 128.1"], [1.6, "M-16.2 106.3 -21.0 112.9 -21.9 115.6 -16.5 126.5 -10.8 132.2 -7.0 134.1 -2.2 135.3 1.8 135.2 10.0 130.6 16.5 130.1 23.8 127.9 32.2 114.3 34.7 113.0 37.3 109.1 41.3 106.0 48.4 102.6 52.8 95.9 55.0 94.3 65.0 94.3 69.6 93.3 76.6 89.2 80.3 88.0 86.9 92.5 94.0 100.8 110.9 109.7 113.4 114.8 115.6 114.7 122.5 118.1 124.6 120.3 127.0 119.0 129.8 120.8 130.9 121.8 131.4 125.3 134.2 126.6 142.1 134.6"], [1.2, "M359.0 -19.3 359.9 -23.9 361.5 -26.5 364.1 -28.4 366.9 -29.1 372.1 -27.9 379.5 -21.9 387.6 -21.6 394.1 -17.9 411.3 -20.6 418.9 -19.2 424.7 -16.9 429.9 -13.9 431.4 -10.7 436.6 -12.6 445.0 -10.3 447.6 0.9 450.8 9.1 456.5 17.4 452.8 29.5 451.1 32.3 448.9 34.4 446.8 33.1 444.4 37.1 444.5 46.3 439.8 56.8 429.4 66.3 424.5 75.5 423.0 84.7 424.1 89.3 421.9 94.6 423.2 100.3 436.2 103.0"], [1.2, "M581.7 304.3 587.4 309.2 587.9 320.5 582.9 329.0 581.0 329.4 572.4 322.1 562.7 320.7 560.1 318.8 558.6 316.4 558.2 313.0 555.3 309.3 551.2 310.4 545.7 308.8 542.1 310.9 537.9 309.6 533.7 306.7 525.3 306.6 524.1 305.5 523.3 302.1 519.5 297.5 511.3 292.1 504.2 290.9 491.6 291.2 486.6 292.2 479.3 290.4 476.8 288.8 469.6 279.8 465.7 277.1 460.4 269.5 453.6 264.5 449.0 257.8 440.7 249.5 434.4 239.1 427.0 231.8 424.2 230.0 412.4 227.2 405.0 228.6 396.2 227.7 391.5 230.7 384.2 233.3 381.9 233.2 375.1 230.1 372.0 231.3 368.7 234.4 364.1 242.5 360.8 245.2 358.9 251.1 358.2 257.2"], [1.2, "M315.0 20.5 317.0 21.8 317.6 23.9 315.1 30.5 315.8 33.9 322.4 42.0 319.1 45.4 319.0 47.4 322.8 54.7 321.6 58.0 314.2 61.6 305.9 69.9 301.1 71.6 298.4 80.3 298.4 83.1 293.9 86.3 282.5 86.1 276.5 89.4 266.0 88.2 257.4 88.7 244.0 92.0 242.6 93.2 240.3 97.8 236.0 100.6 237.0 103.0 235.9 110.7 236.5 113.1 242.7 118.6"], [1.2, "M331.8 81.8 332.6 86.7 337.7 92.7 336.8 94.5 334.0 95.7 327.7 96.1 326.0 98.2 319.4 102.2 317.1 104.9 316.4 107.3 315.4 137.4 317.6 146.9 320.3 153.5 327.3 157.5 331.1 158.4 336.9 155.5 339.5 156.9 341.9 161.2 342.3 165.6 349.2 174.1 348.9 180.4 352.8 186.8 353.1 191.1 358.6 194.9 358.9 200.6"], [1.2, "M583.3 256.6 586.4 256.0 587.3 250.9 584.5 240.2 585.2 235.5 584.4 232.3 581.3 227.3 573.1 225.7 568.5 227.4 565.3 230.0 562.8 229.5 556.0 225.2 553.7 218.3 549.5 214.9 529.0 210.8 517.3 212.2 510.5 214.1 507.8 214.0 501.7 211.2 493.7 209.8 491.4 210.4 484.8 215.8 470.7 222.6 462.3 223.4 439.9 221.9 430.5 227.8 424.8 230.1"], [1.2, "M-111.0 336.1 -106.4 333.8 -98.3 332.9 -94.7 336.3 -92.6 335.9 -79.0 329.3 -74.6 329.2 -69.1 331.8 -60.9 340.1"], [1.2, "M-111.1 336.2 -120.5 334.8 -121.2 332.7 -123.1 331.4 -127.0 330.8 -129.9 328.4 -128.8 325.0 -132.0 319.3 -138.7 312.9 -142.2 311.3 -143.8 307.6 -150.4 304.1 -154.8 297.1 -154.3 294.5"], [1.2, "M-154.3 294.5 -174.6 286.3 -186.7 284.5"]], "lakes": ["M162.2 238.3 160.2 240.3 136.3 250.7 133.7 253.3 128.8 256.6 125.2 257.0 118.6 255.7 114.9 255.6 112.0 256.6 110.6 256.5 109.7 254.8 110.9 250.3 114.4 250.2 117.9 251.5 119.6 251.0 121.4 247.8 124.5 246.2 127.7 246.5 130.6 248.0 137.4 243.4 142.8 242.1 146.4 237.6 158.1 233.1 159.5 231.3 162.9 234.2 164.2 234.4 164.9 233.0 164.4 231.3 161.8 229.2 161.8 228.4 172.9 221.5 175.2 218.3 176.4 214.3 177.2 213.9 182.7 215.6 187.5 219.7 187.6 221.1 184.7 226.9 183.3 228.4 179.9 230.4 168.1 234.6 166.4 234.4 164.8 236.9 162.2 238.3 Z", "M392.7 150.6 395.5 143.0 398.2 141.1 400.0 141.1 400.4 143.7 395.9 150.4 393.5 151.3 392.7 150.6 Z", "M71.8 116.9 67.8 124.3 66.5 129.5 66.9 132.9 70.3 132.1 71.9 133.8 72.4 135.8 71.9 137.0 71.3 137.6 70.2 136.6 67.1 135.5 64.9 129.6 63.8 129.1 63.5 132.7 62.6 131.2 63.0 128.9 64.3 127.2 63.6 126.3 63.6 123.3 65.4 117.3 66.2 111.5 67.3 109.2 69.5 106.7 72.4 105.5 75.0 104.9 76.1 105.8 75.2 111.9 71.8 116.9 Z"], "bp": [261.1, 159.5]};
+const HU_STATIC="<defs><clipPath id=\"huclip\"><rect width=\"600\" height=\"402\"/></clipPath></defs><g clip-path=\"url(#huclip)\"><rect width=\"600\" height=\"402\" fill=\"#e6dcc3\"/><g fill=\"#ddd2b6\" stroke=\"#b9a77e\" stroke-width=\"1\"><path d=\"M615.0 -15.0 615.0 87.0 609.4 85.1 605.8 85.6 601.1 96.1 596.1 99.1 589.4 96.4 588.7 102.1 585.4 103.6 581.6 99.6 584.1 93.5 583.5 91.1 579.0 85.7 574.3 82.6 562.4 84.9 558.2 75.0 552.0 66.8 543.3 67.3 541.4 66.8 537.3 60.5 535.9 52.5 533.0 52.6 534.2 46.8 528.3 45.0 524.7 47.0 522.5 46.7 523.8 33.7 522.8 28.7 524.3 24.1 529.8 19.8 531.8 16.0 537.5 12.2 539.2 2.9 542.2 -1.8 541.9 -8.0 546.2 -15.0 615.0 -15.0 Z\"/><path d=\"M-15.0 -15.0 153.8 -15.0 150.2 -10.3 134.0 -4.1 130.9 -4.6 127.0 -7.8 120.4 -4.9 110.7 -9.7 106.7 -10.7 102.9 -9.9 98.3 -6.7 97.1 -3.2 90.9 4.2 84.1 21.9 81.2 18.6 80.0 10.3 78.0 7.6 71.7 8.8 65.8 5.8 61.3 5.7 58.6 0.2 55.4 -0.6 48.1 -3.2 42.5 -2.8 36.8 5.3 34.5 6.6 19.2 4.2 11.4 4.6 -1.5 -3.3 -4.3 -6.8 -6.3 -6.6 -5.4 -7.7 -9.9 -9.0 -11.1 -11.5 -15.0 -11.0 -15.0 -15.0 Z\"/><path d=\"M585.4 103.6 588.7 102.1 589.4 96.4 596.1 99.1 601.1 96.1 605.8 85.6 609.4 85.1 615.0 87.0 615.0 417.0 414.5 417.0 406.5 408.8 409.9 404.2 406.0 394.8 408.2 386.6 408.0 375.3 406.0 375.2 403.7 378.6 400.4 377.7 396.8 372.0 396.1 367.3 390.6 359.7 383.0 356.6 372.2 348.7 368.1 339.1 362.8 332.3 366.2 327.9 379.8 327.5 381.8 324.1 388.6 326.3 393.0 329.6 398.4 328.6 401.3 326.3 402.3 322.4 405.2 321.9 404.7 316.2 411.5 312.0 416.2 314.1 418.9 313.2 423.5 314.9 426.7 314.5 429.6 317.0 431.1 316.4 435.1 311.4 439.0 310.5 441.0 300.7 443.3 296.3 450.5 294.0 447.5 286.5 451.4 277.8 452.2 270.7 453.5 269.1 460.2 267.9 463.6 262.0 467.6 260.6 469.2 258.3 469.5 255.8 466.5 253.4 469.3 245.6 472.1 241.9 476.1 240.3 476.6 232.7 481.6 228.5 483.5 222.2 480.2 218.6 491.3 208.3 492.7 203.9 496.0 199.9 499.6 184.4 504.4 177.9 509.7 175.9 511.4 172.4 510.3 160.1 511.9 157.0 519.7 150.4 525.0 148.5 528.8 137.6 534.3 131.4 537.4 130.0 544.7 129.9 547.1 124.1 549.7 123.5 558.8 127.2 565.2 125.4 570.7 119.8 574.8 118.4 575.8 112.6 581.9 109.1 585.4 103.6 Z\"/><path d=\"M546.2 -15.0 541.9 -8.0 542.2 -1.8 539.2 2.9 537.5 12.2 531.8 16.0 529.8 19.8 523.0 26.2 523.8 33.7 522.5 46.7 519.4 49.8 505.3 50.6 490.9 55.5 484.0 50.7 478.6 42.2 476.8 35.7 470.9 34.8 469.0 30.5 463.9 27.6 454.0 28.9 448.9 34.4 445.3 32.5 436.0 36.2 429.8 33.0 422.2 32.5 408.5 26.2 383.0 31.6 383.0 37.5 377.8 43.6 369.7 62.2 365.3 65.6 361.6 63.3 356.7 66.7 353.6 66.3 351.1 71.8 342.0 76.1 336.2 80.8 332.5 80.9 327.2 77.4 323.3 78.4 323.2 73.9 321.7 72.1 315.8 72.5 310.4 68.8 301.2 71.6 298.4 80.4 298.5 83.2 293.9 86.3 282.5 86.1 276.6 89.5 257.5 88.8 244.1 92.0 240.4 97.9 236.0 100.6 236.5 113.1 242.2 117.8 238.1 119.1 231.8 124.6 219.9 122.8 202.6 124.8 193.2 127.6 182.8 126.6 158.5 128.1 151.4 126.2 145.9 123.2 141.1 118.3 137.1 118.2 133.2 112.9 128.6 110.8 117.3 97.2 104.4 94.5 101.3 96.3 94.6 92.6 95.1 90.5 93.7 89.5 95.5 84.9 92.7 80.7 87.2 77.0 84.9 63.0 81.7 60.8 80.4 54.8 75.9 52.3 77.3 40.0 84.2 29.9 84.3 19.5 90.9 4.2 97.1 -3.2 98.3 -6.7 102.9 -9.9 106.7 -10.7 110.7 -9.7 120.4 -4.9 127.0 -7.8 130.9 -4.6 134.0 -4.1 150.2 -10.3 153.8 -15.0 546.2 -15.0 Z\"/><path d=\"\"/><path d=\"M84.1 21.9 84.2 29.9 77.3 40.0 75.6 51.5 80.4 54.8 81.7 60.8 84.9 63.0 87.2 77.0 92.7 80.7 95.5 84.9 93.7 89.5 95.1 90.5 94.6 92.6 101.3 96.3 96.0 100.7 96.8 102.5 95.0 105.5 96.1 106.6 94.4 111.7 89.1 114.0 93.4 120.4 92.2 121.8 93.0 130.5 95.1 133.3 80.5 136.6 77.3 136.0 76.1 132.7 71.6 137.4 66.9 136.6 63.6 131.4 55.8 128.0 52.2 127.6 49.1 129.0 48.3 132.9 42.6 136.6 41.3 135.5 38.7 139.1 45.0 141.9 47.3 141.4 57.5 144.0 59.7 148.5 59.2 150.9 61.8 152.9 62.4 156.4 58.0 160.0 58.4 165.1 54.0 168.5 45.0 172.6 41.8 170.5 40.3 178.9 44.2 187.0 39.8 191.2 39.1 198.1 41.6 199.4 40.9 203.3 46.3 202.8 47.3 204.3 42.6 211.2 45.9 215.3 40.1 218.4 43.7 219.1 45.3 221.6 39.3 222.7 37.0 221.1 27.5 220.9 23.2 228.7 18.7 231.5 13.5 237.8 2.7 242.8 1.7 253.4 5.5 259.5 5.6 262.4 3.1 259.7 -6.0 256.1 -10.7 255.9 -15.0 257.6 -15.0 -11.0 -11.1 -11.5 -9.9 -9.0 -5.4 -7.7 -6.3 -6.6 -4.3 -6.8 -1.5 -3.3 11.4 4.6 19.2 4.2 34.5 6.6 36.8 5.3 42.5 -2.8 48.1 -3.2 57.0 -0.4 58.6 0.2 61.3 5.7 65.8 5.8 71.7 8.8 78.0 7.6 80.0 10.3 81.2 18.6 84.1 21.9 Z\"/><path d=\"M362.8 332.3 368.1 339.1 372.2 348.7 383.0 356.6 390.6 359.7 396.1 367.3 396.8 372.0 400.4 377.7 403.7 378.6 406.0 375.2 408.0 375.3 408.2 386.6 406.0 394.8 409.9 404.2 406.5 408.8 414.5 417.0 259.6 417.0 257.5 413.5 258.6 408.1 264.3 409.0 266.7 406.5 259.3 399.6 252.8 403.1 249.6 398.9 250.3 393.1 255.1 387.0 250.1 380.7 249.3 375.0 244.6 368.7 245.5 363.5 249.9 362.2 247.0 358.8 249.9 356.3 249.4 354.3 256.7 355.2 256.2 351.9 261.9 350.3 261.9 346.6 265.2 343.4 270.3 347.8 280.0 348.1 283.7 342.5 289.8 341.6 291.9 338.3 296.1 336.1 299.9 332.3 298.9 329.1 304.2 325.4 314.3 324.2 324.5 329.7 336.3 325.4 341.7 325.9 345.2 328.0 350.6 326.5 353.9 328.8 358.2 328.3 362.8 332.3 Z\"/><path d=\"M47.8 283.4 53.0 287.2 54.4 285.7 59.9 288.0 68.0 298.3 69.2 296.5 74.2 299.2 75.0 298.3 78.2 303.1 79.4 309.4 93.2 326.7 98.6 330.5 106.4 331.3 109.7 335.8 112.0 344.3 115.5 346.1 113.3 347.7 116.4 349.2 117.3 347.7 117.9 351.3 121.6 350.4 123.1 352.8 124.8 351.2 132.0 351.5 138.7 353.7 143.3 359.2 144.2 365.0 157.1 368.9 161.2 374.2 163.9 371.6 171.2 371.6 180.0 374.2 184.1 372.5 191.1 372.5 200.1 377.2 204.3 375.8 207.4 377.9 214.0 371.7 218.1 371.8 221.7 368.6 228.6 357.3 238.8 360.3 241.3 356.5 243.2 357.5 249.4 354.3 249.9 356.3 247.0 358.8 249.9 362.2 245.5 363.5 244.6 368.7 249.3 375.0 250.8 382.3 255.1 387.0 250.3 393.1 249.6 398.9 252.8 403.1 259.3 399.6 266.7 406.5 264.3 409.0 258.6 408.1 257.5 413.5 259.6 417.0 -15.0 417.0 -15.0 318.0 -11.1 314.0 -5.6 313.5 7.5 307.4 9.3 304.4 9.1 298.8 13.2 299.3 16.4 296.7 20.4 299.8 27.5 299.4 27.8 297.6 25.4 295.4 24.1 284.4 33.3 277.7 38.6 278.7 41.4 281.2 44.9 281.2 47.8 283.4 Z\"/><path d=\"M-15.0 257.6 -10.7 255.9 -6.0 256.1 3.1 259.7 5.6 262.4 5.5 259.5 1.7 253.4 1.9 243.7 12.2 238.5 27.2 238.3 32.1 242.0 29.4 249.3 32.5 256.0 34.4 256.7 34.4 258.8 38.5 260.3 38.9 262.6 35.4 265.8 46.5 278.0 47.8 283.4 44.9 281.2 41.4 281.2 38.6 278.7 33.3 277.7 26.5 281.6 24.0 286.2 25.4 295.4 27.8 297.6 27.5 299.4 20.4 299.8 16.4 296.7 13.2 299.3 9.1 298.8 9.3 304.4 7.5 307.4 -5.6 313.5 -11.1 314.0 -15.0 318.0 -15.0 257.6 Z\"/><path d=\"\"/></g><path d=\"M585.4 103.6 581.9 109.1 575.8 112.6 574.8 118.4 570.7 119.8 565.2 125.4 558.8 127.2 549.7 123.5 547.1 124.1 544.7 129.9 537.4 130.0 534.3 131.4 528.8 137.6 525.0 148.5 519.7 150.4 511.9 157.0 510.3 160.1 511.4 172.4 509.7 175.9 504.4 177.9 499.6 184.4 496.0 199.9 492.7 203.9 491.3 208.3 480.2 218.6 483.5 222.2 481.6 228.5 476.6 232.7 476.1 240.3 472.1 241.9 469.3 245.6 466.5 253.4 469.5 255.8 469.2 258.3 467.6 260.6 463.6 262.0 460.2 267.9 453.5 269.1 452.2 270.7 451.4 277.8 447.5 286.5 450.5 294.0 443.3 296.3 441.0 300.7 439.0 310.5 435.1 311.4 431.1 316.4 429.6 317.0 426.7 314.5 409.7 312.5 404.7 316.2 405.2 321.9 402.3 322.4 401.3 326.3 398.4 328.6 393.0 329.6 388.6 326.3 381.8 324.1 379.8 327.5 366.2 327.9 362.8 332.3 358.2 328.3 353.9 328.8 350.6 326.5 345.2 328.0 341.7 325.9 336.3 325.4 324.5 329.7 314.3 324.2 304.2 325.4 298.9 329.1 299.9 332.3 296.1 336.1 291.9 338.3 289.8 341.6 283.7 342.5 280.0 348.1 270.3 347.8 265.2 343.4 261.9 346.6 261.9 350.3 256.2 351.9 256.2 355.5 248.2 354.4 243.2 357.5 241.3 356.5 238.8 360.3 228.6 357.3 221.7 368.6 218.1 371.8 214.0 371.7 208.0 377.7 205.7 377.7 204.3 375.8 200.1 377.2 191.1 372.5 184.1 372.5 180.0 374.2 171.2 371.6 163.9 371.6 161.2 374.2 157.1 368.9 144.2 365.0 143.3 359.2 138.7 353.7 132.0 351.5 124.8 351.2 123.1 352.8 121.6 350.4 117.9 351.3 117.3 347.7 116.4 349.2 113.3 347.7 115.5 346.1 112.0 344.3 109.7 335.8 106.4 331.3 98.6 330.5 93.2 326.7 79.4 309.4 78.2 303.1 75.0 298.3 74.2 299.2 69.2 296.5 68.0 298.3 59.9 288.0 54.4 285.7 53.0 287.2 47.8 283.4 46.5 278.0 40.6 270.6 36.0 267.5 35.4 265.8 38.9 262.6 38.5 260.3 34.4 258.8 34.4 256.7 32.5 256.0 29.4 249.3 32.1 242.0 28.1 238.8 12.2 238.5 23.2 228.7 27.5 220.9 37.0 221.1 39.3 222.7 45.3 221.6 43.7 219.1 40.1 218.4 45.9 215.3 42.6 211.2 47.3 204.3 46.3 202.8 40.9 203.3 41.6 199.4 39.1 198.1 39.8 191.2 44.2 187.0 40.1 178.5 40.9 172.0 42.8 170.2 45.0 172.6 54.0 168.5 58.4 165.1 58.0 160.0 62.4 156.4 61.8 152.9 59.2 150.9 59.7 148.5 57.5 144.0 47.3 141.4 45.0 141.9 38.7 139.1 41.3 135.5 42.6 136.6 47.6 133.6 49.1 129.0 52.2 127.6 62.5 130.6 65.9 136.1 71.6 137.4 76.1 132.7 77.3 136.0 80.5 136.6 95.1 133.3 93.0 130.5 92.2 121.8 93.4 120.4 89.1 114.0 94.4 111.7 96.1 106.6 95.0 105.5 96.8 102.5 96.0 100.7 104.4 94.5 117.3 97.2 128.6 110.8 133.2 112.9 137.1 118.2 139.8 117.6 145.9 123.2 158.5 128.1 182.8 126.6 193.2 127.6 202.6 124.8 219.9 122.8 231.8 124.6 238.1 119.1 242.2 117.8 236.5 113.1 236.0 100.6 240.4 97.9 244.1 92.0 257.5 88.8 276.6 89.5 282.5 86.1 293.9 86.3 298.5 83.2 301.2 71.6 310.4 68.8 315.8 72.5 321.7 72.1 323.2 73.9 323.3 78.4 327.2 77.4 332.5 80.9 336.2 80.8 342.0 76.1 351.1 71.8 353.6 66.3 356.7 66.7 361.6 63.3 365.3 65.6 369.7 62.2 377.8 43.6 383.0 37.5 383.0 31.6 409.9 26.2 422.2 32.5 429.8 33.0 436.0 36.2 445.3 32.5 448.9 34.4 454.0 28.9 462.6 27.2 469.0 30.5 470.9 34.8 476.8 35.7 478.6 42.2 484.0 50.7 490.9 55.5 505.3 50.6 517.8 50.3 522.5 46.7 524.7 47.0 528.3 45.0 534.2 46.8 533.0 52.6 536.5 53.6 537.3 60.5 541.4 66.8 552.0 66.8 558.2 75.0 562.4 84.9 574.3 82.6 579.0 85.7 583.5 91.1 584.1 93.5 581.6 99.6 585.4 103.6 Z\" fill=\"#f4e8c8\" stroke=\"#7a2a22\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/><g fill=\"none\" stroke=\"#6fa3c0\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M-207.1 201.1 -197.1 208.3 -193.6 208.9 -189.7 208.4 -181.8 205.1 -179.8 210.1 -174.4 211.4 -165.7 208.9 -162.0 205.9 -160.2 205.5 -156.6 207.2 -146.3 206.2 -141.7 203.9 -132.9 202.8 -125.2 194.6 -118.0 192.8 -115.4 193.1 -110.6 196.3 -104.4 194.9 -95.7 195.5 -93.6 193.8 -93.0 188.7 -88.3 186.0 -87.4 183.5 -81.2 177.1 -75.6 176.0 -68.6 170.1 -62.3 169.5 -59.1 170.4 -56.5 169.5 -55.9 171.7 -54.4 172.6 -49.3 181.1 -50.0 182.5 -54.2 185.1 -52.4 186.6 -54.2 189.2 -51.8 193.0 -51.3 197.3 -53.0 201.0 -51.9 204.7 -45.5 208.5 -43.2 211.2 -42.6 216.4 -37.9 226.7 -37.9 233.5 -35.5 235.4 -32.1 242.0 -31.0 244.9 -31.6 251.4 -29.1 255.0 -25.2 257.3 -18.8 258.3 -10.8 255.8 -6.1 256.1 -0.4 259.0 3.1 259.6 14.4 268.8 21.4 272.1 26.9 278.6 28.0 277.7 28.9 279.3 30.4 279.7 33.3 277.7 33.9 278.6 34.4 277.7 38.5 278.6 41.4 281.2 45.7 281.7 53.0 287.2 54.4 285.7 58.1 286.7 64.4 294.4 67.0 296.0 68.0 298.2 69.2 296.5 72.5 297.6 74.1 299.2 75.0 298.2 76.1 299.3 78.1 303.1 77.9 305.0 79.3 309.4 83.7 314.5 86.6 319.5 91.1 323.3 93.1 326.6 98.5 330.4 106.3 331.2 109.7 335.8 112.0 344.2 114.7 344.9 115.5 346.0 113.2 346.8 113.2 347.6 116.3 349.2 117.2 347.6 117.9 351.3 121.6 350.3 123.0 352.7 124.7 351.1 132.0 351.5 138.7 353.7 143.3 359.2 144.2 365.0 157.1 368.8 159.5 370.7 161.2 374.1 163.9 371.6 171.1 371.6 180.0 374.1 184.1 372.4 191.0 372.4 195.2 374.9 197.1 375.0 199.2 378.6 205.0 380.3 206.4 382.6 214.0 384.0 214.9 385.0 214.5 386.9 216.0 386.9 218.6 390.3 223.3 392.0 225.2 395.9 227.4 397.9 238.6 401.1 251.6 401.4\" stroke-width=\"1.2\"/><path d=\"M106.2 89.4 109.3 91.9 110.9 95.9 117.2 97.1 119.9 99.3 128.6 110.8 133.2 112.9 137.1 118.2 139.8 117.6 142.8 119.5 145.9 123.2 151.4 126.2 158.5 128.1 182.7 126.5 193.1 127.6 196.3 127.3 202.6 124.8 219.9 122.7 229.3 124.9 231.8 124.6 238.1 119.1 240.0 118.6 249.1 118.9 251.7 121.5 253.4 121.5 258.9 118.3 261.0 118.1 263.1 118.6 266.8 121.5 268.1 124.9 268.2 135.1 262.3 154.2 262.0 158.4 263.2 161.9 261.7 168.5 253.7 177.0 247.7 197.8 247.5 202.8 249.0 210.2 255.0 217.3 253.9 220.7 254.9 231.7 251.9 236.7 251.5 241.9 256.5 249.3 257.9 257.6 256.2 261.6 253.8 264.2 248.1 266.7 245.8 269.3 251.0 283.7 251.2 287.5 248.6 298.7 250.4 304.6 250.6 321.5 249.6 324.2 247.0 323.0 242.0 330.1 232.4 340.2 231.7 343.5 243.5 358.8 243.5 361.3 244.9 361.5 245.4 363.3 244.9 369.4 249.3 375.0 250.7 382.2 254.5 385.2 254.6 388.0 250.3 393.1 249.6 398.8 252.8 403.1 254.3 403.1 259.2 399.6 261.2 402.3 265.7 404.7 266.7 406.5 264.2 409.0 258.5 408.1 257.4 411.2 258.0 413.5 260.9 417.6 260.1 418.9 255.7 421.0 258.0 424.6 259.5 425.7 265.5 426.6 266.1 430.3 268.2 433.0 271.4 434.7 288.4 439.2 302.5 437.0 304.9 438.3 306.8 441.4 308.3 441.8 316.8 439.5 320.4 439.7 326.3 441.8 332.2 435.0 335.0 436.7 339.3 445.5 341.0 446.5 347.7 448.3 357.9 447.1 361.0 448.3 366.7 453.7 371.5 461.1 372.4 465.9 366.8 472.9 369.2 478.3 375.8 487.0 380.7 490.0 388.4 490.1 391.3 487.9 396.0 488.9 395.8 499.3 399.0 502.0 403.1 507.9 406.8 511.4 412.1 512.3 416.9 510.9 425.9 505.4 433.3 504.2 436.2 501.9 440.6 501.5 442.7 497.7 449.5 493.3 457.2 491.7 460.2 496.2 461.5 496.9 475.6 497.8 477.0 499.2 479.1 505.7 482.2 509.0 486.3 510.3 490.7 510.3 499.0 507.6 508.0 512.1 510.7 512.6 514.6 522.7 517.7 526.0 518.6 529.6 520.0 531.1 523.8 532.2 526.9 530.4 537.0 510.2 543.4 507.4 547.2 503.2 550.9 503.7 560.9 513.7 563.7 515.2 570.4 516.1 575.9 522.0 573.9 525.9 570.4 527.1 563.7 523.7 560.3 524.2 559.0 525.4 557.6 530.8 552.1 532.3 551.5 536.8 553.9 540.4 553.9 544.2 555.4 547.8 560.5 553.6 568.8 556.5 569.6 566.0 587.8 579.2 598.4 582.9 599.1 586.7 597.7 590.6 586.1 595.2 583.1 607.3 584.2 612.5 586.3 614.4 588.9 615.1 606.9 613.4 615.5 609.8 623.2 608.6M623.2 608.6 623.2 608.6M623.2 608.6 636.7 609.3 645.8 614.7 649.5 615.4 656.6 613.7 658.5 614.1 663.3 617.1 693.7 625.2 710.5 624.3 719.6 619.1 722.5 619.4 739.9 626.4 743.8 627.0 761.7 625.6 771.6 629.5 786.1 631.2 795.1 637.5 798.8 638.0 804.2 635.8 811.8 635.5 816.8 633.3 821.5 629.6 827.2 629.5 830.7 627.8 832.9 623.9 838.2 619.3 843.7 610.6 853.8 602.7 859.1 594.6 875.5 588.0 901.2 583.9 909.1 581.0 912.9 581.0 924.0 575.0 933.9 574.0 936.1 572.5 942.2 576.5 952.9 579.5 958.5 575.7 971.4 577.9 972.8 577.4 981.9 570.2 985.2 569.0 995.7 568.4 1000.4 564.7 1012.7 561.4 1015.5 559.7 1017.7 556.7 1022.4 545.0 1027.6 539.5 1025.6 531.8 1020.0 529.6 1018.6 527.4 1020.1 525.8 1020.9 515.3 1016.4 510.1 1011.2 508.2 1009.7 506.5 1007.9 502.0 1007.9 499.3 1003.8 497.6 1002.7 493.4 1008.1 484.8 1009.4 475.5 1007.9 469.5 1014.2 454.2 1013.1 450.0 1013.4 442.3 1019.8 427.5 1021.2 420.1 1024.0 417.6 1027.3 416.7 1034.0 418.5 1035.4 415.0 1038.3 413.9 1040.8 415.3 1042.5 417.7 1042.0 420.1 1044.5 426.9 1046.2 430.0 1048.1 431.3 1060.0 435.4 1067.0 439.3 1078.3 441.9 1081.4 441.4\" stroke-width=\"3.2\"/><path d=\"M263.1 162.6 264.9 164.4 266.6 171.0 257.2 186.3 253.9 195.2 254.2 202.9 257.9 208.8 254.1 212.3 254.5 214.3 255.7 214.7 255.0 217.3\" stroke-width=\"1.6\"/><path d=\"M357.4 313.3 354.4 314.4 351.8 320.3 347.6 326.0 347.6 330.4 345.4 334.0 349.5 338.7 348.1 342.0 345.4 342.6 347.0 345.3 350.2 346.7 350.6 352.3 353.5 358.3 349.5 362.6 350.1 364.2 354.1 367.3 354.9 369.3 354.6 375.0 356.0 377.8 350.0 380.9 350.9 388.9 347.6 395.1 352.5 395.7 352.9 397.1 351.0 400.0 351.0 403.3 361.7 415.0 359.3 421.0 364.6 427.8 362.2 432.0 363.6 434.5 367.7 438.0 369.2 444.1 369.0 445.8 366.7 447.3 365.7 452.5\" stroke-width=\"2.6\"/><path d=\"M106.2 89.4 102.1 86.4 101.1 83.6 101.6 80.1 100.0 79.0 93.5 79.2 87.7 75.0 85.4 75.0 84.3 77.5 81.5 77.7 77.3 80.0 67.6 81.0 53.8 79.2 50.7 77.7 39.6 68.7 35.6 62.1 31.4 50.4 29.4 49.1 12.2 52.3 -0.4 51.8 -9.8 46.2 -15.8 46.9 -20.3 45.1 -28.9 43.9 -35.9 45.5 -37.3 44.2 -38.9 44.4 -40.8 45.6 -45.5 51.5 -47.8 62.1 -52.9 66.7 -59.9 69.0 -67.2 69.9 -72.9 74.2 -76.0 72.1 -81.3 71.0 -85.3 66.9 -90.4 66.9 -95.6 71.5 -107.7 74.3 -110.9 72.5 -115.6 67.2 -126.0 66.5 -131.3 63.9 -135.8 60.5 -138.8 56.2 -141.3 58.3 -150.6 55.3 -156.6 57.0 -160.6 56.1 -164.8 44.6 -169.7 43.9 -175.6 40.0 -181.6 38.8 -186.2 33.7 -192.4 30.4 -196.6 26.7 -205.3 24.3 -213.4 24.6 -217.2 22.2 -227.4 21.2 -229.4 20.2 -239.5 13.1 -242.4 9.4 -241.2 8.4 -242.3 7.6 -246.1 6.0 -247.5 7.7 -248.4 6.9 -248.8 5.7 -246.8 4.6 -247.0 1.6 -253.1 -6.9 -260.9 -8.6 -264.4 -6.0 -268.7 -6.9 -270.6 -12.4 -276.5 -15.5 -280.9 -16.3 -285.2 -13.7 -288.1 -15.4 -287.0 -17.1 -290.4 -17.4 -290.8 -18.4\" stroke-width=\"3.2\"/><path d=\"M-60.9 340.1 -59.4 340.8 -55.2 340.4 -41.7 344.5 -38.0 351.1 -34.2 353.1 -29.8 353.6 -22.2 361.9 -14.9 365.6 -11.8 365.6 -7.0 371.7 2.9 372.1 8.4 375.0 11.2 371.6 16.1 371.5 17.3 374.1 21.8 376.3 23.4 375.8 23.5 377.8 22.3 379.1 23.4 380.8 22.3 382.6 25.1 382.6 25.6 386.5 28.3 386.5 30.1 389.6 33.1 389.9 32.7 392.8 34.3 393.0 33.3 395.4 38.5 398.8 36.3 403.4 36.8 404.8 40.2 404.8 38.5 408.2 38.5 406.5 36.8 406.5 37.0 409.8 41.4 415.0 49.6 419.3 51.7 418.7 53.5 416.7 54.5 418.8 55.8 418.5 57.0 419.9 61.6 421.8 61.3 423.7 62.3 424.8 63.7 424.9 66.0 423.2 69.7 426.1 69.7 427.5 70.9 427.8 70.4 430.3 72.7 431.3 73.7 430.7 73.9 432.0 72.1 435.4 76.4 436.6 78.6 435.1 80.0 436.8 82.3 434.7 84.2 440.8 86.0 440.6 85.4 438.9 88.6 441.3 89.4 439.7 89.4 443.2 91.8 441.4 93.4 445.2 97.0 448.0 104.5 451.6 109.4 450.8 111.4 446.5 121.0 452.8 125.4 451.6 126.2 450.0 127.4 451.9 126.5 453.4 128.6 453.6 130.6 452.5 129.4 455.9 137.1 455.1 141.9 450.5 143.8 449.5 146.6 449.7 151.3 453.5 156.1 459.9 159.3 462.1 165.7 460.0 173.5 451.5 176.1 452.3 180.8 456.7 186.2 458.0 189.5 456.6 190.3 452.2 191.2 451.0 193.3 450.5 200.4 454.8 208.0 456.1 212.6 460.9 216.9 463.2 218.9 463.2 218.4 458.9 222.4 458.8 224.7 457.7 228.0 462.3 229.9 459.3 231.0 459.6 235.6 468.1 239.9 469.4 241.2 473.4 238.5 477.3 239.4 480.8 242.3 484.1 248.4 487.4 258.1 487.1 263.5 485.7 273.5 479.1 274.8 481.5 277.9 480.7 281.7 481.5 283.9 481.0 285.6 482.7 287.3 482.9 288.1 482.4 285.2 479.8 290.4 480.7 291.2 478.6 289.2 477.2 292.4 475.1 295.6 475.6 295.8 473.7 298.7 472.2 312.4 474.7 314.2 478.1 321.7 480.7 321.4 483.6 317.0 494.1 319.4 500.3 325.1 501.0 335.0 508.0 340.8 508.0 343.1 508.8 336.4 512.5 335.5 513.9 337.2 515.9 340.0 514.8 346.1 508.7 352.9 505.4 355.3 506.1 355.8 508.8 358.0 509.6 359.3 509.2 360.3 506.0 362.3 504.5 362.2 508.7 365.4 511.8 367.0 510.1 369.4 502.0 372.8 497.0 379.5 493.7 380.7 490.0\" stroke-width=\"1.2\"/><path d=\"M176.9 231.8 179.9 233.7 185.0 234.7 193.0 238.3 206.9 250.8 210.4 252.4 214.0 253.1 220.7 252.0 223.6 252.8 226.1 256.6 226.7 259.2 223.8 275.3 224.3 280.7 225.3 282.8 228.0 285.0 228.4 292.3 226.9 294.1 227.0 296.3 235.7 298.2 238.3 300.9 241.1 300.9 242.3 302.5 243.5 300.9 244.3 301.1 245.2 303.3 249.8 302.5\" stroke-width=\"1.2\"/><path d=\"M821.7 266.7 816.7 266.2 808.4 262.4 803.4 257.5 802.5 252.4 804.2 245.2 803.7 239.6 802.0 235.7 799.2 233.1 779.7 225.4 770.4 225.8 764.8 223.3 761.2 223.3 757.6 225.0 749.5 232.3 744.4 241.9 740.1 248.0 732.0 266.8 726.3 276.0 718.7 282.8 710.3 286.9 702.3 288.3 693.7 285.1 692.4 285.8 691.0 289.1 689.7 289.3 689.4 286.4 688.0 285.9 684.4 290.0 682.9 288.5 679.5 292.1 658.3 300.7 657.5 301.7 659.4 304.9 656.1 314.1 657.5 315.8 654.5 328.5 653.1 330.6 650.6 331.7 645.4 340.9 640.2 343.3 637.5 343.0 632.8 345.4 627.6 350.4 625.6 349.7 622.8 350.4 616.5 353.9 613.4 357.6 609.3 358.7 603.5 362.1 601.2 361.8 594.5 357.0 584.8 352.7 575.8 353.2 566.1 351.5 555.3 351.6 550.8 349.0 546.5 343.6 544.7 343.0 537.4 343.7 531.9 342.5 528.4 343.6 521.5 343.3 516.8 339.3 512.6 333.0 510.1 332.0 493.1 332.3 489.4 330.9 484.0 332.8 469.6 327.3 460.4 326.7 455.4 321.6 453.7 321.2 440.9 325.2 436.4 325.5 429.0 324.4 426.8 325.0 420.8 333.7 418.6 335.3 416.1 335.7 411.4 333.8 407.5 328.8 405.9 328.1 393.2 328.1 376.2 319.1 368.8 316.5 359.9 316.1 357.5 313.5\" stroke-width=\"1.8\"/><path d=\"M-268.6 241.5 -252.9 250.9 -247.2 252.7 -237.5 253.2 -222.0 249.5 -219.8 247.7 -218.1 242.0 -215.4 242.0 -212.3 243.0 -197.7 252.6 -189.5 259.9 -176.7 268.1 -171.1 268.8 -162.6 271.8 -156.4 276.8 -153.0 278.0 -129.4 275.6 -123.1 273.3 -120.8 269.8 -114.7 265.5 -111.5 264.5 -108.4 265.8 -98.3 265.6 -92.3 262.3 -85.4 264.7 -81.7 269.7 -78.7 271.3 -72.8 269.3 -67.8 270.4 -64.6 268.9 -59.4 271.0 -48.9 271.6 -44.6 273.7 -42.9 273.3 -40.9 277.7 -32.1 274.6 -29.3 274.3 -23.2 275.8 -21.1 276.7 -18.9 282.6 -12.7 286.6 -0.6 298.2 1.5 298.7 8.3 296.3 12.6 297.2 16.4 295.1 20.5 297.0 25.4 297.2 31.1 299.9 33.0 302.0 34.5 305.9 45.1 308.2 47.8 308.3 54.5 306.2 65.1 307.0 69.0 305.9 78.4 306.7\" stroke-width=\"2\"/><path d=\"M123.0 352.7 121.9 355.0 122.3 356.5 130.5 357.5 139.2 364.5 142.0 366.0 144.9 365.4\" stroke-width=\"2\"/><path d=\"M-12.4 155.5 -17.3 158.2 -21.1 163.8 -21.6 183.8 -20.6 187.0 -18.5 189.2 -12.6 192.2 -6.1 201.1 2.5 209.9 4.4 211.5 11.8 213.4 18.9 220.6 25.9 223.3 34.9 224.4 41.4 227.1 44.1 226.9 52.1 221.4 59.7 217.7 63.2 213.7 71.4 210.1 74.8 207.5 80.8 194.4 85.4 188.7 86.8 181.9 94.2 170.8 103.4 165.6 114.0 166.5 118.8 165.6 120.8 162.4 123.1 150.8 126.3 146.4 131.7 142.1 138.5 139.0 144.0 132.3 146.9 130.5 158.5 128.1\" stroke-width=\"1.2\"/><path d=\"M-16.2 106.3 -21.0 112.9 -21.9 115.6 -16.5 126.5 -10.8 132.2 -7.0 134.1 -2.2 135.3 1.8 135.2 10.0 130.6 16.5 130.1 23.8 127.9 32.2 114.3 34.7 113.0 37.3 109.1 41.3 106.0 48.4 102.6 52.8 95.9 55.0 94.3 65.0 94.3 69.6 93.3 76.6 89.2 80.3 88.0 86.9 92.5 94.0 100.8 110.9 109.7 113.4 114.8 115.6 114.7 122.5 118.1 124.6 120.3 127.0 119.0 129.8 120.8 130.9 121.8 131.4 125.3 134.2 126.6 142.1 134.6\" stroke-width=\"1.6\"/><path d=\"M359.0 -19.3 359.9 -23.9 361.5 -26.5 364.1 -28.4 366.9 -29.1 372.1 -27.9 379.5 -21.9 387.6 -21.6 394.1 -17.9 411.3 -20.6 418.9 -19.2 424.7 -16.9 429.9 -13.9 431.4 -10.7 436.6 -12.6 445.0 -10.3 447.6 0.9 450.8 9.1 456.5 17.4 452.8 29.5 451.1 32.3 448.9 34.4 446.8 33.1 444.4 37.1 444.5 46.3 439.8 56.8 429.4 66.3 424.5 75.5 423.0 84.7 424.1 89.3 421.9 94.6 423.2 100.3 436.2 103.0\" stroke-width=\"1.2\"/><path d=\"M581.7 304.3 587.4 309.2 587.9 320.5 582.9 329.0 581.0 329.4 572.4 322.1 562.7 320.7 560.1 318.8 558.6 316.4 558.2 313.0 555.3 309.3 551.2 310.4 545.7 308.8 542.1 310.9 537.9 309.6 533.7 306.7 525.3 306.6 524.1 305.5 523.3 302.1 519.5 297.5 511.3 292.1 504.2 290.9 491.6 291.2 486.6 292.2 479.3 290.4 476.8 288.8 469.6 279.8 465.7 277.1 460.4 269.5 453.6 264.5 449.0 257.8 440.7 249.5 434.4 239.1 427.0 231.8 424.2 230.0 412.4 227.2 405.0 228.6 396.2 227.7 391.5 230.7 384.2 233.3 381.9 233.2 375.1 230.1 372.0 231.3 368.7 234.4 364.1 242.5 360.8 245.2 358.9 251.1 358.2 257.2\" stroke-width=\"1.2\"/><path d=\"M315.0 20.5 317.0 21.8 317.6 23.9 315.1 30.5 315.8 33.9 322.4 42.0 319.1 45.4 319.0 47.4 322.8 54.7 321.6 58.0 314.2 61.6 305.9 69.9 301.1 71.6 298.4 80.3 298.4 83.1 293.9 86.3 282.5 86.1 276.5 89.4 266.0 88.2 257.4 88.7 244.0 92.0 242.6 93.2 240.3 97.8 236.0 100.6 237.0 103.0 235.9 110.7 236.5 113.1 242.7 118.6\" stroke-width=\"1.2\"/><path d=\"M331.8 81.8 332.6 86.7 337.7 92.7 336.8 94.5 334.0 95.7 327.7 96.1 326.0 98.2 319.4 102.2 317.1 104.9 316.4 107.3 315.4 137.4 317.6 146.9 320.3 153.5 327.3 157.5 331.1 158.4 336.9 155.5 339.5 156.9 341.9 161.2 342.3 165.6 349.2 174.1 348.9 180.4 352.8 186.8 353.1 191.1 358.6 194.9 358.9 200.6\" stroke-width=\"1.2\"/><path d=\"M583.3 256.6 586.4 256.0 587.3 250.9 584.5 240.2 585.2 235.5 584.4 232.3 581.3 227.3 573.1 225.7 568.5 227.4 565.3 230.0 562.8 229.5 556.0 225.2 553.7 218.3 549.5 214.9 529.0 210.8 517.3 212.2 510.5 214.1 507.8 214.0 501.7 211.2 493.7 209.8 491.4 210.4 484.8 215.8 470.7 222.6 462.3 223.4 439.9 221.9 430.5 227.8 424.8 230.1\" stroke-width=\"1.2\"/><path d=\"M-111.0 336.1 -106.4 333.8 -98.3 332.9 -94.7 336.3 -92.6 335.9 -79.0 329.3 -74.6 329.2 -69.1 331.8 -60.9 340.1\" stroke-width=\"1.2\"/><path d=\"M-111.1 336.2 -120.5 334.8 -121.2 332.7 -123.1 331.4 -127.0 330.8 -129.9 328.4 -128.8 325.0 -132.0 319.3 -138.7 312.9 -142.2 311.3 -143.8 307.6 -150.4 304.1 -154.8 297.1 -154.3 294.5\" stroke-width=\"1.2\"/><path d=\"M-154.3 294.5 -174.6 286.3 -186.7 284.5\" stroke-width=\"1.2\"/></g><g fill=\"#8fbcd4\" stroke=\"#6fa3c0\" stroke-width=\".8\"><path d=\"M162.2 238.3 160.2 240.3 136.3 250.7 133.7 253.3 128.8 256.6 125.2 257.0 118.6 255.7 114.9 255.6 112.0 256.6 110.6 256.5 109.7 254.8 110.9 250.3 114.4 250.2 117.9 251.5 119.6 251.0 121.4 247.8 124.5 246.2 127.7 246.5 130.6 248.0 137.4 243.4 142.8 242.1 146.4 237.6 158.1 233.1 159.5 231.3 162.9 234.2 164.2 234.4 164.9 233.0 164.4 231.3 161.8 229.2 161.8 228.4 172.9 221.5 175.2 218.3 176.4 214.3 177.2 213.9 182.7 215.6 187.5 219.7 187.6 221.1 184.7 226.9 183.3 228.4 179.9 230.4 168.1 234.6 166.4 234.4 164.8 236.9 162.2 238.3 Z\"/><path d=\"M392.7 150.6 395.5 143.0 398.2 141.1 400.0 141.1 400.4 143.7 395.9 150.4 393.5 151.3 392.7 150.6 Z\"/><path d=\"M71.8 116.9 67.8 124.3 66.5 129.5 66.9 132.9 70.3 132.1 71.9 133.8 72.4 135.8 71.9 137.0 71.3 137.6 70.2 136.6 67.1 135.5 64.9 129.6 63.8 129.1 63.5 132.7 62.6 131.2 63.0 128.9 64.3 127.2 63.6 126.3 63.6 123.3 65.4 117.3 66.2 111.5 67.3 109.2 69.5 106.7 72.4 105.5 75.0 104.9 76.1 105.8 75.2 111.9 71.8 116.9 Z\"/></g></g><text x=\"25.4\" y=\"53.5\" text-anchor=\"middle\" class=\"cn\">Ausztria</text><text x=\"249.3\" y=\"28.6\" text-anchor=\"middle\" class=\"cn\">Szlovákia</text><text x=\"557.7\" y=\"19.9\" text-anchor=\"middle\" class=\"cn\">Ukrajna</text><text x=\"540.8\" y=\"277.4\" text-anchor=\"middle\" class=\"cn\">Románia</text><text x=\"342.3\" y=\"383.1\" text-anchor=\"middle\" class=\"cn\">Szerbia</text><text x=\"84.5\" y=\"390.5\" text-anchor=\"middle\" class=\"cn\">Horvátország</text><text x=\"4\" y=\"308.5\" text-anchor=\"start\" class=\"cn\">Szlovénia</text><text x=\"258.8\" y=\"289.8\" class=\"rv\">Duna</text><text x=\"376.3\" y=\"223.9\" class=\"rv\">Tisza</text><text x=\"149.6\" y=\"262.8\" text-anchor=\"middle\" class=\"rv\">Balaton</text><text x=\"177.5\" y=\"390.1\" text-anchor=\"middle\" class=\"rv\">Dráva</text><rect x=\"257.1\" y=\"155.5\" width=\"8\" height=\"8\" fill=\"#3b2f22\"/><text x=\"269.1\" y=\"163.5\" class=\"ct\">Budapest</text><g transform=\"translate(578 368)\"><path d=\"M0 -14 L6 4 L0 0 L-6 4 Z\" fill=\"#5a4a36\"/><text y=\"18\" text-anchor=\"middle\" class=\"nt\">É</text></g><g transform=\"translate(492.1 386)\"><rect width=\"55.9\" height=\"5\" fill=\"#5a4a36\"/><rect x=\"27.95\" width=\"27.95\" height=\"5\" fill=\"#f4e8c8\" stroke=\"#5a4a36\" stroke-width=\".8\"/><text x=\"0\" y=\"-5\" class=\"nt\" style=\"font-weight:400\">0</text><text x=\"55.9\" y=\"-5\" text-anchor=\"middle\" class=\"nt\" style=\"font-weight:400\">50 km</text></g>";
+function mapSVG(ok){
+ return `<svg viewBox="0 0 600 402" role="img" aria-label="Magyarország egyszerűsített térképe, betűkkel jelölt helyszínekkel"><style>.cn{font:italic 12px Spectral,Georgia,serif;fill:#8a7a5e}.rv{font:italic 12px Spectral,Georgia,serif;fill:#3f7596}.ct{font:600 12px 'Public Sans',sans-serif;fill:#3b2f22}.nt{font:600 11px 'Public Sans',sans-serif;fill:#5a4a36}</style>${HU_STATIC}
+ ${Object.entries(PTS).map(([k,[x,y]])=>`<g class="pt${ok.includes(k)?' ok':''}" data-p="${k}" tabindex="0" role="button" aria-label="${k} jelű helyszín"><circle class="hit" cx="${x}" cy="${y}" r="${COARSE?42:20}"/><circle cx="${x}" cy="${y}" r="${COARSE?17:12}"/><text x="${x}" y="${y+(COARSE?6:4.5)}" text-anchor="middle" style="${COARSE?'font-size:18px':''}">${k}</text></g>`).join('')}
+ </svg>`;
+}
+function mapModal(onDone,QS=MAP_Q){
+ const render=()=>{
+  const i=S.qi.terkep||0,q=QS[i],ok=QS.slice(0,i).map(x=>x.a);
+  openModal(`<p class="cat">${CAT.terkep}, ${i+1}/${QS.length}. kérdés</p><h2>Magyarország</h2><div class="mapgrid"><div class="mapwrap">${mapSVG(ok)}</div><div>
+  <p class="note">Egyszerűsített térkép valódi földrajzi koordináták alapján. Térképi adatok: Natural Earth (közkincs).</p>
+  <p><b>${q.q}</b></p><p class="msg" aria-live="polite"></p></div></div><div class="actions">${hintBtnHTML()}<button data-close>Később</button></div>`,'panel wide');
+  const msg=mbox.querySelector('.msg');let solved=false;
+  const choose=p=>{if(solved)return;
+   if(p===q.a){solved=true;mbox.querySelector(`.pt[data-p="${p}"]`).classList.add('ok');msg.className='msg ok';msg.textContent='Helyes. '+q.why;S.qi.terkep=i+1;
+    if(i+1<QS.length)finishBtn('Következő kérdés',render);else finishBtn('Tovább',()=>{closeModal();onDone();});}
+   else{miss('terkep');msg.className='msg bad';msg.textContent=`A(z) ${p} jelű pont nem ez a helyszín. Tájékozódj Budapest, a Duna, a Tisza és a Balaton alapján.`;}};
+  const hb=mbox.querySelector('[data-hint]');hb.onclick=()=>{const wr=[...mbox.querySelectorAll('.pt')].filter(g=>g.dataset.p!==q.a&&!g.classList.contains('off'));shuffle(wr).slice(0,Math.max(0,wr.length-2)).forEach(g=>{g.classList.add('off');g.setAttribute('tabindex','-1');});modalHint();hb.remove();msg.className='msg';msg.textContent='Segítség: a játék kizárt néhány helyszínt, három lehetőség maradt.';};
+  mbox.querySelectorAll('.pt').forEach(g=>{g.onclick=()=>{if(!g.classList.contains('off'))choose(g.dataset.p);};g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(g.dataset.p);}};});
+  mbox.querySelector('[data-close]').onclick=closeModal;
+ };
+ render();
+}
+
+/* ================= 3D JELENET ================= */
+const renderer=new THREE.WebGLRenderer({canvas,antialias:!LOW,powerPreference:'high-performance'});
+let PR=Math.min(window.devicePixelRatio||1,LOW?1.5:2);renderer.setPixelRatio(PR);
+renderer.outputEncoding=THREE.sRGBEncoding;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x14110e);
+const camera=new THREE.PerspectiveCamera(70,1,.05,40);camera.rotation.order='YXZ';
+function resize(){renderer.setSize(innerWidth,innerHeight,false);const a=innerWidth/innerHeight;camera.aspect=a;camera.fov=a<1?clamp(2*Math.atan(Math.tan(37.5*Math.PI/180)/a)*180/Math.PI,70,90):70;camera.updateProjectionMatrix();}
+addEventListener('resize',resize);resize();
+
+function cnv(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);return c;}
+function tex(c,rx,ry){const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=LOW?1:4;if(rx){t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx,ry);}return t;}
+const M=(c,o={})=>{const m=new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.8,metalness:0},o));m.color.convertSRGBToLinear();m.emissive.convertSRGBToLinear();return m;};
+function B(w,h,d,m,x,y,z,p=scene){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);p.add(o);return o;}
+function P(w,h,m,x,y,z,ry=0,rx=0,p=scene){const o=new THREE.Mesh(new THREE.PlaneGeometry(w,h),m);o.position.set(x,y,z);o.rotation.set(rx,ry,0);p.add(o);return o;}
+function tag(o,act,label){o.traverse(m=>{if(m.isMesh){m.userData.act=act;m.userData.label=label;}});return o;}
+const books=[];
+
+function build(){
+ const serif="'Spectral', Georgia, serif",sans="'Public Sans', Arial, sans-serif";
+ const wood=M(0x9a6b43,{roughness:.55}),dark=M(0x3a2f28,{roughness:.6}),white=M(0xf2efe9,{roughness:.7}),
+  metal=M(0xb8bcc2,{metalness:.6,roughness:.35}),black=M(0x222326,{roughness:.5}),teal=M(0x1f6f78,{roughness:.45}),
+  glass=M(0xcfe3e6,{transparent:true,opacity:.22,roughness:.05,metalness:.1});
+ const cyl=(rt,rb,h,m,x,y,z,p=scene,seg=16)=>{const o=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,seg),m);o.position.set(x,y,z);p.add(o);return o;};
+ const txt=(g,t,x,y,f,c,al='center')=>{g.font=f;g.fillStyle=c;g.textAlign=al;g.fillText(t,x,y);};
+ const lines=(g,x,y,w,n,dy,c)=>{g.fillStyle=c;for(let i=0;i<n;i++)g.fillRect(x,y+i*dy,w*(.6+Math.random()*.4),3);};
+
+ /* Falak, padló, mennyezet */
+ const wallC=cnv(256,256,(g,w,h)=>{g.fillStyle='#e8e2d6';g.fillRect(0,0,w,h);for(let i=0;i<2400;i++){g.fillStyle=Math.random()<.5?'rgba(255,255,255,.35)':'rgba(120,110,90,.08)';g.fillRect(Math.random()*w,Math.random()*h,1.5,1.5);}});
+ const wm=(w,h)=>M(0xffffff,{map:tex(wallC,w/1.4,h/1.4),roughness:.95});
+ P(7,2.9,wm(7,2.9),0,1.45,-3);P(6,2.9,wm(6,2.9),-3.5,1.45,0,Math.PI/2);P(6,2.9,wm(6,2.9),3.5,1.45,0,-Math.PI/2);
+ P(2.95,2.9,wm(2.95,2.9),-2.025,1.45,3,Math.PI);P(2.95,2.9,wm(2.95,2.9),2.025,1.45,3,Math.PI);P(1.1,.75,wm(1.1,.75),0,2.525,3,Math.PI);
+ const parqC=cnv(256,256,(g,w,h)=>{for(let r=0;r<16;r++)for(let c=0;c<4;c++){const v=Math.random()*18;g.fillStyle=`rgb(${176+v},${128+v*.7},${84+v*.4})`;g.fillRect(c*64+((r%2)*32),r*16,64,16);g.strokeStyle='rgba(80,50,25,.35)';g.strokeRect(c*64+((r%2)*32),r*16,64,16);}});
+ P(7,6,M(0xffffff,{map:tex(parqC,5,4),roughness:.6}),0,0,0,0,-Math.PI/2).userData.floor=true;
+ const rugC=cnv(256,256,(g,w,h)=>{g.fillStyle='#8a3b32';g.fillRect(0,0,w,h);g.strokeStyle='#e6d3a8';g.lineWidth=8;g.strokeRect(14,14,w-28,h-28);g.lineWidth=3;g.strokeRect(34,34,w-68,h-68);for(let i=0;i<4000;i++){g.fillStyle='rgba(0,0,0,.08)';g.fillRect(Math.random()*w,Math.random()*h,2,2);}});
+ const rug=P(2.6,2.0,M(0xffffff,{map:tex(rugC),roughness:1}),0,.006,.3,0,-Math.PI/2);rug.userData.floor=true;
+ P(7,6,white,0,2.9,0,0,Math.PI/2);
+ const base=M(0x7a6a5a,{roughness:.6});B(7,.08,.02,base,0,.04,-2.99);B(.02,.08,6,base,-3.49,.04,0);B(.02,.08,6,base,3.49,.04,0);B(2.95,.08,.02,base,-2.025,.04,2.99);B(2.95,.08,.02,base,2.025,.04,2.99);
+ [[-1.3,0],[1.3,0]].forEach(([x,z])=>B(.9,.03,.9,M(0xfffbee,{emissive:0xfff3d6,emissiveIntensity:.8}),x,2.885,z));
+
+ /* Az ajtó mögött: utca a várakozó busszal */
+ const busC=cnv(512,256,(g,w,h)=>{const sk=g.createLinearGradient(0,0,0,h);sk.addColorStop(0,'#9cc4e4');sk.addColorStop(1,'#e8f0f4');g.fillStyle=sk;g.fillRect(0,0,w,h);
+  g.fillStyle='#b9b4aa';[[0,60,90,140],[380,40,132,160]].forEach(([x,y,ww,hh])=>g.fillRect(x,y,ww,hh));g.fillStyle='#8f9aa3';g.fillRect(0,196,w,60);
+  g.fillStyle='#d9531e';g.beginPath();g.roundRect?g.roundRect(96,86,330,118,16):g.rect(96,86,330,118);g.fill();g.fillStyle='#fff';g.fillRect(96,160,330,10);
+  g.fillStyle='#2b3440';for(let i=0;i<5;i++)g.fillRect(112+i*60,100,50,44);g.fillStyle='#1c1c1c';[150,370].forEach(x=>{g.beginPath();g.arc(x,206,20,0,7);g.fill();});
+  txt(g,'KÖRUTAZÁS · 8:00',260,190,'600 18px '+sans,'#fff');});
+ P(9,4,new THREE.MeshBasicMaterial({map:tex(busC)}),0,1.8,6.2,Math.PI);
+ P(5,3.2,M(0x9b9a95,{roughness:1}),0,0,4.6,0,-Math.PI/2);
+ P(3.2,2.4,wm(3.2,2.4),-2.5,1.2,4.6,Math.PI/2);P(3.2,2.4,wm(3.2,2.4),2.5,1.2,4.6,-Math.PI/2);
+ if(!LOW){const out=new THREE.PointLight(0xfff2dc,.6,3,1.5);out.position.set(0,2,4.6);scene.add(out);}
+
+ /* Bejárati ajtó, kódzár */
+ B(.08,2.2,.12,dark,-.59,1.1,3);B(.08,2.2,.12,dark,.59,1.1,3);B(1.26,.08,.12,dark,0,2.19,3);
+ const doorP=new THREE.Group();doorP.position.set(-.54,0,2.985);scene.add(doorP);
+ B(1.08,2.12,.05,M(0xdfe3e6,{roughness:.45}),.54,1.06,0,doorP);B(.5,.9,.012,glass,.54,1.45,-.031,doorP);B(.14,.025,.03,metal,.95,1.0,-.05,doorP);
+ tag(doorP,'door','Az iroda ajtaja');
+ const padC=cnv(64,96,(g,w,h)=>{g.fillStyle='#262626';g.fillRect(0,0,w,h);g.fillStyle='#9fe3b0';g.fillRect(8,6,48,8);g.fillStyle='#8d8a82';for(let r=0;r<4;r++)for(let c=0;c<3;c++)g.fillRect(8+c*18,20+r*18,12,12);});
+ const pm=M(0x303030,{metalness:.3,roughness:.5});
+ const keypad=new THREE.Mesh(new THREE.BoxGeometry(.13,.2,.03),[pm,pm,pm,pm,pm,M(0xffffff,{map:tex(padC),metalness:.3,roughness:.5})]);
+ keypad.position.set(.82,1.3,2.97);scene.add(keypad);tag(keypad,'door','Az ajtó kódzára');
+
+ /* Pult: számítógép, levél, földgömb */
+ B(1.1,.04,.6,wood,-1.3,.76,-2.62);[[-1.8,-2.87],[-.8,-2.87],[-1.8,-2.37],[-.8,-2.37]].forEach(([x,z])=>B(.04,.74,.04,dark,x,.37,z));
+ B(.5,.32,.03,black,-1.35,1.05,-2.82);B(.46,.28,.005,M(0x2c4a66,{emissive:0x112233}),-1.35,1.05,-2.803);cyl(.015,.015,.14,black,-1.35,.84,-2.83);B(.16,.01,.12,black,-1.35,.785,-2.83);
+ B(.38,.015,.13,M(0xdcdcdc),-1.35,.787,-2.6);
+ const letC=cnv(256,340,(g,w,h)=>{g.fillStyle='#fbfaf5';g.fillRect(0,0,w,h);g.fillStyle='#1f6f78';g.fillRect(0,0,w,26);lines(g,24,60,w-48,12,18,'rgba(40,40,60,.55)');});
+ const lt=P(.21,.28,M(0xffffff,{map:tex(letC),roughness:1}),-.98,.782,-2.5,0,-Math.PI/2);lt.rotation.z=.15;tag(lt,'letter','Réka levele');
+ const globe=new THREE.Group();globe.position.set(-1.78,.78,-2.72);scene.add(globe);
+ cyl(.06,.07,.02,dark,0,.01,0,globe);cyl(.008,.008,.12,metal,0,.08,0,globe);
+ const gC=cnv(256,128,(g,w,h)=>{g.fillStyle='#4f8fc0';g.fillRect(0,0,w,h);g.fillStyle='#7aa55a';[[40,40,30,22],[70,70,18,30],[130,38,40,20],[150,72,22,26],[205,50,26,18]].forEach(([x,y,a,b])=>{g.beginPath();g.ellipse(x,y,a,b,0,0,7);g.fill();});});
+ const gs=new THREE.Mesh(new THREE.SphereGeometry(.09,24,16),M(0xffffff,{map:tex(gC),roughness:.5}));gs.position.y=.23;gs.rotation.z=.4;globe.add(gs);
+ tag(globe,'globe','Földgömb');
+
+ /* Bőrönd számzárral a csomagtartó padon */
+ B(.9,.04,.6,dark,-2.5,.33,-2.55);[[-2.9,-2.8],[-2.1,-2.8],[-2.9,-2.3],[-2.1,-2.3]].forEach(([x,z])=>B(.04,.33,.04,metal,x,.165,z));
+ const suit=new THREE.Group();scene.add(suit);
+ B(.8,.2,.55,teal,-2.5,.45,-2.55,suit);
+ const lockC=cnv(128,48,(g,w,h)=>{g.fillStyle='#1f6f78';g.fillRect(0,0,w,h);g.fillStyle='#c9ced4';g.fillRect(14,10,100,28);g.fillStyle='#333';for(let i=0;i<4;i++){g.fillRect(20+i*24,14,16,20);txt(g,String((i*3+1)%10),28+i*24,30,'600 14px '+sans,'#fff');}});
+ P(.26,.1,M(0xffffff,{map:tex(lockC),roughness:.4}),-2.5,.46,-2.274,0,0,suit);
+ B(.2,.03,.03,metal,-2.5,.57,-2.27,suit);
+ tag(suit,'drawer','Bőrönd számzárral');
+ const lid=new THREE.Group();lid.position.set(-2.5,.55,-2.825);scene.add(lid);
+ B(.8,.06,.55,teal,0,.03,.275,lid);tag(lid,'drawer','Bőrönd számzárral');
+ const tube=new THREE.Group();tube.position.set(-2.5,.585,-2.55);scene.add(tube);
+ cyl(.085,.085,.04,M(0xc8322b,{roughness:.35}),0,0,0,tube,20);cyl(.02,.02,.06,metal,0,.04,0,tube,8);
+ tube.visible=false;tag(tube,'tube','Mágneses jelölő');
+
+ /* Dohányzóasztal a verseskötettel */
+ B(1.0,.04,.6,wood,.3,.45,-1.1);[[-.44,-.26],[.44,-.26],[-.44,.26],[.44,.26]].forEach(([x,z])=>B(.04,.44,.04,dark,.3+x,.22,-1.1+z));
+ const tape=new THREE.Group();tape.position.set(.25,.475,-1.05);tape.rotation.y=.2;scene.add(tape);
+ const pgC=cnv(256,180,(g,w,h)=>{g.fillStyle='#f5eedc';g.fillRect(0,0,w,h);g.fillStyle='rgba(0,0,0,.25)';g.fillRect(w/2-1,0,2,h);lines(g,14,24,w/2-28,8,17,'rgba(40,30,20,.6)');lines(g,w/2+14,24,w/2-28,8,17,'rgba(40,30,20,.6)');});
+ B(.44,.02,.3,M(0x6a2a2a),0,0,0,tape);P(.42,.29,M(0xffffff,{map:tex(pgC),roughness:1}),0,.012,0,0,-Math.PI/2,tape);
+ tag(tape,'tape','Petőfi-verseskötet');
+ cyl(.04,.035,.09,white,.68,.515,-1.25,scene,14);
+
+ /* Képeslap-állvány */
+ const gal=new THREE.Group();gal.position.set(-1.5,0,1.6);scene.add(gal);
+ cyl(.25,.28,.04,dark,0,.02,0,gal,20);cyl(.02,.02,1.5,metal,0,.77,0,gal,8);
+ const pcCols=[['#7fb5d8','#e8c26a'],['#95c07a','#8a6a4a'],['#c9d9e6','#6f7f8f'],['#f0c890','#b05a3a'],['#a8cfe0','#3f7f5f']];
+ let pci=0;
+ [.75,1.05,1.35].forEach(y=>{for(let s=0;s<4;s++){const a=s*Math.PI/2;const [c1,c2]=pcCols[pci++%pcCols.length];
+   const pc=cnv(128,90,(g,w,h)=>{g.fillStyle='#fff';g.fillRect(0,0,w,h);const sk=g.createLinearGradient(0,6,0,70);sk.addColorStop(0,c1);sk.addColorStop(1,'#fff');g.fillStyle=sk;g.fillRect(6,6,w-12,64);
+    g.fillStyle=c2;const k=pci%3;if(k===0){g.fillRect(30,34,60,36);g.beginPath();g.moveTo(26,34);g.lineTo(60,14);g.lineTo(94,34);g.fill();}else if(k===1){g.beginPath();g.moveTo(6,70);g.quadraticCurveTo(64,20,122,70);g.fill();}else{g.fillRect(20,50,88,6);for(let i=0;i<5;i++)g.fillRect(24+i*20,40,5,16);}
+    g.fillStyle='#444';g.fillRect(8,76,70,4);});
+   const cd=P(.17,.12,M(0xffffff,{map:tex(pc),roughness:.8,side:THREE.DoubleSide}),Math.sin(a)*.1,y,Math.cos(a)*.1,a,0,gal);}});
+ tag(gal,'album','Képeslap-állvány');
+
+ /* Könyvespolc a bal falon */
+ B(.03,2.0,1.95,wood,-3.485,1,-.5);B(.36,2.0,.04,wood,-3.3,1,-1.47);B(.36,2.0,.04,wood,-3.3,1,.47);
+ [.05,.5,1.0,1.5,1.98].forEach(y=>B(.36,.03,1.95,wood,-3.3,y,-.5));
+ const bookCols=[0x6b2a26,0x2f4a5c,0x3d5a34,0x7a5a22,0x4b3350,0x1f6f78,0x8a3b32,0x3a3a3a];
+ function spine(t,col,fs){return cnv(64,256,(g,w,h)=>{g.fillStyle=col;g.fillRect(0,0,w,h);g.fillStyle='#e8d9a8';g.fillRect(0,16,w,3);g.fillRect(0,h-20,w,3);g.save();g.translate(w/2,h/2);g.rotate(-Math.PI/2);txt(g,t,0,fs/3,'600 '+fs+'px '+serif,'#f3ead4');g.restore();});}
+ let lex=null,book1987=null;
+ const special={1:{3:['lex'],6:['y',1995],7:['y',1987],8:['y',2002]}};
+ [.515,1.015,1.515].forEach((y,row)=>{let z=-1.43,i=0;while(z<.4){const sp=special[row]&&special[row][i];const th=sp?(sp[0]==='lex'?.1:.12):.04+Math.random()*.05,hh=sp?.3:.24+Math.random()*.1;
+   if(z+th>.43)break;
+   if(sp){const col=sp[0]==='lex'?'#1f3a5a':['#7a5a22','#2f4a5c','#6b2a26'][[1995,1987,2002].indexOf(sp[1])];
+     const sm=M(0xffffff,{map:tex(spine(sp[0]==='lex'?'KISLEXIKON':String(sp[1]),col,sp[0]==='lex'?22:38)),roughness:.7}),cm=M(new THREE.Color(col).getHex(),{roughness:.7});
+     const bk=new THREE.Mesh(new THREE.BoxGeometry(.24,hh,th),[sm,cm,M(0xe8dcc0),cm,cm,cm]);bk.position.set(-3.29,y+hh/2,z+th/2);scene.add(bk);
+     if(sp[0]==='lex'){tag(bk,'shelf','Turisztikai kislexikon');lex=bk;}else{bk.userData.x0=bk.position.x;bk.userData.year=sp[1];tag(bk,'book','Könyv: '+sp[1]);if(sp[1]===1987)book1987=bk;}}
+   else tag(B(.22,hh,th,M(bookCols[Math.floor(Math.random()*bookCols.length)],{roughness:.75}),-3.3,y+hh/2,z+th/2),'shelf','Könyvespolc');
+   z+=th+.005;i++;}});
+
+ /* Világörökség-tabló a jobb falon */
+ const boardC=cnv(400,280,(g,w,h)=>{g.fillStyle='#f4f1ea';g.fillRect(0,0,w,h);g.fillStyle='#1f3a5a';g.fillRect(0,0,w,46);txt(g,'VILÁGÖRÖKSÉG',w/2-20,31,'600 24px '+serif,'#f3ead4');
+  g.strokeStyle='#1f3a5a';g.lineWidth=2;for(let r=0;r<6;r++){g.strokeRect(20,60+r*34,w-110,26);txt(g,String(r+1)+'.',34,79+r*34,'600 14px '+sans,'#1f3a5a');}
+  g.beginPath();g.arc(w-46,h/2+20,26,0,7);g.fillStyle='#ddd';g.fill();g.stroke();txt(g,'jelölő',w-46,h/2+62,'500 12px '+sans,'#1f3a5a');});
+ const boardTex=tex(boardC);const radFront=M(0xffffff,{map:boardTex,roughness:.7,emissive:0x000000,emissiveMap:boardTex});
+ const fr=M(0x3a2f28,{roughness:.6});
+ const radio=new THREE.Mesh(new THREE.BoxGeometry(.04,.7,1.0),[fr,radFront,fr,fr,fr,fr]);radio.position.set(3.47,1.45,.4);scene.add(radio);
+ tag(radio,'radio','Világörökség-tabló');
+ const radLight=LOW?null:new THREE.PointLight(0xfff0c8,0,1.8,2);if(radLight){radLight.position.set(3.0,1.45,.4);scene.add(radLight);}
+ B(.35,.03,1.0,wood,3.33,.8,.4);[-.05,.85].forEach(dz=>B(.3,.03,.03,dark,3.35,.78,dz));
+
+ /* Magyarország-térkép a jobb falon */
+ const mapC=cnv(600,402,(g,w,h)=>{g.fillStyle='#e6dcc3';g.fillRect(0,0,w,h);
+  g.fillStyle='#f4e8c8';g.strokeStyle='#7a2a22';g.lineWidth=2.5;const hp=new Path2D(HU_CANVAS.hun);g.fill(hp);g.stroke(hp);
+  g.strokeStyle='#6fa3c0';g.lineCap='round';HU_CANVAS.riv.forEach(([sw,p])=>{g.lineWidth=sw*1.2;g.stroke(new Path2D(p));});
+  g.fillStyle='#8fbcd4';HU_CANVAS.lakes.forEach(p=>g.fill(new Path2D(p)));
+  g.fillStyle='#3b2f22';g.fillRect(HU_CANVAS.bp[0]-5,HU_CANVAS.bp[1]-5,10,10);
+  g.fillStyle='rgba(122,42,34,.85)';Object.values(PTS).forEach(([x,y])=>{g.beginPath();g.arc(x,y,9,0,7);g.fill();});
+  txt(g,'MAGYARORSZÁG',w/2,36,'600 28px '+serif,'#3b2f22');});
+ B(.02,.68,.98,dark,3.495,1.62,-1.5);
+ const mapP=tag(P(.92,.62,M(0xffffff,{map:tex(mapC),roughness:1}),3.48,1.62,-1.5,-Math.PI/2),'map','Magyarország-térkép');
+
+ /* Szuvenír-vitrin, benne az úti napló */
+ B(.9,1.95,.02,wood,2.6,.975,-2.94);B(.03,1.95,.56,wood,2.165,.975,-2.67);B(.03,1.95,.56,wood,3.035,.975,-2.67);B(.9,.04,.56,wood,2.6,1.93,-2.67);B(.9,.15,.56,dark,2.6,.075,-2.67);
+ const shelfG=M(0xd7e6e4,{transparent:true,opacity:.35,roughness:.1});B(.84,.02,.5,shelfG,2.6,.8,-2.68);B(.84,.02,.5,shelfG,2.6,1.35,-2.68);
+ function vdoor(sign){const g=new THREE.Group();g.position.set(sign>0?2.18:3.02,0,-2.39);scene.add(g);const cx=.21*sign;
+  B(.42,1.7,.01,glass,cx,1.02,0,g);B(.44,.04,.03,wood,cx,1.87,0,g);B(.44,.04,.03,wood,cx,.17,0,g);B(.03,1.74,.03,wood,0,1.02,0,g);B(.03,1.74,.03,wood,cx*2,1.02,0,g);return g;}
+ const vl=vdoor(1),vr=vdoor(-1);B(.02,.05,.012,black,-.42,1.0,.02,vr);
+ const vase=new THREE.Mesh(new THREE.LatheGeometry([[0,0],[.05,0],[.07,.06],[.045,.14],[.035,.18],[.05,.22],[0,.22]].map(([r,y])=>new THREE.Vector2(r,y)),20),M(0xf7f5f0,{roughness:.2}));vase.position.set(2.35,1.36,-2.72);scene.add(vase);
+ const band=cyl(.061,.061,.02,M(0x2f5f9a),2.35,1.43,-2.72,scene,20);
+ const cow=new THREE.Group();cow.position.set(2.85,1.36,-2.72);scene.add(cow);const cm=M(0xb9b6ae,{roughness:.6});
+ B(.16,.07,.07,cm,0,.08,0,cow);B(.05,.05,.05,cm,.1,.1,0,cow);[[-.06,-.025],[.06,-.025],[-.06,.025],[.06,.025]].forEach(([x,z])=>B(.018,.05,.018,cm,x,.025,z,cow));
+ [-1,1].forEach(s=>{const h=cyl(.005,.003,.07,M(0xe8e2d0),.12,.14,.03*s,cow,6);h.rotation.x=s*.9;});
+ const diaryC=cnv(170,230,(g,w,h)=>{g.fillStyle='#3d5a34';g.fillRect(0,0,w,h);g.fillStyle='#e9dfc4';g.fillRect(28,70,w-56,60);txt(g,'ÚTI',w/2,96,'600 22px '+serif,'#2b241b');txt(g,'NAPLÓ',w/2,122,'600 22px '+serif,'#2b241b');});
+ const dcm=M(0x3d5a34,{roughness:.7});
+ const diary=new THREE.Mesh(new THREE.BoxGeometry(.17,.23,.035),[dcm,dcm,M(0xe8dcc0),dcm,M(0xffffff,{map:tex(diaryC),roughness:.7}),dcm]);
+ diary.position.set(2.6,.93,-2.72);diary.rotation.x=-.1;scene.add(diary);tag(diary,'diary','Úti napló');
+ [vl,vr].forEach(g=>tag(g,'vitrin','Szuvenír-vitrin'));
+ scene.children.filter(o=>(o.isMesh||o.isGroup)&&o.position.x>2.1&&o.position.x<3.1&&o.position.z<-2.3&&o.position.y>0&&!o.userData.act&&o!==diary).forEach(o=>tag(o,'vitrin','Szuvenír-vitrin'));
+
+ /* Falinaptár, plakát, turistajelzés (kattintható díszítő tárgyak) */
+ const calC=cnv(280,380,(g,w,h)=>{g.fillStyle='#f7f5ef';g.fillRect(0,0,w,h);g.fillStyle='#3d6b3a';g.fillRect(0,0,w,110);txt(g,'NEMZETI',w/2,48,'600 30px '+serif,'#fff');txt(g,'PARKOK',w/2,86,'600 30px '+serif,'#fff');
+  g.strokeStyle='#bbb';for(let r=0;r<5;r++)for(let c=0;c<7;c++)g.strokeRect(14+c*36,130+r*44,34,40);});
+ tag(P(.36,.49,M(0xffffff,{map:tex(calC),roughness:1}),1.4,1.55,-2.985),'npcal','Nemzeti parkos falinaptár');
+ cyl(.14,.11,.28,M(0x8a5a3a,{roughness:.8}),1.4,.14,-2.72);for(let i=0;i<8;i++){const lf=new THREE.Mesh(new THREE.ConeGeometry(.035,.5+Math.random()*.3,4),M(i%2?0x3f6d36:0x557f3c,{roughness:.7}));const a=i/8*6.28;lf.position.set(1.4+Math.cos(a)*.05,.5,-2.72+Math.sin(a)*.05);lf.rotation.set(Math.sin(a)*.3,0,-Math.cos(a)*.3);scene.add(lf);}
+ const postC=cnv(300,400,(g,w,h)=>{const sk=g.createLinearGradient(0,0,0,h);sk.addColorStop(0,'#d7ecf2');sk.addColorStop(1,'#6fa8c0');g.fillStyle=sk;g.fillRect(0,0,w,h);
+  g.fillStyle='#4e8a9e';g.beginPath();g.ellipse(w/2,h*.66,120,50,0,0,7);g.fill();g.fillStyle='#f3d6de';for(let i=0;i<6;i++){g.beginPath();g.ellipse(w/2-50+i*20,h*.66,8,4,i,0,7);g.fill();}
+  txt(g,'HÉVÍZ',w/2,70,'600 44px '+serif,'#1f3a5a');txt(g,'a gyógytó',w/2,104,'italic 500 22px '+serif,'#1f3a5a');});
+ tag(P(.5,.66,M(0xffffff,{map:tex(postC),roughness:.9}),0,1.62,-2.985),'poster','Hévízi plakát');
+ const ktC=cnv(128,128,(g,w,h)=>{g.fillStyle='#fff';g.fillRect(0,0,w,h);g.fillStyle='#1f5fbf';g.fillRect(0,h/3,w,h/3);g.strokeStyle='#bbb';g.lineWidth=3;g.strokeRect(2,2,w-4,h-4);});
+ tag(P(.28,.28,M(0xffffff,{map:tex(ktC),roughness:.9}),-3.485,1.55,1.2,Math.PI/2),'kektura','Turistajelzés-tábla');
+
+ /* Programajánló-hirdetőtábla az ajtó mellett */
+ const tvg=new THREE.Group();tvg.position.set(1.15,1.5,2.95);tvg.rotation.y=Math.PI;scene.add(tvg);
+ const corkC=cnv(256,192,(g,w,h)=>{g.fillStyle='#b88a5a';g.fillRect(0,0,w,h);for(let i=0;i<3000;i++){g.fillStyle='rgba(80,50,20,.25)';g.fillRect(Math.random()*w,Math.random()*h,2,2);}
+  [['#fff3a8',20,20],['#cfe8ff',130,30],['#ffd6d6',40,105],['#e2f5d0',150,110]].forEach(([c,x,y])=>{g.fillStyle=c;g.fillRect(x,y,86,64);lines(g,x+8,y+16,70,3,14,'rgba(0,0,0,.4)');g.fillStyle='#c8322b';g.beginPath();g.arc(x+43,y+6,4,0,7);g.fill();});});
+ B(.64,.49,.02,dark,0,0,.012,tvg);P(.6,.45,M(0xffffff,{map:tex(corkC),roughness:1}),0,0,0,0,0,tvg);
+ tag(tvg,'tv','Programajánló-hirdetőtábla');
+
+ /* Díszítő tárgyak: kanapé, ablak, növény, hátizsák */
+ B(1.3,.42,.62,M(0x5a6e7a,{roughness:.9}),-2.8,.21,2.1);B(1.3,.42,.14,M(0x5a6e7a,{roughness:.9}),-2.8,.52,2.38);
+ const winC=cnv(256,320,(g,w,h)=>{const sk=g.createLinearGradient(0,0,0,h);sk.addColorStop(0,'#9cc4e4');sk.addColorStop(1,'#e3eef4');g.fillStyle=sk;g.fillRect(0,0,w,h);
+  g.fillStyle='#c9bfae';[[0,150,60],[60,120,50],[110,170,70],[180,130,76]].forEach(([x,y,ww])=>g.fillRect(x,y,ww,h-y));g.fillStyle='#6b7c86';for(let y=170;y<h;y+=40)for(let x=10;x<w;x+=34)g.fillRect(x,y,14,20);});
+ P(1.0,1.3,new THREE.MeshBasicMaterial({map:tex(winC)}),3.49,1.55,1.9,-Math.PI/2);
+ B(.06,1.42,.06,white,3.47,1.55,1.37);B(.06,1.42,.06,white,3.47,1.55,2.43);B(.06,.06,1.12,white,3.47,2.23,1.9);B(.06,.06,1.12,white,3.47,.87,1.9);B(.06,1.3,.03,white,3.47,1.55,1.9);
+ cyl(.16,.12,.34,M(0xd9d4c8,{roughness:.8}),3.1,.17,2.7);for(let i=0;i<9;i++){const lf=new THREE.Mesh(new THREE.ConeGeometry(.04,.7+Math.random()*.4,4),M(i%2?0x3f6d36:0x557f3c,{roughness:.7}));const a=i/9*6.28;lf.position.set(3.1+Math.cos(a)*.06,.7,2.7+Math.sin(a)*.06);lf.rotation.set(Math.sin(a)*.25,0,-Math.cos(a)*.25);scene.add(lf);}
+ B(.3,.42,.18,M(0xc8702b,{roughness:.8}),-.95,.21,2.8);B(.26,.1,.05,M(0x8a4a1b),-.95,.28,2.7);
+
+ /* Fények */
+ scene.add(new THREE.HemisphereLight(0xffffff,0x6a5a4a,.6));
+ const sun=new THREE.DirectionalLight(0xfff6e8,.45);sun.position.set(6,4,2);scene.add(sun);
+ const top=new THREE.PointLight(0xfff1dc,1.0,12,1.4);top.position.set(0,2.4,0);scene.add(top);
+ const pend=new THREE.Group();
+ return {doorP,drawer:lid,tube,vl,vr,radFront,radLight,pend,letter:lt,radio,tv:tvg,album:gal,tape,map:mapP,lex,diary,keypad,book1987};
+}
+
+/* ================= MOZGÁS, VEZÉRLÉS ================= */
+const pos={x:.3,z:1.9};let yaw=0,pitch=-.06,walkT=null;
+const OB=[[-2.95,-2.05,-2.85,-2.25],[-1.85,-.75,-2.92,-2.32],[-.25,.85,-1.4,-.8],[-3.5,-2.95,-1.5,.5],[-1.8,-1.2,1.3,1.9],[-3.5,-2.1,1.75,2.45],[2.95,3.5,-.15,.95],[2.1,3.1,-3,-2.3],[1.2,1.6,-2.9,-2.5],[2.9,3.3,2.5,2.9],[-1.15,-.75,2.65,2.95]];
+function free(x,z){if(x<-3.25||x>3.25||z<-2.75||z>2.75)return false;const r=.22;for(const[a,b,c,d]of OB)if(x>a-r&&x<b+r&&z>c-r&&z<d+r)return false;return true;}
+function tryMove(dx,dz){if(free(pos.x+dx,pos.z+dz)){pos.x+=dx;pos.z+=dz;}}
+
+const keys={};
+addEventListener('keydown',e=>{
+ if(modalOpen){if(e.key==='Escape'&&S.playing&&!S.won)closeModal();else if(codeKeys)codeKeys(e);return;}
+ if(!S.playing)return;
+ keys[e.code]=true;
+ if(e.code==='KeyF'||e.code==='Enter')interact(innerWidth/2,innerHeight/2);
+ if(e.code.startsWith('Arrow'))e.preventDefault();
+});
+addEventListener('keyup',e=>{keys[e.code]=false;});
+
+const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
+const vis=o=>{while(o){if(!o.visible)return false;o=o.parent;}return true;};
+function pickFloor(x,y){ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,camera);const hs=ray.intersectObjects(scene.children,true);for(const h of hs){if(!vis(h.object))continue;const m=h.object.material;if(m&&!Array.isArray(m)&&m.transparent&&m.opacity<.3)continue;return h.object.userData.floor?h.point:null;}return null;}
+function pick(x,y){ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,camera);const hs=ray.intersectObjects(scene.children,true);for(const h of hs){if(!vis(h.object))continue;const m=h.object.material;if(m&&!Array.isArray(m)&&m.transparent&&m.opacity<.3&&!h.object.userData.act)continue;return h.object.userData.act?h:null;}return null;}
+
+let drag=null;
+canvas.addEventListener('pointerdown',e=>{if(!S.playing||modalOpen)return;drag={x:e.clientX,y:e.clientY,moved:0,id:e.pointerId};canvas.setPointerCapture(e.pointerId);canvas.style.cursor='grabbing';});
+canvas.addEventListener('pointermove',e=>{
+ if(drag&&e.pointerId===drag.id){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.moved+=Math.abs(dx)+Math.abs(dy);drag.x=e.clientX;drag.y=e.clientY;yaw+=dx*.0045;pitch=clamp(pitch+dy*.0045,-1.2,1.2);tip.hidden=true;return;}
+ if(e.pointerType==='mouse'&&S.playing&&!modalOpen){const h=pick(e.clientX,e.clientY);if(h){canvas.style.cursor='pointer';tip.textContent=h.object.userData.label;tip.hidden=false;tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+14)+'px';}else{canvas.style.cursor='grab';tip.hidden=true;}}
+});
+const endDrag=e=>{if(drag&&e.pointerId===drag.id){if(drag.moved<8&&e.type==='pointerup')interact(e.clientX,e.clientY);drag=null;canvas.style.cursor='grab';}};
+canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);
+
+const joy=$('#joy'),knob=$('#knob');let jx=0,jy=0,jid=null;
+function jmove(e){const r=joy.getBoundingClientRect();let dx=(e.clientX-r.left-r.width/2)/(r.width/2),dy=(e.clientY-r.top-r.height/2)/(r.height/2);const l=Math.hypot(dx,dy);if(l>1){dx/=l;dy/=l;}jx=dx;jy=dy;knob.style.transform=`translate(${dx*35}px,${dy*35}px)`;}
+joy.addEventListener('pointerdown',e=>{jid=e.pointerId;joy.setPointerCapture(jid);jmove(e);});
+joy.addEventListener('pointermove',e=>{if(e.pointerId===jid)jmove(e);});
+const jend=e=>{if(e.pointerId===jid){jid=null;jx=jy=0;knob.style.transform='';}};
+joy.addEventListener('pointerup',jend);joy.addEventListener('pointercancel',jend);
+
+const tweens=[];
+function tween(fn,dur,done){tweens.push({t:0,dur,fn,done});}
+
+/* ================= INTERAKCIÓK ================= */
+let W;
+function radioOn(){W.radFront.emissive.setHex(0x6a5230);if(W.radLight)W.radLight.intensity=.8;}
+function interact(x,y){
+ if(!S.playing||modalOpen||S.won)return;
+ let h=pick(x,y);
+ if(!h&&COARSE){for(const r of [14,26]){for(let a=0;a<8&&!h;a++)h=pick(x+Math.cos(a*Math.PI/4)*r,y+Math.sin(a*Math.PI/4)*r);if(h)break;}}
+ if(!h){const f=pickFloor(x,y);if(f)walkT={x:f.x,z:f.z};return;}
+ if(h.distance>3.3){toast('Menj közelebb.');return;}
+ const o=h.object,act=o.userData.act;
+ if(Q){quickInteract(act,o);return;}
+ A[act]&&A[act](o);
+}
+const later='Még nem tudod, mit keress itt. Kövesd a feladatot a bal felső sarokban.';
+const A={
+ letter(){doc(`<p class="date">Budapest, reggel 7 óra 20 perc</p><p>Szia!</p>
+  <p>Nyolckor indul az országjáró körút, és ma te leszel a segítőm. Korán le kellett mennem a buszhoz, az iroda ajtaja pedig kódzárral zárul. A kódot nem írom le, de mindent, ami kell, elrejtettem az irodában: számokat, helyszíneket, egy verset, a térképet, fogalmakat és összefüggéseket.</p>
+  <p>Ha végigmész rajtuk, nemcsak kijutsz, hanem az utasok kérdéseire is tudni fogod a választ. Siess, a busz nem vár sokáig!</p><p class="sign">Réka, idegenvezető</p>
+  <div class="tp"><b>Feladvány-cédula.</b> A bőrönd számzárának kódja Magyarország legmagasabb pontjának magassága méterben.</div>`,()=>{S.letterRead=true;setGoal();});},
+ globe(){toast('Magyarország 1985. július 15-én csatlakozott a világörökségi egyezményhez.',5200);},
+ kektura(){toast('Kék sáv fehér alapon: az Országos Kéktúra jelzése. Az Országos Kéktúra szerepel a Hungarikumok Gyűjteményében.',5600);},
+ poster(){toast('„A Hévízi-tó és a tradicionális hévízi gyógyászat” szerepel a Hungarikumok Gyűjteményében.',5600);},
+ npcal(){toast('A Hortobágyi Nemzeti Park 1972-ben jött létre; a puszta 1999 óta világörökség.',5600);},
+ drawer(){
+  if(S.stage>=1){toast(W.tube.visible?'A bőrönd nyitva. Benne egy piros mágneses jelölő fekszik.':'A bőrönd üres.');return;}
+  codeModal({title:'A bőrönd számzára',prompt:'Négyjegyű számzár: Magyarország legmagasabb pontjának, a Kékesnek a magassága méterben.',answer:'1014',onOk(){
+   W.tube.visible=true;tween(k=>W.drawer.rotation.x=-1.25*k,.7);S.stage=1;setGoal();toast('A zár kattan, a bőrönd fedele felnyílik.');}});
+ },
+ tube(){W.tube.visible=false;addInv('Mágneses jelölő');S.stage=2;setGoal();toast('Felvetted a mágneses jelölőt. A falon lévő tablóra illik.');},
+ radio(){
+  if(S.stage<2){toast('A világörökség-tábla kártyái összekeveredtek. A jobb oldalán egy üres jelölőhely van.',3800);return;}
+  if(S.stage===2){if(S.inv.includes('Mágneses jelölő')){remInv('Mágneses jelölő');toast('Feltetted a jelölőt a tablóra.');}
+   timelineModal(()=>{S.stage=3;S.done.kron=true;radioOn();setGoal();
+    doc(`<h2>A világörökség-tabló</h2><p>A kártyák a helyükre kerültek, a tabló megvilágítása felkapcsol. A keret mögül cédula csúszik ki, rajta Réka írása:</p><p class="hand">„A sorrendet már tudod. De tudod-e, hol mit látnak majd az utasok? Nézd át a képeslap-állványt.”</p>`);});
+   return;}
+  toast('A tabló kártyái a helyükön vannak.');
+ },
+ album(){
+  if(S.stage<3){toast('Képeslapok Magyarország nevezetességeiről. '+later,3800);return;}
+  if(S.stage>3){toast('A képeslapokat már átnézted.');return;}
+  matchModal({cat:'szem',title:'A képeslap-állvány',intro:'A képeslapok hátoldalán csak a helyszín neve áll. Párosítsd a helyszíneket a nevezetességükkel: válassz egy helyszínt, majd a hozzá tartozó leírást.',pairs:PERSONS,lh:'Helyszín',rh:'Nevezetesség',
+   onDone(){S.stage=4;S.done.szem=true;setGoal();
+    doc(`<h2>Az utolsó képeslap</h2><p>Az állvány aljáról egy cédula esik ki:</p><p class="hand">„Az utasok között sok a versbarát. Olvasd el a verset a dohányzóasztalon, és gondold végig, mennyire lehet egy tájleírásban megbízni.”</p>`);}});
+ },
+ tape(){
+  if(S.stage<4){toast('Egy régi verseskötet. '+later,3800);return;}
+  if(S.stage>4){toast('A verset már elolvastad.');return;}
+  quizModal({cat:'forras',title:'A verseskötet',intro:'A könyvjelzőnél Petőfi Sándor egyik tájverse áll. Olvasd el figyelmesen, és válaszolj a kérdésekre.',source:SOURCE,qs:SRC_Q,
+   onDone(){S.stage=5;S.done.forras=true;setGoal();
+    doc(`<h2>A kötet hátsó belső borítója</h2><p class="hand">„A mai útvonalat a falitérképen jelöltem be. Tudod, hol mi van?”</p>`);}});
+ },
+ map(){
+  if(S.stage<5){toast('Magyarország térképe, rajta pontok. '+later,4000);return;}
+  if(S.stage>5){toast('A térkép helyszíneit már azonosítottad.');return;}
+  mapModal(()=>{S.stage=6;S.done.terkep=true;setGoal();
+   doc(`<h2>A térkép kerete mögött</h2><p class="hand">„A helyeket ismered. A szakszavakat is? Lapozd át a Turisztikai kislexikont a könyvespolcon.”</p>`);});
+ },
+ tv(){toast('Programajánlók: múzeumi estek, túrák, fesztiválok. Ma reggel nyolckor indul a körutazás.',4200);},
+ shelf(){
+  if(S.stage===6){quizModal({cat:'fog',title:'Turisztikai kislexikon',intro:'A lexikon lapjain Réka kérdései állnak.',qs:FOG_Q,
+   onDone(){S.stage=7;S.done.fog=true;setGoal();
+    doc(`<h2>A lexikon utolsó lapja</h2><p class="hand">„A vitrin kulcsát annak a könyvnek a mögé tettem, amelynek gerincén az első magyar világörökségi helyszínek felvételének éve áll.”</p>`);}});return;}
+  toast(S.stage<6?'Útikönyvek és egy turisztikai kislexikon. '+later:'Útikönyvek, semmi különös.',3800);
+ },
+ book(o){
+  if(S.stage<=6){A.shelf();return;}
+  const yr=o.userData.year,x0=o.userData.x0;
+  if(S.stage===7&&yr===1987){tween(k=>o.position.x=x0+.15*k,.6);S.stage=8;addInv('Vitrinkulcs');setGoal();
+   doc(`<h2>Az „1987” feliratú könyv mögött</h2><p>A könyv mögött egy kis kulcs lapul, a karikáján „vitrin” felirattal.</p>`);return;}
+  if(S.stage>7&&yr===1987){toast('Ebből a könyvből már kivetted a kulcsot.');return;}
+  if(S.stage===7)miss('fog');
+  tween(k=>o.position.x=x0+.07*Math.sin(k*Math.PI),.6);toast(`„${yr}” feliratú könyv. Mögötte nincs semmi.`);
+ },
+ vitrin(){
+  if(S.vitrinOpen){toast('A vitrin nyitva. Az úti napló a középső polcon fekszik.');return;}
+  if(!S.inv.includes('Vitrinkulcs')){toast('A szuvenír-vitrin zárva. Benne porcelánváza, egy szürkemarha-figura és egy úti napló.');return;}
+  remInv('Vitrinkulcs');S.vitrinOpen=true;S.stage=9;setGoal();tween(k=>{W.vl.rotation.y=-1.7*k;W.vr.rotation.y=1.7*k;},1);toast('A kulcs illik a zárba. A vitrin kinyílt.');
+ },
+ diary(){
+  if(!S.vitrinOpen){A.vitrin();return;}
+  if(S.stage>9){showInvite();return;}
+  matchModal({cat:'ok',title:'Az úti napló',intro:'A napló bal oldali lapjain okok, a jobb oldaliakon következmények állnak, de a lapok összekeveredtek. Párosítsd az okot a következményével.',pairs:CAUSES,lh:'Ok',rh:'Következmény',
+   onDone(){S.stage=10;S.done.ok=true;setGoal();showInvite();}});
+ },
+ door(){
+  if(S.stage<10){toast('A kódzár kódját még nem ismered. Kövesd Réka nyomait.');return;}
+  codeModal({title:'Az iroda ajtaja',prompt:'Négyjegyű kódzár.',answer:'1987',onOk(){
+   S.won=true;S.done.code=true;setGoal();tween(k=>W.doorP.rotation.y=1.45*k,1.3,()=>setTimeout(win,300));toast('A zár kattan, az ajtó kinyílik. Lent vár a busz!');}});
+ }
+};
+function showInvite(){doc(`<h2>Az úti napló utolsó lapja</h2><p>A napló végén Réka sietős sorai állnak:</p><p class="hand">„Ha ezt olvasod, már majdnem kint vagy. Az utasoknak is ezzel kezdem a körutat.”</p><div class="tp"><b>Feladvány-cédula.</b> Az ajtó kódja az az évszám, amikor az első két magyar helyszín, Budapest és Hollókő felkerült a világörökségi listára.</div>`);}
+
+/* ================= ÉRTÉKELÉS ================= */
+const eva=n=>n===0?'hibátlan':n<=2?'kisebb bizonytalanság':'ismétlés javasolt';
+function win(){
+ const t=fmt(performance.now()-S.start);
+ const rows=FULLCATS.map(k=>`<tr><td>${CAT[k]}</td><td class="num">${S.err[k]}</td><td>${eva(S.err[k])}</td></tr>`).join('');
+ const txt=`Nyolckor indul a busz – eredmény\nIdő: ${t}\nSegítségkérések: ${S.hints}\nHibás próbálkozások összesen: ${S.mistakes}\n`+FULLCATS.map(k=>`${CAT[k]}: ${S.err[k]} hiba (${eva(S.err[k])})`).join('\n');
+ openModal(`<h2>Elérted a buszt!</h2><p>Időd: <b>${t}</b>. Segítségkérések: <b>${S.hints}</b>. Hibás próbálkozások összesen: <b>${S.mistakes}</b>.</p>
+ <table class="rep"><thead><tr><th>Témakör</th><th>Hibák</th><th>Értékelés</th></tr></thead><tbody>${rows}</tbody></table>
+ <p>Magyarország világörökségi helyszínei (a felvétel éve):</p>
+ <ul class="tl">${KEY_DATES.map(([d,t2])=>`<li><b>${d}</b>${t2}.</li>`).join('')}</ul>
+ <div id="copyArea"></div>
+ <div class="actions"><button id="copyBtn">Eredmény másolása</button><button class="primary" data-focus id="again">Új játék</button></div>`,'doc');
+ $('#again').onclick=()=>location.reload();
+ $('#copyBtn').onclick=async()=>{
+  try{await navigator.clipboard.writeText(txt);$('#copyBtn').textContent='Kimásolva';}
+  catch(e){$('#copyArea').innerHTML='<textarea id="copyBox" readonly></textarea><p style="font-size:14px">A böngésző nem engedte a közvetlen másolást. Jelöld ki a szöveget, és másold ki kézzel.</p>';const b=$('#copyBox');b.value=txt;b.focus();b.select();}
+ };
+}
+
+$('#hintBtn').onclick=()=>{
+ if(!S.playing||S.won||modalOpen)return;
+ const k=Q?curKey():STAGE_KEYS[S.stage];const hs=(Q&&k==='door')?ROUNDS[Q.round].dh:HINTS[k];if(!hs)return;
+ const used=S.hint[k]||0,repeat=used>=hs.length,l=Math.min(used,hs.length-1);
+ const show=()=>{if(!repeat){S.hints++;if(Q)S.hintPen+=HINT_PEN[l];S.hint[k]=used+1;}
+  doc(`<h2>Segítség, ${l+1}. fokozat</h2><p>${hs[l]}</p><p style="font-size:14px;opacity:.7">${l<hs.length-1?'Ha újra kéred, pontosabb útmutatást kapsz.':'Ez a legpontosabb segítség; újra megnézni már nem jár büntetéssel.'}${Q?'':' A segítségkérések száma megjelenik a végső értékelésben.'}</p>`);};
+ if(!Q||repeat){show();return;}
+ openModal(`<h2>Segítséget kérsz?</h2><p>${l+1}. fokozat: ${['irány','támpont','megoldás'][l]}. Büntetőidő: <b>+${HINT_PEN[l]} mp</b>.</p><div class="actions"><button data-close>Mégse</button><button class="primary" data-yes>Kérem</button></div>`,'doc');
+ mbox.querySelector('[data-close]').onclick=closeModal;mbox.querySelector('[data-yes]').onclick=()=>{closeModal();show();};
+};
+
+/* ================= GYORS KÖR ================= */
+let Q=null,marker=null;
+const LIMIT=600;
+const penalty=()=>S.mistakes*15+S.hintPen;
+const fmtS=sec=>String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');
+const pickN=(arr,n)=>shuffle(arr.map((_,i)=>i)).slice(0,n).sort((a,b)=>a-b).map(i=>arr[i]);
+const MIX=()=>[...pickN(FOG_Q.slice(0,4),2),...TL_Q];
+const ROUNDS={
+ 1:{route:['drawer','radio','album','door'],cats:['code','kron','szem'],door:'1987',
+  clue:`<h2>Az utolsó képeslap</h2><div class="tp"><b>Feladvány-cédula.</b> „Az ajtó kódja az az évszám, amikor az első két magyar helyszín, Budapest és Hollókő felkerült a világörökségi listára.”</div>`,
+  dh:['Az ajtó kódja egy évszám a világörökségi listáról.','Az első két magyar helyszín Budapest és Hollókő volt; ugyanez az évszám a tabló első kártyáján.','Az ajtó kódja: 1987.']},
+ 2:{route:['tape','map','fog','door'],cats:['forras','terkep','fog','code'],door:'1987',
+  clue:`<h2>A lexikon utolsó lapja</h2><div class="tp"><b>Feladvány-cédula.</b> „Az ajtó kódja az utolsó lexikonkérdés válasza.”</div>`,
+  dh:['Az ajtó kódja az utolsó lexikonkérdés válasza.','Az első két magyar helyszín (Budapest, Hollókő) felvételének éve.','Az ajtó kódja: 1987.']},
+ 3:{route:['tv','diary','door'],cats:['vegyes','ok','code'],door:'1014',
+  clue:`<h2>Az úti napló utolsó lapja</h2><div class="tp"><b>Feladvány-cédula.</b> „Az ajtó kódja Magyarország legmagasabb pontjának, a Kékesnek a magassága méterben.”</div>`,
+  dh:['Az ajtó kódja egy magasság méterben.','A Kékes a Mátrában emelkedik. Régi könyvekben 1015 m áll, a mai hivatalos adat egy méterrel kevesebb.','Az ajtó kódja: 1014.']}
+};
+const QGOAL={drawer:'Nyisd ki a bőrönd számzárát a pult mellett.',radio:'Állítsd sorba a világörökségi helyszíneket a tablón a jobb oldali falon.',album:'Nézd át a képeslap-állványt a bal oldalon.',
+ tape:'Olvasd el a verset a dohányzóasztalon.',map:'Oldd meg a térkép feladatait a jobb oldali falon.',fog:'Lapozd át a Turisztikai kislexikont a könyvespolcon.',
+ tv:'Nézd meg a programajánló-hirdetőtáblát az ajtó mellett.',diary:'Olvasd el az úti naplót a szuvenír-vitrinben.',door:'Nyisd ki az iroda ajtaját.'};
+const STAND={letter:[-1.2,-1.7],drawer:[-2.0,-1.6],tube:[-2.0,-1.6],radio:[2.2,.4],tv:[1.1,2.0],album:[-1.5,.8],tape:[.3,-.2],map:[2.3,-1.5],
+ fog:[-2.2,-.8],book:[-2.2,-.8],vitrin:[2.6,-1.55],diary:[2.6,-1.55],door:[.4,1.9]};
+function curKey(){if(Q)return Q.route[Q.i];const k=STAGE_KEYS[S.stage];return (k==='drawer'&&!S.letterRead)?'letter':k;}
+function targetObj(k){if(!W||!k)return null;return {letter:W.letter,drawer:W.drawer,tube:W.tube,radio:W.radio,tv:W.tv,album:W.album,tape:W.tape,map:W.map,fog:W.lex,book:W.book1987,vitrin:W.vl,diary:W.diary,door:W.keypad}[k]||null;}
+const mkBox=new THREE.Box3(),mkC=new THREE.Vector3();
+function updateMarker(){
+ if(!marker)return;const o=(S.playing&&!S.won)?targetObj(curKey()):null;
+ if(!o||!vis(o)){marker.visible=false;return;}
+ mkBox.setFromObject(o);mkBox.getCenter(mkC);marker.visible=true;
+ marker.position.set(mkC.x,mkBox.max.y+.2+(RM?0:Math.sin(tAcc*3)*.04),mkC.z);
+}
+function lookAtObj(o){mkBox.setFromObject(o);const c=mkBox.getCenter(new THREE.Vector3());const dx=c.x-pos.x,dz=c.z-pos.z;yaw=Math.atan2(-dx,-dz);pitch=clamp(Math.atan2(c.y-1.6,Math.hypot(dx,dz)),-1.2,1.2);}
+$('#nextBtn').onclick=()=>{
+ if(!S.playing||S.won||modalOpen)return;const k=curKey(),o=targetObj(k);if(!o)return;
+ walkT=null;if(Q&&STAND[k]){pos.x=STAND[k][0];pos.z=STAND[k][1];}
+ lookAtObj(o);
+};
+const sub=(key,make)=>Q.sub[key]||(Q.sub[key]=make());
+function qdone(){Q.i++;setGoal();}
+const QKEY={shelf:'fog',book:'fog'};
+const QFLAVOR=['letter','globe','kektura','poster','npcal','tv','vitrin'];
+function quickInteract(act,o){
+ const k=QKEY[act]||act;
+ if(Q.route.includes(k)){
+  if(k!==curKey()){toast(Q.route.indexOf(k)<Q.i?'Ezt az állomást már teljesítetted.':'Ez még nem a következő állomás. Kövesd a jelzést.');return;}
+  QA[k](o);return;
+ }
+ if(QFLAVOR.includes(act)&&A[act]){A[act](o);return;}
+ toast('Ebben a fordulóban ennek nincs szerepe.');
+}
+const QA={
+ drawer(){codeModal({title:'A bőrönd számzára',prompt:'Négyjegyű számzár: Magyarország legmagasabb pontjának, a Kékesnek a magassága méterben.',answer:'1014',onOk(){
+  tween(k=>W.drawer.rotation.x=-1.25*k,.7);addInv('Mágneses jelölő');qdone();toast('A bőrönd kinyílt. Elvetted a mágneses jelölőt: a falon lévő tablóra illik.',3800);}});},
+ radio(){if(S.inv.includes('Mágneses jelölő'))remInv('Mágneses jelölő');
+  timelineModal(()=>{S.done.kron=true;radioOn();qdone();toast('A tabló kész. A keret mögött cédula: „Nézd át a képeslap-állványt.”',4200);},sub('radio',()=>pickN(EV,4)));},
+ album(){matchModal({cat:'szem',title:'A képeslap-állvány',intro:'Párosítsd a helyszíneket a nevezetességükkel: válassz egy helyszínt, majd a hozzá tartozó leírást.',pairs:sub('album',()=>pickN(PERSONS,4)),lh:'Helyszín',rh:'Nevezetesség',
+  onDone(){S.done.szem=true;qdone();doc(ROUNDS[1].clue);}});},
+ tape(){quizModal({cat:'forras',title:'A verseskötet',intro:'A könyvjelzőnél Petőfi Sándor egyik tájverse áll. Olvasd el figyelmesen, és válaszolj a kérdésekre.',source:SOURCE,qs:sub('tape',()=>pickN(SRC_Q,3)),
+  onDone(){S.done.forras=true;qdone();toast('A kötet végén cédula: „Nézd meg a falitérképet a jobb oldali falon.”',4200);}});},
+ map(){mapModal(()=>{S.done.terkep=true;qdone();toast('A keret mögül cédula esik ki: „Lapozd át a kislexikont a könyvespolcon.”',4200);},sub('map',()=>pickN(MAP_Q,3)));},
+ fog(){quizModal({cat:'fog',title:'Turisztikai kislexikon',intro:'',qs:sub('fog',()=>[...pickN(FOG_Q.slice(0,4),2),FOG_Q[4]]),onDone(){S.done.fog=true;qdone();doc(ROUNDS[2].clue);}});},
+ tv(){quizModal({cat:'vegyes',title:'A programajánló-hirdetőtábla',intro:'A táblára tűzött cédulákon ismétlő kérdések állnak.',qs:sub('tv',()=>MIX()),
+  onDone(){S.done.vegyes=true;qdone();toast('Az utolsó cédulán: „Az úti napló a vitrinben vár.”',4200);}});},
+ diary(){matchModal({cat:'ok',title:'Az úti napló',intro:'A napló lapjai összekeveredtek. Párosítsd az okot a következményével.',pairs:sub('diary',()=>pickN(CAUSES,4)),lh:'Ok',rh:'Következmény',
+  onDone(){S.done.ok=true;qdone();doc(ROUNDS[3].clue);}});},
+ door(){codeModal({title:'Az iroda ajtaja',prompt:'Négyjegyű kódzár.',answer:ROUNDS[Q.round].door,onOk(){
+  S.done.code=true;qdone();tween(k=>W.doorP.rotation.y=1.45*k,1.3);toast('A zár kattan, az ajtó kinyílik. Lent vár a busz!');endQuick(true);}});}
+};
+function startQuick(round,code){
+ Q={round,code,route:ROUNDS[round].route,i:0,sub:{}};
+ if(round===3){S.vitrinOpen=true;W.vl.rotation.y=-1.7;W.vr.rotation.y=1.7;}
+ const k=Q.route[0];pos.x=STAND[k][0];pos.z=STAND[k][1];lookAtObj(targetObj(k));
+ S.playing=true;S.start=performance.now();lastSec=-1;setGoal();toast('Rajt! Az időmérés elindult.');
+}
+function checkCode(str){let h=5381;for(const c of str)h=(((h*33)>>>0)^c.charCodeAt(0))>>>0;const al='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let o='';for(let i=0;i<4;i++){o+=al[h%32];h=Math.floor(h/32);}return o;}
+function endQuick(ok){
+ if(S.won)return;S.won=true;if(modalOpen)closeModal();
+ const raw=Math.min(Math.floor((performance.now()-S.start)/1000),LIMIT),pen=penalty(),fin=raw+pen,n=Q.route.length,dn=Math.min(Q.i,n);
+ $('#timer').textContent=fmtS(raw)+(pen?` +${pen} mp`:'');setGoal();
+ let w=null;ROUNDS[Q.round].cats.forEach(c=>{if(S.err[c]>0&&(!w||S.err[c]>S.err[w]))w=c;});
+ const chk=checkCode(`${Q.code}|${fin}|${S.mistakes}|${S.hints}|${dn}`);
+ const txt=`Nyolckor indul a busz – ${Q.round}. forduló (kód: ${Q.code})\nVégidő: ${fmtS(fin)}\nNyers idő: ${fmtS(raw)}\nHibák: ${S.mistakes}\nSegítségkérések: ${S.hints}\nTeljesített állomások: ${dn}/${n}\nEllenőrző kód: ${chk}`;
+ setTimeout(()=>{
+  openModal(`<p class="cat" style="color:#3b4a36">${Q.round}. forduló</p><h2>${ok?'Célba értél!':'Lejárt az idő'}</h2>
+  <div class="big">${fmtS(fin)}</div><p class="center" style="margin-top:0">végidő</p>
+  <table class="rep"><tbody>
+  <tr><td>Nyers idő</td><td class="num">${fmtS(raw)}</td></tr>
+  <tr><td>Büntetőidő (hibánként 15 mp, segítségkérésenként 15–60 mp)</td><td class="num">${pen} mp</td></tr>
+  <tr><td>Hibák / segítségkérések</td><td class="num">${S.mistakes} / ${S.hints}</td></tr>
+  <tr><td>Teljesített állomások</td><td class="num">${dn}/${n}</td></tr>
+  <tr><td>Legtöbb hibát okozó témakör</td><td class="num">${w?CAT[w]+' ('+S.err[w]+')':'nem volt hiba'}</td></tr>
+  <tr><td>Ellenőrző kód</td><td class="num"><span class="chk">${chk}</span></td></tr>
+  </tbody></table>
+  ${ok?'':'<p>Ha a tanár engedi, a teljes játékban otthon végigjátszhatod az egészet.</p>'}
+  <div id="copyArea"></div>
+  <div class="actions"><button id="copyBtn">Eredmény másolása</button><button class="primary" data-focus id="again">Új kör</button></div>`,'doc');
+  $('#again').onclick=()=>location.reload();
+  $('#copyBtn').onclick=async()=>{try{await navigator.clipboard.writeText(txt);$('#copyBtn').textContent='Kimásolva';}
+   catch(e){$('#copyArea').innerHTML='<textarea id="copyBox" readonly></textarea>';const b=$('#copyBox');b.value=txt;b.focus();b.select();}};
+ },ok?1500:0);
+}
+
+/* ================= TANÁRI KIVETÍTŐ NÉZET ================= */
+let TEACH=false,tTimer=null,tAudio=null;
+const TK='hu-tanar';
+const T=(()=>{try{return JSON.parse(localStorage.getItem(TK))||{};}catch(e){return {};}})();
+T.round=T.round||1;T.byCode=T.byCode||{};T.end=null;T.left=LIMIT;
+const CHK_AL='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const esc=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+function tSave(){try{const ks=Object.keys(T.byCode);while(ks.length>10)delete T.byCode[ks.shift()];localStorage.setItem(TK,JSON.stringify({round:T.round,code:T.code,byCode:T.byCode}));}catch(e){}}
+const genCode=r=>String(Math.floor(Math.random()*1000)).padStart(3,'0')+r;
+function parseTime(v){const m=String(v).trim().match(/^(\d{1,2})[:.,](\d{2})$/);if(!m||+m[2]>59)return null;return +m[1]*60+(+m[2]);}
+function verify(code,fin,chk){const n=ROUNDS[+code[3]].route.length;for(let dn=n;dn>=0;dn--)for(let m=0;m<=60;m++)for(let h=0;h<=30;h++)if(checkCode(`${code}|${fin}|${m}|${h}|${dn}`)===chk)return {m,h,dn,n};return null;}
+function renderT(){
+ document.querySelectorAll('.t-seg button').forEach(b=>b.classList.toggle('on',+b.dataset.r===T.round));
+ $('#tCode').textContent=T.code||'----';
+ const r=ROUNDS[T.round];$('#tRoundInfo').textContent=`${T.round}. forduló: ${r.route.length} állomás (${r.cats.map(c=>CAT[c]).join(', ')}). A tanulók ezt a kódot írják be a Gyors kör indításakor.`;
+ const fin=x=>x.v&&x.v.dn===x.v.n;
+ const rows=(T.byCode[T.code]||[]).slice().sort((a,b)=>(!!b.v-!!a.v)||(fin(b)-fin(a))||((a.v&&b.v)?b.v.dn-a.v.dn:0)||(a.fin-b.fin));
+ let rank=0;
+ $('#tBody').innerHTML=rows.map(x=>{const ok=!!x.v;if(ok)rank++;return `<tr class="${ok&&rank<=3?'top'+rank:''}"><td class="num">${ok?rank+'.':'–'}</td><td>${esc(x.name)}</td><td class="num">${fmtS(x.fin)}</td><td class="num">${ok?x.v.dn+'/'+x.v.n:'?'}</td><td class="num">${ok?x.v.m+' / '+x.v.h:'?'}</td><td>${ok?esc(x.chk):'<span class="bad">'+esc(x.chk)+': érvénytelen</span>'}</td><td><button class="t-del" data-id="${x.id}" aria-label="Sor törlése">Törlés</button></td></tr>`;}).join('')
+  ||'<tr><td colspan="7" class="t-hint">Még nincs eredmény. A tanulók célképernyőjéről írja be a becenevet, a végidőt és az ellenőrző kódot.</td></tr>';
+ $('#tBody').querySelectorAll('.t-del').forEach(b=>b.onclick=()=>{T.byCode[T.code]=(T.byCode[T.code]||[]).filter(x=>String(x.id)!==b.dataset.id);tSave();renderT();});
+}
+function tAdd(){
+ const name=$('#fName').value.trim(),fin=parseTime($('#fTime').value),chk=$('#fChk').value.trim().toUpperCase(),msg=$('#tMsg');
+ if(!T.code){msg.className='msg bad';msg.textContent='Előbb válasszon fordulót.';return;}
+ if(!name||fin===null||!new RegExp('^['+CHK_AL+']{4}$').test(chk)){msg.className='msg bad';msg.textContent='Adja meg a becenevet, a végidőt perc:másodperc formában (pl. 6:42) és a négykarakteres ellenőrző kódot.';return;}
+ const v=verify(T.code,fin,chk);(T.byCode[T.code]=T.byCode[T.code]||[]).push({id:Date.now(),name,fin,chk,v});tSave();renderT();
+ msg.className=v?'msg ok':'msg bad';
+ msg.textContent=v?`${name}: érvényes eredmény.`:`${name}: az ellenőrző kód nem egyezik a végidővel vagy a fordulókóddal. Kérje meg a tanulót, hogy mutassa meg a célképernyőt.`;
+ ['fName','fTime','fChk'].forEach(i=>$('#'+i).value='');$('#fName').focus();
+}
+function beep(){try{if(!tAudio)return;const a=tAudio;[0,.35,.7].forEach(t=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=880;g.gain.setValueAtTime(.0001,a.currentTime+t);g.gain.exponentialRampToValueAtTime(.3,a.currentTime+t+.02);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+t+.25);o.connect(g).connect(a.destination);o.start(a.currentTime+t);o.stop(a.currentTime+t+.3);});}catch(e){}}
+function tTick(){
+ const left=T.end?Math.max(0,Math.ceil((T.end-Date.now())/1000)):T.left,c=$('#tClock');
+ c.textContent=fmtS(left);c.classList.toggle('warn',left<=60&&left>0);c.classList.toggle('end',left===0);
+ if(T.end&&left===0){clearInterval(tTimer);tTimer=null;T.end=null;T.left=0;$('#tStart').textContent='Rajt';beep();}
+}
+function openTeacher(){
+ TEACH=true;if(modalOpen)closeModal();document.body.classList.add('teach');$('#teacher').hidden=false;
+ if(!T.code)T.code=genCode(T.round);tSave();renderT();tTick();
+}
+document.querySelectorAll('.t-seg button').forEach(b=>b.onclick=()=>{T.round=+b.dataset.r;T.code=genCode(T.round);tSave();renderT();$('#tMsg').textContent='';});
+$('#tNew').onclick=()=>{T.code=genCode(T.round);tSave();renderT();$('#tMsg').textContent='';};
+$('#tStart').onclick=()=>{
+ try{if(!tAudio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)tAudio=new AC();}if(tAudio&&tAudio.state==='suspended')tAudio.resume();}catch(e){}
+ if(T.end){T.left=Math.max(0,Math.ceil((T.end-Date.now())/1000));T.end=null;clearInterval(tTimer);tTimer=null;$('#tStart').textContent='Folytatás';}
+ else{if(T.left<=0)T.left=LIMIT;T.end=Date.now()+T.left*1000;tTimer=setInterval(tTick,250);$('#tStart').textContent='Szünet';}
+ tTick();
+};
+$('#tReset').onclick=()=>{T.end=null;clearInterval(tTimer);tTimer=null;T.left=LIMIT;$('#tStart').textContent='Rajt';tTick();};
+$('#tAdd').onclick=tAdd;
+['fName','fTime','fChk'].forEach(i=>$('#'+i).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();tAdd();}}));
+let clearArm=0;
+$('#tClear').onclick=()=>{if(Date.now()-clearArm<4000){T.byCode[T.code]=[];tSave();renderT();$('#tClear').textContent='Tábla törlése';clearArm=0;}else{clearArm=Date.now();$('#tClear').textContent='Biztosan? Kattintson újra';setTimeout(()=>{$('#tClear').textContent='Tábla törlése';},4000);}};
+$('#tFull').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}catch(e){}};
+$('#homeBtn').onclick=()=>{openModal(`<h2>Visszatérsz a főoldalra?</h2><p>A jelenlegi játékállás elvész.</p><div class="actions"><button data-focus id="homeNo">Mégse</button><button class="primary" id="homeYes">Igen, a főoldalra</button></div>`,'doc');$('#homeNo').onclick=closeModal;$('#homeYes').onclick=()=>{location.href=location.pathname+location.search;};};
+$('#tBack').onclick=()=>{TEACH=false;document.body.classList.remove('teach');$('#teacher').hidden=true;intro();};
+
+/* ================= FŐ CIKLUS ================= */
+const clock=new THREE.Clock();let lastSec=-1,tAcc=0,perfT=0,perfN=0;const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function frame(){
+ if(TEACH){clock.getDelta();requestAnimationFrame(frame);return;}
+ const dt=Math.min(clock.getDelta(),.05);
+ if(S.playing&&!modalOpen&&!S.won){
+  let f=0,s=0,turn=0;
+  if(keys.KeyW||keys.ArrowUp)f++;if(keys.KeyS||keys.ArrowDown)f--;if(keys.KeyD)s++;if(keys.KeyA)s--;
+  if(keys.ArrowLeft||keys.KeyQ)turn++;if(keys.ArrowRight||keys.KeyE)turn--;
+  f-=jy;s+=jx;yaw+=turn*1.9*dt;
+  const l=Math.hypot(f,s);if(l>1){f/=l;s/=l;}
+  if(l>.05){const sp=(keys.ShiftLeft||keys.ShiftRight)?2.6:1.5;const fx=-Math.sin(yaw),fz=-Math.cos(yaw),rx=Math.cos(yaw),rz=-Math.sin(yaw);tryMove((fx*f+rx*s)*sp*dt,0);tryMove(0,(fz*f+rz*s)*sp*dt);walkT=null;}
+  if(walkT){const dx=walkT.x-pos.x,dz=walkT.z-pos.z,d=Math.hypot(dx,dz);if(d<.15)walkT=null;else{const st=Math.min(d,1.7*dt),ox=pos.x,oz=pos.z;tryMove(dx/d*st,0);tryMove(0,dz/d*st);if(Math.hypot(pos.x-ox,pos.z-oz)<st*.2)walkT=null;}}
+ }
+ if(S.playing&&!S.won){const ms=performance.now()-S.start,sec=Math.floor(ms/1000);if(sec!==lastSec){lastSec=sec;if(Q){const pen=penalty();$('#timer').textContent=fmt(ms)+(pen?` +${pen} mp`:'');if(sec>=LIMIT)endQuick(false);}else $('#timer').textContent=fmt(ms);}}
+ updateMarker();
+ perfT+=dt;perfN++;if(perfT>3){const fps=perfN/perfT;perfT=0;perfN=0;if(fps<24&&PR>.75){PR=Math.max(.75,PR-.25);renderer.setPixelRatio(PR);resize();}}
+ tAcc+=dt;if(W&&W.pend&&!RM)W.pend.rotation.z=Math.sin(tAcc*2.4)*.12;
+ camera.position.set(pos.x,1.6,pos.z);camera.rotation.set(pitch,yaw,0);
+ for(let i=tweens.length-1;i>=0;i--){const tw=tweens[i];tw.t=Math.min(1,tw.t+dt/tw.dur);tw.fn(ease(tw.t));if(tw.t>=1){tweens.splice(i,1);tw.done&&tw.done();}}
+ renderer.render(scene,camera);requestAnimationFrame(frame);
+}
+
+const BACK_URL='/';
+function goBack(){try{if(history.length>1&&document.referrer){history.back();return;}}catch(e){}
+ try{window.top.location.href=BACK_URL;}catch(e){location.href=BACK_URL;}}
+function intro(){
+ openModal(`<button class="backbtn" id="goBack" aria-label="Vissza az előző oldalra">← Vissza</button>
+ <h2>Nyolckor indul a busz</h2>
+ <p style="font-size:18px">Budapest, reggel 7 óra 20 perc. Ma indul az országjáró körút, és te vagy a gyakornok az utazási irodában.</p>
+ <p>Réka, a vezető idegenvezető már lement a buszhoz, az iroda ajtaja pedig kódzárral zárul. A kódhoz Magyarország nevezetességein, tájain és világörökségi helyszínein át vezet az út.</p>
+ <p style="font-size:15px">A szereplők és a levelek kitaláltak; a kérdések adatai hivatalos forrásokon alapulnak.</p>
+ <div class="modes">
+  <button class="mode primary" id="goQuick" data-focus><b>Gyors kör</b><span>Óra eleji verseny, 6–8 perc. A tanártól kapott fordulókóddal indul. Hibánként 15, segítségkérésenként 15–60 másodperc büntetőidő jár.</span></button>
+  <button class="mode" id="goFull"><b>Teljes játék</b><span>Mind a hét témakör, 25–40 perc, témakörönkénti értékeléssel.</span></button>
+ </div>
+ <p style="font-size:15px"><span class="desk">Mozgás: <b>W A S D</b> vagy nyilak. Körülnézés: húzás egérrel. Vizsgálat: kattintás vagy <b>F</b>. A sárga nyíl a következő állomást jelzi.</span><span class="touch">Mozgás: bal alsó joystick. Körülnézés: húzás ujjal. Vizsgálat: koppintás. A sárga nyíl a következő állomást jelzi.</span></p>
+ <p style="margin:0;text-align:right"><button class="linkbtn" id="goTeach">Tanári kivetítő nézet</button></p>`,'doc');
+ $('#goBack').onclick=goBack;
+ $('#goQuick').onclick=roundCodeModal;
+ $('#goTeach').onclick=openTeacher;
+ $('#goFull').onclick=()=>{closeModal();S.playing=true;S.start=performance.now();setGoal();};
+}
+function roundCodeModal(){
+ openModal(`<h2>Fordulókód</h2><p>Add meg a tanártól kapott négyjegyű kódot. Az időmérés a kód elfogadásakor indul.</p><div class="code"><span></span><span></span><span></span><span></span></div>
+ <div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-d="${n}">${n}</button>`).join('')}<button data-b aria-label="Törlés">⌫</button><button data-d="0">0</button><button data-ok class="primary">Rajt</button></div>
+ <p class="msg" style="text-align:center" aria-live="polite"></p><div class="actions"><button data-back>Vissza</button></div>`,'panel');
+ let v='';const spans=[...mbox.querySelectorAll('.code span')],msg=mbox.querySelector('.msg');
+ const upd=()=>spans.forEach((s,i)=>s.textContent=v[i]||'');
+ const press=d=>{if(v.length<4){v+=d;upd();msg.textContent='';}};
+ const back=()=>{v=v.slice(0,-1);upd();};
+ const ok=()=>{const r=+v[3];if(v.length<4||!(r>=1&&r<=3)){msg.className='msg bad';msg.textContent='Érvénytelen kód. Kérd a tanártól a forduló kódját.';v='';upd();return;}
+  closeModal();startQuick(r,v);};
+ mbox.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>press(b.dataset.d));
+ mbox.querySelector('[data-b]').onclick=back;mbox.querySelector('[data-ok]').onclick=ok;
+ mbox.querySelector('[data-back]').onclick=intro;
+ codeKeys=e=>{if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace')back();else if(e.key==='Enter')ok();};
+}
+const ready=document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]):Promise.resolve();
+ready.then(()=>{try{W=build();marker=new THREE.Mesh(new THREE.ConeGeometry(.06,.15,4),new THREE.MeshBasicMaterial({color:0xf2c14e}));marker.rotation.x=Math.PI;marker.raycast=()=>{};marker.visible=false;scene.add(marker);}catch(err){console.error(err);}setGoal();$('#goal').textContent='Budapest, reggel 7 óra 20 perc';requestAnimationFrame(frame);if(location.hash==='#tanar')openTeacher();else intro();});
+
+})();
+</script>
+</body>
+</html>

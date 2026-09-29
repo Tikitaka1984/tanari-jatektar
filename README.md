@@ -28,6 +28,19 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | Keresztrejtvény | `games/keresztrejtveny.html` | 9–12. | Generált keresztrejtvény évfolyam és téma szerint. |
 | Csak E! | `games/eszperente.html` | 9–12. | Eszperente nyelvi rejtvény — történelmi események és szereplők leírásában csak "e"/"é" magánhangzó szerepel, három nehézségi szinttel. |
 
+## 3D szabadulószobák
+
+Önálló oldalak a `jatekok/<azonosító>/index.html` útvonalon; a hub „Szabadulószobák” szekciójának kártyáiról ugyanazon a lapon nyílnak. Közös three.js (r128) a `jatekok/_lib/three.min.js` fájlban; a játékok relatív útvonalon (`../_lib/three.min.js`) hivatkozzák, ezért a `/jatekok/<azonosító>/` (záró perjeles) címen érhetők el. A tanári kivetítő nézet a cím végére írt `#tanar` hash-sel nyílik. A kártyák adatai: `jatekok/jatekok.json`.
+
+| Játék | Mappa | Tantárgy | Évfolyam |
+| --- | --- | --- | --- |
+| Az Árpádok öröksége | `jatekok/arpadok-oroksege/` | Történelem | 11–12. |
+| Iuti háza | `jatekok/iuti-haza/` | Történelem | 9. |
+| Nyolckor indul a busz | `jatekok/nyolckor-indul-a-busz/` | Turizmus-vendéglátás | 9. (bevezető) |
+| Június tizenhatodika | `jatekok/junius-tizenhatodika/` | Történelem | 11–12. |
+
+A tanári kísérőanyagok (Word) a `jatekok/<azonosító>/docs/` mappában vannak (a „Június tizenhatodika” játékhoz nincs).
+
 ## Szemléltető animációk
 
 | Anyag | Fájl | Téma |
@@ -54,6 +67,13 @@ tanari-jatektar/
 │   ├── ketforras.html
 │   ├── keresztrejtveny.html
 │   └── eszperente.html
+├── jatekok/                 (3D szabadulószobák)
+│   ├── _lib/three.min.js
+│   ├── jatekok.json
+│   ├── arpadok-oroksege/    (index.html, docs/)
+│   ├── iuti-haza/           (index.html, docs/)
+│   ├── nyolckor-indul-a-busz/ (index.html, docs/)
+│   └── junius-tizenhatodika/  (index.html)
 ├── demos/
 │   ├── demo_felfedezesek.html
 │   ├── demo_roma.html

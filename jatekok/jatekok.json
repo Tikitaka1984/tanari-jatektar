@@ -1,0 +1,70 @@
+[
+ {
+  "slug": "arpadok-oroksege",
+  "cim": "Az Árpádok öröksége",
+  "alcim": "Székesfehérvár, 1310",
+  "tantargy": "történelem",
+  "tema": "Az Árpád-házi királyok",
+  "evfolyam": "11–12.",
+  "cel": "érettségi gyakorlás (közép és emelt)",
+  "ido": {
+   "gyors_kor": "6–8 perc",
+   "teljes": "25–40 perc"
+  },
+  "mobil": true,
+  "ut": "/jatekok/arpadok-oroksege/",
+  "tanari_nezet": "/jatekok/arpadok-oroksege/#tanar",
+  "tanari_anyag": "/jatekok/arpadok-oroksege/docs/tanari_kiseroanyag_arpadok_oroksege.docx"
+ },
+ {
+  "slug": "iuti-haza",
+  "cim": "Iuti háza",
+  "alcim": "Az ókori Egyiptom",
+  "tantargy": "történelem",
+  "tema": "Az ókori Egyiptom",
+  "evfolyam": "9.",
+  "cel": "tananyag-ismétlés",
+  "ido": {
+   "gyors_kor": "6–8 perc",
+   "teljes": "25–40 perc"
+  },
+  "mobil": true,
+  "ut": "/jatekok/iuti-haza/",
+  "tanari_nezet": "/jatekok/iuti-haza/#tanar",
+  "tanari_anyag": "/jatekok/iuti-haza/docs/tanari_kiseroanyag_okori_egyiptom.docx"
+ },
+ {
+  "slug": "nyolckor-indul-a-busz",
+  "cim": "Nyolckor indul a busz",
+  "alcim": "Magyarország nevezetességei",
+  "tantargy": "turizmus-vendéglátás",
+  "tema": "Világörökség, hungarikumok, tájak",
+  "evfolyam": "9. (bevezető)",
+  "cel": "kedvcsináló, alapozó",
+  "ido": {
+   "gyors_kor": "6–8 perc",
+   "teljes": "25–40 perc"
+  },
+  "mobil": true,
+  "ut": "/jatekok/nyolckor-indul-a-busz/",
+  "tanari_nezet": "/jatekok/nyolckor-indul-a-busz/#tanar",
+  "tanari_anyag": "/jatekok/nyolckor-indul-a-busz/docs/tanari_kiseroanyag_nyolckor_indul_a_busz.docx"
+ },
+ {
+  "slug": "junius-tizenhatodika",
+  "cim": "Június tizenhatodika",
+  "alcim": "Budapest, 1989 – 1956 emlékezete",
+  "tantargy": "történelem",
+  "tema": "Az 1956-os forradalom és szabadságharc",
+  "evfolyam": "11–12.",
+  "cel": "érettségi gyakorlás (középszint)",
+  "ido": {
+   "gyors_kor": "6–8 perc",
+   "teljes": "25–40 perc"
+  },
+  "mobil": true,
+  "ut": "/jatekok/junius-tizenhatodika/",
+  "tanari_nezet": "/jatekok/junius-tizenhatodika/#tanar",
+  "tanari_anyag": null
+ }
+]
