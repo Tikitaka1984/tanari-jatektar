@@ -58,5 +58,50 @@
     "path": "demos/demo_legkor.html",
     "bytes": 433600,
     "md5": "c0f38827392251fbdcdf89a8363db7b9"
+  },
+  "jatekok_three": {
+    "path": "jatekok/_lib/three.min.js",
+    "bytes": 603445,
+    "md5": "eb8549863a97355411c3259a3f93b8e1"
+  },
+  "arpadok-oroksege": {
+    "path": "jatekok/arpadok-oroksege/index.html",
+    "bytes": 131401,
+    "md5": "b5b230f1c17006a505c0491c5a36f96f"
+  },
+  "iuti-haza": {
+    "path": "jatekok/iuti-haza/index.html",
+    "bytes": 105171,
+    "md5": "340c852092744f65080d8ffc0507373e"
+  },
+  "nyolckor-indul-a-busz": {
+    "path": "jatekok/nyolckor-indul-a-busz/index.html",
+    "bytes": 144825,
+    "md5": "efc765d9cbee433128eb0155abe416e7"
+  },
+  "junius-tizenhatodika": {
+    "path": "jatekok/junius-tizenhatodika/index.html",
+    "bytes": 111339,
+    "md5": "01c928a5f336b3e45da65cea17c047fb"
+  },
+  "arpadok-oroksege_docx": {
+    "path": "jatekok/arpadok-oroksege/docs/tanari_kiseroanyag_arpadok_oroksege.docx",
+    "bytes": 18320,
+    "md5": "339199dbd647d3b74a6bdc151f3eeb48"
+  },
+  "iuti-haza_docx": {
+    "path": "jatekok/iuti-haza/docs/tanari_kiseroanyag_okori_egyiptom.docx",
+    "bytes": 28157,
+    "md5": "e51fd30a647a8ed25f40b7251559c9ed"
+  },
+  "nyolckor-indul-a-busz_docx": {
+    "path": "jatekok/nyolckor-indul-a-busz/docs/tanari_kiseroanyag_nyolckor_indul_a_busz.docx",
+    "bytes": 25119,
+    "md5": "81d5b710ebb108f40e17bc0531c50db0"
+  },
+  "jatekok_json": {
+    "path": "jatekok/jatekok.json",
+    "bytes": 2067,
+    "md5": "e56b0ce377f66ab23534ee76f89dd584"
   }
 }
