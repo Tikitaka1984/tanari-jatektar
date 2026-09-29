@@ -78,6 +78,17 @@
   .card.demo .kind{display:flex;align-items:center;gap:6px;}
   .card.demo .kind svg{width:12px;height:12px;}
 
+  .card.escape{cursor:default;}
+  .card.escape .sub{font-style:italic;margin:-2px 0 8px;}
+  .card.escape .meta{font-size:.8rem;margin:12px 0 0;}
+  .card .actions{display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px;margin-top:10px;}
+  .btn-start{display:inline-flex;align-items:center;min-height:44px;padding:0 20px;background:var(--navy);color:var(--cream);
+    border-radius:var(--r-sm);font-family:'Cormorant Garamond',serif;font-weight:700;font-size:.95rem;text-decoration:none;transition:.15s;}
+  .btn-start:hover{background:var(--k-ink);}
+  .tlink{display:inline-flex;align-items:center;min-height:44px;color:var(--k-ink);font-size:.82rem;font-weight:600;
+    text-decoration:underline;font-family:'Lora',serif;}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
   .divider{max-width:1180px;margin:56px auto 34px;padding:0 22px;display:flex;align-items:center;gap:14px;}
   .divider .line{flex:1;height:1px;background:var(--edge-2);}
   .divider span{font-family:'Lora',serif;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap;font-weight:600;}
@@ -146,6 +157,13 @@
   <div class="grid" id="grid"></div>
   <div class="empty" id="empty" style="display:none;">Nincs a szűrésnek megfelelő feladat — próbálj más kombinációt.</div>
 
+  <div class="divider"><div class="line"></div><span>szabadulószobák</span><div class="line"></div></div>
+
+  <div class="section-head"><h2>Szabadulószobák</h2></div>
+  <p class="section-note">3D szabadulószoba-játékok — ugyanazon a lapon nyílnak, tanári kivetítő nézettel.</p>
+  <div class="grid" id="escapeGrid"></div>
+  <div class="empty" id="escapeEmpty" style="display:none;">Ebben a tárgyban egyelőre nincs szabadulószoba.</div>
+
   <div class="divider"><div class="line"></div><span>szemléltető anyagok</span><div class="line"></div></div>
 
   <div class="section-head"><h2>Szemléltetés órára</h2></div>
@@ -209,7 +227,15 @@
 /* ===== beágyazott tartalom (base64) ===== */
 const GAMES = [{"id": "korona", "title": "A korona nyomában", "accent": "#FFC24B", "kind": "Nyomozójáték", "subject": "tortenelem", "grade": ["9", "10"], "type": "kaland", "desc": "Térképes nyomozás a középkori magyar államon át — az államalapítástól Mohácsig. Topográfiai kapu, forráselemzés, hat állomás."}, {"id": "kivagyok", "title": "Ki vagyok én?", "accent": "#3DDC97", "kind": "Portréjáték", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "portre", "desc": "42 történelmi személy a hivatalos érettségi névsorból, évfolyamonkénti válogatással — szabad felidézés fokozatosan könnyülő nyomokkal, szabadon újrajátszható."}, {"id": "reformkor", "title": "A reformkor vitaterme", "accent": "#5FD3F0", "kind": "Álláspont-szortírozó", "subject": "tortenelem", "grade": ["10", "11"], "type": "vita", "desc": "Három reformkori vita — Széchenyi–Kossuth, Dessewffy–Széchenyi, centralisták–Kossuth: melyik állítás kié, és mi az, amiben egyetértettek? Esszévázzal zárul."}, {"id": "leveltar", "title": "A titkos levéltár", "accent": "#FF7A8A", "kind": "Szabadulószoba", "subject": "tortenelem", "grade": ["11", "12"], "type": "szabadulo", "desc": "Négy zár — évszám, fogalom, név, térkép —, majd egy hamisítvány leleplezése. Visszaszámlálóval és hibaprofillal."}, {"id": "szokereso", "title": "Szókereső", "accent": "#9E8BFF", "kind": "Lexikagyakorló", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "szokereso", "desc": "428 fogalom, név és helyszín az ókortól napjainkig. Klasszikus és körülírásos nehézség, rejtvénykóddal és nyomtatható feladatlappal."}, {"id": "ketforras", "title": "Két forrás, két igazság", "accent": "#5FD3F0", "kind": "Forráselemzés", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "forras", "desc": "21 esetpár mind a négy évfolyamról — két egymásnak ellentmondó forrás, három lépésben: közös alap, eltérés magyarázata, epistemikus besorolás."}, {"id": "keresztrejtveny", "title": "Keresztrejtvény", "accent": "#FF9A2E", "kind": "Keresztrejtvény", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "kereszt", "desc": "Klasszikus, kereszteződő szavas rejtvény — válaszd ki az évfolyamot és a témát, a gép generálja a rácsot. Szabadon újrasorsolható, megoldás- és nyomtatási funkcióval."}, {"id": "eszperente", "title": "Csak E!", "accent": "#FF6EA0", "kind": "Nyelvi rejtvény", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "eszperente", "desc": "Történelmi események és szereplők — de a leírásukban csak \"e\"/\"é\" magánhangzó szerepelhet. Feleletválasztós rejtvény, három nehézségi szinttel."}];
 const DEMOS = [{"id": "demo_felfedezesek", "title": "A nagy földrajzi felfedezések", "accent": "#5FD3F0", "subject": "tortenelem", "topic": "Kora újkor", "desc": "Animált bemutató a felfedezések okairól és a legfontosabb utakról — óra közbeni magyarázathoz."}, {"id": "demo_roma", "title": "A Római Birodalom", "accent": "#FFC24B", "subject": "tortenelem", "topic": "Ókor", "desc": "Animált áttekintés a Római Birodalomról — kivetíthető szemléltetés az órai magyarázathoz."}, {"id": "demo_wwi", "title": "Az első világháború frontjai", "accent": "#FF7A8A", "subject": "tortenelem", "topic": "XX. század", "desc": "Interaktív térkép az első világháború frontvonalairól — a hadszínterek és a frontok bemutatásához."}, {"id": "demo_legkor", "title": "A légkör rétegei", "accent": "#60A5FA", "subject": "foldrajz", "topic": "Fizikai földrajz", "desc": "Animált bemutató a légkör szerkezetéről és rétegeiről — kivetíthető szemléltetés az órai magyarázathoz."}];
-const SUBJECTS = [["tortenelem", "Történelem"], ["foldrajz", "Földrajz"]];
+const SUBJECTS = [["tortenelem", "Történelem"], ["foldrajz", "Földrajz"], ["turizmus", "Turizmus-vendéglátás"]];
+/* 3D szabadulószobák: önálló oldalak (jatekok/<azonosító>/), ugyanazon a lapon nyílnak.
+   Adatforrás: jatekok/jatekok.json (a mezők 1:1 átvéve). */
+const ESCAPES = [
+  {slug:"arpadok-oroksege", title:"Az Árpádok öröksége", sub:"Székesfehérvár, 1310", subject:"tortenelem", topic:"Az Árpád-házi királyok", grade:"11–12. évf.", goal:"érettségi gyakorlás (közép és emelt)", quick:"6–8 perc", full:"25–40 perc", doc:"tanari_kiseroanyag_arpadok_oroksege.docx"},
+  {slug:"iuti-haza", title:"Iuti háza", sub:"Az ókori Egyiptom", subject:"tortenelem", topic:"Az ókori Egyiptom", grade:"9. évf.", goal:"tananyag-ismétlés", quick:"6–8 perc", full:"25–40 perc", doc:"tanari_kiseroanyag_okori_egyiptom.docx"},
+  {slug:"nyolckor-indul-a-busz", title:"Nyolckor indul a busz", sub:"Magyarország nevezetességei", subject:"turizmus", topic:"Világörökség, hungarikumok, tájak", grade:"9. évf. (bevezető)", goal:"kedvcsináló, alapozó", quick:"6–8 perc", full:"25–40 perc", doc:"tanari_kiseroanyag_nyolckor_indul_a_busz.docx"},
+  {slug:"junius-tizenhatodika", title:"Június tizenhatodika", sub:"Budapest, 1989 – 1956 emlékezete", subject:"tortenelem", topic:"Az 1956-os forradalom és szabadságharc", grade:"11–12. évf.", goal:"érettségi gyakorlás (középszint)", quick:"6–8 perc", full:"25–40 perc", doc:null}
+];
 
 
 const GRADES=['9','10','11','12'];
@@ -223,7 +249,7 @@ function renderSubjectBar(){
     '<button class="schip '+(state.subject===null?'on':'')+'" onclick="setSubject(null)">Minden tantárgy</button>' +
     SUBJECTS.map(function(s){return '<button class="schip '+(state.subject===s[0]?'on':'')+'" onclick="setSubject(\''+s[0]+'\')">'+s[1]+'</button>';}).join('');
 }
-function setSubject(v){ state.subject=v; renderSubjectBar(); renderGrid(); renderDemos(); renderFoot(); }
+function setSubject(v){ state.subject=v; renderSubjectBar(); renderGrid(); renderEscapes(); renderDemos(); renderFoot(); }
 
 function renderFilters(){
   document.getElementById('fGrade').innerHTML =
@@ -249,6 +275,22 @@ function renderGrid(){
       '<div class="go">Megnyitás <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></button>';
   }).join('');
 }
+function renderEscapes(){
+  const list=ESCAPES.filter(function(e){ return state.subject===null || e.subject===state.subject; });
+  document.getElementById('escapeEmpty').style.display = list.length? 'none':'block';
+  document.getElementById('escapeGrid').innerHTML = list.map(function(e){
+    const base='jatekok/'+e.slug+'/';
+    const sr='<span class="sr"> – '+e.title+'</span>';
+    return '<article class="card escape"><div class="kind">Szabadulószoba · 3D</div><h2>'+e.title+'</h2><p class="sub">'+e.sub+'</p>'+
+      '<p>Téma: '+e.topic+' · Cél: '+e.goal+'</p>'+
+      '<div class="tags"><span class="tag fill">'+subjectLabel(e.subject)+'</span><span class="tag outline">'+e.grade+'</span><span class="tag outline">Mobilon is játszható</span></div>'+
+      '<p class="meta">Gyors kör: '+e.quick+' · Teljes játék: '+e.full+'</p>'+
+      '<div class="actions"><a class="btn-start" href="'+base+'">Játék indítása'+sr+'</a>'+
+      '<a class="tlink" href="'+base+'#tanar">Tanári kivetítő nézet'+sr+'</a>'+
+      (e.doc?'<a class="tlink" href="'+base+'docs/'+e.doc+'" download>Tanári anyag letöltése (Word)'+sr+'</a>':'')+
+      '</div></article>';
+  }).join('');
+}
 function renderDemos(){
   const list=DEMOS.filter(function(d){ return state.subject===null || d.subject===state.subject; });
   document.getElementById('demoEmpty').style.display = list.length? 'none':'block';
@@ -263,8 +305,9 @@ function renderDemos(){
 function renderFoot(){
   const gc=GAMES.filter(function(g){return state.subject===null||g.subject===state.subject;}).length;
   const dc=DEMOS.filter(function(d){return state.subject===null||d.subject===state.subject;}).length;
+  const ec=ESCAPES.filter(function(e){return state.subject===null||e.subject===state.subject;}).length;
   document.getElementById('footText').textContent =
-    gc+' gyakorlófeladat + '+dc+' szemléltető anyag, külön HTML-fájlokban · a történelmi tételek a hivatalos érettségi vizsgakövetelmény alapján készültek · statikus oldal, build nélkül · a betűtípusok Google Fonts-ról töltődnek be, ezért internetkapcsolat szükséges.';
+    gc+' gyakorlófeladat + '+ec+' szabadulószoba + '+dc+' szemléltető anyag, külön HTML-fájlokban · a történelmi tételek a hivatalos érettségi vizsgakövetelmény alapján készültek · statikus oldal, build nélkül · a betűtípusok Google Fonts-ról töltődnek be, ezért internetkapcsolat szükséges.';
 }
 
 /* Blob URL-t adunk az iframe-nek srcdoc helyett: a srcdoc opak
@@ -322,7 +365,7 @@ function openInTab(){
 }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape' && state.open) closeGame(); });
 
-renderSubjectBar(); renderFilters(); renderGrid(); renderDemos(); renderFoot();
+renderSubjectBar(); renderFilters(); renderGrid(); renderEscapes(); renderDemos(); renderFoot();
 </script>
 </body>
 </html>
