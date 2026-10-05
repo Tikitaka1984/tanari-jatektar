@@ -38,6 +38,7 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | Iuti háza | `jatekok/iuti-haza/` | Történelem | 9. |
 | Nyolckor indul a busz | `jatekok/nyolckor-indul-a-busz/` | Turizmus-vendéglátás | 9. (bevezető) |
 | Június tizenhatodika | `jatekok/junius-tizenhatodika/` | Történelem | 11–12. |
+| A gróf dolgozószobája | `jatekok/grof-dolgozoszobaja/` | Történelem | 11–12. |
 
 A tanári kísérőanyagok (Word) a `jatekok/<azonosító>/docs/` mappában vannak (a „Június tizenhatodika” játékhoz nincs).
 
@@ -73,7 +74,8 @@ tanari-jatektar/
 │   ├── arpadok-oroksege/    (index.html, docs/)
 │   ├── iuti-haza/           (index.html, docs/)
 │   ├── nyolckor-indul-a-busz/ (index.html, docs/)
-│   └── junius-tizenhatodika/  (index.html)
+│   ├── junius-tizenhatodika/  (index.html)
+│   └── grof-dolgozoszobaja/ (index.html, docs/)
 ├── demos/
 │   ├── demo_felfedezesek.html
 │   ├── demo_roma.html
