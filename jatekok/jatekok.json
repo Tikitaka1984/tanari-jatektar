@@ -66,5 +66,22 @@
   "ut": "/jatekok/junius-tizenhatodika/",
   "tanari_nezet": "/jatekok/junius-tizenhatodika/#tanar",
   "tanari_anyag": null
+ },
+ {
+  "slug": "grof-dolgozoszobaja",
+  "cim": "A gróf dolgozószobája",
+  "alcim": "Nagycenk, 1841",
+  "tantargy": "történelem",
+  "tema": "A reformkor – Széchenyi István munkássága",
+  "evfolyam": "11–12.",
+  "cel": "érettségi gyakorlás",
+  "ido": {
+   "gyors_kor": "6–8 perc",
+   "teljes": "15–25 perc"
+  },
+  "mobil": true,
+  "ut": "/jatekok/grof-dolgozoszobaja/",
+  "tanari_nezet": "/jatekok/grof-dolgozoszobaja/#tanar",
+  "tanari_anyag": "/jatekok/grof-dolgozoszobaja/docs/tanari_kiseroanyag_grof_dolgozoszobaja.docx"
  }
 ]
