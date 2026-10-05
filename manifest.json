@@ -99,9 +99,19 @@
     "bytes": 25119,
     "md5": "81d5b710ebb108f40e17bc0531c50db0"
   },
+  "grof-dolgozoszobaja": {
+    "path": "jatekok/grof-dolgozoszobaja/index.html",
+    "bytes": 130489,
+    "md5": "98c0e6fc35481c154796daaf908d4eb2"
+  },
+  "grof-dolgozoszobaja_docx": {
+    "path": "jatekok/grof-dolgozoszobaja/docs/tanari_kiseroanyag_grof_dolgozoszobaja.docx",
+    "bytes": 17657,
+    "md5": "cac313911e3c8628f9d448eafac2d771"
+  },
   "jatekok_json": {
     "path": "jatekok/jatekok.json",
-    "bytes": 2067,
-    "md5": "e56b0ce377f66ab23534ee76f89dd584"
+    "bytes": 2612,
+    "md5": "f567caef6006bf37f30c75e0068e79e1"
   }
 }
