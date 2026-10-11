@@ -81,7 +81,8 @@ async function exercise(browser,width){
   }finally{await page.close();}
 }
 (async()=>{
-  const browser=await chromium.launch({headless:true});
+  const browser=await chromium.launch({headless:true,
+    ...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}:{})});
   try{
     const results=[];
     for(const width of [360,768,1280])results.push(await exercise(browser,width));
