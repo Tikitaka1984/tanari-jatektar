@@ -117,7 +117,7 @@
 
   /* ---------- játék ---------- */
   .play{display:grid;grid-template-columns:minmax(0,1fr) 322px;gap:18px;align-items:start;}
-  @media(max-width:900px){.play{grid-template-columns:1fr;}}
+  @media(max-width:900px){.play{grid-template-columns:minmax(0,1fr);}}
   .gridcard{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:20px;box-shadow:0 18px 40px rgba(0,0,0,.28);}
 
   .prog{height:10px;background:var(--surf-2);border-radius:999px;overflow:hidden;border:1px solid var(--edge);}
@@ -839,13 +839,16 @@ const S={size:16,grid:[],place:[],hit:0,err:0,hint:0,anchor:null,cursor:{r:0,c:0
 function show(id){ document.querySelectorAll('.screen').forEach(e=>e.classList.remove('on'));
   document.getElementById('sc-'+id).classList.add('on'); window.scrollTo({top:0,behavior:'smooth'}); }
 function goStart(){ clearInterval(S.timer); document.getElementById('stats').style.display='none';
-  document.getElementById('ctxLabel').textContent='történelem 9–12.'; paint(); show('start'); }
+  document.getElementById('ctxLabel').textContent='történelem 9–12.'; paint(); show('start');
+  document.querySelector('#rail [aria-pressed="true"]').focus(); }
 
 function applyAccent(){
   const G=GRADES[CFG.grade], d=document.documentElement.style;
   d.setProperty('--acc',G.accent); d.setProperty('--acc-2',G.accent2); d.setProperty('--acc-ink',G.ink);
 }
 function paint(){
+  const active=document.activeElement,group=active.closest('#rail,#topicSeg,#modeSeg,#lenSeg,#varSeg,#keySeg');
+  const focusIndex=group?[...group.children].indexOf(active):-1;
   applyAccent();
   document.getElementById('rail').innerHTML=ORDER.map(g=>{
     const G=GRADES[g], on=CFG.grade===g;
@@ -869,6 +872,7 @@ function paint(){
     const pages=PRINT.variants*(PRINT.key?2:1);
     document.getElementById('printNote').textContent=pages+' oldal · '+CFG.len+' szó · '+(CFG.mode==='hard'?'körülírásos':'klasszikus');
   }
+  if(group&&focusIndex>=0)group.children[focusIndex]?.focus();
 }
 function setPrint(k,v){ PRINT[k]=v; paint(); }
 function setCfg(k,v){ CFG[k]=v; paint(); }
@@ -989,7 +993,7 @@ function gridKeydown(event){
   if(!cell||!grid.contains(cell)||S.done)return;
   const r=Number(cell.dataset.r),c=Number(cell.dataset.c);
   if(event.key==='Enter'||event.key===' '){
-    event.preventDefault();tap(r,c);return;
+    event.preventDefault();if(!event.repeat)tap(r,c);return;
   }
   if(event.key==='Escape'){
     if(S.anchor){
