@@ -31,7 +31,7 @@ Példa: a `j16-tanar` kulcs alá `{"round":1,"code":"1231","byCode":{"1231":{}}}
 - Tanári funkciók 360, 768 és 1280 px-en: tényleges mezőbevitel, kódellenőrzés, teljes/részleges eredmények rendezése, sor törlése, ismételt Enter, időzítő indítása/szünete/visszaállítása, fordulóváltás, új kód, visszalépés, fókusz a rejtett tanári nézeten kívül, eredmények megőrzése újratöltés után.
 - Teljes játék és mindhárom gyors kör: tényleges feladatvezérlők, helyes és hibás kód, befejező képernyő, újrakezdés; hibaszám, segítségszám, nyert állapot, szakasz, leltár, kész feladatok és gyors kör állapota visszaáll.
 - A futtatott esetekben nem volt nem kezelt JavaScript-kivétel vagy váratlan alkalmazáskonzolhiba. Az online Google Fonts kérések szándékosan blokkoltak, a böngésző betűkészlet-helyettesítést használt; ezek hálózati hibajelzése nem alkalmazáskonzolhiba.
-- A teljes dokumentum nem nyúlt túl a nézeten. A tanári táblázat 360 px-en a saját görgethető felületén túlér (`teacher: true`), 768/1280 px-en nem. A meglévő táblázatos elrendezést a javítás nem változtatja meg.
+- A teljes dokumentum nem nyúlt túl a nézeten. A tanári panel 360 px-en jobbra túlér és vízszintesen is görgethető (`teacher: true`), 768/1280 px-en nem. Ez meglévő mobilos elrendezési korlát: a 360 px-es megjelenést nem minősítjük teljes körűen hibamentesnek. Az összehasonlító böngészőmérésben a kiinduló és a javított tanári panel görgetési szélessége egyaránt 505 px volt a 360 px-es nézetben. A javítás a CSS-t nem változtatja meg.
 
 ## Újrafuttatás
 
