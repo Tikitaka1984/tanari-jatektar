@@ -11,7 +11,13 @@ async function exercise(browser,width){
   const page=await browser.newPage({viewport:{width,height:900}});
   const failures=[];
   page.on('pageerror',e=>failures.push('pageerror: '+e.message));
-  page.on('console',msg=>{if(msg.type()==='error')failures.push('console: '+msg.text());});
+  page.on('console',msg=>{
+    if(msg.type()!=='error')return;
+    const entry=msg.text();
+    // A Google Fonts offline betöltési hibája nem alkalmazáskonzolhiba.
+    if(/fonts\\.(?:googleapis|gstatic)\\.com|ERR_INTERNET_DISCONNECTED|ERR_NAME_NOT_RESOLVED/.test(entry))return;
+    failures.push('console: '+entry);
+  });
   let checks=0;
   const check=(ok,msg)=>{assert.ok(ok,msg);checks++;};
   try{
