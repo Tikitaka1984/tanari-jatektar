@@ -1,0 +1,50 @@
+{
+  "main_commit": "68d12ba33de612ed795605496cd09d9ce1373859",
+  "tested_commit": "0f5d57016bb89096288ed96da028c640c51ef923",
+  "source_sha256": "b0926d80b135ca808b9d4e3d22e149a70c168c03e26cb11b90406c4f4885ef9a",
+  "time_utc": "2026-10-11T19:07:01.526493+00:00",
+  "checks": [
+    {
+      "check": "random_generator_wordbanks_428_configuration_and_puzzle_code",
+      "status": "PASS",
+      "main_sha256": "d72e37955043469669417051a91985554c8ddf00ff66160b46fa08802429a86c",
+      "modified_sha256": "d72e37955043469669417051a91985554c8ddf00ff66160b46fa08802429a86c"
+    },
+    {
+      "check": "puzzle_generation_rules",
+      "status": "PASS",
+      "main_sha256": "3a46cf02b0abe084f71544e323f372c8cb21d4c7612bfdfc0c80ddef5692c208",
+      "modified_sha256": "3a46cf02b0abe084f71544e323f372c8cb21d4c7612bfdfc0c80ddef5692c208"
+    },
+    {
+      "check": "print_tasks_and_keys",
+      "status": "PASS",
+      "main_sha256": "372be6d7bf8abe3fda08dc01ec435b3fda8c8e4473fef56cbcc54ce99d0959de",
+      "modified_sha256": "372be6d7bf8abe3fda08dc01ec435b3fda8c8e4473fef56cbcc54ce99d0959de"
+    },
+    {
+      "check": "final_score_and_feedback",
+      "status": "PASS",
+      "main_sha256": "fe861d2ab31d29a29ca577a8c0e8f90969d0b36b328f7c57f3d27cb5044e952e",
+      "modified_sha256": "fe861d2ab31d29a29ca577a8c0e8f90969d0b36b328f7c57f3d27cb5044e952e"
+    },
+    {
+      "check": "hint_choice_and_20_second_penalty",
+      "status": "PASS",
+      "main_sha256": "c757bb321bb33c05cce65098fbfc1b6c1dfb2365c045b544a9e3364c4a7dde28",
+      "modified_sha256": "c757bb321bb33c05cce65098fbfc1b6c1dfb2365c045b544a9e3364c4a7dde28"
+    },
+    {
+      "check": "word_recognition_and_hit_error_streak_statements",
+      "status": "PASS",
+      "identical_statements": 5
+    },
+    {
+      "check": "only_assigned_game_source_changed",
+      "status": "PASS",
+      "changed_game_sources": [
+        "games/szokereso.html"
+      ]
+    }
+  ]
+}

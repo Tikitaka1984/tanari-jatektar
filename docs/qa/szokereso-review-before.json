@@ -1,0 +1,156 @@
+{
+  "tested_commit": "7356989f98a61af606f81ae6da54626fac251d98",
+  "source_sha256": "f25530f26e9bd92d204977ebe7444e329049b47ba7301d0f096ce66fc12188a4",
+  "browser": "153.0.8010.0",
+  "time_utc": "2026-10-11T18:47:26.780Z",
+  "results": [
+    {
+      "name": "grid-navigation",
+      "width": 360,
+      "mode": "classic",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: no document overflow\n    at check (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:10:35)\n    at navigation (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:35:87)\n    at async run (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:11:102)\n    at async /workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:67:74",
+      "checks": 273
+    },
+    {
+      "name": "gameplay",
+      "width": 360,
+      "mode": "classic",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: settings focus after return\n    at check (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:10:35)\n    at gameplay (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:50:98)\n    at async run (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:11:102)\n    at async /workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:67:141",
+      "checks": 14
+    },
+    {
+      "name": "grid-navigation",
+      "width": 360,
+      "mode": "hard",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: no document overflow\n    at check (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:10:35)\n    at navigation (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:35:87)\n    at async run (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:11:102)\n    at async /workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:67:74",
+      "checks": 273
+    },
+    {
+      "name": "gameplay",
+      "width": 360,
+      "mode": "hard",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: settings focus after return\n    at check (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:10:35)\n    at gameplay (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:50:98)\n    at async run (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:11:102)\n    at async /workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:67:141",
+      "checks": 14
+    },
+    {
+      "name": "grid-navigation",
+      "width": 768,
+      "mode": "classic",
+      "status": "PASS",
+      "detail": {
+        "all_cells_visited": 256,
+        "document_overflow": false,
+        "aria_rows": 16
+      },
+      "checks": 275
+    },
+    {
+      "name": "gameplay",
+      "width": 768,
+      "mode": "classic",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: settings focus after return\n    at check (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:10:35)\n    at gameplay (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:50:98)\n    at async run (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:11:102)\n    at async /workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:67:141",
+      "checks": 14
+    },
+    {
+      "name": "grid-navigation",
+      "width": 768,
+      "mode": "hard",
+      "status": "PASS",
+      "detail": {
+        "all_cells_visited": 256,
+        "document_overflow": false,
+        "aria_rows": 16
+      },
+      "checks": 275
+    },
+    {
+      "name": "gameplay",
+      "width": 768,
+      "mode": "hard",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: settings focus after return\n    at check (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:10:35)\n    at gameplay (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:50:98)\n    at async run (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:11:102)\n    at async /workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:67:141",
+      "checks": 14
+    },
+    {
+      "name": "grid-navigation",
+      "width": 1280,
+      "mode": "classic",
+      "status": "PASS",
+      "detail": {
+        "all_cells_visited": 256,
+        "document_overflow": false,
+        "aria_rows": 16
+      },
+      "checks": 275
+    },
+    {
+      "name": "gameplay",
+      "width": 1280,
+      "mode": "classic",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: settings focus after return\n    at check (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:10:35)\n    at gameplay (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:50:98)\n    at async run (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:11:102)\n    at async /workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:67:141",
+      "checks": 14
+    },
+    {
+      "name": "grid-navigation",
+      "width": 1280,
+      "mode": "hard",
+      "status": "PASS",
+      "detail": {
+        "all_cells_visited": 256,
+        "document_overflow": false,
+        "aria_rows": 16
+      },
+      "checks": 275
+    },
+    {
+      "name": "gameplay",
+      "width": 1280,
+      "mode": "hard",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: settings focus after return\n    at check (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:10:35)\n    at gameplay (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:50:98)\n    at async run (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:11:102)\n    at async /workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:67:141",
+      "checks": 14
+    },
+    {
+      "name": "settings-focus",
+      "width": 1280,
+      "mode": "both",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: focus retained in rail\n    at check (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:10:35)\n    at settingsFocus (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:53:347)\n    at async run (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:11:102)\n    at async /workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:68:2",
+      "checks": 0
+    },
+    {
+      "name": "held-activation",
+      "width": 360,
+      "mode": "both",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: held Enter must not cancel its own anchor\n    at check (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:10:35)\n    at repeat (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:54:128)\n    at async run (/workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:11:102)\n    at async /workspace/scratch/329af5744efa/m05-szokereso/tests/szokereso-review.test.cjs:68:56",
+      "checks": 0
+    },
+    {
+      "name": "main-comparison",
+      "width": 1280,
+      "mode": "classic",
+      "status": "PASS",
+      "detail": {
+        "generated_puzzles": 48,
+        "mouse_score": {
+          "hit": 10,
+          "err": 1,
+          "hint": 1,
+          "run": 10,
+          "best": 10,
+          "done": true,
+          "seconds": 20,
+          "code": "9AR-4821"
+        }
+      },
+      "checks": 3
+    }
+  ]
+}
