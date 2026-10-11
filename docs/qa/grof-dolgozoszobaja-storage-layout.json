@@ -1,0 +1,20 @@
+{
+  "time_utc": "2026-10-11T17:39:52.230947+00:00",
+  "browser": "Chromium 153.0.8010.0",
+  "baseline_commit": "0c07a071ded6b7d5976489ab2b2b395f7d97d6a2",
+  "fixed_source_sha256": "cfa83b58ad3f82b1b3e1ab4e16329641cf44454a79f46afc6bc50bd3d5d7e4ba",
+  "game": "grof-dolgozoszobaja",
+  "width": 360,
+  "baseline": {
+    "width": 360,
+    "scroll_width": 505,
+    "overflow_x": "auto",
+    "code": "1231"
+  },
+  "fixed": {
+    "width": 360,
+    "scroll_width": 505,
+    "overflow_x": "auto",
+    "code": "1231"
+  }
+}

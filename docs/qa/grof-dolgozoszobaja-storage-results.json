@@ -1,0 +1,1032 @@
+{
+  "game": "grof-dolgozoszobaja",
+  "baseline": false,
+  "time_utc": "2026-10-11T17:42:44.400Z",
+  "browser": "153.0.8010.0",
+  "source_sha256": "cfa83b58ad3f82b1b3e1ab4e16329641cf44454a79f46afc6bc50bd3d5d7e4ba",
+  "base_commit": "da0b4af90563db26ff44bbd292fe5d48e71340cc",
+  "results": [
+    {
+      "name": "missing",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "2191",
+        "byCode": [],
+        "names": [],
+        "warning": "",
+        "raw": "{\"round\":1,\"code\":\"2191\",\"byCode\":{}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "valid",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231",
+          "4562"
+        ],
+        "names": [
+          "Régi eredmény"
+        ],
+        "warning": "",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":1,\"name\":\"Régi eredmény\",\"fin\":60,\"chk\":\"AAAA\",\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}}],\"4562\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "legacy-no-code",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 2,
+        "code": "9652",
+        "byCode": [
+          "4562"
+        ],
+        "names": [],
+        "warning": "",
+        "raw": "{\"round\":2,\"code\":\"9652\",\"byCode\":{\"4562\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "invalid-json",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "5621",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{",
+        "overflow": false
+      }
+    },
+    {
+      "name": "root-null",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "9991",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "null",
+        "overflow": false
+      }
+    },
+    {
+      "name": "root-array",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "4891",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "[]",
+        "overflow": false
+      }
+    },
+    {
+      "name": "root-number",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "9701",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "3",
+        "overflow": false
+      }
+    },
+    {
+      "name": "root-string",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1841",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "\"old\"",
+        "overflow": false
+      }
+    },
+    {
+      "name": "missing-fields",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "0101",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "missing-round",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "6021",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"byCode\":{}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "missing-byCode",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\"}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "round-0",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":0,\"code\":\"1231\",\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "round-1",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":4,\"code\":\"1231\",\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "round-2",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":-1,\"code\":\"1231\",\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "round-3",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1.5,\"code\":\"1231\",\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "round-4",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":\"1\",\"code\":\"1231\",\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "round-5",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":null,\"code\":\"1231\",\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "round-6",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":{},\"code\":\"1231\",\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "round-7",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":[],\"code\":\"1231\",\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "code-0",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1711",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":1231,\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "code-1",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "8421",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1234\",\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "code-2",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "3361",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"oops\",\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "code-3",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "6511",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":{},\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "code-4",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "3531",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":null,\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "code-5",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "4011",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1232\",\"byCode\":{\"1231\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "byCode-0",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":null}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "byCode-1",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":[]}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "byCode-2",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":1}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "byCode-3",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":\"rows\"}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "object-rows",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":{}}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "null-row",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [
+          "Megmarad"
+        ],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[null,{\"id\":2,\"name\":\"Megmarad\",\"fin\":60,\"chk\":\"AAAA\",\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}}]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "bad-row-name",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [
+          "Megmarad"
+        ],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":2,\"name\":{},\"fin\":60,\"chk\":\"AAAA\",\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}},{\"id\":3,\"name\":\"Megmarad\",\"fin\":60,\"chk\":\"AAAA\",\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}}]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "bad-row-id",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [
+          "Megmarad"
+        ],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":\"\\\" onclick=\\\"alert(1)\",\"name\":\"Hibás\",\"fin\":60,\"chk\":\"AAAA\",\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}},{\"id\":3,\"name\":\"Megmarad\",\"fin\":60,\"chk\":\"AAAA\",\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}}]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "bad-row-time",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [
+          "Megmarad"
+        ],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":2,\"name\":\"Hibás\",\"fin\":-1,\"chk\":\"AAAA\",\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}},{\"id\":3,\"name\":\"Megmarad\",\"fin\":60,\"chk\":\"AAAA\",\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}}]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "bad-row-check",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":2,\"name\":\"Hibás\",\"fin\":60,\"chk\":{},\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}}]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "bad-verification",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [
+          "Megmarad"
+        ],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":2,\"name\":\"Megmarad\",\"fin\":60,\"chk\":\"AAAA\",\"v\":{\"dn\":{},\"n\":4}}]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "bad-other-code",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [
+          "Megmarad"
+        ],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":2,\"name\":\"Megmarad\",\"fin\":60,\"chk\":\"AAAA\",\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}}],\"nope\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "prototype-key",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[],\"__proto__\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "legacy-string-id",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [
+          "Régi sor"
+        ],
+        "warning": "",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":\"old-1\",\"name\":\"Régi sor\",\"fin\":60,\"chk\":\"AAAA\",\"v\":null}]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "legacy-no-v",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [
+          "Régi sor"
+        ],
+        "warning": "",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":1,\"name\":\"Régi sor\",\"fin\":60,\"chk\":\"AAAA\",\"v\":null}]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "many-valid-codes",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "0001",
+          "0011",
+          "0021",
+          "0031",
+          "0041",
+          "0051",
+          "0061",
+          "0071",
+          "0081",
+          "0091",
+          "0101",
+          "0111"
+        ],
+        "names": [],
+        "warning": "",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"0001\":[],\"0011\":[],\"0021\":[],\"0031\":[],\"0041\":[],\"0051\":[],\"0061\":[],\"0071\":[],\"0081\":[],\"0091\":[],\"0101\":[],\"0111\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "storage-denied",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "3581",
+        "byCode": [],
+        "names": [],
+        "warning": "A böngésző helyi tárolója nem érhető el vagy nem írható. A tábla ebben a munkamenetben használható, de az új eredmények és módosítások újratöltéskor elvesznek.",
+        "raw": "DENIED",
+        "overflow": false
+      }
+    },
+    {
+      "name": "storage-quota",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "9421",
+        "byCode": [],
+        "names": [],
+        "warning": "A böngésző helyi tárolója nem érhető el vagy nem írható. A tábla ebben a munkamenetben használható, de az új eredmények és módosítások újratöltéskor elvesznek.",
+        "raw": null,
+        "overflow": false
+      }
+    },
+    {
+      "name": "valid",
+      "width": 768,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231",
+          "4562"
+        ],
+        "names": [
+          "Régi eredmény"
+        ],
+        "warning": "",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":1,\"name\":\"Régi eredmény\",\"fin\":60,\"chk\":\"AAAA\",\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}}],\"4562\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "object-rows",
+      "width": 768,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":{}}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "valid",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231",
+          "4562"
+        ],
+        "names": [
+          "Régi eredmény"
+        ],
+        "warning": "",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":1,\"name\":\"Régi eredmény\",\"fin\":60,\"chk\":\"AAAA\",\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}}],\"4562\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "object-rows",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [],
+        "names": [],
+        "warning": "A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":{}}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "teacher-functions",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "names": [
+          "Gyorsabb",
+          "Lassabb",
+          "Részleges"
+        ],
+        "overflow": {
+          "document": false,
+          "teacher": true
+        },
+        "keyboard": "Enter and Space on teacher controls",
+        "back": "intro visible; focus outside hidden teacher",
+        "restart": "reload resets student state"
+      }
+    },
+    {
+      "name": "teacher-functions",
+      "width": 768,
+      "status": "PASS",
+      "detail": {
+        "names": [
+          "Gyorsabb",
+          "Lassabb",
+          "Részleges"
+        ],
+        "overflow": {
+          "document": false,
+          "teacher": false
+        },
+        "keyboard": "Enter and Space on teacher controls",
+        "back": "intro visible; focus outside hidden teacher",
+        "restart": "reload resets student state"
+      }
+    },
+    {
+      "name": "teacher-functions",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "names": [
+          "Gyorsabb",
+          "Lassabb",
+          "Részleges"
+        ],
+        "overflow": {
+          "document": false,
+          "teacher": false
+        },
+        "keyboard": "Enter and Space on teacher controls",
+        "back": "intro visible; focus outside hidden teacher",
+        "restart": "reload resets student state"
+      }
+    },
+    {
+      "name": "full-game",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "steps": 57,
+        "ending": {
+          "won": true,
+          "mistakes": 1,
+          "done": {
+            "kron": true,
+            "szem": true,
+            "forras": true,
+            "terkep": true,
+            "fog": true,
+            "ok": true,
+            "code": true
+          }
+        },
+        "reset": {
+          "mistakes": 0,
+          "hints": 0,
+          "won": false,
+          "stage": 0,
+          "inventory": 0,
+          "done": 0,
+          "quick": null
+        },
+        "navigation": "Room objects activated through test-only hook. Modal choices use actual controls. Physical 3D navigation not covered."
+      }
+    },
+    {
+      "name": "quick-round-1",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "steps": 12,
+        "ending": {
+          "won": true,
+          "mistakes": 1,
+          "done": {
+            "kron": true,
+            "szem": true,
+            "code": true
+          },
+          "round": 1,
+          "completed": 4
+        },
+        "reset": {
+          "mistakes": 0,
+          "hints": 0,
+          "won": false,
+          "stage": 0,
+          "inventory": 0,
+          "done": 0,
+          "quick": null
+        },
+        "navigation": "Room objects activated through test-only hook. Modal choices use actual controls. Physical 3D navigation not covered."
+      }
+    },
+    {
+      "name": "quick-round-2",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "steps": 25,
+        "ending": {
+          "won": true,
+          "mistakes": 1,
+          "done": {
+            "forras": true,
+            "terkep": true,
+            "fog": true,
+            "code": true
+          },
+          "round": 2,
+          "completed": 4
+        },
+        "reset": {
+          "mistakes": 0,
+          "hints": 0,
+          "won": false,
+          "stage": 0,
+          "inventory": 0,
+          "done": 0,
+          "quick": null
+        },
+        "navigation": "Room objects activated through test-only hook. Modal choices use actual controls. Physical 3D navigation not covered."
+      }
+    },
+    {
+      "name": "quick-round-3",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "steps": 16,
+        "ending": {
+          "won": true,
+          "mistakes": 1,
+          "done": {
+            "vegyes": true,
+            "ok": true,
+            "code": true
+          },
+          "round": 3,
+          "completed": 3
+        },
+        "reset": {
+          "mistakes": 0,
+          "hints": 0,
+          "won": false,
+          "stage": 0,
+          "inventory": 0,
+          "done": 0,
+          "quick": null
+        },
+        "navigation": "Room objects activated through test-only hook. Modal choices use actual controls. Physical 3D navigation not covered."
+      }
+    }
+  ]
+}
