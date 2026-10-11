@@ -944,11 +944,63 @@ function endQuick(ok){
 /* ================= TANÁRI KIVETÍTŐ NÉZET ================= */
 let TEACH=false,tTimer=null,tAudio=null;
 const TK='egy-tanar';
-const T=(()=>{try{return JSON.parse(localStorage.getItem(TK))||{};}catch(e){return {};}})();
-T.round=T.round||1;T.byCode=T.byCode||{};T.end=null;T.left=LIMIT;
+// A sérült tároló eredeti értékét nem írjuk felül. Az érvényes sorok
+// ilyenkor csak a jelenlegi munkamenetben használhatók és bővíthetők.
+let tStorageProblem='';
+const tRecord=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
+const tValidCode=x=>typeof x==='string'&&/^\d{3}[123]$/.test(x);
+function tLoad(){
+ const out={round:1,byCode:Object.create(null)};
+ let raw;
+ try{raw=localStorage.getItem(TK);}catch(e){tStorageProblem='read';return out;}
+ if(raw===null)return out;
+ let data;
+ try{data=JSON.parse(raw);}catch(e){tStorageProblem='invalid';return out;}
+ const bad=()=>{tStorageProblem='invalid';};
+ if(!tRecord(data)){bad();return out;}
+ if(Number.isInteger(data.round)&&ROUNDS[data.round])out.round=data.round;else bad();
+ if(data.code!==undefined){
+  if(tValidCode(data.code)&&+data.code[3]===out.round)out.code=data.code;else bad();
+ }
+ if(!tRecord(data.byCode)){bad();return out;}
+ for(const [code,rows] of Object.entries(data.byCode)){
+  if(!tValidCode(code)||!Array.isArray(rows)){bad();continue;}
+  const n=ROUNDS[+code[3]].route.length;
+  out.byCode[code]=[];
+  for(const row of rows){
+   if(!tRecord(row)||!(Number.isSafeInteger(row.id)&&row.id>=0||typeof row.id==='string'&&/^[A-Za-z0-9_-]{1,64}$/.test(row.id))
+    ||typeof row.name!=='string'||!row.name.trim()||!Number.isInteger(row.fin)||row.fin<0||row.fin>5999
+    ||typeof row.chk!=='string'||!/^[ABCDEFGHJKLMNPQRSTUVWXYZ23456789]{4}$/.test(row.chk)){bad();continue;}
+   let v=null;
+   if(row.v!==undefined&&row.v!==null){
+    if(tRecord(row.v)&&Number.isInteger(row.v.m)&&row.v.m>=0&&row.v.m<=60
+     &&Number.isInteger(row.v.h)&&row.v.h>=0&&row.v.h<=30
+     &&Number.isInteger(row.v.dn)&&row.v.dn>=0&&row.v.dn<=n&&row.v.n===n){
+     v={m:row.v.m,h:row.v.h,dn:row.v.dn,n:row.v.n};
+    }else bad();
+   }
+   out.byCode[code].push({id:row.id,name:row.name,fin:row.fin,chk:row.chk,v});
+  }
+ }
+ return out;
+}
+const T=tLoad();
+T.end=null;T.left=LIMIT;
+function tStorageNotice(){
+ if(!tStorageProblem)return;
+ let note=$('#tStorageWarning');
+ if(!note){note=document.createElement('p');note.id='tStorageWarning';note.className='msg bad';note.setAttribute('role','status');$('#tMsg').before(note);}
+ note.textContent=tStorageProblem==='invalid'
+  ?'A mentett tanári tábla hibás vagy nem támogatott adatot tartalmaz. Az eredeti tárolt adat változatlan maradt. A használható sorok és az új eredmények csak ebben a munkamenetben érhetők el; újratöltéskor az új módosítások elvesznek.'
+  :'A böngésző helyi tárolója nem érhető el vagy nem írható. A tábla ebben a munkamenetben használható, de az új eredmények és módosítások újratöltéskor elvesznek.';
+}
 const CHK_AL='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const esc=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
-function tSave(){try{const ks=Object.keys(T.byCode);while(ks.length>10)delete T.byCode[ks.shift()];localStorage.setItem(TK,JSON.stringify({round:T.round,code:T.code,byCode:T.byCode}));}catch(e){}}
+function tSave(){
+ if(tStorageProblem){tStorageNotice();return;}
+ try{localStorage.setItem(TK,JSON.stringify({round:T.round,code:T.code,byCode:T.byCode}));}
+ catch(e){tStorageProblem='write';tStorageNotice();}
+}
 const genCode=r=>String(Math.floor(Math.random()*1000)).padStart(3,'0')+r;
 function parseTime(v){const m=String(v).trim().match(/^(\d{1,2})[:.,](\d{2})$/);if(!m||+m[2]>59)return null;return +m[1]*60+(+m[2]);}
 function verify(code,fin,chk){const n=ROUNDS[+code[3]].route.length;for(let dn=n;dn>=0;dn--)for(let m=0;m<=60;m++)for(let h=0;h<=30;h++)if(checkCode(`${code}|${fin}|${m}|${h}|${dn}`)===chk)return {m,h,dn,n};return null;}
