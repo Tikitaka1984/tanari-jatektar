@@ -1,0 +1,327 @@
+{
+  "game": "junius-tizenhatodika",
+  "baseline": true,
+  "time_utc": "2026-10-11T17:20:44.247Z",
+  "browser": "153.0.8010.0",
+  "source_sha256": "34a48ccc27907dd4301d5d0ffb396a5b8f7114a6302b12fdc092ad525c79bdde",
+  "base_commit": "0c07a071ded6b7d5976489ab2b2b395f7d97d6a2",
+  "results": [
+    {
+      "name": "missing",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "6041",
+        "byCode": [],
+        "names": [],
+        "warning": "",
+        "raw": "{\"round\":1,\"code\":\"6041\",\"byCode\":{}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "valid",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231",
+          "4562"
+        ],
+        "names": [
+          "Régi eredmény"
+        ],
+        "warning": "",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":1,\"name\":\"Régi eredmény\",\"fin\":60,\"chk\":\"AAAA\",\"v\":{\"m\":0,\"h\":0,\"dn\":4,\"n\":4}}],\"4562\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "legacy-no-code",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 2,
+        "code": "5492",
+        "byCode": [
+          "4562"
+        ],
+        "names": [],
+        "warning": "",
+        "raw": "{\"round\":2,\"code\":\"5492\",\"byCode\":{\"4562\":[]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "invalid-json",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "root-null",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "root-array",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "root-number",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   \"Cannot create property 'round' on number '3'\"\n+ ]\n- []\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:9)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "root-string",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   \"Cannot create property 'round' on string 'old'\"\n+ ]\n- []\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:9)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "missing-fields",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "missing-round",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "missing-byCode",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "round-0",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "round-1",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   \"Cannot read properties of undefined (reading 'route')\"\n+ ]\n- []\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:9)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "round-2",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   \"Cannot read properties of undefined (reading 'route')\"\n+ ]\n- []\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:9)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "round-3",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   \"Cannot read properties of undefined (reading 'route')\"\n+ ]\n- []\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:9)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "round-4",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert([1,2,3].includes(snapshot.round))\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:106)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "round-5",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "round-6",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   \"Cannot read properties of undefined (reading 'route')\"\n+ ]\n- []\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:9)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "round-7",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   \"Cannot read properties of undefined (reading 'route')\"\n+ ]\n- []\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:9)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "code-0",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "code-1",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(/^\\d{3}[123]$/.test(snapshot.code))\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:147)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "code-2",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(/^\\d{3}[123]$/.test(snapshot.code))\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:147)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "code-3",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert(/^\\d{3}[123]$/.test(snapshot.code))\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:147)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "code-4",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "code-5",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "byCode-0",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "byCode-1",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "byCode-2",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "byCode-3",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "object-rows",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   '(T.byCode[T.code] || []).slice is not a function'\n+ ]\n- []\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:9)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "null-row",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   \"Cannot read properties of null (reading 'v')\"\n+ ]\n- []\n\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:54:9)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "bad-row-name",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "bad-row-id",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "bad-row-time",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "bad-row-check",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "bad-verification",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "bad-other-code",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "prototype-key",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "legacy-string-id",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [
+          "Régi sor"
+        ],
+        "warning": "",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":\"old-1\",\"name\":\"Régi sor\",\"fin\":60,\"chk\":\"AAAA\",\"v\":null}]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "legacy-no-v",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "teacher": true,
+        "ready": true,
+        "round": 1,
+        "code": "1231",
+        "byCode": [
+          "1231"
+        ],
+        "names": [
+          "Régi sor"
+        ],
+        "warning": "",
+        "raw": "{\"round\":1,\"code\":\"1231\",\"byCode\":{\"1231\":[{\"id\":1,\"name\":\"Régi sor\",\"fin\":60,\"chk\":\"AAAA\"}]}}",
+        "overflow": false
+      }
+    },
+    {
+      "name": "storage-denied",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    },
+    {
+      "name": "storage-quota",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:55:17)\n    at async record (/workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:51:90)\n    at async /workspace/scratch/329af5744efa/m01-junius/tests/junius-tanari-tarolo.test.cjs:101:26"
+    }
+  ]
+}
