@@ -1,0 +1,21 @@
+{
+  "tested_commit": "0f5d57016bb89096288ed96da028c640c51ef923",
+  "source_sha256": "b0926d80b135ca808b9d4e3d22e149a70c168c03e26cb11b90406c4f4885ef9a",
+  "node": "v24.19.0",
+  "time_utc": "2026-10-11T19:07:34.821Z",
+  "results": [
+    {
+      "file": "games/szokereso.html",
+      "inline_script": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "tests/szokereso-keyboard.test.cjs",
+      "status": "PASS"
+    },
+    {
+      "file": "tests/szokereso-review.test.cjs",
+      "status": "PASS"
+    }
+  ]
+}

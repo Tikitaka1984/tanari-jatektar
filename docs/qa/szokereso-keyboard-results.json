@@ -1,0 +1,28 @@
+{
+  "browser": "153.0.8010.0",
+  "results": [
+    {
+      "width": 360,
+      "status": "PASS",
+      "checks": 20,
+      "errorsBeforeRestart": 0
+    },
+    {
+      "width": 768,
+      "status": "PASS",
+      "checks": 20,
+      "errorsBeforeRestart": 0
+    },
+    {
+      "width": 1280,
+      "status": "PASS",
+      "checks": 20,
+      "errorsBeforeRestart": 0
+    }
+  ],
+  "tested_commit": "0f5d57016bb89096288ed96da028c640c51ef923",
+  "source_sha256": "b0926d80b135ca808b9d4e3d22e149a70c168c03e26cb11b90406c4f4885ef9a",
+  "test_sha256": "12634e92c20174a033c43b6928038f08edcb6ccc3d1dff4b3678e7ce32e5b102",
+  "completed_log_mtime_utc": "2026-10-11T19:03:54.361503+00:00",
+  "transport": "file URL; original PR test with optional CHROMIUM_PATH adapter"
+}

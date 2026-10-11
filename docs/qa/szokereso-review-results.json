@@ -1,0 +1,244 @@
+{
+  "tested_commit": "0f5d57016bb89096288ed96da028c640c51ef923",
+  "baseline_commit": "68d12ba33de612ed795605496cd09d9ce1373859",
+  "baseline_source_sha256": "932096da0e01721289ebc07083e52eec08a75b44fa32ec3e4aa198c65f4f1f9b",
+  "test_sha256": "9c7c660e67cf391b27af385bce2b5ed95b76126509fd7ee8ff2041f9269d1e4e",
+  "source_sha256": "b0926d80b135ca808b9d4e3d22e149a70c168c03e26cb11b90406c4f4885ef9a",
+  "browser": "153.0.8010.0",
+  "time_utc": "2026-10-11T19:04:37.131Z",
+  "results": [
+    {
+      "name": "grid-navigation",
+      "width": 360,
+      "mode": "classic",
+      "status": "PASS",
+      "detail": {
+        "all_cells_visited": 256,
+        "document_overflow": false,
+        "aria_rows": 16
+      },
+      "checks": 275
+    },
+    {
+      "name": "gameplay",
+      "width": 360,
+      "mode": "classic",
+      "status": "PASS",
+      "detail": {
+        "score": {
+          "hit": 10,
+          "err": 1,
+          "hint": 1,
+          "run": 10,
+          "best": 10,
+          "done": true,
+          "seconds": 20,
+          "code": "9AR-4821"
+        },
+        "keyboard_only_solution": true
+      },
+      "checks": 16
+    },
+    {
+      "name": "grid-navigation",
+      "width": 360,
+      "mode": "hard",
+      "status": "PASS",
+      "detail": {
+        "all_cells_visited": 256,
+        "document_overflow": false,
+        "aria_rows": 16
+      },
+      "checks": 275
+    },
+    {
+      "name": "gameplay",
+      "width": 360,
+      "mode": "hard",
+      "status": "PASS",
+      "detail": {
+        "score": {
+          "hit": 10,
+          "err": 1,
+          "hint": 1,
+          "run": 10,
+          "best": 10,
+          "done": true,
+          "seconds": 20,
+          "code": "9AR-4821"
+        },
+        "keyboard_only_solution": true
+      },
+      "checks": 16
+    },
+    {
+      "name": "grid-navigation",
+      "width": 768,
+      "mode": "classic",
+      "status": "PASS",
+      "detail": {
+        "all_cells_visited": 256,
+        "document_overflow": false,
+        "aria_rows": 16
+      },
+      "checks": 275
+    },
+    {
+      "name": "gameplay",
+      "width": 768,
+      "mode": "classic",
+      "status": "PASS",
+      "detail": {
+        "score": {
+          "hit": 10,
+          "err": 1,
+          "hint": 1,
+          "run": 10,
+          "best": 10,
+          "done": true,
+          "seconds": 20,
+          "code": "9AR-4821"
+        },
+        "keyboard_only_solution": true
+      },
+      "checks": 16
+    },
+    {
+      "name": "grid-navigation",
+      "width": 768,
+      "mode": "hard",
+      "status": "PASS",
+      "detail": {
+        "all_cells_visited": 256,
+        "document_overflow": false,
+        "aria_rows": 16
+      },
+      "checks": 275
+    },
+    {
+      "name": "gameplay",
+      "width": 768,
+      "mode": "hard",
+      "status": "PASS",
+      "detail": {
+        "score": {
+          "hit": 10,
+          "err": 1,
+          "hint": 1,
+          "run": 10,
+          "best": 10,
+          "done": true,
+          "seconds": 20,
+          "code": "9AR-4821"
+        },
+        "keyboard_only_solution": true
+      },
+      "checks": 16
+    },
+    {
+      "name": "grid-navigation",
+      "width": 1280,
+      "mode": "classic",
+      "status": "PASS",
+      "detail": {
+        "all_cells_visited": 256,
+        "document_overflow": false,
+        "aria_rows": 16
+      },
+      "checks": 275
+    },
+    {
+      "name": "gameplay",
+      "width": 1280,
+      "mode": "classic",
+      "status": "PASS",
+      "detail": {
+        "score": {
+          "hit": 10,
+          "err": 1,
+          "hint": 1,
+          "run": 10,
+          "best": 10,
+          "done": true,
+          "seconds": 20,
+          "code": "9AR-4821"
+        },
+        "keyboard_only_solution": true
+      },
+      "checks": 16
+    },
+    {
+      "name": "grid-navigation",
+      "width": 1280,
+      "mode": "hard",
+      "status": "PASS",
+      "detail": {
+        "all_cells_visited": 256,
+        "document_overflow": false,
+        "aria_rows": 16
+      },
+      "checks": 275
+    },
+    {
+      "name": "gameplay",
+      "width": 1280,
+      "mode": "hard",
+      "status": "PASS",
+      "detail": {
+        "score": {
+          "hit": 10,
+          "err": 1,
+          "hint": 1,
+          "run": 10,
+          "best": 10,
+          "done": true,
+          "seconds": 20,
+          "code": "9AR-4821"
+        },
+        "keyboard_only_solution": true
+      },
+      "checks": 16
+    },
+    {
+      "name": "settings-focus",
+      "width": 1280,
+      "mode": "both",
+      "status": "PASS",
+      "detail": {
+        "controls": 6
+      },
+      "checks": 6
+    },
+    {
+      "name": "held-activation",
+      "width": 360,
+      "mode": "both",
+      "status": "PASS",
+      "detail": {
+        "autorepeat": "ignored for activation",
+        "native_double_click": true
+      },
+      "checks": 4
+    },
+    {
+      "name": "main-comparison",
+      "width": 1280,
+      "mode": "classic",
+      "status": "PASS",
+      "detail": {
+        "generated_puzzles": 48,
+        "mouse_score": {
+          "hit": 10,
+          "err": 1,
+          "hint": 1,
+          "run": 10,
+          "best": 10,
+          "done": true,
+          "seconds": 20,
+          "code": "9AR-4821"
+        }
+      },
+      "checks": 3
+    }
+  ]
+}
