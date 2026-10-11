@@ -44,7 +44,7 @@ async function newPage(width,fixture){
  await p.addInitScript(({key,fixture})=>{
   if(fixture[0]==='storage-denied')Object.defineProperty(window,'localStorage',{get(){throw new DOMException('Storage blocked','SecurityError');}});
   else if(fixture[0]==='storage-quota')Storage.prototype.setItem=function(){throw new DOMException('Storage full','QuotaExceededError');};
-  else if(fixture[1]!==null)localStorage.setItem(key,fixture[1]);
+  else if(fixture[1]!==null&&localStorage.getItem(key)===null)localStorage.setItem(key,fixture[1]);
  },{key,fixture});
  await p.goto(url+'#tanar',{waitUntil:'domcontentloaded'});await p.waitForTimeout(100);
  return {p,errors,consoleErrors};
