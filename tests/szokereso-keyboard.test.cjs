@@ -13,10 +13,10 @@ async function exercise(browser,width){
   page.on('pageerror',e=>failures.push('pageerror: '+e.message));
   page.on('console',msg=>{
     if(msg.type()!=='error')return;
-    const entry=msg.text();
-    // A Google Fonts offline betöltési hibája nem alkalmazáskonzolhiba.
-    if(/fonts\\.(?:googleapis|gstatic)\\.com|ERR_INTERNET_DISCONNECTED|ERR_NAME_NOT_RESOLVED/.test(entry))return;
-    failures.push('console: '+entry);
+    const source=msg.location().url||'';
+    // Az opcionális külső betűtípus hálózati hibája nem alkalmazáshiba.
+    if(source.startsWith('https://fonts.googleapis.com/')||source.startsWith('https://fonts.gstatic.com/'))return;
+    failures.push('console: '+msg.text());
   });
   let checks=0;
   const check=(ok,msg)=>{assert.ok(ok,msg);checks++;};
