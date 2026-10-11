@@ -1,0 +1,34 @@
+{
+  "game": "iuti-haza",
+  "baseline": true,
+  "time_utc": "2026-10-11T17:35:44.972Z",
+  "browser": "153.0.8010.0",
+  "source_sha256": "4c93d7d53151bb660674f9eafa5282589d582c95933f755deb04eca8a9c046e2",
+  "base_commit": "0c07a071ded6b7d5976489ab2b2b395f7d97d6a2",
+  "results": [
+    {
+      "name": "invalid-json",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Missing warning\n    at storageCase (/workspace/scratch/329af5744efa/m02-iuti/tests/iuti-tanari-tarolo.test.cjs:56:17)\n    at async record (/workspace/scratch/329af5744efa/m02-iuti/tests/iuti-tanari-tarolo.test.cjs:52:139)\n    at async /workspace/scratch/329af5744efa/m02-iuti/tests/iuti-tanari-tarolo.test.cjs:104:26"
+    },
+    {
+      "name": "root-number",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   \"Cannot create property 'round' on number '3'\"\n+ ]\n- []\n\n    at storageCase (/workspace/scratch/329af5744efa/m02-iuti/tests/iuti-tanari-tarolo.test.cjs:55:9)\n    at async record (/workspace/scratch/329af5744efa/m02-iuti/tests/iuti-tanari-tarolo.test.cjs:52:139)\n    at async /workspace/scratch/329af5744efa/m02-iuti/tests/iuti-tanari-tarolo.test.cjs:104:26"
+    },
+    {
+      "name": "object-rows",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   '(T.byCode[T.code] || []).slice is not a function'\n+ ]\n- []\n\n    at storageCase (/workspace/scratch/329af5744efa/m02-iuti/tests/iuti-tanari-tarolo.test.cjs:55:9)\n    at async record (/workspace/scratch/329af5744efa/m02-iuti/tests/iuti-tanari-tarolo.test.cjs:52:139)\n    at async /workspace/scratch/329af5744efa/m02-iuti/tests/iuti-tanari-tarolo.test.cjs:104:26"
+    },
+    {
+      "name": "many-valid-codes",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Stored result groups pruned\n\n10 !== 12\n\n    at storageCase (/workspace/scratch/329af5744efa/m02-iuti/tests/iuti-tanari-tarolo.test.cjs:59:44)\n    at async record (/workspace/scratch/329af5744efa/m02-iuti/tests/iuti-tanari-tarolo.test.cjs:52:139)\n    at async /workspace/scratch/329af5744efa/m02-iuti/tests/iuti-tanari-tarolo.test.cjs:104:26"
+    }
+  ]
+}
