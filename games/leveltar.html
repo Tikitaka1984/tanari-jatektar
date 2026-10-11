@@ -904,7 +904,6 @@ function endGame(won,reason){
     document.getElementById('endTitle').textContent='Bent maradtál';
     document.getElementById('endLead').innerHTML='A zárak nem engedtek. Nézd meg a hibaprofilt: <b>amelyik zárnál a legtöbbet hibáztál, azt a lexikatípust kell ismételned</b> — utána gyere vissza.';
   }
-  document.getElementById('endTitle').focus();
   document.getElementById('endStat').innerHTML=
     'Maradék idő (pontszám): <b>'+fmt(Math.max(0,G.t))+'</b><br>'+
     'Kinyitott zárak: <b>'+LOCKDEF.filter(d=>L[d.id].o).length+' / 4</b><br>'+
@@ -931,6 +930,7 @@ function endGame(won,reason){
       ? '<b>Értékelés:</b> hibátlan futás. A négy lexikatípus mindegyike biztosan ül, és a forráskritikai fogást is érted. Vizsgaérett.'
       : '<b>Értékelés:</b> a legtöbb hibát a(z) <b>'+worst.type+'</b> záron vétetted ('+worstE+' hiba). Ez az a lexikatípus, amelyet célzottan ismételned kell — a többi zár eredménye ehhez képest értékelendő.'
         + (G.finErr>2 ? ' A forráskritikai finálé is sok próbálkozásba került: gyakorold az <b>anakronizmus-keresést</b> — mindig az évszámhoz kösd az intézményeket és a tisztségeket.' : '');
+  document.getElementById('endTitle').focus();
 }
 </script>
 </body>
