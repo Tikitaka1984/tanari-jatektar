@@ -44,7 +44,7 @@ async function testWidth(browser,width){
     assert.equal(await page.locator('#s-end.active').count(),1,'end screen shown');
     assert.equal(await page.evaluate(()=>document.activeElement.id),'endTitle','end heading receives focus');
     assert.deepEqual(errors,[],'no uncaught runtime errors');
-    return {width,status:'PASS',cases:11,errors};
+    return {width,status:'PASS',cases:13,errors};
   }finally{await page.close();}
 }
 (async()=>{
