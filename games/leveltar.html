@@ -182,7 +182,7 @@
   <section class="screen" id="s-end">
     <div class="ending" id="endWrap">
       <div class="eyebrow" id="endEyebrow"></div>
-      <h2 id="endTitle"></h2>
+      <h2 id="endTitle" tabindex="-1"></h2>
       <p id="endLead" style="max-width:620px;margin:8px auto 0;opacity:.9;line-height:1.6;"></p>
       <div class="stat" id="endStat"></div>
       <div class="profile" id="endProfile"></div>
@@ -194,7 +194,7 @@
   </section>
 </div>
 
-<div class="overlay" id="ov">
+<div class="overlay" id="ov" role="dialog" aria-modal="true" aria-labelledby="p-t">
   <div class="panel">
     <button class="panel-close" onclick="closePanel()" aria-label="Bezárás">&#10005;</button>
     <div class="eyebrow" id="p-eb"></div>
@@ -594,7 +594,7 @@ function renderRoom(){
   document.getElementById('locks').innerHTML=LOCKDEF.map(d=>{
     const done=L[d.id].o;
     const act=done?'':'LOCKDEF.find(x=>x.id===\''+d.id+'\').open()';
-    return `<div class="lock ${done?'done':''}" onclick="${act}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${act}}" role="button" tabindex="0" aria-label="${d.name}${done?', nyitva':''}">
+    return `<div data-lock="${d.id}" class="lock ${done?'done':''}" onclick="${act}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();${act}}" role="button" tabindex="0" aria-label="${d.name}${done?', nyitva':''}">
       ${done?'<svg viewBox="0 0 48 48"><path d="M13 25l7 8 15-17" fill="none" stroke="#4d8a5c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>':LOCK_SVG[d.id]}
       <div class="lname">${d.name}</div><div class="ltype">${done?'NYITVA':d.type}</div></div>`;
   }).join('');
@@ -608,26 +608,68 @@ function renderRoom(){
 }
 
 /* ========== panel ========== */
+// A korábban megnyitott zár mezőjére ne állítson fókuszt egy későn lefutó callback.
+let panelFocusTimer=null, panelReturnLock=null;
+function cancelPanelFocus(){
+  if(panelFocusTimer!==null)clearTimeout(panelFocusTimer);
+  panelFocusTimer=null;
+}
+function focusPanelField(id){
+  cancelPanelFocus();
+  panelFocusTimer=setTimeout(()=>{
+    panelFocusTimer=null;
+    const field=document.getElementById(id);
+    if(document.getElementById('ov').classList.contains('active')&&field&&field.isConnected&&!field.disabled)field.focus();
+  },100);
+}
 function P(eb,t,body,act){
+  cancelPanelFocus();
   document.getElementById('p-eb').innerHTML=eb;
   document.getElementById('p-t').textContent=t;
   document.getElementById('p-b').innerHTML=body;
   document.getElementById('p-a').innerHTML=act||'';
   const f=document.getElementById('p-fb'); f.className='fb'; f.textContent='';
   document.getElementById('ov').classList.add('active');
+  document.querySelector('#ov .panel-close').focus();
 }
-function closePanel(){document.getElementById('ov').classList.remove('active');renderRoom();}
+function closePanel(){
+  cancelPanelFocus();
+  document.getElementById('ov').classList.remove('active');
+  renderRoom();
+  const target=panelReturnLock==='door'
+    ?document.getElementById('door')
+    :document.querySelector('.lock[data-lock="'+panelReturnLock+'"]');
+  panelReturnLock=null;
+  if(target)target.focus();
+}
+document.addEventListener('keydown',event=>{
+  const overlay=document.getElementById('ov');
+  if(!overlay.classList.contains('active'))return;
+  if(event.key==='Escape'){event.preventDefault();closePanel();return;}
+  if(event.key!=='Tab')return;
+  const items=[...overlay.querySelectorAll('button:not([disabled]),input:not([disabled]),[role="button"][tabindex="0"]')]
+    .filter(el=>el.getClientRects().length>0);
+  if(!items.length)return;
+  const first=items[0],last=items[items.length-1];
+  if(event.shiftKey&&(document.activeElement===first||!overlay.contains(document.activeElement))){
+    event.preventDefault();last.focus();
+  }else if(!event.shiftKey&&(document.activeElement===last||!overlay.contains(document.activeElement))){
+    event.preventDefault();first.focus();
+  }
+});
 function F(msg,kind){const f=document.getElementById('p-fb');f.className='fb '+kind;f.innerHTML=msg;}
 function solved(id,msg){
   L[id].o=true;
   F('&#128275; '+msg,'ok');
   document.getElementById('p-a').innerHTML='<button class="btn" onclick="closePanel()">Vissza a terembe &rarr;</button>';
+  document.querySelector('#p-a button').focus();
   renderRoom();
 }
 function hintBtn(id){return `<button class="btn secondary small" id="hb-${id}" onclick="useHint('${id}')">Segítség (&minus;1,5 perc)</button>`;}
 
 /* ========== 1. ÉVSZÁM-ZÁR ========== */
 function openYearLock(){
+  panelReturnLock='year';
   P('1. zár &middot; kronológia &mdash; szabad felidézés','A dátumfeloldó zár',
    `<p>A zár négy számjegyet kér. A kód <b>egy évszám</b> — de nincs kiírva sehol: a levél keltezéséből kell kiszámolnod.</p>
     <div class="doc"><div class="dhead">Töredékes keltezés</div><div class="dtext">${R.year.frag}</div></div>
@@ -637,7 +679,7 @@ function openYearLock(){
       <button class="btn" onclick="tryYear()">Kód beírása</button>
       ${hintBtn('year')}
     </div>`);
-  setTimeout(()=>document.getElementById('yearCode').focus(),100);
+  focusPanelField('yearCode');
 }
 function tryYear(){
   if(L.year.o)return;
@@ -654,6 +696,7 @@ function tryYear(){
 
 /* ========== 2. FOGALOM-ZÁR ========== */
 function openConceptLock(){
+  panelReturnLock='concept';
   P('2. zár &middot; fogalmak &mdash; szabad felidézés','Az öt tárcsa',
    `<p>A zár öt tárcsája öt fogalmat rejt. Írd be mindegyiket — <b>nincs válaszlehetőség</b>.</p>
     <div class="dial-row" id="dials"></div>
@@ -688,6 +731,7 @@ function tryConcept(i){
 
 /* ========== 3. NÉV-ZÁR ========== */
 function openNameLock(){
+  panelReturnLock='name';
   const n=R.name;
   P('3. zár &middot; személyek &mdash; szabad felidézés','A pecsét gazdája',
    `<p>A zárra egy pecsét van nyomva. A kód: <b>a pecsét gazdájának neve</b>.</p>
@@ -705,7 +749,7 @@ function openNameLock(){
       <button class="btn" onclick="tryName()">Név beírása</button>
       ${hintBtn('name')}
     </div>`);
-  setTimeout(()=>document.getElementById('nameCode').focus(),100);
+  focusPanelField('nameCode');
 }
 function tryName(){
   if(L.name.o)return;
@@ -750,6 +794,7 @@ function mapSvg(){
   </svg>`;
 }
 function openMapLock(){
+  panelReturnLock='map';
   if(!R.mapSolved) R.mapSolved=[];
   renderMapStep();
 }
@@ -806,6 +851,7 @@ function useHint(id){
 /* ========== FINÁLÉ ========== */
 function openFinale(){
   if(LOCKDEF.some(d=>!L[d.id].o)) return;
+  panelReturnLock='door';
   renderFinale();
 }
 function renderFinale(){
@@ -830,6 +876,7 @@ function clickTerm(el){
     document.querySelectorAll('.tm').forEach(x=>x.style.pointerEvents='none');
     F('&#127942; '+t.fb,'ok');
     document.getElementById('p-a').innerHTML='<button class="btn" onclick="endGame(true)">Kilépek a levéltárból &rarr;</button>';
+    document.querySelector('#p-a button').focus();
   }else{
     G.finErr++; penal(60);
     el.classList.add('clean');
@@ -842,6 +889,7 @@ function endGame(won,reason){
   if(G.ended)return;
   G.ended=true; G.won=won;
   clearInterval(G.tm);
+  cancelPanelFocus(); panelReturnLock=null;
   document.getElementById('ov').classList.remove('active');
   go('end');
   const w=document.getElementById('endWrap');
@@ -884,6 +932,7 @@ function endGame(won,reason){
       ? '<b>Értékelés:</b> hibátlan futás. A négy lexikatípus mindegyike biztosan ül, és a forráskritikai fogást is érted. Vizsgaérett.'
       : '<b>Értékelés:</b> a legtöbb hibát a(z) <b>'+worst.type+'</b> záron vétetted ('+worstE+' hiba). Ez az a lexikatípus, amelyet célzottan ismételned kell — a többi zár eredménye ehhez képest értékelendő.'
         + (G.finErr>2 ? ' A forráskritikai finálé is sok próbálkozásba került: gyakorold az <b>anakronizmus-keresést</b> — mindig az évszámhoz kösd az intézményeket és a tisztségeket.' : '');
+  document.getElementById('endTitle').focus();
 }
 </script>
 </body>
