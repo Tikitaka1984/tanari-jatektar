@@ -91,6 +91,9 @@
   @media(max-width:920px){.play{grid-template-columns:1fr;}}
   .gridcard{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:18px;overflow-x:auto;}
   .xgrid{display:inline-grid;gap:2px;background:var(--edge);padding:2px;border-radius:8px;}
+  .xrow{display:contents;}
+  .grid-help{font-size:.8rem;color:var(--muted);line-height:1.5;margin:12px 0 0;}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
   .xcell{position:relative;width:30px;height:30px;background:var(--surf-2);}
   .xcell.block{background:transparent;}
   .xcell input{
@@ -99,6 +102,7 @@
     text-transform:uppercase;padding:0;border-radius:3px;caret-color:var(--k2);
   }
   .xcell input:focus{outline:none;box-shadow:inset 0 0 0 2.5px var(--k);}
+  .xcell input:focus-visible{outline:3px solid #1b1330;outline-offset:-3px;position:relative;z-index:2;}
   .xcell.active input{box-shadow:inset 0 0 0 2px rgba(255,194,75,.55);}
   .xcell.focus input{box-shadow:inset 0 0 0 2.5px var(--k2);background:#fff8e8;}
   .xcell input.ok{color:var(--win);background:#eafff5;}
@@ -121,6 +125,7 @@
   .cl.done{opacity:.55;}
   .cl .n{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--k);flex:none;width:20px;}
   .cl.done .n{color:var(--win);}
+  .clues button.cl{width:100%;text-align:left;}
 
   .toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid var(--edge);}
 
@@ -207,7 +212,9 @@
 <section class="screen" id="sc-play">
   <div class="play">
     <div class="gridcard">
-      <div class="xgrid" id="xgrid" role="grid" aria-label="Keresztrejtvény rács"></div>
+      <div class="xgrid" id="xgrid" role="grid" aria-label="Keresztrejtvény rács" aria-describedby="crosswordHelp"></div>
+      <p class="grid-help" id="crosswordHelp">Billentyűzettel: a nyilak mozgatnak, Home/End a szó első/utolsó betűjére lép. Ctrl+Home/End a rács első/utolsó mezője. Metszésben Enter vagy Szóköz vált irányt. Escape a meghatározásra lép; ott Enter visszavisz a válaszhoz. Tab kilép a rácsból.</p>
+      <span class="sr-only" id="crosswordStatus" role="status" aria-live="polite" aria-atomic="true"></span>
       <div class="progwrap">
         <div class="prog"><div class="prog-fill" id="progFill"></div></div>
         <div class="prog-txt" id="progTxt" role="status" aria-live="polite"></div>
@@ -219,12 +226,12 @@
         <button class="ghost" onclick="openPrintDialog()">PDF nyomtatás</button>
       </div>
     </div>
-    <div class="clues" id="clues"></div>
+    <div class="clues" id="clues" role="region" aria-label="Meghatározások"></div>
   </div>
 </section>
 
 <section class="screen" id="sc-end">
-  <div class="result-head"><h2 id="endTitle">Kész a rejtvény.</h2></div>
+  <div class="result-head"><h2 id="endTitle" tabindex="-1" aria-describedby="scoreline verdict">Kész a rejtvény.</h2></div>
   <div class="scoreline" id="scoreline" role="status" aria-live="polite"></div>
   <div class="verdict" id="verdict"></div>
   <div class="recap" id="recap"></div>
@@ -239,7 +246,7 @@
 
 <div id="sheet"></div>
 
-<div id="confirmBox" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(10,7,26,.72);align-items:center;justify-content:center;">
+<div id="confirmBox" role="dialog" aria-modal="true" aria-labelledby="confirmText" onkeydown="confirmKey(event)" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(10,7,26,.72);align-items:center;justify-content:center;">
   <div style="background:var(--surf);border:1px solid var(--edge-2);border-radius:16px;padding:24px;max-width:360px;text-align:center;">
     <p id="confirmText" style="margin:0 0 18px;font-size:.94rem;"></p>
     <div style="display:flex;gap:9px;justify-content:center;">
@@ -392,7 +399,7 @@ const PICK={grade:null,cat:null};
 const G={bankKey:null,puzzle:null,cellLetter:{},cellNumber:{},acrossAt:{},downAt:{},entries:[],h:0,w:0,
   answers:{},errCells:new Set(),curIdx:-1,curDir:'A',curCell:null,
   errors:0,hints:0,t0:0,timer:null,done:false,gaveUp:false};
-let pendingAction=null;
+let pendingAction=null,pendingCancelAction=null,confirmReturnFocus=null;
 
 function go(id){
   document.querySelectorAll('.screen').forEach(e=>e.classList.remove('on'));
@@ -400,12 +407,12 @@ function go(id){
   document.getElementById('hud').classList.toggle('on', id==='play');
   window.scrollTo({top:0,behavior:'smooth'});
 }
-function goPick(){ clearInterval(G.timer); renderPick(); go('pick'); }
+function goPick(){ hideConfirm(); clearInterval(G.timer); renderPick(); go('pick'); (document.querySelector('#railGrade [aria-pressed="true"]')||document.querySelector('#railGrade button')).focus(); }
 
 function renderPick(){
   document.getElementById('railGrade').innerHTML = Object.keys(GRADES).map(g=>{
     const gr=GRADES[g];
-    return `<button class="era" style="--eacc:${gr.accent}" aria-pressed="${PICK.grade===g}" onclick="pickGrade('${g}')">
+    return `<button class="era" id="grade-${g}" style="--eacc:${gr.accent}" aria-pressed="${PICK.grade===g}" onclick="pickGrade('${g}')">
       <div class="gr">${g}.</div><div class="gl">${gr.span}</div></button>`;
   }).join('');
   const cr=document.getElementById('railCat');
@@ -415,24 +422,27 @@ function renderPick(){
   cr.style.setProperty('--eacc',gr.accent);
   cr.innerHTML = ['A','B'].map(k=>{
     const cat=gr[k];
-    return `<button class="cat" style="--eacc:${gr.accent}" aria-pressed="${PICK.cat===k}" onclick="pickCat('${k}')">
+    return `<button class="cat" id="cat-${k}" style="--eacc:${gr.accent}" aria-pressed="${PICK.cat===k}" onclick="pickCat('${k}')">
       <div class="cl">${cat.label}</div><div class="cn">${WORDBANKS[cat.key].length} bejegyzés (nagyjából)</div></button>`;
   }).join('');
   document.getElementById('btnGen').disabled = !(PICK.grade && PICK.cat);
 }
-function pickGrade(g){ PICK.grade=g; PICK.cat=null; renderPick(); }
-function pickCat(k){ PICK.cat=k; renderPick(); }
+function pickGrade(g){ PICK.grade=g; PICK.cat=null; renderPick(); document.getElementById('grade-'+g).focus(); }
+function pickCat(k){ PICK.cat=k; renderPick(); document.getElementById('cat-'+k).focus(); }
 function genFromPick(){
   const gr=GRADES[PICK.grade], cat=gr[PICK.cat];
   startPuzzle(cat.key, gr.accent, gr.label+' — '+cat.label);
 }
 
 function startPuzzle(bankKey, accent, title){
+  hideConfirm();
   G.bankKey=bankKey; G.accent=accent||'#FFC24B'; G.title=title||'';
   const p=generatePuzzle(bankKey, 27, 5);
   G.puzzle=p; G.h=p.h; G.w=p.w; G.entries=p.entries;
   G.cellLetter={}; G.cellNumber={}; G.acrossAt={}; G.downAt={};
   G.answers={}; G.errCells=new Set(); G.errors=0; G.hints=0; G.done=false; G.gaveUp=false;
+  document.getElementById('hErr').textContent='0';
+  document.getElementById('crosswordStatus').textContent='';
   p.entries.forEach(e=>{
     const [dr,dc]=DIRS[e.dir];
     for(let i=0;i<e.len;i++){
@@ -454,7 +464,7 @@ function startPuzzle(bankKey, accent, title){
 
   drawGrid(); drawClues(); updateProgress(); tick();
   go('play');
-  setTimeout(()=>focusCell(G.curCell[0],G.curCell[1]),50);
+  focusCell(G.curCell[0],G.curCell[1]);
 }
 function regenerate(){
   if(!G.bankKey) return;
@@ -467,22 +477,29 @@ function tick(){ document.getElementById('hTime').textContent=mmss(secs()); }
 
 function drawGrid(){
   const el=document.getElementById('xgrid');
+  el.setAttribute('aria-rowcount',G.h); el.setAttribute('aria-colcount',G.w);
   el.style.gridTemplateColumns='repeat('+G.w+',30px)';
   el.style.gridTemplateRows='repeat('+G.h+',30px)';
   let html='';
-  for(let r=0;r<G.h;r++) for(let c=0;c<G.w;c++){
+  for(let r=0;r<G.h;r++){
+   html+='<div class="xrow" role="row" aria-rowindex="'+(r+1)+'">';
+   for(let c=0;c<G.w;c++){
     const key=r+','+c;
-    if(G.cellLetter[key]===undefined){ html+='<div class="xcell block" role="gridcell"></div>'; continue; }
+    if(G.cellLetter[key]===undefined){ html+='<div class="xcell block" role="gridcell" aria-colindex="'+(c+1)+'" aria-disabled="true" aria-label="Zárt mező"></div>'; continue; }
     const num=G.cellNumber[key];
-    html += '<div class="xcell" id="xc-'+r+'-'+c+'" role="gridcell">'+
+    html += '<div class="xcell" id="xc-'+r+'-'+c+'" role="gridcell" aria-colindex="'+(c+1)+'" aria-selected="false">'+
       (num?'<span class="xnum">'+num+'</span>':'')+
       '<input maxlength="1" autocomplete="off" spellcheck="false" inputmode="text" '+
-      'aria-label="cella '+r+' '+c+'" '+
+      'data-r="'+r+'" data-c="'+c+'" tabindex="-1" aria-invalid="false" '+
+      'aria-label="'+(r+1)+'. sor, '+(c+1)+'. oszlop, üres betűmező" '+
+      'aria-describedby="'+[G.acrossAt[key],G.downAt[key]].filter(i=>i!==undefined).map(i=>'cl-'+i).join(' ')+' crosswordHelp" '+
       'onclick="cellClick('+r+','+c+')" '+
       'onfocus="cellFocus('+r+','+c+')" '+
       'oninput="cellInput('+r+','+c+',this)" '+
       'onkeydown="cellKey(event,'+r+','+c+')">'+
       '</div>';
+   }
+   html+='</div>';
   }
   el.innerHTML=html;
 }
@@ -492,7 +509,7 @@ function entryCells(idx){
   return out;
 }
 function paintHighlight(){
-  document.querySelectorAll('.xcell').forEach(el=>el.classList.remove('active','focus'));
+  document.querySelectorAll('.xcell').forEach(el=>{el.classList.remove('active','focus');el.setAttribute('aria-selected','false');});
   if(G.curIdx<0) return;
   entryCells(G.curIdx).forEach(([r,c])=>{
     const el=document.getElementById('xc-'+r+'-'+c);
@@ -500,7 +517,7 @@ function paintHighlight(){
   });
   if(G.curCell){
     const el=document.getElementById('xc-'+G.curCell[0]+'-'+G.curCell[1]);
-    if(el) el.classList.add('focus');
+    if(el){ el.classList.add('focus'); el.setAttribute('aria-selected','true'); }
   }
 }
 function resolveDir(r,c,preferred){
@@ -516,13 +533,16 @@ function syncCursor(r,c){
   G.curCell=[r,c]; G.curDir=dir;
   const key=r+','+c;
   G.curIdx = dir==='A' ? G.acrossAt[key] : G.downAt[key];
+  document.querySelectorAll('#xgrid input').forEach(input=>{input.tabIndex=(+input.dataset.r===r&&+input.dataset.c===c)?0:-1;});
   paintHighlight(); highlightClue();
+  const e=G.entries[G.curIdx];
+  document.getElementById('crosswordStatus').textContent=e.number+'. '+(dir==='A'?'Vízszintes':'Függőleges')+': '+e.clue+' ('+e.len+' betű).';
 }
-function cellFocus(r,c){ syncCursor(r,c); }
+function cellFocus(r,c){ syncCursor(r,c); document.getElementById('xc-'+r+'-'+c).querySelector('input').select(); }
 function focusCell(r,c){
   syncCursor(r,c);
   const el=document.getElementById('xc-'+r+'-'+c);
-  if(el){ const inp=el.querySelector('input'); if(inp) inp.focus(); }
+  if(el){ const inp=el.querySelector('input'); if(inp){inp.focus();inp.select();} }
 }
 function cellClick(r,c){
   const key=r+','+c;
@@ -544,6 +564,7 @@ function nextCellInEntry(r,c,dir,step){
   return [e.row+dr*ni, e.col+dc*ni];
 }
 function cellInput(r,c,input){
+  if(G.done)return;
   let v=(input.value||'').toUpperCase().slice(-1);
   v=v.replace(/[^A-ZÁÉÍÓÖŐÚÜŰ]/g,'');
   input.value=v;
@@ -554,11 +575,23 @@ function cellInput(r,c,input){
     if(v===G.cellLetter[key]){ input.classList.add('ok'); G.errCells.delete(key); }
     else { input.classList.add('bad'); if(!G.errCells.has(key)){ G.errCells.add(key); G.errors++; document.getElementById('hErr').textContent=G.errors; } }
   } else { delete G.answers[key]; }
+  updateCellAria(r,c);
+  const feedback=v?(v===G.cellLetter[key]?'Helyes betű.':'Hibás betű. Hibák: '+G.errors+'.'):'Betű törölve.';
   updateProgress();
   if(checkComplete()){ finish(false); return; }
   if(v){ const nxt=nextCellInEntry(r,c,G.curDir,1); if(nxt) focusCell(nxt[0],nxt[1]); }
+  document.getElementById('crosswordStatus').textContent=feedback;
 }
 function cellKey(ev,r,c){
+  if(G.done)return;
+  if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();if(!ev.repeat)cellClick(r,c);return;}
+  if(ev.key==='Escape'){ev.preventDefault();document.getElementById('cl-'+G.curIdx).focus();return;}
+  if(ev.key==='Home'||ev.key==='End'){
+    ev.preventDefault();
+    if(ev.ctrlKey){const inputs=[...document.querySelectorAll('#xgrid input')],input=ev.key==='Home'?inputs[0]:inputs.at(-1);focusCell(+input.dataset.r,+input.dataset.c);}
+    else{const cells=entryCells(G.curIdx),cell=ev.key==='Home'?cells[0]:cells.at(-1);focusCell(...cell);}
+    return;
+  }
   if(ev.key==='Backspace'){
     const input=document.getElementById('xc-'+r+'-'+c).querySelector('input');
     if(input.value) return;
@@ -569,6 +602,7 @@ function cellKey(ev,r,c){
       const pInput=document.getElementById('xc-'+prev[0]+'-'+prev[1]).querySelector('input');
       pInput.value=''; pInput.classList.remove('ok','bad');
       delete G.answers[prev[0]+','+prev[1]];
+      updateCellAria(prev[0],prev[1]);
       updateProgress();
     }
     return;
@@ -589,17 +623,23 @@ function cellKey(ev,r,c){
 function drawClues(){
   const across=G.entries.map((e,i)=>({...e,idx:i})).filter(e=>e.dir==='A').sort((a,b)=>a.number-b.number);
   const down=G.entries.map((e,i)=>({...e,idx:i})).filter(e=>e.dir==='D').sort((a,b)=>a.number-b.number);
-  function row(e){ return `<div class="cl" id="cl-${e.idx}" onclick="clueClick(${e.idx})"><span class="n">${e.number}.</span><span>${e.clue}</span></div>`; }
+  function row(e){ return `<button type="button" class="cl" id="cl-${e.idx}" aria-pressed="false" onclick="clueClick(${e.idx})"><span class="n">${e.number}.</span><span>${e.clue}</span><span class="sr-only">${e.dir==='A'?'Vízszintes':'Függőleges'}, ${e.len} betű.</span><span class="sr-only" data-state></span></button>`; }
   document.getElementById('clues').innerHTML = '<h4>Vízszintes</h4>'+across.map(row).join('')+'<h4>Függőleges</h4>'+down.map(row).join('');
 }
-function clueClick(idx){ const e=G.entries[idx]; G.curDir=e.dir; G.curIdx=idx; focusCell(e.row,e.col); }
+function clueClick(idx){ if(G.done)return; const e=G.entries[idx]; G.curDir=e.dir; G.curIdx=idx; focusCell(e.row,e.col); }
 function highlightClue(){
-  document.querySelectorAll('.cl').forEach(el=>el.classList.remove('cur'));
-  if(G.curIdx>=0){ const el=document.getElementById('cl-'+G.curIdx); if(el) el.classList.add('cur'); }
+  document.querySelectorAll('#clues .cl').forEach(el=>{el.classList.remove('cur');el.setAttribute('aria-pressed','false');});
+  if(G.curIdx>=0){ const el=document.getElementById('cl-'+G.curIdx); if(el){el.classList.add('cur');el.setAttribute('aria-pressed','true');} }
   G.entries.forEach((e,idx)=>{
     const filled=entryCells(idx).every(([r,c])=>G.answers[r+','+c]===G.cellLetter[r+','+c]);
-    const el=document.getElementById('cl-'+idx); if(el) el.classList.toggle('done', filled);
+    const el=document.getElementById('cl-'+idx); if(el){el.classList.toggle('done',filled);el.querySelector('[data-state]').textContent=filled?' Megfejtve.':' Még nincs megfejtve.';}
   });
+}
+
+function updateCellAria(r,c){
+  const key=r+','+c,input=document.getElementById('xc-'+r+'-'+c).querySelector('input'),v=G.answers[key];
+  input.setAttribute('aria-invalid',v&&v!==G.cellLetter[key]?'true':'false');
+  input.setAttribute('aria-label',(r+1)+'. sor, '+(c+1)+'. oszlop, '+(!v?'üres betűmező':v===G.cellLetter[key]?'helyes betű':'hibás betű'));
 }
 
 function updateProgress(){
@@ -618,6 +658,8 @@ function useHint(){
   const input=document.getElementById('xc-'+r+'-'+c).querySelector('input');
   input.value=G.cellLetter[key]; input.classList.remove('bad'); input.classList.add('ok');
   G.answers[key]=G.cellLetter[key]; G.errCells.delete(key);
+  updateCellAria(r,c);
+  document.getElementById('crosswordStatus').textContent='Segítség: egy betű felfedve a '+(r+1)+'. sor, '+(c+1)+'. oszlopban. Időbüntetés: 20 másodperc.';
   G.hints++; G.t0-=20000; tick(); updateProgress();
   if(checkComplete()) finish(false);
 }
@@ -630,21 +672,43 @@ function askSolution(){
       const input=document.getElementById('xc-'+r+'-'+c).querySelector('input');
       input.value=G.cellLetter[key]; input.classList.remove('bad'); input.classList.add('ok');
       G.answers[key]=G.cellLetter[key];
+      updateCellAria(r,c);
     });
     updateProgress();
     finish(true);
   });
 }
-function showConfirm(text, onYes){
+function showConfirm(text, onYes, onNo){
+  hideConfirm();
   document.getElementById('confirmText').textContent=text;
-  pendingAction=onYes;
-  document.getElementById('confirmBox').style.display='flex';
+  pendingAction=onYes; pendingCancelAction=onNo||null; confirmReturnFocus=document.activeElement;
+  const box=document.getElementById('confirmBox'),cancel=box.querySelector('.ghost:not(.warn)');
+  cancel.textContent=onNo?'Csak a feladatlap':'Mégse';
+  document.querySelectorAll('.wrap,.topbar,.foot').forEach(el=>{el.inert=true;});
+  box.style.display='flex';cancel.focus();
 }
-function confirmYes(){ document.getElementById('confirmBox').style.display='none'; if(pendingAction) pendingAction(); pendingAction=null; }
-function confirmNo(){ document.getElementById('confirmBox').style.display='none'; pendingAction=null; }
+function hideConfirm(){
+  document.getElementById('confirmBox').style.display='none';
+  pendingAction=null;pendingCancelAction=null;
+  document.querySelectorAll('.wrap,.topbar,.foot').forEach(el=>{el.inert=false;});
+  const focus=confirmReturnFocus;confirmReturnFocus=null;
+  if(focus&&focus.isConnected)focus.focus();
+}
+function confirmYes(){const action=pendingAction;hideConfirm();if(action)action();}
+function confirmNo(){const action=pendingCancelAction;hideConfirm();if(action)action();}
+function confirmKey(ev){
+  if(ev.key==='Escape'){ev.preventDefault();hideConfirm();return;}
+  if(ev.key==='Tab'){
+    const buttons=[...document.querySelectorAll('#confirmBox button')],first=buttons[0],last=buttons.at(-1);
+    if(ev.shiftKey&&document.activeElement===first){ev.preventDefault();last.focus();}
+    else if(!ev.shiftKey&&document.activeElement===last){ev.preventDefault();first.focus();}
+  }
+}
 
 function finish(gaveUp){
+  if(G.done)return;
   G.done=true; G.gaveUp=gaveUp; clearInterval(G.timer);
+  document.querySelectorAll('#xgrid input').forEach(input=>{input.readOnly=true;});
   const tot=secs();
   document.getElementById('endTitle').textContent = gaveUp? 'Megoldás felfedve.' : 'Kész a rejtvény.';
   const vEl=document.getElementById('verdict');
@@ -664,6 +728,7 @@ function finish(gaveUp){
   document.getElementById('recap').innerHTML = G.entries.map(e=>
     `<div class="rc"><b>${e.label}</b><span>${e.clue}</span></div>`).join('');
   go('end');
+  document.getElementById('endTitle').focus();
 }
 
 function buildSheetGrid(showSolution){
@@ -693,17 +758,14 @@ function sheetPage(showSolution){
 }
 function openPrintDialog(){
   if(!G.puzzle) return;
-  showConfirm('A megoldókulcsot is nyomtassuk mellé, külön lapon?', ()=>doPrint(true));
-  const box=document.getElementById('confirmBox');
-  const cancelBtn=box.querySelector('.ghost:not(.warn)');
-  cancelBtn.textContent='Csak a feladatlap';
-  cancelBtn.onclick=()=>{ box.style.display='none'; doPrint(false); cancelBtn.textContent='Mégse'; cancelBtn.onclick=confirmNo; };
+  showConfirm('A megoldókulcsot is nyomtassuk mellé, külön lapon?', ()=>doPrint(true),()=>doPrint(false));
 }
 function doPrint(withKey){
   document.getElementById('sheet').innerHTML = sheetPage(false) + (withKey? sheetPage(true) : '');
   setTimeout(()=>window.print(), 100);
 }
 
+document.addEventListener('keydown',ev=>{if(ev.repeat&&(ev.key==='Enter'||ev.key===' ')&&ev.target.matches('button'))ev.preventDefault();});
 renderPick();
 </script>
 </body>
