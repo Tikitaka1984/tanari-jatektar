@@ -1,0 +1,17 @@
+{
+  "tested_commit": "6b1f7289ee51de9910c6caf8ce894a27d38bb539",
+  "source_sha256": "ec86c2f5c8a67c943d76bab74fd816f58d745a0dd90eb056645fee66ba9b5b8a",
+  "node": "v24.19.0",
+  "time_utc": "2026-10-11T19:07:34.836Z",
+  "results": [
+    {
+      "file": "games/keresztrejtveny.html",
+      "inline_script": 0,
+      "status": "PASS"
+    },
+    {
+      "file": "tests/keresztrejtveny-keyboard.test.cjs",
+      "status": "PASS"
+    }
+  ]
+}

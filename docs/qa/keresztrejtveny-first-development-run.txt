@@ -1,0 +1,19 @@
+aria-structure 360 PASS
+keyboard-workflow 360 PASS
+reset-display 360 PASS
+full-game 360 FAIL
+dialog-focus 360 PASS
+aria-structure 768 PASS
+keyboard-workflow 768 PASS
+reset-display 768 PASS
+full-game 768 FAIL
+dialog-focus 768 PASS
+aria-structure 1280 PASS
+keyboard-workflow 1280 PASS
+reset-display 1280 PASS
+full-game 1280 FAIL
+dialog-focus 1280 PASS
+print-and-transition-race 1280 PASS
+all-eight-topics 1280 FAIL
+main-comparison 1280 PASS
+{"total":18,"pass":14,"fail":4,"checks":188}

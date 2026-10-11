@@ -1,0 +1,298 @@
+{
+  "tested_commit": "47eb23a0ef7c2aa582e0a2e08ba68c706aff5fdb",
+  "baseline_commit": "68d12ba33de612ed795605496cd09d9ce1373859",
+  "baseline_source_sha256": "40a2b3c1d0e3bed3428bae684cd75fac08a1a7db67f103ac4a9da34ccde5f2dc",
+  "test_sha256": "57492ccf8ccc484420d8916ed424f4ca72e507b2b8e4eff304de657500e8f66d",
+  "source_sha256": "ec86c2f5c8a67c943d76bab74fd816f58d745a0dd90eb056645fee66ba9b5b8a",
+  "browser": "153.0.8010.0",
+  "time_utc": "2026-10-11T19:04:46.597Z",
+  "results": [
+    {
+      "name": "aria-structure",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "grid": {
+          "h": 17,
+          "w": 23,
+          "n": 73,
+          "e": 14
+        },
+        "overflow": {
+          "document": false,
+          "grid": true
+        }
+      },
+      "checks": 10
+    },
+    {
+      "name": "keyboard-workflow",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "keyboard_only_setup": true,
+        "keys": "arrows, Enter, Space, Escape, Home/End, Ctrl+Home/End, Tab/Shift+Tab",
+        "outline": {
+          "style": "solid",
+          "width": "3px"
+        }
+      },
+      "checks": 23
+    },
+    {
+      "name": "reset-display",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "errors_before_reset": 1,
+        "hint_penalty": 20
+      },
+      "checks": 13
+    },
+    {
+      "name": "full-game",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "score": {
+          "done": true,
+          "gaveUp": false,
+          "errors": 0,
+          "hints": 0,
+          "seconds": 0,
+          "total": 14,
+          "ok": true
+        },
+        "synthetic_guard_events": true
+      },
+      "checks": 6
+    },
+    {
+      "name": "dialog-focus",
+      "width": 360,
+      "status": "PASS",
+      "detail": {
+        "modal_keyboard": true,
+        "give_up": true
+      },
+      "checks": 12
+    },
+    {
+      "name": "aria-structure",
+      "width": 768,
+      "status": "PASS",
+      "detail": {
+        "grid": {
+          "h": 17,
+          "w": 23,
+          "n": 73,
+          "e": 14
+        },
+        "overflow": {
+          "document": false,
+          "grid": true
+        }
+      },
+      "checks": 10
+    },
+    {
+      "name": "keyboard-workflow",
+      "width": 768,
+      "status": "PASS",
+      "detail": {
+        "keyboard_only_setup": true,
+        "keys": "arrows, Enter, Space, Escape, Home/End, Ctrl+Home/End, Tab/Shift+Tab",
+        "outline": {
+          "style": "solid",
+          "width": "3px"
+        }
+      },
+      "checks": 23
+    },
+    {
+      "name": "reset-display",
+      "width": 768,
+      "status": "PASS",
+      "detail": {
+        "errors_before_reset": 1,
+        "hint_penalty": 20
+      },
+      "checks": 13
+    },
+    {
+      "name": "full-game",
+      "width": 768,
+      "status": "PASS",
+      "detail": {
+        "score": {
+          "done": true,
+          "gaveUp": false,
+          "errors": 0,
+          "hints": 0,
+          "seconds": 0,
+          "total": 14,
+          "ok": true
+        },
+        "synthetic_guard_events": true
+      },
+      "checks": 6
+    },
+    {
+      "name": "dialog-focus",
+      "width": 768,
+      "status": "PASS",
+      "detail": {
+        "modal_keyboard": true,
+        "give_up": true
+      },
+      "checks": 12
+    },
+    {
+      "name": "aria-structure",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "grid": {
+          "h": 17,
+          "w": 23,
+          "n": 73,
+          "e": 14
+        },
+        "overflow": {
+          "document": false,
+          "grid": false
+        }
+      },
+      "checks": 10
+    },
+    {
+      "name": "keyboard-workflow",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "keyboard_only_setup": true,
+        "keys": "arrows, Enter, Space, Escape, Home/End, Ctrl+Home/End, Tab/Shift+Tab",
+        "outline": {
+          "style": "solid",
+          "width": "3px"
+        }
+      },
+      "checks": 23
+    },
+    {
+      "name": "reset-display",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "errors_before_reset": 1,
+        "hint_penalty": 20
+      },
+      "checks": 13
+    },
+    {
+      "name": "full-game",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "score": {
+          "done": true,
+          "gaveUp": false,
+          "errors": 0,
+          "hints": 0,
+          "seconds": 0,
+          "total": 14,
+          "ok": true
+        },
+        "synthetic_guard_events": true
+      },
+      "checks": 6
+    },
+    {
+      "name": "dialog-focus",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "modal_keyboard": true,
+        "give_up": true
+      },
+      "checks": 12
+    },
+    {
+      "name": "print-and-transition-race",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "print_stub_calls": 2,
+        "operating_system_print_tested": false,
+        "synthetic_transition_race": true
+      },
+      "checks": 10
+    },
+    {
+      "name": "all-eight-topics",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "solved": [
+          {
+            "bank": "okor",
+            "entries": 14
+          },
+          {
+            "bank": "kozepkor",
+            "entries": 14
+          },
+          {
+            "bank": "kora_ujkor",
+            "entries": 14
+          },
+          {
+            "bank": "reformkor",
+            "entries": 14
+          },
+          {
+            "bank": "dualizmus",
+            "entries": 13
+          },
+          {
+            "bank": "vilaghaboruk",
+            "entries": 14
+          },
+          {
+            "bank": "hideghaboru",
+            "entries": 13
+          },
+          {
+            "bank": "jelenkor",
+            "entries": 14
+          }
+        ]
+      },
+      "checks": 24
+    },
+    {
+      "name": "double-activation",
+      "width": 1280,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: double confirmation retains result focus\n    at check (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:11:35)\n    at doubleActivation (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:61:883)\n    at async run (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:12:181)\n    at async /workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:67:104",
+      "checks": 4
+    },
+    {
+      "name": "main-comparison",
+      "width": 1280,
+      "status": "PASS",
+      "detail": {
+        "layouts": 8,
+        "score": {
+          "errors": 1,
+          "hints": 1,
+          "seconds": 20,
+          "done": true,
+          "gaveUp": false,
+          "total": 14
+        }
+      },
+      "checks": 3
+    }
+  ]
+}

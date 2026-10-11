@@ -1,0 +1,50 @@
+{
+  "tested_commit": "68d12ba33de612ed795605496cd09d9ce1373859",
+  "source_sha256": "40a2b3c1d0e3bed3428bae684cd75fac08a1a7db67f103ac4a9da34ccde5f2dc",
+  "browser": "153.0.8010.0",
+  "time_utc": "2026-10-11T18:54:56.276Z",
+  "results": [
+    {
+      "name": "aria-structure",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: ARIA owned rows\n    at check (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:9:35)\n    at ariaStructure (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:17:2)\n    at async run (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:10:181)\n    at async /workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:63:33",
+      "checks": 0
+    },
+    {
+      "name": "dialog-focus",
+      "width": 360,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: dialog receives focus\n    at check (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:9:35)\n    at dialogFocus (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:48:205)\n    at async run (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:10:181)\n    at async /workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:63:231",
+      "checks": 0
+    },
+    {
+      "name": "aria-structure",
+      "width": 768,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: ARIA owned rows\n    at check (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:9:35)\n    at ariaStructure (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:17:2)\n    at async run (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:10:181)\n    at async /workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:63:33",
+      "checks": 0
+    },
+    {
+      "name": "dialog-focus",
+      "width": 768,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: dialog receives focus\n    at check (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:9:35)\n    at dialogFocus (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:48:205)\n    at async run (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:10:181)\n    at async /workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:63:231",
+      "checks": 0
+    },
+    {
+      "name": "aria-structure",
+      "width": 1280,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: ARIA owned rows\n    at check (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:9:35)\n    at ariaStructure (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:17:2)\n    at async run (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:10:181)\n    at async /workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:63:33",
+      "checks": 0
+    },
+    {
+      "name": "dialog-focus",
+      "width": 1280,
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: dialog receives focus\n    at check (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:9:35)\n    at dialogFocus (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:48:205)\n    at async run (/workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:10:181)\n    at async /workspace/scratch/329af5744efa/m06-keresztrejtveny/tests/keresztrejtveny-keyboard.test.cjs:63:231",
+      "checks": 0
+    }
+  ]
+}
