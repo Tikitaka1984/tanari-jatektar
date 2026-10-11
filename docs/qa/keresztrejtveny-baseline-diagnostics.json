@@ -1,0 +1,21 @@
+{
+  "main_commit": "68d12ba33de612ed795605496cd09d9ce1373859",
+  "browser": "153.0.8010.0",
+  "time_utc": "2026-10-11T19:08:17.895Z",
+  "observations": {
+    "settings_focus_after_enter": "BODY",
+    "errors_before": "1",
+    "errors_after_reset": {
+      "model": 0,
+      "hud": "1"
+    },
+    "filled_input_original": "M",
+    "typed_replacement": "X",
+    "filled_input_after_typing": "M",
+    "solution_cancel_after_key_print": {
+      "cancelLabel": "Csak a feladatlap",
+      "print_stub_calls": 2,
+      "expected": 1
+    }
+  }
+}

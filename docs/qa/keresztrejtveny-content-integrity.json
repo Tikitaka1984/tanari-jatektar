@@ -1,0 +1,45 @@
+{
+  "main_commit": "68d12ba33de612ed795605496cd09d9ce1373859",
+  "tested_commit": "6b1f7289ee51de9910c6caf8ce894a27d38bb539",
+  "source_sha256": "ec86c2f5c8a67c943d76bab74fd816f58d745a0dd90eb056645fee66ba9b5b8a",
+  "time_utc": "2026-10-11T19:07:01.548555+00:00",
+  "checks": [
+    {
+      "check": "all_eight_wordbanks_answers_clues_levels_and_full_generation_rules",
+      "status": "PASS",
+      "main_sha256": "0c72c5ad6b719a9aa3e9d894f0b4f757cc806749d4c3d3e954983cf65092bbc5",
+      "modified_sha256": "0c72c5ad6b719a9aa3e9d894f0b4f757cc806749d4c3d3e954983cf65092bbc5"
+    },
+    {
+      "check": "final_score_and_verdict_thresholds",
+      "status": "PASS",
+      "main_sha256": "923ce347538a0ffca32f69e835ba53c46b288386e824e4c59c2f104c372745b5",
+      "modified_sha256": "923ce347538a0ffca32f69e835ba53c46b288386e824e4c59c2f104c372745b5"
+    },
+    {
+      "check": "print_tasks_and_keys",
+      "status": "PASS",
+      "main_sha256": "73f9732cf02fe8f25017a4b23c13e291981c7ad8359dcc0acfcef1a7b812db6f",
+      "modified_sha256": "73f9732cf02fe8f25017a4b23c13e291981c7ad8359dcc0acfcef1a7b812db6f"
+    },
+    {
+      "check": "answer_validation_and_error_counting",
+      "status": "PASS",
+      "main_sha256": "d5e62a340f45550144bc2d633e3a2b2de3ba89e87be3cda293807e59b3b65c22",
+      "modified_sha256": "d5e62a340f45550144bc2d633e3a2b2de3ba89e87be3cda293807e59b3b65c22"
+    },
+    {
+      "check": "hint_choice_and_20_second_penalty",
+      "status": "PASS",
+      "main_sha256": "5f6b9c762ffc9a314d798313b47ef360f9dad23b036cdc26e88313a150b8156e",
+      "modified_sha256": "5f6b9c762ffc9a314d798313b47ef360f9dad23b036cdc26e88313a150b8156e"
+    },
+    {
+      "check": "only_assigned_game_source_changed",
+      "status": "PASS",
+      "changed_game_sources": [
+        "games/keresztrejtveny.html"
+      ]
+    }
+  ]
+}
