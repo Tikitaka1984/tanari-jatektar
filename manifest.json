@@ -113,5 +113,10 @@
     "path": "jatekok/jatekok.json",
     "bytes": 2612,
     "md5": "f567caef6006bf37f30c75e0068e79e1"
+  },
+  "iranyitsd-romat": {
+    "path": "games/iranyitsd-romat.html",
+    "bytes": 99072,
+    "md5": "7cf25ea826f0dad1593f64b09b3a0b9c"
   }
 }
