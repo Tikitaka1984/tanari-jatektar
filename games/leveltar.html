@@ -662,6 +662,7 @@ function solved(id,msg){
   L[id].o=true;
   F('&#128275; '+msg,'ok');
   document.getElementById('p-a').innerHTML='<button class="btn" onclick="closePanel()">Vissza a terembe &rarr;</button>';
+  document.querySelector('#p-a button').focus();
   renderRoom();
 }
 function hintBtn(id){return `<button class="btn secondary small" id="hb-${id}" onclick="useHint('${id}')">Segítség (&minus;1,5 perc)</button>`;}
@@ -875,6 +876,7 @@ function clickTerm(el){
     document.querySelectorAll('.tm').forEach(x=>x.style.pointerEvents='none');
     F('&#127942; '+t.fb,'ok');
     document.getElementById('p-a').innerHTML='<button class="btn" onclick="endGame(true)">Kilépek a levéltárból &rarr;</button>';
+    document.querySelector('#p-a button').focus();
   }else{
     G.finErr++; penal(60);
     el.classList.add('clean');
