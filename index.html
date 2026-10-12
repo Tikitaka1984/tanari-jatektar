@@ -205,14 +205,12 @@ h1,h2,h3{color:#fff8e9}
 .tag.outline{border-color:#546a7a;color:#d5dfeb}
 .card.demo{background:linear-gradient(140deg,#1b3448,#10283c)}
 .card.escape{background:linear-gradient(150deg,#18344a,#10253a)}
-.card-visual{height:128px;display:block;margin:-19px -21px 17px;background:linear-gradient(135deg,#344c66,#0d2336);overflow:hidden;position:relative;border-radius:17px 17px 0 0}
-.card-visual::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#132b3d00,#08182d14)}
-.card-visual .illustration{position:absolute;inset:0;background-position:center;background-size:cover;filter:saturate(.88)}
-.card-visual[data-theme="roma"] .illustration,.card-visual[data-theme="ancient"] .illustration{background-image:url('assets/hub-roma.svg')}
-.card-visual[data-theme="castle"] .illustration,.card-visual[data-theme="escape"] .illustration{background-image:url('assets/hub-korona.svg')}
-.card-visual[data-theme="quiz"] .illustration{background:radial-gradient(circle at 73% 32%,#d0a96a44,transparent 28%),repeating-linear-gradient(120deg,#152d42,#233f54 34px,#152d42 72px)}
-.card-visual[data-theme="demo"] .illustration{background:radial-gradient(ellipse at 35% 35%,#cc9d565c,transparent 32%),linear-gradient(130deg,#31506b,#0f2237)}
-.card-visual .visual-symbol{position:absolute;right:25px;top:9px;color:#f0c987bd;font-family:'Cormorant Garamond',Georgia,serif;font-size:6.2rem;line-height:1}
+/* The artwork stays at the top of cards, including equal-height grid rows. */
+.card{display:flex;flex-direction:column;align-items:stretch}
+.card-visual{height:156px;flex:none;display:block;margin:-19px -21px 17px;background:#183348;overflow:hidden;position:relative;border-radius:17px 17px 0 0}
+.card-visual img{display:block;width:100%;height:100%;object-fit:cover}
+.card-visual::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#08182d20,transparent 45%)}
+.card .go{margin-top:auto;padding-top:16px}
 .divider span{color:#d3bea0}
 .divider .line{background:var(--edge-2)}
 .btn-start{border:1px solid #ecc485;background:linear-gradient(135deg,#e7b86f,#db9950);color:#112339;border-radius:10px;font-family:'Lora',Georgia,serif}
@@ -258,7 +256,7 @@ h1,h2,h3{color:#fff8e9}
  .feature-copy strong{font-size:1.7rem}
  .feature-copy small{font-size:.8rem}
  .feature-arrow{display:grid}
- .card-visual{height:100px}
+ .card-visual{height:128px}
  .grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr))}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
@@ -426,6 +424,31 @@ function syncFilterStates(){
   });
 }
 
+/* Decorative illustrations; each card's visible title supplies its accessible name. */
+const CARD_ARTWORK = {
+  "iranyitsd-romat": "roma",
+  "korona": "korona",
+  "kivagyok": "kivagyok",
+  "reformkor": "reformkor",
+  "leveltar": "leveltar",
+  "szokereso": "szokereso",
+  "ketforras": "ketforras",
+  "keresztrejtveny": "keresztrejtveny",
+  "eszperente": "eszperente",
+  "arpadok-oroksege": "arpadok",
+  "iuti-haza": "iuti",
+  "nyolckor-indul-a-busz": "nyolckor",
+  "junius-tizenhatodika": "junius",
+  "grof-dolgozoszobaja": "grof",
+  "demo_felfedezesek": "demo-felfedezesek",
+  "demo_roma": "demo-roma",
+  "demo_wwi": "demo-wwi",
+  "demo_legkor": "demo-legkor"
+};
+function cardArtwork(id){
+  return '<span class="card-visual" aria-hidden="true"><img src="assets/hub-'+CARD_ARTWORK[id]+'.svg" alt="" width="960" height="360" loading="lazy" decoding="async"></span>';
+}
+
 function renderGrid(){
   const list=GAMES.filter(function(g){
     return (state.subject===null || g.subject===state.subject) &&
@@ -435,7 +458,7 @@ function renderGrid(){
   document.getElementById('count').textContent = list.length+' / '+GAMES.length+' feladat';
   document.getElementById('grid').innerHTML = list.map(function(g){
     return '<button class="card" onclick="openItem(\''+g.id+'\',\'game\',this)">'+
-      '<span class="card-visual" data-theme="'+(g.id==='iranyitsd-romat'?'roma':g.id==='korona'?'castle':'quiz')+'" aria-hidden="true"><span class="illustration"></span><span class="visual-symbol">'+(g.id==='iranyitsd-romat'?'Ⅻ':g.id==='korona'?'♛':'✦')+'</span></span>'+
+      cardArtwork(g.id)+
       '<div class="kind">'+g.kind+'</div><h3>'+g.title+'</h3><p>'+g.desc+'</p>'+
       '<div class="tags"><span class="tag fill">'+subjectLabel(g.subject)+'</span>'+g.grade.map(function(x){return '<span class="tag outline">'+x+'. évf.</span>';}).join('')+'</div>'+
       '<div class="go">Megnyitás <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></button>';
@@ -447,7 +470,7 @@ function renderEscapes(){
   document.getElementById('escapeGrid').innerHTML = list.map(function(e){
     const base='jatekok/'+e.slug+'/';
     const sr='<span class="sr"> – '+e.title+'</span>';
-    return '<article class="card escape"><span class="card-visual" data-theme="escape" aria-hidden="true"><span class="illustration"></span></span><div class="kind">Szabadulószoba · 3D</div><h3>'+e.title+'</h3><p class="sub">'+e.sub+'</p>'+
+    return '<article class="card escape">'+cardArtwork(e.slug)+'<div class="kind">Szabadulószoba · 3D</div><h3>'+e.title+'</h3><p class="sub">'+e.sub+'</p>'+
       '<p>Téma: '+e.topic+' · Cél: '+e.goal+'</p>'+
       '<div class="tags"><span class="tag fill">'+subjectLabel(e.subject)+'</span><span class="tag outline">'+e.grade+'</span><span class="tag outline">Mobilon is játszható</span></div>'+
       '<p class="meta">Gyors kör: '+e.quick+' · Teljes játék: '+e.full+'</p>'+
@@ -462,7 +485,7 @@ function renderDemos(){
   document.getElementById('demoEmpty').style.display = list.length? 'none':'block';
   document.getElementById('demoGrid').innerHTML = list.map(function(d){
     return '<button class="card demo" onclick="openItem(\''+d.id+'\',\'demo\',this)">'+
-      '<span class="card-visual" data-theme="demo" aria-hidden="true"><span class="illustration"></span><span class="visual-symbol">✧</span></span>'+
+      cardArtwork(d.id)+
       '<div class="kind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>Szemléltetés</div>'+
       '<h3>'+d.title+'</h3><p>'+d.desc+'</p>'+
       '<div class="tags"><span class="tag fill">'+subjectLabel(d.subject)+'</span><span class="tag outline">'+d.topic+'</span></div>'+
