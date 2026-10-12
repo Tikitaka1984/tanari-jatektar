@@ -1,0 +1,102 @@
+{
+  "tested_commit": "aae8a8d10d0a9459bc56d5772a29452308316477",
+  "baseline_commit": "a3669271da16286b164a8f395aa7814e236d8b47",
+  "source_sha256": "0fe04d35b1a741f5a2081c36a570cbf7ed95188cd6ef4c80fc6d5aa5c2037a6c",
+  "test_sha256": "2f9eab83e4d7c63fe551a194b56a23ece38bd930c06562802482576c1877fc8e",
+  "node": "v24.19.0",
+  "time_utc": "2026-10-12T07:17:05.514Z",
+  "results": [
+    {
+      "name": "all_rounds_options_notes_reports_region_data_and_map_coordinates",
+      "status": "PASS",
+      "baseline_sha256": "b9cac14a59b604b205b162763befa527bb42f36b4f10006867e4329ccf13aa67",
+      "candidate_sha256": "b9cac14a59b604b205b162763befa527bb42f36b4f10006867e4329ccf13aa67"
+    },
+    {
+      "name": "all_original_delayed_plans",
+      "status": "PASS",
+      "baseline_sha256": "dfcefaa4f1ec6e65b65ac84be19151c81efd204c163e3df7d3f753faae59be1b",
+      "candidate_sha256": "dfcefaa4f1ec6e65b65ac84be19151c81efd204c163e3df7d3f753faae59be1b"
+    },
+    {
+      "name": "historical_guide_rules_material_and_sources",
+      "status": "PASS",
+      "baseline_sha256": "d574c45b2e320149a571cfff3fcb010f7bfb7f3a9545b9ca9a5c4add32da8191",
+      "candidate_sha256": "d574c45b2e320149a571cfff3fcb010f7bfb7f3a9545b9ca9a5c4add32da8191"
+    },
+    {
+      "name": "unchanged_9_difficulty_profiles",
+      "status": "PASS",
+      "baseline_sha256": "b0d9b45578c0eca714c622741e918b9e6021b72fc2c4535d9ff5af99113e2751",
+      "candidate_sha256": "b0d9b45578c0eca714c622741e918b9e6021b72fc2c4535d9ff5af99113e2751"
+    },
+    {
+      "name": "original_score_formula_and_verdict_thresholds",
+      "status": "PASS",
+      "baseline_sha256": "29d96991958f598c4edb37dd5bc15730b8e78e6b12ae3a3dd225483e5b3fa9a6",
+      "candidate_sha256": "29d96991958f598c4edb37dd5bc15730b8e78e6b12ae3a3dd225483e5b3fa9a6"
+    },
+    {
+      "name": "original_province_weighting_and_clamp",
+      "status": "PASS",
+      "baseline_sha256": "b9fc6cd72d0f0d50e4416e076cf23914bea09a2054940b4c09e6d7d98f7ee821",
+      "candidate_sha256": "b9fc6cd72d0f0d50e4416e076cf23914bea09a2054940b4c09e6d7d98f7ee821"
+    },
+    {
+      "name": "map_geographic_shapes_and_labels",
+      "status": "PASS",
+      "baseline_sha256": "5a0f4eb3da7ba26c547a7c6c1ee6f1744b794f3634a6fcb2f658b6cb59021122",
+      "candidate_sha256": "5a0f4eb3da7ba26c547a7c6c1ee6f1744b794f3634a6fcb2f658b6cb59021122"
+    },
+    {
+      "name": "inline_script_0_syntax",
+      "status": "PASS"
+    },
+    {
+      "name": "inline_script_1_syntax",
+      "status": "PASS"
+    },
+    {
+      "name": "inline_script_2_syntax",
+      "status": "PASS"
+    },
+    {
+      "name": "inline_script_3_syntax",
+      "status": "PASS"
+    },
+    {
+      "name": "inline_script_4_syntax",
+      "status": "PASS"
+    },
+    {
+      "name": "roma-9-model.test.cjs_syntax",
+      "status": "PASS"
+    },
+    {
+      "name": "roma-9-browser.test.cjs_syntax",
+      "status": "PASS"
+    },
+    {
+      "name": "roma-9-content.test.cjs_syntax",
+      "status": "PASS"
+    },
+    {
+      "name": "manifest_utf8_bytes_and_md5",
+      "status": "PASS",
+      "bytes": 106486,
+      "md5": "a9b792a289094753c7a06b3e19c7370d"
+    },
+    {
+      "name": "other_manifest_entries_unchanged",
+      "status": "PASS",
+      "entries": 23
+    },
+    {
+      "name": "only_roma_game_source_changed",
+      "status": "PASS",
+      "files": [
+        "games/iranyitsd-romat.html"
+      ]
+    }
+  ]
+}

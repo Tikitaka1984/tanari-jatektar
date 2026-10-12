@@ -1,0 +1,5355 @@
+{
+  "tested_commit": "b05a5970a9b51a9c763962159608aafe52b8ccfc",
+  "source_sha256": "f4dbf794c2edfe0b04a0eec5d5c58ce6babd8264a0a1ba08ccfeaeb65c3e95ec",
+  "test_sha256": "6e3d7a3307bd812f23e5675de7febc73542e3dc454f3b357e73f0b47a9099d68",
+  "baseline_commit": "a3669271da16286b164a8f395aa7814e236d8b47",
+  "baseline_sha256": "1157b03efb2c05811dd57f6bbb5fab62cac9906e712b9bfb12a7b3c85f13fc21",
+  "legacy_commit": "b05a5970a9b51a9c763962159608aafe52b8ccfc",
+  "legacy_sha256": "f4dbf794c2edfe0b04a0eec5d5c58ce6babd8264a0a1ba08ccfeaeb65c3e95ec",
+  "node": "v24.19.0",
+  "time_utc": "2026-10-12T06:38:39.143Z",
+  "method": "Actual first inline script; DOM stub; rendering suppressed; original endScreen scoring executed",
+  "normal": {
+    "paths": 27,
+    "comparisons": 459,
+    "mismatched_paths": 24,
+    "invalid_states": 0,
+    "samples": [
+      {
+        "sequence": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "stage": 3,
+        "moment": "after-decision",
+        "baseline": {
+          "state": {
+            "money": 32,
+            "border": 79,
+            "supply": 74,
+            "loyalty": 63
+          },
+          "regions": {
+            "italia": 81,
+            "gallia": 70,
+            "hispania": 65,
+            "aegyptus": 78,
+            "asia": 64,
+            "danubius": 68
+          },
+          "idx": 1,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 0,
+          "selected": "aegyptus",
+          "pending": [
+            {
+              "due": 2,
+              "title": "A rajnai légiók ellátása",
+              "description": "A fenntartási költségek később megterhelik a kincstárat.",
+              "global": [
+                -9,
+                3,
+                0,
+                0
+              ],
+              "regions": {
+                "gallia": 3
+              },
+              "source": 0
+            },
+            {
+              "due": 3,
+              "title": "Kikötői infrastruktúra",
+              "description": "A raktárak és kikötők javítják a későbbi ellátást.",
+              "global": [
+                0,
+                0,
+                8,
+                3
+              ],
+              "regions": {
+                "aegyptus": 8,
+                "italia": 5
+              },
+              "source": 1
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Új légiókat állítasz fel",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +24 · Ellátás és utak -3 · Tartományi bizalom -2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Kikötőket és raktárakat bővítesz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem 0 · Ellátás és utak +21 · Tartományi bizalom +8",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        "candidate": {
+          "state": {
+            "money": 32,
+            "border": 79,
+            "supply": 74,
+            "loyalty": 63
+          },
+          "regions": {
+            "italia": 80,
+            "gallia": 70,
+            "hispania": 65,
+            "aegyptus": 78,
+            "asia": 64,
+            "danubius": 68
+          },
+          "idx": 1,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 0,
+          "selected": "aegyptus",
+          "pending": [
+            {
+              "due": 2,
+              "title": "A rajnai légiók ellátása",
+              "description": "A fenntartási költségek később megterhelik a kincstárat.",
+              "global": [
+                -9,
+                3,
+                0,
+                0
+              ],
+              "regions": {
+                "gallia": 3
+              },
+              "source": 0
+            },
+            {
+              "due": 3,
+              "title": "Kikötői infrastruktúra",
+              "description": "A raktárak és kikötők javítják a későbbi ellátást.",
+              "global": [
+                0,
+                0,
+                8,
+                3
+              ],
+              "regions": {
+                "aegyptus": 8,
+                "italia": 5
+              },
+              "source": 1
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Új légiókat állítasz fel",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +24 · Ellátás és utak -3 · Tartományi bizalom -2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Kikötőket és raktárakat bővítesz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem 0 · Ellátás és utak +21 · Tartományi bizalom +8",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            }
+          ],
+          "score": null,
+          "title": null
+        }
+      },
+      {
+        "sequence": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "stage": 4,
+        "moment": "next-session-or-end",
+        "baseline": {
+          "state": {
+            "money": 23,
+            "border": 82,
+            "supply": 70,
+            "loyalty": 63
+          },
+          "regions": {
+            "italia": 81,
+            "gallia": 73,
+            "hispania": 65,
+            "aegyptus": 78,
+            "asia": 64,
+            "danubius": 68
+          },
+          "idx": 2,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "aegyptus",
+          "pending": [
+            {
+              "due": 3,
+              "title": "Kikötői infrastruktúra",
+              "description": "A raktárak és kikötők javítják a későbbi ellátást.",
+              "global": [
+                0,
+                0,
+                8,
+                3
+              ],
+              "regions": {
+                "aegyptus": 8,
+                "italia": 5
+              },
+              "source": 1
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Új légiókat állítasz fel",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +24 · Ellátás és utak -3 · Tartományi bizalom -2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Kikötőket és raktárakat bővítesz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem 0 · Ellátás és utak +21 · Tartományi bizalom +8",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "A rajnai légiók ellátása",
+              "option": "Késleltetett esemény",
+              "effect": "A fenntartási költségek később megterhelik a kincstárat."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        "candidate": {
+          "state": {
+            "money": 23,
+            "border": 82,
+            "supply": 70,
+            "loyalty": 63
+          },
+          "regions": {
+            "italia": 80,
+            "gallia": 73,
+            "hispania": 65,
+            "aegyptus": 78,
+            "asia": 64,
+            "danubius": 68
+          },
+          "idx": 2,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "aegyptus",
+          "pending": [
+            {
+              "due": 3,
+              "title": "Kikötői infrastruktúra",
+              "description": "A raktárak és kikötők javítják a későbbi ellátást.",
+              "global": [
+                0,
+                0,
+                8,
+                3
+              ],
+              "regions": {
+                "aegyptus": 8,
+                "italia": 5
+              },
+              "source": 1
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Új légiókat állítasz fel",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +24 · Ellátás és utak -3 · Tartományi bizalom -2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Kikötőket és raktárakat bővítesz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem 0 · Ellátás és utak +21 · Tartományi bizalom +8",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "A rajnai légiók ellátása",
+              "option": "Késleltetett esemény",
+              "effect": "A fenntartási költségek később megterhelik a kincstárat."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            }
+          ],
+          "score": null,
+          "title": null
+        }
+      },
+      {
+        "sequence": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "stage": 5,
+        "moment": "after-decision",
+        "baseline": {
+          "state": {
+            "money": 5,
+            "border": 89,
+            "supply": 90,
+            "loyalty": 73
+          },
+          "regions": {
+            "italia": 81,
+            "gallia": 89,
+            "hispania": 76,
+            "aegyptus": 78,
+            "asia": 64,
+            "danubius": 68
+          },
+          "idx": 2,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 0,
+          "selected": "gallia",
+          "pending": [
+            {
+              "due": 3,
+              "title": "Kikötői infrastruktúra",
+              "description": "A raktárak és kikötők javítják a későbbi ellátást.",
+              "global": [
+                0,
+                0,
+                8,
+                3
+              ],
+              "regions": {
+                "aegyptus": 8,
+                "italia": 5
+              },
+              "source": 1
+            },
+            {
+              "due": 5,
+              "title": "A fejlesztett utak haszna",
+              "description": "A kereskedelmi útvonalak később is hozzájárulnak a bevételekhez.",
+              "global": [
+                9,
+                2,
+                5,
+                3
+              ],
+              "regions": {
+                "gallia": 6,
+                "hispania": 6
+              },
+              "source": 2
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Új légiókat állítasz fel",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +24 · Ellátás és utak -3 · Tartományi bizalom -2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Kikötőket és raktárakat bővítesz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem 0 · Ellátás és utak +21 · Tartományi bizalom +8",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "A rajnai légiók ellátása",
+              "option": "Késleltetett esemény",
+              "effect": "A fenntartási költségek később megterhelik a kincstárat."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Birodalmi úthálózatot korszerűsítesz",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +7 · Ellátás és utak +20 · Tartományi bizalom +10",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        "candidate": {
+          "state": {
+            "money": 5,
+            "border": 89,
+            "supply": 90,
+            "loyalty": 73
+          },
+          "regions": {
+            "italia": 80,
+            "gallia": 89,
+            "hispania": 76,
+            "aegyptus": 78,
+            "asia": 64,
+            "danubius": 68
+          },
+          "idx": 2,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 0,
+          "selected": "gallia",
+          "pending": [
+            {
+              "due": 3,
+              "title": "Kikötői infrastruktúra",
+              "description": "A raktárak és kikötők javítják a későbbi ellátást.",
+              "global": [
+                0,
+                0,
+                8,
+                3
+              ],
+              "regions": {
+                "aegyptus": 8,
+                "italia": 5
+              },
+              "source": 1
+            },
+            {
+              "due": 5,
+              "title": "A fejlesztett utak haszna",
+              "description": "A kereskedelmi útvonalak később is hozzájárulnak a bevételekhez.",
+              "global": [
+                9,
+                2,
+                5,
+                3
+              ],
+              "regions": {
+                "gallia": 6,
+                "hispania": 6
+              },
+              "source": 2
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Új légiókat állítasz fel",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +24 · Ellátás és utak -3 · Tartományi bizalom -2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Kikötőket és raktárakat bővítesz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem 0 · Ellátás és utak +21 · Tartományi bizalom +8",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "A rajnai légiók ellátása",
+              "option": "Késleltetett esemény",
+              "effect": "A fenntartási költségek később megterhelik a kincstárat."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Birodalmi úthálózatot korszerűsítesz",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +7 · Ellátás és utak +20 · Tartományi bizalom +10",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            }
+          ],
+          "score": null,
+          "title": null
+        }
+      },
+      {
+        "sequence": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "stage": 6,
+        "moment": "next-session-or-end",
+        "baseline": {
+          "state": {
+            "money": 5,
+            "border": 89,
+            "supply": 94,
+            "loyalty": 76
+          },
+          "regions": {
+            "italia": 86,
+            "gallia": 89,
+            "hispania": 76,
+            "aegyptus": 86,
+            "asia": 64,
+            "danubius": 68
+          },
+          "idx": 3,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "gallia",
+          "pending": [
+            {
+              "due": 5,
+              "title": "A fejlesztett utak haszna",
+              "description": "A kereskedelmi útvonalak később is hozzájárulnak a bevételekhez.",
+              "global": [
+                9,
+                2,
+                5,
+                3
+              ],
+              "regions": {
+                "gallia": 6,
+                "hispania": 6
+              },
+              "source": 2
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Új légiókat állítasz fel",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +24 · Ellátás és utak -3 · Tartományi bizalom -2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Kikötőket és raktárakat bővítesz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem 0 · Ellátás és utak +21 · Tartományi bizalom +8",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "A rajnai légiók ellátása",
+              "option": "Késleltetett esemény",
+              "effect": "A fenntartási költségek később megterhelik a kincstárat."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Birodalmi úthálózatot korszerűsítesz",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +7 · Ellátás és utak +20 · Tartományi bizalom +10",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Kikötői infrastruktúra",
+              "option": "Késleltetett esemény",
+              "effect": "A raktárak és kikötők javítják a későbbi ellátást."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        "candidate": {
+          "state": {
+            "money": 5,
+            "border": 89,
+            "supply": 94,
+            "loyalty": 76
+          },
+          "regions": {
+            "italia": 85,
+            "gallia": 89,
+            "hispania": 76,
+            "aegyptus": 86,
+            "asia": 64,
+            "danubius": 68
+          },
+          "idx": 3,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "gallia",
+          "pending": [
+            {
+              "due": 5,
+              "title": "A fejlesztett utak haszna",
+              "description": "A kereskedelmi útvonalak később is hozzájárulnak a bevételekhez.",
+              "global": [
+                9,
+                2,
+                5,
+                3
+              ],
+              "regions": {
+                "gallia": 6,
+                "hispania": 6
+              },
+              "source": 2
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Új légiókat állítasz fel",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +24 · Ellátás és utak -3 · Tartományi bizalom -2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Kikötőket és raktárakat bővítesz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem 0 · Ellátás és utak +21 · Tartományi bizalom +8",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "A rajnai légiók ellátása",
+              "option": "Késleltetett esemény",
+              "effect": "A fenntartási költségek később megterhelik a kincstárat."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Birodalmi úthálózatot korszerűsítesz",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +7 · Ellátás és utak +20 · Tartományi bizalom +10",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Kikötői infrastruktúra",
+              "option": "Késleltetett esemény",
+              "effect": "A raktárak és kikötők javítják a későbbi ellátást."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            }
+          ],
+          "score": null,
+          "title": null
+        }
+      }
+    ],
+    "status": "FAIL"
+  },
+  "difficulty": {
+    "normal": {
+      "paths": 27,
+      "score_min": 24,
+      "score_max": 86,
+      "score_mean": 63.592592592592595
+    },
+    "easy": {
+      "paths": 27,
+      "comparisons": 459,
+      "mismatched_legacy_paths": 0,
+      "invalid_states": 0,
+      "incomplete": 0,
+      "score_min": 51,
+      "score_max": 93,
+      "sample_sequence": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "initial": {
+        "state": {
+          "money": 85,
+          "border": 80,
+          "supply": 85,
+          "loyalty": 90
+        },
+        "regions": {
+          "italia": 84,
+          "gallia": 76,
+          "hispania": 77,
+          "aegyptus": 78,
+          "asia": 76,
+          "danubius": 72
+        },
+        "idx": 0,
+        "chosen": false,
+        "ended": false,
+        "chosenOption": null,
+        "selected": "italia",
+        "pending": [],
+        "history": [],
+        "score": null,
+        "title": null
+      },
+      "score_mean": 85.33333333333333,
+      "example_stages": [
+        {
+          "state": {
+            "money": 85,
+            "border": 80,
+            "supply": 85,
+            "loyalty": 90
+          },
+          "regions": {
+            "italia": 84,
+            "gallia": 76,
+            "hispania": 77,
+            "aegyptus": 78,
+            "asia": 76,
+            "danubius": 72
+          },
+          "idx": 0,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "italia",
+          "pending": [],
+          "history": [],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 78,
+            "border": 97,
+            "supply": 91,
+            "loyalty": 92
+          },
+          "regions": {
+            "italia": 84,
+            "gallia": 84,
+            "hispania": 77,
+            "aegyptus": 78,
+            "asia": 76,
+            "danubius": 83
+          },
+          "idx": 0,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "danubius",
+          "pending": [
+            {
+              "due": 2,
+              "title": "Határ menti biztonság",
+              "description": "Az erődrendszer később is javítja a határvidék helyzetét.",
+              "global": [
+                0,
+                5,
+                0,
+                0
+              ],
+              "regions": {
+                "gallia": 8,
+                "danubius": 2
+              },
+              "source": 0
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 78,
+            "border": 97,
+            "supply": 91,
+            "loyalty": 92
+          },
+          "regions": {
+            "italia": 84,
+            "gallia": 84,
+            "hispania": 77,
+            "aegyptus": 78,
+            "asia": 76,
+            "danubius": 83
+          },
+          "idx": 1,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "danubius",
+          "pending": [
+            {
+              "due": 2,
+              "title": "Határ menti biztonság",
+              "description": "Az erődrendszer később is javítja a határvidék helyzetét.",
+              "global": [
+                0,
+                5,
+                0,
+                0
+              ],
+              "regions": {
+                "gallia": 8,
+                "danubius": 2
+              },
+              "source": 0
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 70,
+            "border": 97,
+            "supply": 100,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 92,
+            "gallia": 84,
+            "hispania": 77,
+            "aegyptus": 89,
+            "asia": 76,
+            "danubius": 83
+          },
+          "idx": 1,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "aegyptus",
+          "pending": [
+            {
+              "due": 2,
+              "title": "Határ menti biztonság",
+              "description": "Az erődrendszer később is javítja a határvidék helyzetét.",
+              "global": [
+                0,
+                5,
+                0,
+                0
+              ],
+              "regions": {
+                "gallia": 8,
+                "danubius": 2
+              },
+              "source": 0
+            },
+            {
+              "due": 3,
+              "title": "Új gabonaválság",
+              "description": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit.",
+              "global": [
+                -3,
+                0,
+                -7,
+                -4
+              ],
+              "regions": {
+                "italia": -8
+              },
+              "source": 1
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 70,
+            "border": 100,
+            "supply": 100,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 92,
+            "gallia": 93,
+            "hispania": 77,
+            "aegyptus": 89,
+            "asia": 76,
+            "danubius": 85
+          },
+          "idx": 2,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "aegyptus",
+          "pending": [
+            {
+              "due": 3,
+              "title": "Új gabonaválság",
+              "description": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit.",
+              "global": [
+                -3,
+                0,
+                -7,
+                -4
+              ],
+              "regions": {
+                "italia": -8
+              },
+              "source": 1
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 64,
+            "border": 100,
+            "supply": 100,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 92,
+            "gallia": 100,
+            "hispania": 84,
+            "aegyptus": 89,
+            "asia": 76,
+            "danubius": 85
+          },
+          "idx": 2,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "gallia",
+          "pending": [
+            {
+              "due": 3,
+              "title": "Új gabonaválság",
+              "description": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit.",
+              "global": [
+                -3,
+                0,
+                -7,
+                -4
+              ],
+              "regions": {
+                "italia": -8
+              },
+              "source": 1
+            },
+            {
+              "due": 5,
+              "title": "Katonai úthálózat",
+              "description": "A gyors csapatmozgás később is segíti a védelmet.",
+              "global": [
+                0,
+                5,
+                1,
+                0
+              ],
+              "regions": {
+                "gallia": 4
+              },
+              "source": 2
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +15 · Ellátás és utak +7 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 62,
+            "border": 100,
+            "supply": 95,
+            "loyalty": 97
+          },
+          "regions": {
+            "italia": 87,
+            "gallia": 100,
+            "hispania": 84,
+            "aegyptus": 89,
+            "asia": 76,
+            "danubius": 85
+          },
+          "idx": 3,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "gallia",
+          "pending": [
+            {
+              "due": 5,
+              "title": "Katonai úthálózat",
+              "description": "A gyors csapatmozgás később is segíti a védelmet.",
+              "global": [
+                0,
+                5,
+                1,
+                0
+              ],
+              "regions": {
+                "gallia": 4
+              },
+              "source": 2
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +15 · Ellátás és utak +7 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 59,
+            "border": 100,
+            "supply": 100,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 87,
+            "gallia": 100,
+            "hispania": 84,
+            "aegyptus": 89,
+            "asia": 89,
+            "danubius": 85
+          },
+          "idx": 3,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "asia",
+          "pending": [
+            {
+              "due": 5,
+              "title": "Katonai úthálózat",
+              "description": "A gyors csapatmozgás később is segíti a védelmet.",
+              "global": [
+                0,
+                5,
+                1,
+                0
+              ],
+              "regions": {
+                "gallia": 4
+              },
+              "source": 2
+            },
+            {
+              "due": 6,
+              "title": "Tartós helyi együttműködés",
+              "description": "Az igazságosabb adózás idővel gazdasági előnnyel jár.",
+              "global": [
+                8,
+                0,
+                2,
+                5
+              ],
+              "regions": {
+                "asia": 9
+              },
+              "source": 3
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +15 · Ellátás és utak +7 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -3 · Határvédelem +2 · Ellátás és utak +8 · Tartományi bizalom +20",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 59,
+            "border": 100,
+            "supply": 100,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 87,
+            "gallia": 100,
+            "hispania": 84,
+            "aegyptus": 89,
+            "asia": 89,
+            "danubius": 85
+          },
+          "idx": 4,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "asia",
+          "pending": [
+            {
+              "due": 5,
+              "title": "Katonai úthálózat",
+              "description": "A gyors csapatmozgás később is segíti a védelmet.",
+              "global": [
+                0,
+                5,
+                1,
+                0
+              ],
+              "regions": {
+                "gallia": 4
+              },
+              "source": 2
+            },
+            {
+              "due": 6,
+              "title": "Tartós helyi együttműködés",
+              "description": "Az igazságosabb adózás idővel gazdasági előnnyel jár.",
+              "global": [
+                8,
+                0,
+                2,
+                5
+              ],
+              "regions": {
+                "asia": 9
+              },
+              "source": 3
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +15 · Ellátás és utak +7 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -3 · Határvédelem +2 · Ellátás és utak +8 · Tartományi bizalom +20",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 51,
+            "border": 100,
+            "supply": 98,
+            "loyalty": 97
+          },
+          "regions": {
+            "italia": 87,
+            "gallia": 100,
+            "hispania": 84,
+            "aegyptus": 89,
+            "asia": 89,
+            "danubius": 91
+          },
+          "idx": 4,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "danubius",
+          "pending": [
+            {
+              "due": 5,
+              "title": "Katonai úthálózat",
+              "description": "A gyors csapatmozgás később is segíti a védelmet.",
+              "global": [
+                0,
+                5,
+                1,
+                0
+              ],
+              "regions": {
+                "gallia": 4
+              },
+              "source": 2
+            },
+            {
+              "due": 6,
+              "title": "Tartós helyi együttműködés",
+              "description": "Az igazságosabb adózás idővel gazdasági előnnyel jár.",
+              "global": [
+                8,
+                0,
+                2,
+                5
+              ],
+              "regions": {
+                "asia": 9
+              },
+              "source": 3
+            },
+            {
+              "due": 6,
+              "title": "Határvédelem fenntartása",
+              "description": "A megerősített katonai jelenlét továbbra is pénzt igényel.",
+              "global": [
+                -8,
+                5,
+                0,
+                0
+              ],
+              "regions": {
+                "danubius": 6
+              },
+              "source": 4
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +15 · Ellátás és utak +7 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -3 · Határvédelem +2 · Ellátás és utak +8 · Tartományi bizalom +20",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem +23 · Ellátás és utak -2 · Tartományi bizalom -3",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 51,
+            "border": 100,
+            "supply": 99,
+            "loyalty": 97
+          },
+          "regions": {
+            "italia": 87,
+            "gallia": 100,
+            "hispania": 84,
+            "aegyptus": 89,
+            "asia": 89,
+            "danubius": 91
+          },
+          "idx": 5,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "danubius",
+          "pending": [
+            {
+              "due": 6,
+              "title": "Tartós helyi együttműködés",
+              "description": "Az igazságosabb adózás idővel gazdasági előnnyel jár.",
+              "global": [
+                8,
+                0,
+                2,
+                5
+              ],
+              "regions": {
+                "asia": 9
+              },
+              "source": 3
+            },
+            {
+              "due": 6,
+              "title": "Határvédelem fenntartása",
+              "description": "A megerősített katonai jelenlét továbbra is pénzt igényel.",
+              "global": [
+                -8,
+                5,
+                0,
+                0
+              ],
+              "regions": {
+                "danubius": 6
+              },
+              "source": 4
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +15 · Ellátás és utak +7 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -3 · Határvédelem +2 · Ellátás és utak +8 · Tartományi bizalom +20",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem +23 · Ellátás és utak -2 · Tartományi bizalom -3",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 43,
+            "border": 100,
+            "supply": 100,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 99,
+            "gallia": 100,
+            "hispania": 84,
+            "aegyptus": 97,
+            "asia": 89,
+            "danubius": 91
+          },
+          "idx": 5,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "italia",
+          "pending": [
+            {
+              "due": 6,
+              "title": "Tartós helyi együttműködés",
+              "description": "Az igazságosabb adózás idővel gazdasági előnnyel jár.",
+              "global": [
+                8,
+                0,
+                2,
+                5
+              ],
+              "regions": {
+                "asia": 9
+              },
+              "source": 3
+            },
+            {
+              "due": 6,
+              "title": "Határvédelem fenntartása",
+              "description": "A megerősített katonai jelenlét továbbra is pénzt igényel.",
+              "global": [
+                -8,
+                5,
+                0,
+                0
+              ],
+              "regions": {
+                "danubius": 6
+              },
+              "source": 4
+            },
+            {
+              "due": 7,
+              "title": "Segélyek társadalmi hatása",
+              "description": "A gyors segítség bizalmat épített.",
+              "global": [
+                0,
+                0,
+                1,
+                6
+              ],
+              "regions": {
+                "italia": 6
+              },
+              "source": 5
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +15 · Ellátás és utak +7 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -3 · Határvédelem +2 · Ellátás és utak +8 · Tartományi bizalom +20",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem +23 · Ellátás és utak -2 · Tartományi bizalom -3",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Járvány és városi egészség",
+              "option": "Élelmiszer- és segélyosztást szervezel",
+              "reason": "QA 6. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +18",
+              "fact": "A római városok életében a vízellátás, az utak, a fürdők és a középítkezések fontos szerepet kaptak. Városi problémáik kezelése igazgatási kérdés is volt."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 47,
+            "border": 100,
+            "supply": 100,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 99,
+            "gallia": 100,
+            "hispania": 84,
+            "aegyptus": 97,
+            "asia": 99,
+            "danubius": 98
+          },
+          "idx": 6,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "italia",
+          "pending": [
+            {
+              "due": 7,
+              "title": "Segélyek társadalmi hatása",
+              "description": "A gyors segítség bizalmat épített.",
+              "global": [
+                0,
+                0,
+                1,
+                6
+              ],
+              "regions": {
+                "italia": 6
+              },
+              "source": 5
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +15 · Ellátás és utak +7 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -3 · Határvédelem +2 · Ellátás és utak +8 · Tartományi bizalom +20",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem +23 · Ellátás és utak -2 · Tartományi bizalom -3",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Járvány és városi egészség",
+              "option": "Élelmiszer- és segélyosztást szervezel",
+              "reason": "QA 6. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +18",
+              "fact": "A római városok életében a vízellátás, az utak, a fürdők és a középítkezések fontos szerepet kaptak. Városi problémáik kezelése igazgatási kérdés is volt."
+            },
+            {
+              "num": 7,
+              "title": "Tartós helyi együttműködés",
+              "option": "Késleltetett esemény",
+              "effect": "Az igazságosabb adózás idővel gazdasági előnnyel jár."
+            },
+            {
+              "num": 7,
+              "title": "Határvédelem fenntartása",
+              "option": "Késleltetett esemény",
+              "effect": "A megerősített katonai jelenlét továbbra is pénzt igényel."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 41,
+            "border": 100,
+            "supply": 100,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 99,
+            "gallia": 100,
+            "hispania": 84,
+            "aegyptus": 97,
+            "asia": 99,
+            "danubius": 100
+          },
+          "idx": 6,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "danubius",
+          "pending": [
+            {
+              "due": 7,
+              "title": "Segélyek társadalmi hatása",
+              "description": "A gyors segítség bizalmat épített.",
+              "global": [
+                0,
+                0,
+                1,
+                6
+              ],
+              "regions": {
+                "italia": 6
+              },
+              "source": 5
+            },
+            {
+              "due": 7,
+              "title": "Az utánpótlás szervezése",
+              "description": "A javított logisztika tartós hatása jelentkezik.",
+              "global": [
+                3,
+                3,
+                6,
+                0
+              ],
+              "regions": {
+                "danubius": 6
+              },
+              "source": 6
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +15 · Ellátás és utak +7 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -3 · Határvédelem +2 · Ellátás és utak +8 · Tartományi bizalom +20",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem +23 · Ellátás és utak -2 · Tartományi bizalom -3",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Járvány és városi egészség",
+              "option": "Élelmiszer- és segélyosztást szervezel",
+              "reason": "QA 6. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +18",
+              "fact": "A római városok életében a vízellátás, az utak, a fürdők és a középítkezések fontos szerepet kaptak. Városi problémáik kezelése igazgatási kérdés is volt."
+            },
+            {
+              "num": 7,
+              "title": "Tartós helyi együttműködés",
+              "option": "Késleltetett esemény",
+              "effect": "Az igazságosabb adózás idővel gazdasági előnnyel jár."
+            },
+            {
+              "num": 7,
+              "title": "Határvédelem fenntartása",
+              "option": "Késleltetett esemény",
+              "effect": "A megerősített katonai jelenlét továbbra is pénzt igényel."
+            },
+            {
+              "num": 7,
+              "title": "A hadsereg zsoldja",
+              "option": "Jobban szervezed az utánpótlást",
+              "reason": "QA 7. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +12 · Ellátás és utak +16 · Tartományi bizalom +6",
+              "fact": "A légiók ellátása és a katonák rendszeres zsoldja tartós terhet jelentett a birodalom pénzügyeire. A hadsereg egyúttal a császári hatalom alapja is volt."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 44,
+            "border": 100,
+            "supply": 100,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 100,
+            "gallia": 100,
+            "hispania": 84,
+            "aegyptus": 97,
+            "asia": 99,
+            "danubius": 100
+          },
+          "idx": 7,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "danubius",
+          "pending": [],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +15 · Ellátás és utak +7 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -3 · Határvédelem +2 · Ellátás és utak +8 · Tartományi bizalom +20",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem +23 · Ellátás és utak -2 · Tartományi bizalom -3",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Járvány és városi egészség",
+              "option": "Élelmiszer- és segélyosztást szervezel",
+              "reason": "QA 6. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +18",
+              "fact": "A római városok életében a vízellátás, az utak, a fürdők és a középítkezések fontos szerepet kaptak. Városi problémáik kezelése igazgatási kérdés is volt."
+            },
+            {
+              "num": 7,
+              "title": "Tartós helyi együttműködés",
+              "option": "Késleltetett esemény",
+              "effect": "Az igazságosabb adózás idővel gazdasági előnnyel jár."
+            },
+            {
+              "num": 7,
+              "title": "Határvédelem fenntartása",
+              "option": "Késleltetett esemény",
+              "effect": "A megerősített katonai jelenlét továbbra is pénzt igényel."
+            },
+            {
+              "num": 7,
+              "title": "A hadsereg zsoldja",
+              "option": "Jobban szervezed az utánpótlást",
+              "reason": "QA 7. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +12 · Ellátás és utak +16 · Tartományi bizalom +6",
+              "fact": "A légiók ellátása és a katonák rendszeres zsoldja tartós terhet jelentett a birodalom pénzügyeire. A hadsereg egyúttal a császári hatalom alapja is volt."
+            },
+            {
+              "num": 8,
+              "title": "Segélyek társadalmi hatása",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors segítség bizalmat épített."
+            },
+            {
+              "num": 8,
+              "title": "Az utánpótlás szervezése",
+              "option": "Késleltetett esemény",
+              "effect": "A javított logisztika tartós hatása jelentkezik."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 35,
+            "border": 100,
+            "supply": 100,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 100,
+            "gallia": 100,
+            "hispania": 95,
+            "aegyptus": 100,
+            "asia": 100,
+            "danubius": 100
+          },
+          "idx": 7,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "asia",
+          "pending": [],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +15 · Ellátás és utak +7 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -3 · Határvédelem +2 · Ellátás és utak +8 · Tartományi bizalom +20",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem +23 · Ellátás és utak -2 · Tartományi bizalom -3",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Járvány és városi egészség",
+              "option": "Élelmiszer- és segélyosztást szervezel",
+              "reason": "QA 6. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +18",
+              "fact": "A római városok életében a vízellátás, az utak, a fürdők és a középítkezések fontos szerepet kaptak. Városi problémáik kezelése igazgatási kérdés is volt."
+            },
+            {
+              "num": 7,
+              "title": "Tartós helyi együttműködés",
+              "option": "Késleltetett esemény",
+              "effect": "Az igazságosabb adózás idővel gazdasági előnnyel jár."
+            },
+            {
+              "num": 7,
+              "title": "Határvédelem fenntartása",
+              "option": "Késleltetett esemény",
+              "effect": "A megerősített katonai jelenlét továbbra is pénzt igényel."
+            },
+            {
+              "num": 7,
+              "title": "A hadsereg zsoldja",
+              "option": "Jobban szervezed az utánpótlást",
+              "reason": "QA 7. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +12 · Ellátás és utak +16 · Tartományi bizalom +6",
+              "fact": "A légiók ellátása és a katonák rendszeres zsoldja tartós terhet jelentett a birodalom pénzügyeire. A hadsereg egyúttal a császári hatalom alapja is volt."
+            },
+            {
+              "num": 8,
+              "title": "Segélyek társadalmi hatása",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors segítség bizalmat épített."
+            },
+            {
+              "num": 8,
+              "title": "Az utánpótlás szervezése",
+              "option": "Késleltetett esemény",
+              "effect": "A javított logisztika tartós hatása jelentkezik."
+            },
+            {
+              "num": 8,
+              "title": "A birodalom jövője",
+              "option": "A tartományok jólétébe fektetsz",
+              "reason": "QA 8. tanácsülés",
+              "effect": "Kincstár -9 · Határvédelem 0 · Ellátás és utak +16 · Tartományi bizalom +23",
+              "fact": "A császárok a katonai biztonság, az állami pénzügyek, a közellátás és a tartományi együttműködés között egyensúlyoztak. A birodalomnak nem volt egyetlen egyszerű, állandóan helyes kormányzási stratégiája."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 35,
+            "border": 100,
+            "supply": 100,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 100,
+            "gallia": 100,
+            "hispania": 95,
+            "aegyptus": 100,
+            "asia": 100,
+            "danubius": 100
+          },
+          "idx": 8,
+          "chosen": false,
+          "ended": true,
+          "chosenOption": null,
+          "selected": "asia",
+          "pending": [],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +17 · Ellátás és utak +6 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +16",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +15 · Ellátás és utak +7 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -3 · Határvédelem +2 · Ellátás és utak +8 · Tartományi bizalom +20",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem +23 · Ellátás és utak -2 · Tartományi bizalom -3",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Járvány és városi egészség",
+              "option": "Élelmiszer- és segélyosztást szervezel",
+              "reason": "QA 6. tanácsülés",
+              "effect": "Kincstár -8 · Határvédelem 0 · Ellátás és utak +9 · Tartományi bizalom +18",
+              "fact": "A római városok életében a vízellátás, az utak, a fürdők és a középítkezések fontos szerepet kaptak. Városi problémáik kezelése igazgatási kérdés is volt."
+            },
+            {
+              "num": 7,
+              "title": "Tartós helyi együttműködés",
+              "option": "Késleltetett esemény",
+              "effect": "Az igazságosabb adózás idővel gazdasági előnnyel jár."
+            },
+            {
+              "num": 7,
+              "title": "Határvédelem fenntartása",
+              "option": "Késleltetett esemény",
+              "effect": "A megerősített katonai jelenlét továbbra is pénzt igényel."
+            },
+            {
+              "num": 7,
+              "title": "A hadsereg zsoldja",
+              "option": "Jobban szervezed az utánpótlást",
+              "reason": "QA 7. tanácsülés",
+              "effect": "Kincstár -6 · Határvédelem +12 · Ellátás és utak +16 · Tartományi bizalom +6",
+              "fact": "A légiók ellátása és a katonák rendszeres zsoldja tartós terhet jelentett a birodalom pénzügyeire. A hadsereg egyúttal a császári hatalom alapja is volt."
+            },
+            {
+              "num": 8,
+              "title": "Segélyek társadalmi hatása",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors segítség bizalmat épített."
+            },
+            {
+              "num": 8,
+              "title": "Az utánpótlás szervezése",
+              "option": "Késleltetett esemény",
+              "effect": "A javított logisztika tartós hatása jelentkezik."
+            },
+            {
+              "num": 8,
+              "title": "A birodalom jövője",
+              "option": "A tartományok jólétébe fektetsz",
+              "reason": "QA 8. tanácsülés",
+              "effect": "Kincstár -9 · Határvédelem 0 · Ellátás és utak +16 · Tartományi bizalom +23",
+              "fact": "A császárok a katonai biztonság, az állami pénzügyek, a közellátás és a tartományi együttműködés között egyensúlyoztak. A birodalomnak nem volt egyetlen egyszerű, állandóan helyes kormányzási stratégiája."
+            }
+          ],
+          "score": 93,
+          "title": "Törékeny birodalom"
+        }
+      ],
+      "status": "PASS"
+    },
+    "hard": {
+      "paths": 27,
+      "comparisons": 459,
+      "mismatched_legacy_paths": 0,
+      "invalid_states": 0,
+      "incomplete": 0,
+      "score_min": 12,
+      "score_max": 72,
+      "sample_sequence": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "initial": {
+        "state": {
+          "money": 55,
+          "border": 60,
+          "supply": 55,
+          "loyalty": 60
+        },
+        "regions": {
+          "italia": 60,
+          "gallia": 52,
+          "hispania": 53,
+          "aegyptus": 54,
+          "asia": 52,
+          "danubius": 48
+        },
+        "idx": 0,
+        "chosen": false,
+        "ended": false,
+        "chosenOption": null,
+        "selected": "italia",
+        "pending": [],
+        "history": [],
+        "score": null,
+        "title": null
+      },
+      "score_mean": 43.148148148148145,
+      "example_stages": [
+        {
+          "state": {
+            "money": 55,
+            "border": 60,
+            "supply": 55,
+            "loyalty": 60
+          },
+          "regions": {
+            "italia": 60,
+            "gallia": 52,
+            "hispania": 53,
+            "aegyptus": 54,
+            "asia": 52,
+            "danubius": 48
+          },
+          "idx": 0,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "italia",
+          "pending": [],
+          "history": [],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 40,
+            "border": 73,
+            "supply": 59,
+            "loyalty": 62
+          },
+          "regions": {
+            "italia": 60,
+            "gallia": 58,
+            "hispania": 53,
+            "aegyptus": 54,
+            "asia": 52,
+            "danubius": 56
+          },
+          "idx": 0,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "danubius",
+          "pending": [
+            {
+              "due": 2,
+              "title": "Határ menti biztonság",
+              "description": "Az erődrendszer később is javítja a határvidék helyzetét.",
+              "global": [
+                0,
+                5,
+                0,
+                0
+              ],
+              "regions": {
+                "gallia": 8,
+                "danubius": 2
+              },
+              "source": 0
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 40,
+            "border": 73,
+            "supply": 59,
+            "loyalty": 62
+          },
+          "regions": {
+            "italia": 60,
+            "gallia": 58,
+            "hispania": 53,
+            "aegyptus": 54,
+            "asia": 52,
+            "danubius": 56
+          },
+          "idx": 1,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "danubius",
+          "pending": [
+            {
+              "due": 2,
+              "title": "Határ menti biztonság",
+              "description": "Az erődrendszer később is javítja a határvidék helyzetét.",
+              "global": [
+                0,
+                5,
+                0,
+                0
+              ],
+              "regions": {
+                "gallia": 8,
+                "danubius": 2
+              },
+              "source": 0
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 23,
+            "border": 73,
+            "supply": 66,
+            "loyalty": 74
+          },
+          "regions": {
+            "italia": 66,
+            "gallia": 58,
+            "hispania": 53,
+            "aegyptus": 62,
+            "asia": 52,
+            "danubius": 56
+          },
+          "idx": 1,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "aegyptus",
+          "pending": [
+            {
+              "due": 2,
+              "title": "Határ menti biztonság",
+              "description": "Az erődrendszer később is javítja a határvidék helyzetét.",
+              "global": [
+                0,
+                5,
+                0,
+                0
+              ],
+              "regions": {
+                "gallia": 8,
+                "danubius": 2
+              },
+              "source": 0
+            },
+            {
+              "due": 3,
+              "title": "Új gabonaválság",
+              "description": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit.",
+              "global": [
+                -3,
+                0,
+                -7,
+                -4
+              ],
+              "regions": {
+                "italia": -8
+              },
+              "source": 1
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 23,
+            "border": 77,
+            "supply": 60,
+            "loyalty": 74
+          },
+          "regions": {
+            "italia": 66,
+            "gallia": 65,
+            "hispania": 53,
+            "aegyptus": 62,
+            "asia": 52,
+            "danubius": 58
+          },
+          "idx": 2,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "aegyptus",
+          "pending": [
+            {
+              "due": 3,
+              "title": "Új gabonaválság",
+              "description": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit.",
+              "global": [
+                -3,
+                0,
+                -7,
+                -4
+              ],
+              "regions": {
+                "italia": -8
+              },
+              "source": 1
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 10,
+            "border": 88,
+            "supply": 65,
+            "loyalty": 75
+          },
+          "regions": {
+            "italia": 66,
+            "gallia": 72,
+            "hispania": 58,
+            "aegyptus": 62,
+            "asia": 52,
+            "danubius": 58
+          },
+          "idx": 2,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "gallia",
+          "pending": [
+            {
+              "due": 3,
+              "title": "Új gabonaválság",
+              "description": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit.",
+              "global": [
+                -3,
+                0,
+                -7,
+                -4
+              ],
+              "regions": {
+                "italia": -8
+              },
+              "source": 1
+            },
+            {
+              "due": 5,
+              "title": "Katonai úthálózat",
+              "description": "A gyors csapatmozgás később is segíti a védelmet.",
+              "global": [
+                0,
+                5,
+                1,
+                0
+              ],
+              "regions": {
+                "gallia": 4
+              },
+              "source": 2
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -13 · Határvédelem +11 · Ellátás és utak +5 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 6,
+            "border": 88,
+            "supply": 49,
+            "loyalty": 69
+          },
+          "regions": {
+            "italia": 55,
+            "gallia": 72,
+            "hispania": 58,
+            "aegyptus": 62,
+            "asia": 52,
+            "danubius": 58
+          },
+          "idx": 3,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "gallia",
+          "pending": [
+            {
+              "due": 5,
+              "title": "Katonai úthálózat",
+              "description": "A gyors csapatmozgás később is segíti a védelmet.",
+              "global": [
+                0,
+                5,
+                1,
+                0
+              ],
+              "regions": {
+                "gallia": 4
+              },
+              "source": 2
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -13 · Határvédelem +11 · Ellátás és utak +5 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 0,
+            "border": 90,
+            "supply": 55,
+            "loyalty": 83
+          },
+          "regions": {
+            "italia": 55,
+            "gallia": 72,
+            "hispania": 58,
+            "aegyptus": 62,
+            "asia": 61,
+            "danubius": 58
+          },
+          "idx": 3,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "asia",
+          "pending": [
+            {
+              "due": 5,
+              "title": "Katonai úthálózat",
+              "description": "A gyors csapatmozgás később is segíti a védelmet.",
+              "global": [
+                0,
+                5,
+                1,
+                0
+              ],
+              "regions": {
+                "gallia": 4
+              },
+              "source": 2
+            },
+            {
+              "due": 6,
+              "title": "Tartós helyi együttműködés",
+              "description": "Az igazságosabb adózás idővel gazdasági előnnyel jár.",
+              "global": [
+                8,
+                0,
+                2,
+                5
+              ],
+              "regions": {
+                "asia": 9
+              },
+              "source": 3
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -13 · Határvédelem +11 · Ellátás és utak +5 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +2 · Ellátás és utak +6 · Tartományi bizalom +14",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 0,
+            "border": 90,
+            "supply": 49,
+            "loyalty": 83
+          },
+          "regions": {
+            "italia": 55,
+            "gallia": 72,
+            "hispania": 58,
+            "aegyptus": 62,
+            "asia": 61,
+            "danubius": 58
+          },
+          "idx": 4,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "asia",
+          "pending": [
+            {
+              "due": 5,
+              "title": "Katonai úthálózat",
+              "description": "A gyors csapatmozgás később is segíti a védelmet.",
+              "global": [
+                0,
+                5,
+                1,
+                0
+              ],
+              "regions": {
+                "gallia": 4
+              },
+              "source": 2
+            },
+            {
+              "due": 6,
+              "title": "Tartós helyi együttműködés",
+              "description": "Az igazságosabb adózás idővel gazdasági előnnyel jár.",
+              "global": [
+                8,
+                0,
+                2,
+                5
+              ],
+              "regions": {
+                "asia": 9
+              },
+              "source": 3
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -13 · Határvédelem +11 · Ellátás és utak +5 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +2 · Ellátás és utak +6 · Tartományi bizalom +14",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 0,
+            "border": 100,
+            "supply": 45,
+            "loyalty": 76
+          },
+          "regions": {
+            "italia": 55,
+            "gallia": 72,
+            "hispania": 58,
+            "aegyptus": 62,
+            "asia": 61,
+            "danubius": 62
+          },
+          "idx": 4,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "danubius",
+          "pending": [
+            {
+              "due": 5,
+              "title": "Katonai úthálózat",
+              "description": "A gyors csapatmozgás később is segíti a védelmet.",
+              "global": [
+                0,
+                5,
+                1,
+                0
+              ],
+              "regions": {
+                "gallia": 4
+              },
+              "source": 2
+            },
+            {
+              "due": 6,
+              "title": "Tartós helyi együttműködés",
+              "description": "Az igazságosabb adózás idővel gazdasági előnnyel jár.",
+              "global": [
+                8,
+                0,
+                2,
+                5
+              ],
+              "regions": {
+                "asia": 9
+              },
+              "source": 3
+            },
+            {
+              "due": 6,
+              "title": "Határvédelem fenntartása",
+              "description": "A megerősített katonai jelenlét továbbra is pénzt igényel.",
+              "global": [
+                -8,
+                5,
+                0,
+                0
+              ],
+              "regions": {
+                "danubius": 6
+              },
+              "source": 4
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -13 · Határvédelem +11 · Ellátás és utak +5 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +2 · Ellátás és utak +6 · Tartományi bizalom +14",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +17 · Ellátás és utak -4 · Tartományi bizalom -7",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 0,
+            "border": 100,
+            "supply": 40,
+            "loyalty": 76
+          },
+          "regions": {
+            "italia": 55,
+            "gallia": 75,
+            "hispania": 58,
+            "aegyptus": 62,
+            "asia": 61,
+            "danubius": 62
+          },
+          "idx": 5,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "danubius",
+          "pending": [
+            {
+              "due": 6,
+              "title": "Tartós helyi együttműködés",
+              "description": "Az igazságosabb adózás idővel gazdasági előnnyel jár.",
+              "global": [
+                8,
+                0,
+                2,
+                5
+              ],
+              "regions": {
+                "asia": 9
+              },
+              "source": 3
+            },
+            {
+              "due": 6,
+              "title": "Határvédelem fenntartása",
+              "description": "A megerősített katonai jelenlét továbbra is pénzt igényel.",
+              "global": [
+                -8,
+                5,
+                0,
+                0
+              ],
+              "regions": {
+                "danubius": 6
+              },
+              "source": 4
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -13 · Határvédelem +11 · Ellátás és utak +5 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +2 · Ellátás és utak +6 · Tartományi bizalom +14",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +17 · Ellátás és utak -4 · Tartományi bizalom -7",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 0,
+            "border": 100,
+            "supply": 47,
+            "loyalty": 90
+          },
+          "regions": {
+            "italia": 64,
+            "gallia": 75,
+            "hispania": 58,
+            "aegyptus": 68,
+            "asia": 61,
+            "danubius": 62
+          },
+          "idx": 5,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "italia",
+          "pending": [
+            {
+              "due": 6,
+              "title": "Tartós helyi együttműködés",
+              "description": "Az igazságosabb adózás idővel gazdasági előnnyel jár.",
+              "global": [
+                8,
+                0,
+                2,
+                5
+              ],
+              "regions": {
+                "asia": 9
+              },
+              "source": 3
+            },
+            {
+              "due": 6,
+              "title": "Határvédelem fenntartása",
+              "description": "A megerősített katonai jelenlét továbbra is pénzt igényel.",
+              "global": [
+                -8,
+                5,
+                0,
+                0
+              ],
+              "regions": {
+                "danubius": 6
+              },
+              "source": 4
+            },
+            {
+              "due": 7,
+              "title": "Segélyek társadalmi hatása",
+              "description": "A gyors segítség bizalmat épített.",
+              "global": [
+                0,
+                0,
+                1,
+                6
+              ],
+              "regions": {
+                "italia": 6
+              },
+              "source": 5
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -13 · Határvédelem +11 · Ellátás és utak +5 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +2 · Ellátás és utak +6 · Tartományi bizalom +14",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +17 · Ellátás és utak -4 · Tartományi bizalom -7",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 6,
+              "title": "Járvány és városi egészség",
+              "option": "Élelmiszer- és segélyosztást szervezel",
+              "reason": "QA 6. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +14",
+              "fact": "A római városok életében a vízellátás, az utak, a fürdők és a középítkezések fontos szerepet kaptak. Városi problémáik kezelése igazgatási kérdés is volt."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 0,
+            "border": 100,
+            "supply": 43,
+            "loyalty": 94
+          },
+          "regions": {
+            "italia": 64,
+            "gallia": 75,
+            "hispania": 58,
+            "aegyptus": 68,
+            "asia": 69,
+            "danubius": 67
+          },
+          "idx": 6,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "italia",
+          "pending": [
+            {
+              "due": 7,
+              "title": "Segélyek társadalmi hatása",
+              "description": "A gyors segítség bizalmat épített.",
+              "global": [
+                0,
+                0,
+                1,
+                6
+              ],
+              "regions": {
+                "italia": 6
+              },
+              "source": 5
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -13 · Határvédelem +11 · Ellátás és utak +5 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +2 · Ellátás és utak +6 · Tartományi bizalom +14",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +17 · Ellátás és utak -4 · Tartományi bizalom -7",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 6,
+              "title": "Járvány és városi egészség",
+              "option": "Élelmiszer- és segélyosztást szervezel",
+              "reason": "QA 6. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +14",
+              "fact": "A római városok életében a vízellátás, az utak, a fürdők és a középítkezések fontos szerepet kaptak. Városi problémáik kezelése igazgatási kérdés is volt."
+            },
+            {
+              "num": 7,
+              "title": "Tartós helyi együttműködés",
+              "option": "Késleltetett esemény",
+              "effect": "Az igazságosabb adózás idővel gazdasági előnnyel jár."
+            },
+            {
+              "num": 7,
+              "title": "Határvédelem fenntartása",
+              "option": "Késleltetett esemény",
+              "effect": "A megerősített katonai jelenlét továbbra is pénzt igényel."
+            },
+            {
+              "num": 7,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 0,
+            "border": 100,
+            "supply": 55,
+            "loyalty": 98
+          },
+          "regions": {
+            "italia": 64,
+            "gallia": 82,
+            "hispania": 58,
+            "aegyptus": 68,
+            "asia": 69,
+            "danubius": 77
+          },
+          "idx": 6,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "danubius",
+          "pending": [
+            {
+              "due": 7,
+              "title": "Segélyek társadalmi hatása",
+              "description": "A gyors segítség bizalmat épített.",
+              "global": [
+                0,
+                0,
+                1,
+                6
+              ],
+              "regions": {
+                "italia": 6
+              },
+              "source": 5
+            },
+            {
+              "due": 7,
+              "title": "Az utánpótlás szervezése",
+              "description": "A javított logisztika tartós hatása jelentkezik.",
+              "global": [
+                3,
+                3,
+                6,
+                0
+              ],
+              "regions": {
+                "danubius": 6
+              },
+              "source": 6
+            }
+          ],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -13 · Határvédelem +11 · Ellátás és utak +5 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +2 · Ellátás és utak +6 · Tartományi bizalom +14",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +17 · Ellátás és utak -4 · Tartományi bizalom -7",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 6,
+              "title": "Járvány és városi egészség",
+              "option": "Élelmiszer- és segélyosztást szervezel",
+              "reason": "QA 6. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +14",
+              "fact": "A római városok életében a vízellátás, az utak, a fürdők és a középítkezések fontos szerepet kaptak. Városi problémáik kezelése igazgatási kérdés is volt."
+            },
+            {
+              "num": 7,
+              "title": "Tartós helyi együttműködés",
+              "option": "Késleltetett esemény",
+              "effect": "Az igazságosabb adózás idővel gazdasági előnnyel jár."
+            },
+            {
+              "num": 7,
+              "title": "Határvédelem fenntartása",
+              "option": "Késleltetett esemény",
+              "effect": "A megerősített katonai jelenlét továbbra is pénzt igényel."
+            },
+            {
+              "num": 7,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 7,
+              "title": "A hadsereg zsoldja",
+              "option": "Jobban szervezed az utánpótlást",
+              "reason": "QA 7. tanácsülés",
+              "effect": "Kincstár -14 · Határvédelem +9 · Ellátás és utak +12 · Tartományi bizalom +4",
+              "fact": "A légiók ellátása és a katonák rendszeres zsoldja tartós terhet jelentett a birodalom pénzügyeire. A hadsereg egyúttal a császári hatalom alapja is volt."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 3,
+            "border": 100,
+            "supply": 55,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 69,
+            "gallia": 82,
+            "hispania": 58,
+            "aegyptus": 68,
+            "asia": 69,
+            "danubius": 82
+          },
+          "idx": 7,
+          "chosen": false,
+          "ended": false,
+          "chosenOption": null,
+          "selected": "danubius",
+          "pending": [],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -13 · Határvédelem +11 · Ellátás és utak +5 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +2 · Ellátás és utak +6 · Tartományi bizalom +14",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +17 · Ellátás és utak -4 · Tartományi bizalom -7",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 6,
+              "title": "Járvány és városi egészség",
+              "option": "Élelmiszer- és segélyosztást szervezel",
+              "reason": "QA 6. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +14",
+              "fact": "A római városok életében a vízellátás, az utak, a fürdők és a középítkezések fontos szerepet kaptak. Városi problémáik kezelése igazgatási kérdés is volt."
+            },
+            {
+              "num": 7,
+              "title": "Tartós helyi együttműködés",
+              "option": "Késleltetett esemény",
+              "effect": "Az igazságosabb adózás idővel gazdasági előnnyel jár."
+            },
+            {
+              "num": 7,
+              "title": "Határvédelem fenntartása",
+              "option": "Késleltetett esemény",
+              "effect": "A megerősített katonai jelenlét továbbra is pénzt igényel."
+            },
+            {
+              "num": 7,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 7,
+              "title": "A hadsereg zsoldja",
+              "option": "Jobban szervezed az utánpótlást",
+              "reason": "QA 7. tanácsülés",
+              "effect": "Kincstár -14 · Határvédelem +9 · Ellátás és utak +12 · Tartományi bizalom +4",
+              "fact": "A légiók ellátása és a katonák rendszeres zsoldja tartós terhet jelentett a birodalom pénzügyeire. A hadsereg egyúttal a császári hatalom alapja is volt."
+            },
+            {
+              "num": 8,
+              "title": "Segélyek társadalmi hatása",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors segítség bizalmat épített."
+            },
+            {
+              "num": 8,
+              "title": "Az utánpótlás szervezése",
+              "option": "Késleltetett esemény",
+              "effect": "A javított logisztika tartós hatása jelentkezik."
+            },
+            {
+              "num": 8,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 0,
+            "border": 100,
+            "supply": 67,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 69,
+            "gallia": 82,
+            "hispania": 66,
+            "aegyptus": 76,
+            "asia": 81,
+            "danubius": 82
+          },
+          "idx": 7,
+          "chosen": true,
+          "ended": false,
+          "chosenOption": 1,
+          "selected": "asia",
+          "pending": [],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -13 · Határvédelem +11 · Ellátás és utak +5 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +2 · Ellátás és utak +6 · Tartományi bizalom +14",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +17 · Ellátás és utak -4 · Tartományi bizalom -7",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 6,
+              "title": "Járvány és városi egészség",
+              "option": "Élelmiszer- és segélyosztást szervezel",
+              "reason": "QA 6. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +14",
+              "fact": "A római városok életében a vízellátás, az utak, a fürdők és a középítkezések fontos szerepet kaptak. Városi problémáik kezelése igazgatási kérdés is volt."
+            },
+            {
+              "num": 7,
+              "title": "Tartós helyi együttműködés",
+              "option": "Késleltetett esemény",
+              "effect": "Az igazságosabb adózás idővel gazdasági előnnyel jár."
+            },
+            {
+              "num": 7,
+              "title": "Határvédelem fenntartása",
+              "option": "Késleltetett esemény",
+              "effect": "A megerősített katonai jelenlét továbbra is pénzt igényel."
+            },
+            {
+              "num": 7,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 7,
+              "title": "A hadsereg zsoldja",
+              "option": "Jobban szervezed az utánpótlást",
+              "reason": "QA 7. tanácsülés",
+              "effect": "Kincstár -14 · Határvédelem +9 · Ellátás és utak +12 · Tartományi bizalom +4",
+              "fact": "A légiók ellátása és a katonák rendszeres zsoldja tartós terhet jelentett a birodalom pénzügyeire. A hadsereg egyúttal a császári hatalom alapja is volt."
+            },
+            {
+              "num": 8,
+              "title": "Segélyek társadalmi hatása",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors segítség bizalmat épített."
+            },
+            {
+              "num": 8,
+              "title": "Az utánpótlás szervezése",
+              "option": "Késleltetett esemény",
+              "effect": "A javított logisztika tartós hatása jelentkezik."
+            },
+            {
+              "num": 8,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 8,
+              "title": "A birodalom jövője",
+              "option": "A tartományok jólétébe fektetsz",
+              "reason": "QA 8. tanácsülés",
+              "effect": "Kincstár -20 · Határvédelem 0 · Ellátás és utak +12 · Tartományi bizalom +17",
+              "fact": "A császárok a katonai biztonság, az állami pénzügyek, a közellátás és a tartományi együttműködés között egyensúlyoztak. A birodalomnak nem volt egyetlen egyszerű, állandóan helyes kormányzási stratégiája."
+            }
+          ],
+          "score": null,
+          "title": null
+        },
+        {
+          "state": {
+            "money": 0,
+            "border": 100,
+            "supply": 67,
+            "loyalty": 100
+          },
+          "regions": {
+            "italia": 69,
+            "gallia": 82,
+            "hispania": 66,
+            "aegyptus": 76,
+            "asia": 81,
+            "danubius": 82
+          },
+          "idx": 8,
+          "chosen": false,
+          "ended": true,
+          "chosenOption": null,
+          "selected": "asia",
+          "pending": [],
+          "history": [
+            {
+              "num": 1,
+              "title": "A rajnai határ védelme",
+              "option": "Erődöket és őrtornyokat fejlesztesz",
+              "reason": "QA 1. tanácsülés",
+              "effect": "Kincstár -15 · Határvédelem +13 · Ellátás és utak +4 · Tartományi bizalom +2",
+              "fact": "Róma a Rajna és a Duna mentén katonai táborokkal, határutakkal és őrségekkel védte érdekeit. A limes nem mindenhol összefüggő fal volt: ellenőrzési rendszerként működött."
+            },
+            {
+              "num": 2,
+              "title": "Róma gabonaellátása",
+              "option": "Sürgős gabonát vásárolsz",
+              "reason": "QA 2. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +12",
+              "fact": "Egyiptom gabonája fontos volt Róma ellátásában. A tengeri szállítás, a raktárak és az állami gabonaellátás politikai szerepet is betöltött."
+            },
+            {
+              "num": 3,
+              "title": "Határ menti biztonság",
+              "option": "Késleltetett esemény",
+              "effect": "Az erődrendszer később is javítja a határvidék helyzetét."
+            },
+            {
+              "num": 3,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 3,
+              "title": "Utak és hidak a provinciákban",
+              "option": "Csak a fő katonai útvonalakat javítod",
+              "reason": "QA 3. tanácsülés",
+              "effect": "Kincstár -13 · Határvédelem +11 · Ellátás és utak +5 · Tartományi bizalom +1",
+              "fact": "A római úthálózat katonai csapatmozgást, közigazgatást és kereskedelmet egyaránt segített. Az utak építése és fenntartása hosszú távú erőforrásokat igényelt."
+            },
+            {
+              "num": 4,
+              "title": "Új gabonaválság",
+              "option": "Késleltetett esemény",
+              "effect": "A sürgős vásárlás nem oldotta meg a rendszer gyengeségeit."
+            },
+            {
+              "num": 4,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 4,
+              "title": "Adózás és tartományi béke",
+              "option": "Igazságosabb elosztást vezetsz be",
+              "reason": "QA 4. tanácsülés",
+              "effect": "Kincstár -7 · Határvédelem +2 · Ellátás és utak +6 · Tartományi bizalom +14",
+              "fact": "A provinciákban a helyi közösségek és elitek együttműködése nélkülözhetetlen volt. Az adóztatás és a helytartók ellenőrzése befolyásolta a római uralom elfogadottságát."
+            },
+            {
+              "num": 5,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 5,
+              "title": "A dunai limes",
+              "option": "A légiókat erősíted meg",
+              "reason": "QA 5. tanácsülés",
+              "effect": "Kincstár -18 · Határvédelem +17 · Ellátás és utak -4 · Tartományi bizalom -7",
+              "fact": "A dunai határvidéken állomásozó hadsereg és a katonai infrastruktúra jelentős szerepet játszott a határmenti gazdasági kapcsolatokban is."
+            },
+            {
+              "num": 6,
+              "title": "Katonai úthálózat",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors csapatmozgás később is segíti a védelmet."
+            },
+            {
+              "num": 6,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 6,
+              "title": "Járvány és városi egészség",
+              "option": "Élelmiszer- és segélyosztást szervezel",
+              "reason": "QA 6. tanácsülés",
+              "effect": "Kincstár -17 · Határvédelem 0 · Ellátás és utak +7 · Tartományi bizalom +14",
+              "fact": "A római városok életében a vízellátás, az utak, a fürdők és a középítkezések fontos szerepet kaptak. Városi problémáik kezelése igazgatási kérdés is volt."
+            },
+            {
+              "num": 7,
+              "title": "Tartós helyi együttműködés",
+              "option": "Késleltetett esemény",
+              "effect": "Az igazságosabb adózás idővel gazdasági előnnyel jár."
+            },
+            {
+              "num": 7,
+              "title": "Határvédelem fenntartása",
+              "option": "Késleltetett esemény",
+              "effect": "A megerősített katonai jelenlét továbbra is pénzt igényel."
+            },
+            {
+              "num": 7,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 7,
+              "title": "A hadsereg zsoldja",
+              "option": "Jobban szervezed az utánpótlást",
+              "reason": "QA 7. tanácsülés",
+              "effect": "Kincstár -14 · Határvédelem +9 · Ellátás és utak +12 · Tartományi bizalom +4",
+              "fact": "A légiók ellátása és a katonák rendszeres zsoldja tartós terhet jelentett a birodalom pénzügyeire. A hadsereg egyúttal a császári hatalom alapja is volt."
+            },
+            {
+              "num": 8,
+              "title": "Segélyek társadalmi hatása",
+              "option": "Késleltetett esemény",
+              "effect": "A gyors segítség bizalmat épített."
+            },
+            {
+              "num": 8,
+              "title": "Az utánpótlás szervezése",
+              "option": "Késleltetett esemény",
+              "effect": "A javított logisztika tartós hatása jelentkezik."
+            },
+            {
+              "num": 8,
+              "title": "Forráshiány",
+              "option": "Rendszerhatás",
+              "effect": "A pénzügyi hiány akadályozza az ellátás fenntartását."
+            },
+            {
+              "num": 8,
+              "title": "A birodalom jövője",
+              "option": "A tartományok jólétébe fektetsz",
+              "reason": "QA 8. tanácsülés",
+              "effect": "Kincstár -20 · Határvédelem 0 · Ellátás és utak +12 · Tartományi bizalom +17",
+              "fact": "A császárok a katonai biztonság, az állami pénzügyek, a közellátás és a tartományi együttműködés között egyensúlyoztak. A birodalomnak nem volt egyetlen egyszerű, állandóan helyes kormányzási stratégiája."
+            }
+          ],
+          "score": 72,
+          "title": "Birodalmi válság"
+        }
+      ],
+      "status": "PASS"
+    }
+  },
+  "edge_cases": [
+    {
+      "name": "all-zero",
+      "turn": 1,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 1,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 1,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 2,
+      "option": 1,
+      "status": "FAIL"
+    },
+    {
+      "name": "all-zero",
+      "turn": 2,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 2,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 3,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 3,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 3,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 4,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 4,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 4,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 5,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 5,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 5,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 6,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 6,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 6,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 7,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 7,
+      "option": 2,
+      "status": "FAIL"
+    },
+    {
+      "name": "all-zero",
+      "turn": 7,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 8,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 8,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-zero",
+      "turn": 8,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 1,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 1,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 1,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 2,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 2,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 2,
+      "option": 3,
+      "status": "FAIL"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 3,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 3,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 3,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 4,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 4,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 4,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 5,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 5,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 5,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 6,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 6,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 6,
+      "option": 3,
+      "status": "FAIL"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 7,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 7,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 7,
+      "option": 3,
+      "status": "FAIL"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 8,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 8,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "all-ceiling",
+      "turn": 8,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 1,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 1,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 1,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 2,
+      "option": 1,
+      "status": "FAIL"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 2,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 2,
+      "option": 3,
+      "status": "FAIL"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 3,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 3,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 3,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 4,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 4,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 4,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 5,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 5,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 5,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 6,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 6,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 6,
+      "option": 3,
+      "status": "FAIL"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 7,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 7,
+      "option": 2,
+      "status": "FAIL"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 7,
+      "option": 3,
+      "status": "FAIL"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 8,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 8,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "below-crisis-thresholds",
+      "turn": 8,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 1,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 1,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 1,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 2,
+      "option": 1,
+      "status": "FAIL"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 2,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 2,
+      "option": 3,
+      "status": "FAIL"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 3,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 3,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 3,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 4,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 4,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 4,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 5,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 5,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 5,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 6,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 6,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 6,
+      "option": 3,
+      "status": "FAIL"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 7,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 7,
+      "option": 2,
+      "status": "FAIL"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 7,
+      "option": 3,
+      "status": "FAIL"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 8,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 8,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "exact-crisis-thresholds",
+      "turn": 8,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 1,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 1,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 1,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 2,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 2,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 2,
+      "option": 3,
+      "status": "FAIL"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 3,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 3,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 3,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 4,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 4,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 4,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 5,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 5,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 5,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 6,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 6,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 6,
+      "option": 3,
+      "status": "FAIL"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 7,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 7,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 7,
+      "option": 3,
+      "status": "FAIL"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 8,
+      "option": 1,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 8,
+      "option": 2,
+      "status": "PASS"
+    },
+    {
+      "name": "clamp-boundaries",
+      "turn": 8,
+      "option": 3,
+      "status": "PASS"
+    },
+    {
+      "name": "settle-all-zero",
+      "status": "PASS"
+    },
+    {
+      "name": "settle-all-ceiling",
+      "status": "PASS"
+    },
+    {
+      "name": "settle-below-crisis-thresholds",
+      "status": "PASS"
+    },
+    {
+      "name": "settle-exact-crisis-thresholds",
+      "status": "PASS"
+    },
+    {
+      "name": "settle-clamp-boundaries",
+      "status": "PASS"
+    }
+  ],
+  "rounding": [
+    {
+      "amount": 12.18,
+      "baseline": {
+        "italia": 81,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 78,
+        "asia": 64,
+        "danubius": 60
+      },
+      "candidate": {
+        "italia": 80,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 78,
+        "asia": 64,
+        "danubius": 60
+      },
+      "status": "FAIL"
+    },
+    {
+      "amount": -12.18,
+      "baseline": {
+        "italia": 63,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 54,
+        "asia": 64,
+        "danubius": 60
+      },
+      "candidate": {
+        "italia": 64,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 54,
+        "asia": 64,
+        "danubius": 60
+      },
+      "status": "FAIL"
+    },
+    {
+      "amount": 0.49,
+      "baseline": {
+        "italia": 72,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 66,
+        "asia": 64,
+        "danubius": 60
+      },
+      "candidate": {
+        "italia": 72,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 66,
+        "asia": 64,
+        "danubius": 60
+      },
+      "status": "PASS"
+    },
+    {
+      "amount": 0.5,
+      "baseline": {
+        "italia": 72,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 67,
+        "asia": 64,
+        "danubius": 60
+      },
+      "candidate": {
+        "italia": 73,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 67,
+        "asia": 64,
+        "danubius": 60
+      },
+      "status": "FAIL"
+    },
+    {
+      "amount": -0.49,
+      "baseline": {
+        "italia": 72,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 66,
+        "asia": 64,
+        "danubius": 60
+      },
+      "candidate": {
+        "italia": 72,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 66,
+        "asia": 64,
+        "danubius": 60
+      },
+      "status": "PASS"
+    },
+    {
+      "amount": -0.5,
+      "baseline": {
+        "italia": 72,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 66,
+        "asia": 64,
+        "danubius": 60
+      },
+      "candidate": {
+        "italia": 72,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 66,
+        "asia": 64,
+        "danubius": 60
+      },
+      "status": "PASS"
+    },
+    {
+      "amount": 99.9,
+      "baseline": {
+        "italia": 100,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 100,
+        "asia": 64,
+        "danubius": 60
+      },
+      "candidate": {
+        "italia": 100,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 100,
+        "asia": 64,
+        "danubius": 60
+      },
+      "status": "PASS"
+    },
+    {
+      "amount": -99.9,
+      "baseline": {
+        "italia": 2,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 0,
+        "asia": 64,
+        "danubius": 60
+      },
+      "candidate": {
+        "italia": 2,
+        "gallia": 64,
+        "hispania": 65,
+        "aegyptus": 0,
+        "asia": 64,
+        "danubius": 60
+      },
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "idx": 1,
+  "chosen": false,
+  "decisions": 1,
+  "pending": 1,
+  "clicks": [
+    {
+      "id": "",
+      "tag": "BUTTON",
+      "button": "",
+      "detail": 1
+    },
+    {
+      "id": "",
+      "tag": "SMALL",
+      "index": "0",
+      "button": "",
+      "detail": 1
+    },
+    {
+      "id": "nextBtn",
+      "tag": "BUTTON",
+      "button": "nextBtn",
+      "detail": 2
+    }
+  ]
+}

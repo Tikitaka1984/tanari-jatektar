@@ -1,0 +1,450 @@
+{
+  "tested_commit": "a3669271da16286b164a8f395aa7814e236d8b47",
+  "source_sha256": "449a39e9a55d110da235bcdea48c595e062862639b9e197a55b2f916bf8c9486",
+  "test_sha256": "2c82e66a1c38a81471ac7d434aba86baf5713c1c7b3ad3770b62f1dfbca51e7a",
+  "baseline_commit": "a3669271da16286b164a8f395aa7814e236d8b47",
+  "baseline_source_sha256": "1157b03efb2c05811dd57f6bbb5fab62cac9906e712b9bfb12a7b3c85f13fc21",
+  "legacy_commit": "b05a5970a9b51a9c763962159608aafe52b8ccfc",
+  "browser": "153.0.8010.0",
+  "time_utc": "2026-10-12T06:55:49.127Z",
+  "results": [
+    {
+      "name": "full-game-export-reset",
+      "width": 360,
+      "mode": "easy",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: initial resources and regions\n\n{\n  chosen: false,\n  chosenOption: null,\n  ended: false,\n  history: [],\n  idx: 0,\n  pending: [],\n  regions: {\n    aegyptus: 78,\n    asia: 76,\n    danubius: 72,\n    gallia: 76,\n    hispania: 77,\n    italia: 84\n  },\n  score: null,\n  selected: 'italia',\n  state: {\n    border: 80,\n    loyalty: 90,\n    money: 85,\n    supply: 85\n  },\n  title: null\n}\n\n    at eq (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:16:30)\n    at fullGame (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:90:55)\n    at async run (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:20:22)\n    at async /workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:252:48",
+      "checks": 7
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 360,
+      "mode": "normal",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: initial resources and regions\n\n{\n  chosen: false,\n  chosenOption: null,\n  ended: false,\n  history: [],\n  idx: 0,\n  pending: [],\n  regions: {\n    aegyptus: 66,\n    asia: 64,\n    danubius: 60,\n    gallia: 64,\n    hispania: 65,\n    italia: 72\n  },\n  score: null,\n  selected: 'italia',\n  state: {\n    border: 55,\n    loyalty: 57,\n    money: 65,\n    supply: 56\n  },\n  title: null\n}\n\n    at eq (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:16:30)\n    at fullGame (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:90:55)\n    at async run (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:20:22)\n    at async /workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:252:48",
+      "checks": 7
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 360,
+      "mode": "hard",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: initial resources and regions\n\n{\n  chosen: false,\n  chosenOption: null,\n  ended: false,\n  history: [],\n  idx: 0,\n  pending: [],\n  regions: {\n    aegyptus: 54,\n    asia: 52,\n    danubius: 48,\n    gallia: 52,\n    hispania: 53,\n    italia: 60\n  },\n  score: null,\n  selected: 'italia',\n  state: {\n    border: 60,\n    loyalty: 60,\n    money: 55,\n    supply: 55\n  },\n  title: null\n}\n\n    at eq (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:16:30)\n    at fullGame (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:90:55)\n    at async run (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:20:22)\n    at async /workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:252:48",
+      "checks": 7
+    },
+    {
+      "name": "repeated-controls",
+      "width": 360,
+      "mode": "normal",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: native double decision exactly once\n    at check (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:15:32)\n    at repeatedControls (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:179:5)\n    at async run (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:20:22)\n    at async /workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:253:5",
+      "checks": 0
+    },
+    {
+      "name": "guides-and-opening",
+      "width": 360,
+      "mode": "all",
+      "status": "PASS",
+      "detail": {
+        "rules_and_history": true,
+        "focus_trap": true
+      },
+      "checks": 15
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 768,
+      "mode": "easy",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: initial resources and regions\n\n{\n  chosen: false,\n  chosenOption: null,\n  ended: false,\n  history: [],\n  idx: 0,\n  pending: [],\n  regions: {\n    aegyptus: 78,\n    asia: 76,\n    danubius: 72,\n    gallia: 76,\n    hispania: 77,\n    italia: 84\n  },\n  score: null,\n  selected: 'italia',\n  state: {\n    border: 80,\n    loyalty: 90,\n    money: 85,\n    supply: 85\n  },\n  title: null\n}\n\n    at eq (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:16:30)\n    at fullGame (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:90:55)\n    at async run (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:20:22)\n    at async /workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:252:48",
+      "checks": 7
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 768,
+      "mode": "normal",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: initial resources and regions\n\n{\n  chosen: false,\n  chosenOption: null,\n  ended: false,\n  history: [],\n  idx: 0,\n  pending: [],\n  regions: {\n    aegyptus: 66,\n    asia: 64,\n    danubius: 60,\n    gallia: 64,\n    hispania: 65,\n    italia: 72\n  },\n  score: null,\n  selected: 'italia',\n  state: {\n    border: 55,\n    loyalty: 57,\n    money: 65,\n    supply: 56\n  },\n  title: null\n}\n\n    at eq (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:16:30)\n    at fullGame (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:90:55)\n    at async run (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:20:22)\n    at async /workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:252:48",
+      "checks": 7
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 768,
+      "mode": "hard",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: initial resources and regions\n\n{\n  chosen: false,\n  chosenOption: null,\n  ended: false,\n  history: [],\n  idx: 0,\n  pending: [],\n  regions: {\n    aegyptus: 54,\n    asia: 52,\n    danubius: 48,\n    gallia: 52,\n    hispania: 53,\n    italia: 60\n  },\n  score: null,\n  selected: 'italia',\n  state: {\n    border: 60,\n    loyalty: 60,\n    money: 55,\n    supply: 55\n  },\n  title: null\n}\n\n    at eq (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:16:30)\n    at fullGame (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:90:55)\n    at async run (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:20:22)\n    at async /workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:252:48",
+      "checks": 7
+    },
+    {
+      "name": "repeated-controls",
+      "width": 768,
+      "mode": "normal",
+      "status": "PASS",
+      "detail": {
+        "native_double_click": true,
+        "native_key_repeat": true
+      },
+      "checks": 6
+    },
+    {
+      "name": "guides-and-opening",
+      "width": 768,
+      "mode": "all",
+      "status": "PASS",
+      "detail": {
+        "rules_and_history": true,
+        "focus_trap": true
+      },
+      "checks": 15
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 1280,
+      "mode": "easy",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: initial resources and regions\n\n{\n  chosen: false,\n  chosenOption: null,\n  ended: false,\n  history: [],\n  idx: 0,\n  pending: [],\n  regions: {\n    aegyptus: 78,\n    asia: 76,\n    danubius: 72,\n    gallia: 76,\n    hispania: 77,\n    italia: 84\n  },\n  score: null,\n  selected: 'italia',\n  state: {\n    border: 80,\n    loyalty: 90,\n    money: 85,\n    supply: 85\n  },\n  title: null\n}\n\n    at eq (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:16:30)\n    at fullGame (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:90:55)\n    at async run (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:20:22)\n    at async /workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:252:48",
+      "checks": 7
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 1280,
+      "mode": "normal",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: initial resources and regions\n\n{\n  chosen: false,\n  chosenOption: null,\n  ended: false,\n  history: [],\n  idx: 0,\n  pending: [],\n  regions: {\n    aegyptus: 66,\n    asia: 64,\n    danubius: 60,\n    gallia: 64,\n    hispania: 65,\n    italia: 72\n  },\n  score: null,\n  selected: 'italia',\n  state: {\n    border: 55,\n    loyalty: 57,\n    money: 65,\n    supply: 56\n  },\n  title: null\n}\n\n    at eq (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:16:30)\n    at fullGame (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:90:55)\n    at async run (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:20:22)\n    at async /workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:252:48",
+      "checks": 7
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 1280,
+      "mode": "hard",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: initial resources and regions\n\n{\n  chosen: false,\n  chosenOption: null,\n  ended: false,\n  history: [],\n  idx: 0,\n  pending: [],\n  regions: {\n    aegyptus: 54,\n    asia: 52,\n    danubius: 48,\n    gallia: 52,\n    hispania: 53,\n    italia: 60\n  },\n  score: null,\n  selected: 'italia',\n  state: {\n    border: 60,\n    loyalty: 60,\n    money: 55,\n    supply: 55\n  },\n  title: null\n}\n\n    at eq (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:16:30)\n    at fullGame (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:90:55)\n    at async run (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:20:22)\n    at async /workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:252:48",
+      "checks": 7
+    },
+    {
+      "name": "repeated-controls",
+      "width": 1280,
+      "mode": "normal",
+      "status": "PASS",
+      "detail": {
+        "native_double_click": true,
+        "native_key_repeat": true
+      },
+      "checks": 6
+    },
+    {
+      "name": "guides-and-opening",
+      "width": 1280,
+      "mode": "all",
+      "status": "PASS",
+      "detail": {
+        "rules_and_history": true,
+        "focus_trap": true
+      },
+      "checks": 15
+    },
+    {
+      "name": "normal-20-sequence-regression",
+      "width": 1280,
+      "mode": "normal",
+      "status": "PASS",
+      "detail": {
+        "sequences": [
+          {
+            "sequence": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "score": 83
+          },
+          {
+            "sequence": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "score": 86
+          },
+          {
+            "sequence": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "score": 24
+          },
+          {
+            "sequence": [
+              1,
+              0,
+              2,
+              2,
+              0,
+              2,
+              1,
+              0
+            ],
+            "score": 68
+          },
+          {
+            "sequence": [
+              1,
+              2,
+              1,
+              2,
+              0,
+              0,
+              2,
+              0
+            ],
+            "score": 67
+          },
+          {
+            "sequence": [
+              2,
+              0,
+              1,
+              0,
+              0,
+              1,
+              2,
+              2
+            ],
+            "score": 63
+          },
+          {
+            "sequence": [
+              1,
+              1,
+              0,
+              1,
+              0,
+              2,
+              2,
+              2
+            ],
+            "score": 65
+          },
+          {
+            "sequence": [
+              0,
+              2,
+              0,
+              0,
+              2,
+              1,
+              0,
+              1
+            ],
+            "score": 67
+          },
+          {
+            "sequence": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              2,
+              2,
+              0
+            ],
+            "score": 64
+          },
+          {
+            "sequence": [
+              2,
+              0,
+              2,
+              1,
+              0,
+              2,
+              2,
+              0
+            ],
+            "score": 58
+          },
+          {
+            "sequence": [
+              2,
+              2,
+              2,
+              0,
+              1,
+              1,
+              1,
+              1
+            ],
+            "score": 56
+          },
+          {
+            "sequence": [
+              1,
+              1,
+              1,
+              0,
+              2,
+              0,
+              1,
+              1
+            ],
+            "score": 78
+          },
+          {
+            "sequence": [
+              2,
+              2,
+              2,
+              0,
+              2,
+              0,
+              1,
+              1
+            ],
+            "score": 50
+          },
+          {
+            "sequence": [
+              1,
+              2,
+              2,
+              0,
+              0,
+              2,
+              1,
+              0
+            ],
+            "score": 54
+          },
+          {
+            "sequence": [
+              0,
+              2,
+              0,
+              2,
+              0,
+              2,
+              2,
+              1
+            ],
+            "score": 57
+          },
+          {
+            "sequence": [
+              1,
+              2,
+              0,
+              2,
+              2,
+              0,
+              2,
+              2
+            ],
+            "score": 56
+          },
+          {
+            "sequence": [
+              1,
+              2,
+              0,
+              0,
+              1,
+              2,
+              0,
+              0
+            ],
+            "score": 56
+          },
+          {
+            "sequence": [
+              2,
+              1,
+              0,
+              1,
+              1,
+              1,
+              1,
+              2
+            ],
+            "score": 76
+          },
+          {
+            "sequence": [
+              1,
+              2,
+              0,
+              0,
+              1,
+              1,
+              1,
+              1
+            ],
+            "score": 76
+          },
+          {
+            "sequence": [
+              1,
+              0,
+              2,
+              2,
+              0,
+              1,
+              1,
+              2
+            ],
+            "score": 73
+          }
+        ],
+        "comparisons": 340,
+        "unintended_numeric_differences": 0,
+        "export_compatibility": true
+      },
+      "checks": 344
+    },
+    {
+      "name": "transition-race",
+      "width": 1280,
+      "mode": "all",
+      "status": "PASS",
+      "detail": {
+        "synthetic_timer_race": true
+      },
+      "checks": 3
+    },
+    {
+      "name": "partial-export",
+      "width": 768,
+      "mode": "easy",
+      "status": "PASS",
+      "detail": {
+        "bytes": 529,
+        "sha256": "9cb229db4ed9a54cb6bc71bb0f9b9fa878e13cd92599496ff88fb749ceeeb79c"
+      },
+      "checks": 4
+    },
+    {
+      "name": "hub-integration",
+      "width": 1280,
+      "mode": "hard",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: hub loads current local game\n    at check (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:15:32)\n    at hubIntegration (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:235:5)\n    at async run (/workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:20:22)\n    at async /workspace/scratch/329af5744efa/m07-roma/tests/roma-9-browser.test.cjs:259:3",
+      "checks": 0
+    }
+  ]
+}
