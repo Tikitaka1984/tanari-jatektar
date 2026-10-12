@@ -85,6 +85,12 @@ async function readDownload(p,keyboard=false) {
 async function fullGame(width,mode) {
   const p=await pageFor(width);try {
     check(await p.locator('#imperialSplash').getAttribute('role')==='dialog','named opening dialog');
+    const contrast=await p.locator('.difficulty-select legend').evaluate(el=>{
+      const css=getComputedStyle(el),lum=color=>{const rgb=color.match(/[\d.]+/g).slice(0,3).map(Number).map(x=>x/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4);return .2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2];};
+      const a=lum(css.color),b=lum(css.backgroundColor);return (Math.max(a,b)+.05)/(Math.min(a,b)+.05);
+    });
+    check(contrast>=4.5,'new difficulty legend text contrast');
+
     check(await p.evaluate(()=>document.querySelector('main').inert&&document.querySelector('header').inert),'opening background inert');
     await start(p,mode,true);
     const model=createModel(source);model.reset(mode);eq(await snapshot(p),model.snapshot(),'initial resources and regions');
@@ -142,7 +148,7 @@ async function fullGame(width,mode) {
     check(!overflow.document&&overflow.opening==='auto','no document overflow; opening scrollable');
     check(p.failures.length===0,p.failures.join(';'));
     return {eight_rounds:true,keyboard_gameplay:true,final_state:end.state,final_regions:end.regions,score:end.score,
-      export:{bytes:exported.bytes,sha256:exported.sha256},overflow};
+      export:{bytes:exported.bytes,sha256:exported.sha256},overflow,legend_contrast:contrast};
   } finally {await p.close();}
 }
 function comparisonSequences() {
