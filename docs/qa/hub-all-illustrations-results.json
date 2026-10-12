@@ -1,0 +1,22 @@
+{
+  "browser": "154.0.8037.99",
+  "time": "2026-10-12T17:29:27.813Z",
+  "source_sha256": "71171f99f8703c06cd1266a8c0a84f754b3003feafcbd700ba92c62800b3e9d6",
+  "results": [
+    {
+      "width": 360,
+      "status": "PASS",
+      "checks": "layout, 18 unique decoded decorative card illustrations aligned to card tops, navigation, keyboard, filters, empty state, featured/game/demo iframe, return focus, new tab, player Escape, escape/teacher/download links, SVG, no JS errors"
+    },
+    {
+      "width": 768,
+      "status": "PASS",
+      "checks": "layout, 18 unique decoded decorative card illustrations aligned to card tops, navigation, keyboard, filters, empty state, featured/game/demo iframe, return focus, new tab, player Escape, escape/teacher/download links, SVG, no JS errors"
+    },
+    {
+      "width": 1280,
+      "status": "PASS",
+      "checks": "layout, 18 unique decoded decorative card illustrations aligned to card tops, navigation, keyboard, filters, empty state, featured/game/demo iframe, return focus, new tab, player Escape, escape/teacher/download links, SVG, no JS errors"
+    }
+  ]
+}
