@@ -1,0 +1,49 @@
+{
+  "legacy_commit": "b05a5970a9b51a9c763962159608aafe52b8ccfc",
+  "browser": "153.0.8010.0",
+  "time_utc": "2026-10-12T06:44:55.623Z",
+  "observations": [
+    {
+      "width": 360,
+      "enterReachable": false,
+      "splash": {
+        "top": -311.3125,
+        "bottom": 1211.3125,
+        "viewport": 900,
+        "overflowY": "visible",
+        "active": "BODY"
+      },
+      "tab_remains_in_splash": false,
+      "pinFocus": "BODY",
+      "choiceFocus": "BODY"
+    },
+    {
+      "width": 768,
+      "enterReachable": true,
+      "splash": {
+        "top": -2.5625,
+        "bottom": 902.5625,
+        "viewport": 900,
+        "overflowY": "visible",
+        "active": "BODY"
+      },
+      "tab_remains_in_splash": false,
+      "pinFocus": "BODY",
+      "choiceFocus": "BODY"
+    },
+    {
+      "width": 1280,
+      "enterReachable": true,
+      "splash": {
+        "top": -31.0625,
+        "bottom": 931.0625,
+        "viewport": 900,
+        "overflowY": "visible",
+        "active": "BODY"
+      },
+      "tab_remains_in_splash": false,
+      "pinFocus": "BODY",
+      "choiceFocus": "BODY"
+    }
+  ]
+}

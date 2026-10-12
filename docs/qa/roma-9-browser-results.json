@@ -1,0 +1,698 @@
+{
+  "tested_commit": "aae8a8d10d0a9459bc56d5772a29452308316477",
+  "source_sha256": "0fe04d35b1a741f5a2081c36a570cbf7ed95188cd6ef4c80fc6d5aa5c2037a6c",
+  "test_sha256": "1dc3a29442b60d98fad88963c20651c9447a4d554efbdd04c6015ad319f0b036",
+  "baseline_commit": "a3669271da16286b164a8f395aa7814e236d8b47",
+  "baseline_source_sha256": "1157b03efb2c05811dd57f6bbb5fab62cac9906e712b9bfb12a7b3c85f13fc21",
+  "legacy_commit": "b05a5970a9b51a9c763962159608aafe52b8ccfc",
+  "browser": "153.0.8010.0",
+  "time_utc": "2026-10-12T07:20:28.336Z",
+  "results": [
+    {
+      "name": "full-game-export-reset",
+      "width": 360,
+      "mode": "easy",
+      "status": "PASS",
+      "detail": {
+        "eight_rounds": true,
+        "keyboard_gameplay": true,
+        "final_state": {
+          "money": 50,
+          "border": 100,
+          "supply": 100,
+          "loyalty": 100
+        },
+        "final_regions": {
+          "italia": 100,
+          "gallia": 100,
+          "hispania": 100,
+          "aegyptus": 100,
+          "asia": 100,
+          "danubius": 100
+        },
+        "score": 95,
+        "export": {
+          "bytes": 5150,
+          "sha256": "cde8e1e1f250e8d312d733b5a0893b21307501121755b4aa2519c565a8016713"
+        },
+        "overflow": {
+          "document": false,
+          "opening": "auto"
+        },
+        "legend_contrast": 8.376721237934271
+      },
+      "checks": 143
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 360,
+      "mode": "normal",
+      "status": "PASS",
+      "detail": {
+        "eight_rounds": true,
+        "keyboard_gameplay": true,
+        "final_state": {
+          "money": 0,
+          "border": 100,
+          "supply": 100,
+          "loyalty": 100
+        },
+        "final_regions": {
+          "italia": 100,
+          "gallia": 100,
+          "hispania": 92,
+          "aegyptus": 100,
+          "asia": 98,
+          "danubius": 100
+        },
+        "score": 89,
+        "export": {
+          "bytes": 5621,
+          "sha256": "5f4ab14e44c36eb558a5175dcb77ae20832a61f139acb76f48b0b481aad60aac"
+        },
+        "overflow": {
+          "document": false,
+          "opening": "auto"
+        },
+        "legend_contrast": 8.376721237934271
+      },
+      "checks": 148
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 360,
+      "mode": "hard",
+      "status": "PASS",
+      "detail": {
+        "eight_rounds": true,
+        "keyboard_gameplay": true,
+        "final_state": {
+          "money": 0,
+          "border": 100,
+          "supply": 100,
+          "loyalty": 100
+        },
+        "final_regions": {
+          "italia": 88,
+          "gallia": 90,
+          "hispania": 75,
+          "aegyptus": 87,
+          "asia": 81,
+          "danubius": 92
+        },
+        "score": 81,
+        "export": {
+          "bytes": 5728,
+          "sha256": "0b8ec71cb15095da5f5cef92ccae6e6ad0fa3e5ee794cdada24d87703b9f351c"
+        },
+        "overflow": {
+          "document": false,
+          "opening": "auto"
+        },
+        "legend_contrast": 8.376721237934271
+      },
+      "checks": 149
+    },
+    {
+      "name": "repeated-controls",
+      "width": 360,
+      "mode": "normal",
+      "status": "PASS",
+      "detail": {
+        "native_double_click": true,
+        "native_key_repeat": true
+      },
+      "checks": 6
+    },
+    {
+      "name": "guides-and-opening",
+      "width": 360,
+      "mode": "all",
+      "status": "PASS",
+      "detail": {
+        "rules_and_history": true,
+        "focus_trap": true
+      },
+      "checks": 15
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 768,
+      "mode": "easy",
+      "status": "PASS",
+      "detail": {
+        "eight_rounds": true,
+        "keyboard_gameplay": true,
+        "final_state": {
+          "money": 50,
+          "border": 100,
+          "supply": 100,
+          "loyalty": 100
+        },
+        "final_regions": {
+          "italia": 100,
+          "gallia": 100,
+          "hispania": 100,
+          "aegyptus": 100,
+          "asia": 100,
+          "danubius": 100
+        },
+        "score": 95,
+        "export": {
+          "bytes": 5150,
+          "sha256": "cde8e1e1f250e8d312d733b5a0893b21307501121755b4aa2519c565a8016713"
+        },
+        "overflow": {
+          "document": false,
+          "opening": "auto"
+        },
+        "legend_contrast": 8.376721237934271
+      },
+      "checks": 143
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 768,
+      "mode": "normal",
+      "status": "PASS",
+      "detail": {
+        "eight_rounds": true,
+        "keyboard_gameplay": true,
+        "final_state": {
+          "money": 0,
+          "border": 100,
+          "supply": 100,
+          "loyalty": 100
+        },
+        "final_regions": {
+          "italia": 100,
+          "gallia": 100,
+          "hispania": 92,
+          "aegyptus": 100,
+          "asia": 98,
+          "danubius": 100
+        },
+        "score": 89,
+        "export": {
+          "bytes": 5621,
+          "sha256": "5f4ab14e44c36eb558a5175dcb77ae20832a61f139acb76f48b0b481aad60aac"
+        },
+        "overflow": {
+          "document": false,
+          "opening": "auto"
+        },
+        "legend_contrast": 8.376721237934271
+      },
+      "checks": 148
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 768,
+      "mode": "hard",
+      "status": "PASS",
+      "detail": {
+        "eight_rounds": true,
+        "keyboard_gameplay": true,
+        "final_state": {
+          "money": 0,
+          "border": 100,
+          "supply": 100,
+          "loyalty": 100
+        },
+        "final_regions": {
+          "italia": 88,
+          "gallia": 90,
+          "hispania": 75,
+          "aegyptus": 87,
+          "asia": 81,
+          "danubius": 92
+        },
+        "score": 81,
+        "export": {
+          "bytes": 5728,
+          "sha256": "0b8ec71cb15095da5f5cef92ccae6e6ad0fa3e5ee794cdada24d87703b9f351c"
+        },
+        "overflow": {
+          "document": false,
+          "opening": "auto"
+        },
+        "legend_contrast": 8.376721237934271
+      },
+      "checks": 149
+    },
+    {
+      "name": "repeated-controls",
+      "width": 768,
+      "mode": "normal",
+      "status": "PASS",
+      "detail": {
+        "native_double_click": true,
+        "native_key_repeat": true
+      },
+      "checks": 6
+    },
+    {
+      "name": "guides-and-opening",
+      "width": 768,
+      "mode": "all",
+      "status": "PASS",
+      "detail": {
+        "rules_and_history": true,
+        "focus_trap": true
+      },
+      "checks": 15
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 1280,
+      "mode": "easy",
+      "status": "PASS",
+      "detail": {
+        "eight_rounds": true,
+        "keyboard_gameplay": true,
+        "final_state": {
+          "money": 50,
+          "border": 100,
+          "supply": 100,
+          "loyalty": 100
+        },
+        "final_regions": {
+          "italia": 100,
+          "gallia": 100,
+          "hispania": 100,
+          "aegyptus": 100,
+          "asia": 100,
+          "danubius": 100
+        },
+        "score": 95,
+        "export": {
+          "bytes": 5150,
+          "sha256": "cde8e1e1f250e8d312d733b5a0893b21307501121755b4aa2519c565a8016713"
+        },
+        "overflow": {
+          "document": false,
+          "opening": "auto"
+        },
+        "legend_contrast": 8.376721237934271
+      },
+      "checks": 143
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 1280,
+      "mode": "normal",
+      "status": "PASS",
+      "detail": {
+        "eight_rounds": true,
+        "keyboard_gameplay": true,
+        "final_state": {
+          "money": 0,
+          "border": 100,
+          "supply": 100,
+          "loyalty": 100
+        },
+        "final_regions": {
+          "italia": 100,
+          "gallia": 100,
+          "hispania": 92,
+          "aegyptus": 100,
+          "asia": 98,
+          "danubius": 100
+        },
+        "score": 89,
+        "export": {
+          "bytes": 5621,
+          "sha256": "5f4ab14e44c36eb558a5175dcb77ae20832a61f139acb76f48b0b481aad60aac"
+        },
+        "overflow": {
+          "document": false,
+          "opening": "auto"
+        },
+        "legend_contrast": 8.376721237934271
+      },
+      "checks": 148
+    },
+    {
+      "name": "full-game-export-reset",
+      "width": 1280,
+      "mode": "hard",
+      "status": "PASS",
+      "detail": {
+        "eight_rounds": true,
+        "keyboard_gameplay": true,
+        "final_state": {
+          "money": 0,
+          "border": 100,
+          "supply": 100,
+          "loyalty": 100
+        },
+        "final_regions": {
+          "italia": 88,
+          "gallia": 90,
+          "hispania": 75,
+          "aegyptus": 87,
+          "asia": 81,
+          "danubius": 92
+        },
+        "score": 81,
+        "export": {
+          "bytes": 5728,
+          "sha256": "0b8ec71cb15095da5f5cef92ccae6e6ad0fa3e5ee794cdada24d87703b9f351c"
+        },
+        "overflow": {
+          "document": false,
+          "opening": "auto"
+        },
+        "legend_contrast": 8.376721237934271
+      },
+      "checks": 149
+    },
+    {
+      "name": "repeated-controls",
+      "width": 1280,
+      "mode": "normal",
+      "status": "PASS",
+      "detail": {
+        "native_double_click": true,
+        "native_key_repeat": true
+      },
+      "checks": 6
+    },
+    {
+      "name": "guides-and-opening",
+      "width": 1280,
+      "mode": "all",
+      "status": "PASS",
+      "detail": {
+        "rules_and_history": true,
+        "focus_trap": true
+      },
+      "checks": 15
+    },
+    {
+      "name": "normal-20-sequence-regression",
+      "width": 1280,
+      "mode": "normal",
+      "status": "PASS",
+      "detail": {
+        "sequences": [
+          {
+            "sequence": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "score": 83
+          },
+          {
+            "sequence": [
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            "score": 86
+          },
+          {
+            "sequence": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "score": 24
+          },
+          {
+            "sequence": [
+              1,
+              0,
+              2,
+              2,
+              0,
+              2,
+              1,
+              0
+            ],
+            "score": 68
+          },
+          {
+            "sequence": [
+              1,
+              2,
+              1,
+              2,
+              0,
+              0,
+              2,
+              0
+            ],
+            "score": 67
+          },
+          {
+            "sequence": [
+              2,
+              0,
+              1,
+              0,
+              0,
+              1,
+              2,
+              2
+            ],
+            "score": 63
+          },
+          {
+            "sequence": [
+              1,
+              1,
+              0,
+              1,
+              0,
+              2,
+              2,
+              2
+            ],
+            "score": 65
+          },
+          {
+            "sequence": [
+              0,
+              2,
+              0,
+              0,
+              2,
+              1,
+              0,
+              1
+            ],
+            "score": 67
+          },
+          {
+            "sequence": [
+              0,
+              1,
+              1,
+              1,
+              0,
+              2,
+              2,
+              0
+            ],
+            "score": 64
+          },
+          {
+            "sequence": [
+              2,
+              0,
+              2,
+              1,
+              0,
+              2,
+              2,
+              0
+            ],
+            "score": 58
+          },
+          {
+            "sequence": [
+              2,
+              2,
+              2,
+              0,
+              1,
+              1,
+              1,
+              1
+            ],
+            "score": 56
+          },
+          {
+            "sequence": [
+              1,
+              1,
+              1,
+              0,
+              2,
+              0,
+              1,
+              1
+            ],
+            "score": 78
+          },
+          {
+            "sequence": [
+              2,
+              2,
+              2,
+              0,
+              2,
+              0,
+              1,
+              1
+            ],
+            "score": 50
+          },
+          {
+            "sequence": [
+              1,
+              2,
+              2,
+              0,
+              0,
+              2,
+              1,
+              0
+            ],
+            "score": 54
+          },
+          {
+            "sequence": [
+              0,
+              2,
+              0,
+              2,
+              0,
+              2,
+              2,
+              1
+            ],
+            "score": 57
+          },
+          {
+            "sequence": [
+              1,
+              2,
+              0,
+              2,
+              2,
+              0,
+              2,
+              2
+            ],
+            "score": 56
+          },
+          {
+            "sequence": [
+              1,
+              2,
+              0,
+              0,
+              1,
+              2,
+              0,
+              0
+            ],
+            "score": 56
+          },
+          {
+            "sequence": [
+              2,
+              1,
+              0,
+              1,
+              1,
+              1,
+              1,
+              2
+            ],
+            "score": 76
+          },
+          {
+            "sequence": [
+              1,
+              2,
+              0,
+              0,
+              1,
+              1,
+              1,
+              1
+            ],
+            "score": 76
+          },
+          {
+            "sequence": [
+              1,
+              0,
+              2,
+              2,
+              0,
+              1,
+              1,
+              2
+            ],
+            "score": 73
+          }
+        ],
+        "comparisons": 340,
+        "unintended_numeric_differences": 0,
+        "export_compatibility": true
+      },
+      "checks": 344
+    },
+    {
+      "name": "transition-race",
+      "width": 1280,
+      "mode": "all",
+      "status": "PASS",
+      "detail": {
+        "synthetic_timer_race": true
+      },
+      "checks": 3
+    },
+    {
+      "name": "partial-export",
+      "width": 768,
+      "mode": "easy",
+      "status": "PASS",
+      "detail": {
+        "bytes": 529,
+        "sha256": "9cb229db4ed9a54cb6bc71bb0f9b9fa878e13cd92599496ff88fb749ceeeb79c"
+      },
+      "checks": 4
+    },
+    {
+      "name": "hub-integration",
+      "width": 1280,
+      "mode": "hard",
+      "status": "PASS",
+      "detail": {
+        "local_hub_iframe": true
+      },
+      "checks": 4
+    }
+  ]
+}
