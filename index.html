@@ -134,24 +134,172 @@
   .foot{max-width:1180px;margin:44px auto 0;padding:22px 22px 50px;border-top:1px solid var(--edge);
     font-family:'Lora',serif;font-size:.75rem;color:var(--muted);line-height:1.7;}
   @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
+
+/* === Vizualis redesign: cinematic museum / M08-tol fuggetlen hub === */
+:root{
+  --bg:#081624;--surf:#11283e;--surf-2:#172f47;--ink:#f6f0e7;
+  --navy:#091a2b;--cream:#fff6df;--edge:rgba(224,185,119,.21);
+  --edge-2:rgba(224,185,119,.39);--text:#f6f0e7;--muted:#b5c4d1;
+  --k:#edbd70;--k-ink:#f2cb83;--k2:#f2cb83;--r:18px;--r-sm:12px;
+}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+.skip-link{position:absolute;left:16px;top:-100px;z-index:10;background:#f7d797;color:#142536;padding:12px 20px;border-radius:8px}
+.skip-link:focus{top:12px}
+body{font-family:'Lora',Georgia,serif;background:radial-gradient(ellipse 75% 22% at 86% 2%,#284761 0%,transparent 72%),linear-gradient(180deg,#081726,#0b1a2a 48%,#071321);color:var(--ink)}
+h1,h2,h3{color:#fff8e9}
+:focus-visible{outline:3px solid #f9d186;outline-offset:3px}
+.wrap{max-width:1260px;padding:0 26px 44px}
+.site-header{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:3;min-height:88px;border-bottom:1px solid var(--edge)}
+.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--k-ink);font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(1.36rem,2.1vw,2.2rem);font-weight:700;letter-spacing:.055em}
+.brand svg{width:36px;height:36px;fill:none;stroke:currentColor;stroke-width:1.8}
+.site-nav{display:flex;align-items:center;gap:8px}
+.site-nav a{display:inline-flex;align-items:center;min-height:44px;padding:7px 15px;color:#f5e6cc;text-decoration:none;font-size:.84rem;border-radius:12px}
+.site-nav a:hover,.site-nav a:focus-visible{background:#233e52;color:#ffe5a6}
+.menu-toggle{display:none;border:1px solid var(--edge-2);background:#122a3e;color:var(--k-ink);font-size:1.35rem;min-height:44px;min-width:48px;border-radius:10px;cursor:pointer}
+.hero{position:relative;isolation:isolate;overflow:hidden;border-radius:0 0 28px 28px;min-height:440px;display:flex;align-items:center;padding:54px 42px 62px;background:linear-gradient(90deg,#071627 1%,rgba(7,22,39,.98) 37%,rgba(7,22,39,.62) 72%,rgba(7,22,39,.16)),url('assets/hub-roma.svg') right center/auto 100% no-repeat;}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:-1;background:linear-gradient(0deg,rgba(6,18,30,.55),transparent 55%)}
+.hero-copy{position:relative;z-index:1;max-width:730px}
+.hero .kicker{color:#f7c97e;letter-spacing:.24em;font-size:.78rem;margin:0 0 19px}
+.hero h1{font-size:clamp(3.1rem,6.1vw,6.1rem);line-height:.97;letter-spacing:-.025em;font-weight:700;max-width:700px;text-shadow:0 3px 32px #04111a}
+.hero h1 em{color:#fff7e6;font-style:normal}
+.hero .lede{max-width:650px;color:#d4deeb;font-size:clamp(.95rem,1.8vw,1.2rem);line-height:1.7;margin:24px 0 27px}
+.hero-actions{display:flex;flex-wrap:wrap;gap:14px}
+.hero-btn{min-height:52px;display:inline-flex;align-items:center;justify-content:center;padding:12px 26px;text-decoration:none;border:1px solid #f2ca81;border-radius:13px;font-size:1rem;font-weight:700;transition:transform .2s ease,box-shadow .2s ease}
+.hero-btn:hover{transform:translateY(-2px)}
+.hero-btn.primary{background:linear-gradient(135deg,#ffe39d,#dc9c4c);color:#122030;box-shadow:0 7px 24px #0006}
+.hero-btn.secondary{background:#081a2add;color:#fff2dc}
+.featured{margin:25px 0 50px}
+.featured-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.featured-head h2{font-size:2rem}.featured-head p{color:var(--muted);font-size:.81rem}
+.featured-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.feature-card{display:flex;flex-direction:column;overflow:hidden;text-align:left;background:#12293d;border:1px solid #35526b;border-radius:23px;color:#faf4e9;padding:0;cursor:pointer;box-shadow:0 10px 27px #0004;transition:transform .22s,box-shadow .22s,border-color .22s}
+.feature-card:hover{transform:translateY(-4px);box-shadow:0 17px 34px #0008;border-color:#eac27c}
+.feature-art{display:block;aspect-ratio:16/8.5;background-position:center;background-size:cover;position:relative}
+.feature-art::after{content:'';position:absolute;inset:60% 0 0;background:linear-gradient(transparent,#132a3c44)}
+.feature-art.roma{background-image:url('assets/hub-roma.svg')}
+.feature-art.korona{background-image:url('assets/hub-korona.svg')}
+.feature-copy{display:flex;align-items:center;gap:10px;padding:18px 20px 20px}
+.feature-copy strong{display:block;font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(1.4rem,3vw,2.4rem);line-height:1.1}
+.feature-copy small{display:block;color:#f0c887;font-size:.9rem;margin-top:4px}
+.feature-arrow{display:grid;place-items:center;margin-left:auto;flex:none;width:41px;height:41px;border:1px solid #5c7890;border-radius:50%;font-size:1.6rem;color:#f2c87b}
+.section-head{margin-top:8px}
+.section-head h2{font-size:clamp(1.8rem,3.6vw,2.6rem)}
+.section-note{color:#acbfce;max-width:820px}
+.subjectbar,.filters{margin-bottom:27px}
+.schip,.chip{border-color:var(--edge-2);background:#142c40;color:#e7d9c1;border-radius:11px;font-family:'Lora',Georgia,serif;min-height:44px;font-size:.8rem}
+.schip.on,.chip.on{background:linear-gradient(125deg,#e8b366,#f7d797);color:#162536;border-color:#f7d797}
+.schip:hover,.chip:hover{border-color:#efcb86;color:#ffe6b3}
+.schip.on:hover,.chip.on:hover{color:#142536}
+.flabel,.count{color:#c5d0db}
+.grid{gap:18px}
+.card{border-radius:18px;background:linear-gradient(155deg,#17334a,#0f2439);border:1px solid #31506a;padding:19px 21px 21px;box-shadow:0 7px 20px #0003;color:#f8f0e5;transition:transform .2s,border-color .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);border-color:#edc27f;box-shadow:0 14px 29px #0006}
+.card .kind,.card .go{color:#efbf77}
+.card h3{font-size:1.65rem;color:#fff6e7;margin:8px 0}
+.card{min-width:0;overflow-wrap:break-word}
+.filters .fgroup{min-width:0}
+.pback,.pnew{min-height:44px;min-width:44px}
+.pframe{min-height:0}
+.card p{color:#b8c8d5}
+.tag.fill{background:#25445f;color:#f0e0bf}
+.tag.outline{border-color:#546a7a;color:#d5dfeb}
+.card.demo{background:linear-gradient(140deg,#1b3448,#10283c)}
+.card.escape{background:linear-gradient(150deg,#18344a,#10253a)}
+.card-visual{height:128px;display:block;margin:-19px -21px 17px;background:linear-gradient(135deg,#344c66,#0d2336);overflow:hidden;position:relative;border-radius:17px 17px 0 0}
+.card-visual::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#132b3d00,#08182d14)}
+.card-visual .illustration{position:absolute;inset:0;background-position:center;background-size:cover;filter:saturate(.88)}
+.card-visual[data-theme="roma"] .illustration,.card-visual[data-theme="ancient"] .illustration{background-image:url('assets/hub-roma.svg')}
+.card-visual[data-theme="castle"] .illustration,.card-visual[data-theme="escape"] .illustration{background-image:url('assets/hub-korona.svg')}
+.card-visual[data-theme="quiz"] .illustration{background:radial-gradient(circle at 73% 32%,#d0a96a44,transparent 28%),repeating-linear-gradient(120deg,#152d42,#233f54 34px,#152d42 72px)}
+.card-visual[data-theme="demo"] .illustration{background:radial-gradient(ellipse at 35% 35%,#cc9d565c,transparent 32%),linear-gradient(130deg,#31506b,#0f2237)}
+.card-visual .visual-symbol{position:absolute;right:25px;top:9px;color:#f0c987bd;font-family:'Cormorant Garamond',Georgia,serif;font-size:6.2rem;line-height:1}
+.divider span{color:#d3bea0}
+.divider .line{background:var(--edge-2)}
+.btn-start{border:1px solid #ecc485;background:linear-gradient(135deg,#e7b86f,#db9950);color:#112339;border-radius:10px;font-family:'Lora',Georgia,serif}
+.btn-start:hover{background:#f6d68c;color:#132335}
+.tlink{color:#f0cb8d}
+.guide h3{font-size:2rem}
+.guide .gsub,.row .what span{color:#b8c8d5}
+.row{background:#10273a;border:1px solid #35536b;border-radius:14px}
+.row .when{color:#f2c787}.row .what b{color:#fff3df}
+.foot{color:#adbecd}
+.player{background:#091623}
+.pbar{background:#0d253a;border-bottom-color:#36546b}
+.phint{background:#332b22;color:#ffe1a8}
+.phint button{color:#ffe1a8;border-color:#f4d08b}
+@media(max-width:800px){
+ .wrap{padding:0 16px 36px}
+ .site-header{min-height:74px}
+ .menu-toggle{display:block}
+ .site-nav{display:none;position:absolute;right:0;top:68px;flex-direction:column;align-items:stretch;width:min(290px,100%);padding:12px;background:#11293f;border:1px solid #496178;border-radius:12px;box-shadow:0 20px 40px #0009}
+ .site-nav.open{display:flex}
+ .hero{min-height:480px;padding:44px 24px 48px;background-image:linear-gradient(90deg,#091827 0%,rgba(7,22,39,.94) 50%,rgba(7,22,39,.55) 100%),url('assets/hub-roma.svg');background-position:center,right bottom;background-size:cover,auto 100%}
+ .hero h1{font-size:clamp(2.7rem,9vw,4.6rem)}
+ .hero .kicker{letter-spacing:.13em}
+ .hero-actions{gap:10px}
+ .featured-grid{gap:12px}
+ .feature-copy{padding:14px}
+ .feature-copy strong{font-size:1.45rem}
+ .feature-copy small{font-size:.76rem}
+ .feature-arrow{width:30px;height:30px;font-size:1.25rem}
+}
+@media(max-width:520px){
+ .brand{font-size:1.42rem;letter-spacing:.025em}
+ .brand svg{width:30px;height:30px}
+ .hero{margin:0 -16px;border-radius:0 0 22px 22px;min-height:510px;padding:55px 26px}
+ .hero h1{font-size:clamp(2.75rem,11vw,4.3rem)}
+ .hero .lede{font-size:1rem}
+ .hero-btn{flex:1 1 100%;min-height:50px;padding:10px}
+ .featured{margin-top:28px}
+ .featured-head h2{font-size:1.65rem}
+ .featured-grid{grid-template-columns:1fr;gap:18px}
+ .feature-art{aspect-ratio:16/8.5}
+ .feature-copy{padding:12px 10px}
+ .feature-copy strong{font-size:1.7rem}
+ .feature-copy small{font-size:.8rem}
+ .feature-arrow{display:grid}
+ .card-visual{height:100px}
+ .grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr))}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
 </style>
 </head>
 <body>
-
-<div class="wrap" id="hub">
-  <div class="kicker">Interaktív gyakorlófeladatok és szemléltetés</div>
-  <h1 tabindex="-1">Egy helyen. <em>Többféle gyakorlás.</em></h1>
-  <p class="lede">A gyakorlófeladatok és szemléltető anyagok egy közös felületről érhetők el. Válassz tantárgyat, évfolyamot vagy feladattípust, majd kattints egy kártyára.</p>
+<main class="wrap" id="hub">
+<a class="skip-link" href="#gamesSection">Ugrás a játékokhoz</a>
+  <header class="site-header">
+    <a href="#hub" class="brand" aria-label="Tanári Játéktár főoldal"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 13 20 4l16 9M7 16h26M8 32h24M5 36h30M11 18v12m9-12v12m9-12v12"/></svg>TANÁRI JÁTÉKTÁR</a>
+    <button class="menu-toggle" id="menuToggle" aria-controls="siteNav" aria-expanded="false" aria-label="Navigáció megnyitása" onclick="toggleSiteNav()">☰</button>
+    <nav class="site-nav" id="siteNav" aria-label="Fő navigáció">
+      <a href="#gamesSection" onclick="closeSiteNav()">Játékok</a><a href="#escapesSection" onclick="closeSiteNav()">Szabadulószobák</a><a href="#demosSection" onclick="closeSiteNav()">Szemléltetés</a><a href="#guideSection" onclick="closeSiteNav()">Tanári segítség</a>
+    </nav>
+  </header>
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="hero-copy">
+      <div class="kicker">FEDEZD FEL A TÖRTÉNELMET</div>
+      <h1 id="heroTitle" tabindex="-1">A történelem <em>életre kel.</em></h1>
+      <p class="lede">Interaktív játékok, történelmi kihívások és digitális szabadulószobák – egy helyen.</p>
+      <div class="hero-actions"><a class="hero-btn primary" href="#gamesSection">Játékok felfedezése →</a><a class="hero-btn secondary" href="#escapesSection">Szabadulószobák</a></div>
+    </div>
+  </section>
+  <section class="featured" aria-labelledby="featuredTitle">
+    <div class="featured-head"><h2 id="featuredTitle">Kiemelt történelmi kalandok</h2><p>Válassz egy történetet, és indulhat a játék.</p></div>
+    <div class="featured-grid">
+      <button class="feature-card" onclick="openFeaturedRome(this)" aria-label="Irányítsd Rómát! stratégiai játék megnyitása"><span class="feature-art roma" role="img" aria-label="Római fórum illusztrációja"></span><span class="feature-copy"><span><strong>Irányítsd Rómát!</strong><small>Stratégiai játék · 9.0</small></span><span class="feature-arrow" aria-hidden="true">›</span></span></button>
+      <button class="feature-card" onclick="openFeaturedCrown(this)" aria-label="A korona nyomában játék megnyitása"><span class="feature-art korona" role="img" aria-label="Középkori vár, korona és régi térkép illusztrációja"></span><span class="feature-copy"><span><strong>A korona nyomában</strong><small>Történelmi nyomozás</small></span><span class="feature-arrow" aria-hidden="true">›</span></span></button>
+    </div>
+  </section>
 
   <div class="subjectbar" id="subjectbar"></div>
 
-  <div class="section-head"><h2>Gyakorlófeladatok</h2></div>
+  <div id="gamesSection" class="section-head" tabindex="-1"><h2>Gyakorlófeladatok</h2></div>
   <p class="section-note">Önellenőrző, pontozott feladatok — diákmunkára, órai vagy otthoni gyakorlásra.</p>
 
   <div class="filters">
     <div class="fgroup"><div class="flabel">Évfolyam</div><div class="chips" id="fGrade"></div></div>
     <div class="fgroup"><div class="flabel">Típus</div><div class="chips" id="fType"></div></div>
-    <div class="count" id="count"></div>
+    <div class="count" id="count" role="status" aria-live="polite" aria-atomic="true"></div>
   </div>
 
   <div class="grid" id="grid"></div>
@@ -159,19 +307,19 @@
 
   <div class="divider"><div class="line"></div><span>szabadulószobák</span><div class="line"></div></div>
 
-  <div class="section-head"><h2>Szabadulószobák</h2></div>
+  <div id="escapesSection" class="section-head"><h2>Szabadulószobák</h2></div>
   <p class="section-note">3D szabadulószoba-játékok — ugyanazon a lapon nyílnak, tanári kivetítő nézettel.</p>
   <div class="grid" id="escapeGrid"></div>
   <div class="empty" id="escapeEmpty" style="display:none;">Ebben a tárgyban egyelőre nincs szabadulószoba.</div>
 
   <div class="divider"><div class="line"></div><span>szemléltető anyagok</span><div class="line"></div></div>
 
-  <div class="section-head"><h2>Szemléltetés órára</h2></div>
+  <div id="demosSection" class="section-head"><h2>Szemléltetés órára</h2></div>
   <p class="section-note">Animált bemutatók kivetítéshez, magyarázathoz — nem feladatok, nincs bennük pontozás.</p>
   <div class="grid" id="demoGrid"></div>
   <div class="empty" id="demoEmpty" style="display:none;">Ebben a tárgyban egyelőre nincs szemléltető anyag.</div>
 
-  <div class="guide">
+  <div class="guide" id="guideSection">
     <h3>Mikor melyiket?</h3>
     <p class="gsub">Rövid tanári segédlet — az eszközök nem egyenértékűek, más-más órai helyzetre valók.</p>
     <div class="rows">
@@ -187,7 +335,8 @@
       <div class="row"><div class="when">Esszéfelkészítés</div>
         <div class="what"><b>Két forrás, két igazság</b> · <b>A reformkor vitaterme</b><br>
         <span>25–30 perces, mély feladatok. Mindkettő kész esszévázzal zárul, amit a diák fel tud használni.</span></div></div>
-      <div class="row"><div class="when">Történelmi döntéshelyzetek</div><div class="what"><b>Irányítsd Rómát!</b><br><span>20–30 perc, páros munkában. A diákoknak a határvédelem, a kincstár, az ellátás és a provinciák között kell mérlegelniük; döntéseiket indokolják.</span></div></div>\n      <div class="row"><div class="when">Összefoglaló óra</div>
+      <div class="row"><div class="when">Történelmi döntéshelyzetek</div><div class="what"><b>Irányítsd Rómát!</b><br><span>20–30 perc, páros munkában. A diákoknak a határvédelem, a kincstár, az ellátás és a provinciák között kell mérlegelniük; döntéseiket indokolják.</span></div></div>
+      <div class="row"><div class="when">Összefoglaló óra</div>
         <div class="what"><b>A korona nyomában</b><br>
         <span>Egy teljes korszak végigjárása térképen, forráselemzéssel — projektórára vagy dupla órára.</span></div></div>
       <div class="row"><div class="when">Otthoni gyakorlás</div>
@@ -200,7 +349,7 @@
   </div>
 
   <div class="foot" id="footText"></div>
-</div>
+</main>
 
 <div class="player" id="player" role="dialog" aria-modal="true" aria-labelledby="ptitle">
   <div class="pbar">
@@ -211,7 +360,7 @@
       </button>
       <div class="ptitle" id="ptitle"></div>
     </div>
-    <button class="pnew" onclick="openInTab()" title="Megnyitás külön lapon (nyomtatáshoz ajánlott)">
+    <button class="pnew" onclick="openInTab()" aria-label="Megnyitás külön lapon" title="Megnyitás külön lapon (nyomtatáshoz ajánlott)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/></svg>
       <span>Külön lapon</span>
     </button>
@@ -224,7 +373,7 @@
 </div>
 
 <script>
-/* ===== beágyazott tartalom (base64) ===== */
+/* Katalógus: önálló HTML-fájlok. */
 const GAMES = [{"id": "iranyitsd-romat", "title": "Irányítsd Rómát! – Császári stratégia", "accent": "#B68235", "kind": "Stratégiai szimuláció", "subject": "tortenelem", "grade": ["9"], "type": "strategia", "desc": "Nyolc császári tanácsülés: hadsereg, kincstár, tartományok és gabonaellátás. Indokold a döntéseidet, figyeld meg a hosszú távú következményeket! Beépített történelmi tudástárral."}, {"id": "korona", "title": "A korona nyomában", "accent": "#FFC24B", "kind": "Nyomozójáték", "subject": "tortenelem", "grade": ["9", "10"], "type": "kaland", "desc": "Térképes nyomozás a középkori magyar államon át — az államalapítástól Mohácsig. Topográfiai kapu, forráselemzés, hat állomás."}, {"id": "kivagyok", "title": "Ki vagyok én?", "accent": "#3DDC97", "kind": "Portréjáték", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "portre", "desc": "42 történelmi személy a hivatalos érettségi névsorból, évfolyamonkénti válogatással — szabad felidézés fokozatosan könnyülő nyomokkal, szabadon újrajátszható."}, {"id": "reformkor", "title": "A reformkor vitaterme", "accent": "#5FD3F0", "kind": "Álláspont-szortírozó", "subject": "tortenelem", "grade": ["10", "11"], "type": "vita", "desc": "Három reformkori vita — Széchenyi–Kossuth, Dessewffy–Széchenyi, centralisták–Kossuth: melyik állítás kié, és mi az, amiben egyetértettek? Esszévázzal zárul."}, {"id": "leveltar", "title": "A titkos levéltár", "accent": "#FF7A8A", "kind": "Szabadulószoba", "subject": "tortenelem", "grade": ["11", "12"], "type": "szabadulo", "desc": "Négy zár — évszám, fogalom, név, térkép —, majd egy hamisítvány leleplezése. Visszaszámlálóval és hibaprofillal."}, {"id": "szokereso", "title": "Szókereső", "accent": "#9E8BFF", "kind": "Lexikagyakorló", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "szokereso", "desc": "428 fogalom, név és helyszín az ókortól napjainkig. Klasszikus és körülírásos nehézség, rejtvénykóddal és nyomtatható feladatlappal."}, {"id": "ketforras", "title": "Két forrás, két igazság", "accent": "#5FD3F0", "kind": "Forráselemzés", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "forras", "desc": "21 esetpár mind a négy évfolyamról — két egymásnak ellentmondó forrás, három lépésben: közös alap, eltérés magyarázata, epistemikus besorolás."}, {"id": "keresztrejtveny", "title": "Keresztrejtvény", "accent": "#FF9A2E", "kind": "Keresztrejtvény", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "kereszt", "desc": "Klasszikus, kereszteződő szavas rejtvény — válaszd ki az évfolyamot és a témát, a gép generálja a rácsot. Szabadon újrasorsolható, megoldás- és nyomtatási funkcióval."}, {"id": "eszperente", "title": "Csak E!", "accent": "#FF6EA0", "kind": "Nyelvi rejtvény", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "eszperente", "desc": "Történelmi események és szereplők — de a leírásukban csak \"e\"/\"é\" magánhangzó szerepelhet. Feleletválasztós rejtvény, három nehézségi szinttel."}];
 const DEMOS = [{"id": "demo_felfedezesek", "title": "A nagy földrajzi felfedezések", "accent": "#5FD3F0", "subject": "tortenelem", "topic": "Kora újkor", "desc": "Animált bemutató a felfedezések okairól és a legfontosabb utakról — óra közbeni magyarázathoz."}, {"id": "demo_roma", "title": "A Római Birodalom", "accent": "#FFC24B", "subject": "tortenelem", "topic": "Ókor", "desc": "Animált áttekintés a Római Birodalomról — kivetíthető szemléltetés az órai magyarázathoz."}, {"id": "demo_wwi", "title": "Az első világháború frontjai", "accent": "#FF7A8A", "subject": "tortenelem", "topic": "XX. század", "desc": "Interaktív térkép az első világháború frontvonalairól — a hadszínterek és a frontok bemutatásához."}, {"id": "demo_legkor", "title": "A légkör rétegei", "accent": "#60A5FA", "subject": "foldrajz", "topic": "Fizikai földrajz", "desc": "Animált bemutató a légkör szerkezetéről és rétegeiről — kivetíthető szemléltetés az órai magyarázathoz."}];
 const SUBJECTS = [["tortenelem", "Történelem"], ["foldrajz", "Földrajz"], ["turizmus", "Turizmus-vendéglátás"]];
@@ -243,6 +392,10 @@ const GRADES=['9','10','11','12'];
 const TYPES=[['kaland','Kaland'],['portre','Portré'],['vita','Vita'],['szabadulo','Szabaduló'],['szokereso','Szókereső'],['forras','Forrás'],['kereszt','Keresztrejtvény'],['eszperente','Nyelvi rejtvény'],['strategia','Stratégia']];
 const state={subject:null,grade:null,type:null,open:null,openKind:null,openTrigger:null};
 
+function openFeaturedRome(btn){openItem('iranyitsd-romat','game',btn)}
+function openFeaturedCrown(btn){openItem('korona','game',btn)}
+function toggleSiteNav(){const nav=document.getElementById('siteNav'),b=document.getElementById('menuToggle');const open=nav.classList.toggle('open');b.setAttribute('aria-expanded',String(open));b.setAttribute('aria-label',open?'Navigáció bezárása':'Navigáció megnyitása')}
+function closeSiteNav(){const nav=document.getElementById('siteNav'),b=document.getElementById('menuToggle');nav.classList.remove('open');b.setAttribute('aria-expanded','false');b.setAttribute('aria-label','Navigáció megnyitása')}
 function subjectLabel(id){ const s=SUBJECTS.filter(function(x){return x[0]===id;})[0]; return s?s[1]:id; }
 
 function renderSubjectBar(){
@@ -250,7 +403,7 @@ function renderSubjectBar(){
     '<button class="schip '+(state.subject===null?'on':'')+'" onclick="setSubject(null)">Minden tantárgy</button>' +
     SUBJECTS.map(function(s){return '<button class="schip '+(state.subject===s[0]?'on':'')+'" onclick="setSubject(\''+s[0]+'\')">'+s[1]+'</button>';}).join('');
 }
-function setSubject(v){ state.subject=v; renderSubjectBar(); renderGrid(); renderEscapes(); renderDemos(); renderFoot(); }
+function setSubject(v){ const restore=rememberFilterFocus(); state.subject=v; renderSubjectBar(); renderGrid(); renderEscapes(); renderDemos(); renderFoot(); syncFilterStates(); restore(); }
 
 function renderFilters(){
   document.getElementById('fGrade').innerHTML =
@@ -260,7 +413,18 @@ function renderFilters(){
     '<button class="chip '+(state.type===null?'on':'')+'" onclick="setF(\'type\',null)">Mind</button>' +
     TYPES.map(function(t){return '<button class="chip '+(state.type===t[0]?'on':'')+'" onclick="setF(\'type\',\''+t[0]+'\')">'+t[1]+'</button>';}).join('');
 }
-function setF(k,v){ state[k]=v; renderFilters(); renderGrid(); }
+function setF(k,v){ const restore=rememberFilterFocus(); state[k]=v; renderFilters(); renderGrid(); syncFilterStates(); restore(); }
+function rememberFilterFocus(){
+  const active=document.activeElement;
+  const group=active.closest('#subjectbar, #fGrade, #fType');
+  const index=group?Array.from(group.children).indexOf(active):-1;
+  return function(){ if(group && index>=0) group.children[index].focus(); };
+}
+function syncFilterStates(){
+  document.querySelectorAll('.schip,.chip').forEach(function(button){
+    button.setAttribute('aria-pressed',String(button.classList.contains('on')));
+  });
+}
 
 function renderGrid(){
   const list=GAMES.filter(function(g){
@@ -271,7 +435,8 @@ function renderGrid(){
   document.getElementById('count').textContent = list.length+' / '+GAMES.length+' feladat';
   document.getElementById('grid').innerHTML = list.map(function(g){
     return '<button class="card" onclick="openItem(\''+g.id+'\',\'game\',this)">'+
-      '<div class="kind">'+g.kind+'</div><h2>'+g.title+'</h2><p>'+g.desc+'</p>'+
+      '<span class="card-visual" data-theme="'+(g.id==='iranyitsd-romat'?'roma':g.id==='korona'?'castle':'quiz')+'" aria-hidden="true"><span class="illustration"></span><span class="visual-symbol">'+(g.id==='iranyitsd-romat'?'Ⅻ':g.id==='korona'?'♛':'✦')+'</span></span>'+
+      '<div class="kind">'+g.kind+'</div><h3>'+g.title+'</h3><p>'+g.desc+'</p>'+
       '<div class="tags"><span class="tag fill">'+subjectLabel(g.subject)+'</span>'+g.grade.map(function(x){return '<span class="tag outline">'+x+'. évf.</span>';}).join('')+'</div>'+
       '<div class="go">Megnyitás <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></button>';
   }).join('');
@@ -282,7 +447,7 @@ function renderEscapes(){
   document.getElementById('escapeGrid').innerHTML = list.map(function(e){
     const base='jatekok/'+e.slug+'/';
     const sr='<span class="sr"> – '+e.title+'</span>';
-    return '<article class="card escape"><div class="kind">Szabadulószoba · 3D</div><h2>'+e.title+'</h2><p class="sub">'+e.sub+'</p>'+
+    return '<article class="card escape"><span class="card-visual" data-theme="escape" aria-hidden="true"><span class="illustration"></span></span><div class="kind">Szabadulószoba · 3D</div><h3>'+e.title+'</h3><p class="sub">'+e.sub+'</p>'+
       '<p>Téma: '+e.topic+' · Cél: '+e.goal+'</p>'+
       '<div class="tags"><span class="tag fill">'+subjectLabel(e.subject)+'</span><span class="tag outline">'+e.grade+'</span><span class="tag outline">Mobilon is játszható</span></div>'+
       '<p class="meta">Gyors kör: '+e.quick+' · Teljes játék: '+e.full+'</p>'+
@@ -297,8 +462,9 @@ function renderDemos(){
   document.getElementById('demoEmpty').style.display = list.length? 'none':'block';
   document.getElementById('demoGrid').innerHTML = list.map(function(d){
     return '<button class="card demo" onclick="openItem(\''+d.id+'\',\'demo\',this)">'+
+      '<span class="card-visual" data-theme="demo" aria-hidden="true"><span class="illustration"></span><span class="visual-symbol">✧</span></span>'+
       '<div class="kind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>Szemléltetés</div>'+
-      '<h2>'+d.title+'</h2><p>'+d.desc+'</p>'+
+      '<h3>'+d.title+'</h3><p>'+d.desc+'</p>'+
       '<div class="tags"><span class="tag fill">'+subjectLabel(d.subject)+'</span><span class="tag outline">'+d.topic+'</span></div>'+
       '<div class="go">Megtekintés <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></button>';
   }).join('');
@@ -308,20 +474,17 @@ function renderFoot(){
   const dc=DEMOS.filter(function(d){return state.subject===null||d.subject===state.subject;}).length;
   const ec=ESCAPES.filter(function(e){return state.subject===null||e.subject===state.subject;}).length;
   document.getElementById('footText').textContent =
-    gc+' gyakorlófeladat + '+ec+' szabadulószoba + '+dc+' szemléltető anyag, külön HTML-fájlokban · a történelmi tételek a hivatalos érettségi vizsgakövetelmény alapján készültek · statikus oldal, build nélkül · a betűtípusok Google Fonts-ról töltődnek be, ezért internetkapcsolat szükséges.';
+    gc+' gyakorlófeladat · '+ec+' szabadulószoba · '+dc+' szemléltető anyag — Tanári Játéktár';
 }
 
-/* Blob URL-t adunk az iframe-nek srcdoc helyett: a srcdoc opak
-   (about:srcdoc) eredetet kap, ami ütközhet az önkicsomagoló bemutatók
-   Blob URL + document.documentElement.replaceWith mechanizmusával.
-   A blob: URL "rendes" eredetet ad, közelebb áll egy sima navigációhoz. */
+/* Relatív útvonalak a lejátszóhoz. */
 function resolvePath(id, kind){
   return (kind==='demo' ? 'demos/' : 'games/') + id + '.html';
 }
 function openItem(id, kind, triggerEl){
   const src = kind==='demo' ? DEMOS : GAMES;
   const g = src.filter(function(x){return x.id===id;})[0];
-  if(!g) return;
+  if(!g || state.open) return;
   state.open = g; state.openKind = kind;
   state.openTrigger = triggerEl || null;
   const p = document.getElementById('player');
@@ -331,12 +494,13 @@ function openItem(id, kind, triggerEl){
   const hint = document.getElementById('phint');
   hint.classList.remove('on');
   const frame = document.getElementById('pframe');
+  window._loaded = false;
+  frame.title = g.title;
   frame.src = resolvePath(id, kind);
   p.classList.add('on');
   document.body.classList.add('playing');
   document.getElementById('hub').inert = true;
   document.getElementById('pback').focus();
-  window._loaded = false;
   clearTimeout(window._loadWatch);
   window._loadWatch = setTimeout(function(){
     if(state.open===g && !window._loaded) hint.classList.add('on');
@@ -349,6 +513,7 @@ function frameLoadListener(){
   });
 }
 function closeGame(){
+  if(!state.open) return;
   document.getElementById('player').classList.remove('on');
   document.body.classList.remove('playing');
   document.getElementById('pframe').src = 'about:blank';
@@ -364,9 +529,23 @@ function openInTab(){
   if(!state.open) return;
   window.open(resolvePath(state.open.id, state.openKind), '_blank');
 }
-document.addEventListener('keydown', function(e){ if(e.key==='Escape' && state.open) closeGame(); });
+function handleEscape(e){
+  if(e.key!=='Escape' || e.defaultPrevented) return;
+  if(state.open){ e.preventDefault(); closeGame(); }
+  else if(document.getElementById('siteNav').classList.contains('open')){
+    closeSiteNav(); document.getElementById('menuToggle').focus();
+  }
+}
+document.addEventListener('keydown',handleEscape);
+document.getElementById('pframe').addEventListener('load',function(){
+  try { this.contentDocument.addEventListener('keydown',handleEscape); } catch(e) { /* Cross-origin content retains the visible back button. */ }
+});
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.site-header')) closeSiteNav();
+});
+window.matchMedia('(min-width:801px)').addEventListener('change',closeSiteNav);
 
-renderSubjectBar(); renderFilters(); renderGrid(); renderEscapes(); renderDemos(); renderFoot();
+renderSubjectBar(); renderFilters(); renderGrid(); renderEscapes(); renderDemos(); renderFoot(); syncFilterStates();
 </script>
 </body>
 </html>
