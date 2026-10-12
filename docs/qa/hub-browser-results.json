@@ -1,0 +1,22 @@
+{
+  "browser": "154.0.8037.99",
+  "time": "2026-10-12T16:59:50.305Z",
+  "source_sha256": "7d543a0ad26ab5ed7a67f888baf1ce063067fdd6d4401e872c1b73da40968321",
+  "results": [
+    {
+      "width": 360,
+      "status": "PASS",
+      "checks": "layout, 18 cards, navigation, keyboard, filters, empty state, featured/game/demo iframe, return focus, new tab, player Escape, escape/teacher/download links, SVG, no JS errors"
+    },
+    {
+      "width": 768,
+      "status": "PASS",
+      "checks": "layout, 18 cards, navigation, keyboard, filters, empty state, featured/game/demo iframe, return focus, new tab, player Escape, escape/teacher/download links, SVG, no JS errors"
+    },
+    {
+      "width": 1280,
+      "status": "PASS",
+      "checks": "layout, 18 cards, navigation, keyboard, filters, empty state, featured/game/demo iframe, return focus, new tab, player Escape, escape/teacher/download links, SVG, no JS errors"
+    }
+  ]
+}
