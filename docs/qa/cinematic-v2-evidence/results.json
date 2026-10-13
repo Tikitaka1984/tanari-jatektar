@@ -1,0 +1,1826 @@
+{
+  "time_utc": "2026-10-13T10:38:36.040Z",
+  "base_commit": "11cd27e707c84fae8ff79387d063664f0ebc8f4e",
+  "index_sha256": "7b81ab08792492b3330a844d80e9b9e12c312f03318dd3dd4597e8262adc3f4e",
+  "test_sha256": "0e80d4ed9b6e1caa318f00d039d6ac622c473e576b6b337ee1dbbc905b6a2fe9",
+  "assets": [
+    {
+      "key": "roma",
+      "file": "assets/hub-roma.webp",
+      "size_bytes": 132204,
+      "sha256": "d980f67f9d12eabb2741765cea9278ef4a1c715850159040a292df9bfda0d6f3",
+      "source": "a_dramatic_cinematic_highly_detailed_epic_histor_1_batch_1.png",
+      "dimensions": [
+        1119,
+        630
+      ]
+    },
+    {
+      "key": "korona",
+      "file": "assets/hub-korona.webp",
+      "size_bytes": 134302,
+      "sha256": "431e0660c69a67c65e0d802c01738fea8a1ece61faea73a298cd3a99ac6d5a3c",
+      "source": "wide_cinematic_scene_a_richly_detailed_medieval_r_2_batch_2.png",
+      "dimensions": [
+        1119,
+        630
+      ]
+    },
+    {
+      "key": "leveltar",
+      "file": "assets/hub-leveltar.webp",
+      "size_bytes": 125804,
+      "sha256": "978990719e1cfc7beccb595d67afdf20347f4ff4f0bce8738570bbf853e8f5b8",
+      "source": "wide_cinematic_atmospheric_interior_scene_of_an_3_batch_3.png",
+      "dimensions": [
+        1119,
+        630
+      ]
+    },
+    {
+      "key": "ketforras",
+      "file": "assets/hub-ketforras.webp",
+      "size_bytes": 149262,
+      "sha256": "9d393627277a4fb8c929a7ed9c4e35ce167a65625915efbfc9a90ff5378b4944",
+      "source": "wide_cinematic_still_life_scene_on_a_dark_wooden_d_4_batch_4.png",
+      "dimensions": [
+        1119,
+        630
+      ]
+    },
+    {
+      "key": "kivagyok",
+      "file": "assets/hub-kivagyok.webp",
+      "size_bytes": 125114,
+      "sha256": "f05ea2b9d5b76e25cce6ce7f0829b1f137be51271741c129d98b85fe2d53d8a2",
+      "source": "a_cinematic_dramatic_high_detail_fantasy_histor_5_batch_5.png",
+      "dimensions": [
+        1119,
+        630
+      ]
+    },
+    {
+      "key": "nyolckor",
+      "file": "assets/hub-nyolckor.webp",
+      "size_bytes": 147260,
+      "sha256": "59e8cf2ceba8ba7347dc67620add52320959ed2ee2e676eff4b2769065f6f5ec",
+      "source": "wide_cinematic_landscape_scene_at_golden_sunrise_6_batch_6.png",
+      "dimensions": [
+        1119,
+        630
+      ]
+    },
+    {
+      "key": "junius",
+      "file": "assets/hub-junius.webp",
+      "size_bytes": 122804,
+      "sha256": "5133f66779881f3ea3200298e40eae878aca34ef72997adbf8aff685ab5bfa1a",
+      "source": "wide_cinematic_ultra_detailed_atmospheric_histor_7_batch_7.png",
+      "dimensions": [
+        1119,
+        630
+      ]
+    },
+    {
+      "key": "demo-felfedezesek",
+      "file": "assets/hub-demo-felfedezesek.webp",
+      "size_bytes": 161698,
+      "sha256": "9d821ebcbf2d54a58a1ed687e473fcb0cdcf2ef0d0bc500cdeac9876247c5e14",
+      "source": "a_cinematic_highly_detailed_golden_hour_seafarin_8_batch_8.png",
+      "dimensions": [
+        1119,
+        630
+      ]
+    },
+    {
+      "key": "demo-roma",
+      "file": "assets/hub-demo-roma.webp",
+      "size_bytes": 132204,
+      "sha256": "d980f67f9d12eabb2741765cea9278ef4a1c715850159040a292df9bfda0d6f3",
+      "source": "a_dramatic_cinematic_highly_detailed_epic_histor_1_batch_1.png",
+      "dimensions": [
+        1119,
+        630
+      ]
+    },
+    {
+      "key": "grof",
+      "file": "assets/hub-grof.webp",
+      "size_bytes": 116400,
+      "sha256": "56c7118f55ed26061ffd1bebf8930aa7f24005f2995b93c12685cc1dbf2369b7",
+      "source": "a_richly_detailed_cinematic_photorealistic_paint_1_batch_1.png",
+      "dimensions": [
+        1119,
+        630
+      ]
+    }
+  ],
+  "asset_bytes": 1347052,
+  "svg_integrity": [
+    {
+      "file": "assets/hub-arpadok.svg",
+      "sha256": "be0a34cc0ac07fcdd51dcfd8b4116e2d9881157ee5d4394c29968107da4b2df5"
+    },
+    {
+      "file": "assets/hub-cserepszavazas.svg",
+      "sha256": "d9dc8263461d3da1f16f9957966d825449c7488be856e18db550552d81c11e71"
+    },
+    {
+      "file": "assets/hub-demo-felfedezesek.svg",
+      "sha256": "e5abb049e06f811b36118d6874e71af0b2fc2ac42636f0e04d6e70af05f09cd9"
+    },
+    {
+      "file": "assets/hub-demo-legkor.svg",
+      "sha256": "b6195f7a1e8130d3b05b04bced636951290c372b1f5bd2f71e302bb5e8bbbd72"
+    },
+    {
+      "file": "assets/hub-demo-roma.svg",
+      "sha256": "6c042544426e265d86e6c007d9b42ef38521205a3bcd03a11dfb5d48625cfbcf"
+    },
+    {
+      "file": "assets/hub-demo-wwi.svg",
+      "sha256": "c56ea7f62da5f0073c302d08789b94e87276ca3e7ee1c1aca98c5ccefef634ac"
+    },
+    {
+      "file": "assets/hub-eszperente.svg",
+      "sha256": "956876d57d0866af020eb947309851747195833801745bc953f81f16e177c4b6"
+    },
+    {
+      "file": "assets/hub-grof.svg",
+      "sha256": "e3a2618b93e0e98af9451d5dfa712c79aa2ba115b50163a8ddd61974873f732a"
+    },
+    {
+      "file": "assets/hub-iuti.svg",
+      "sha256": "d37438f586649fab46ae89839ffdcdf284d184ba02641fda9be1c0a3055cf0d7"
+    },
+    {
+      "file": "assets/hub-junius.svg",
+      "sha256": "26d26758520c983372b77337d2b80eb99d5eabf36e9dcb1c974f73d752c6a7db"
+    },
+    {
+      "file": "assets/hub-keresztrejtveny.svg",
+      "sha256": "14223ab21f86c186442aa33e79aaa97c7af1de8097c6dd547e4477a925ae44e5"
+    },
+    {
+      "file": "assets/hub-ketforras.svg",
+      "sha256": "92cf659c6c613df822f433cb39305f450d9fbb0418a4a6ceca29d344dd561c41"
+    },
+    {
+      "file": "assets/hub-kivagyok.svg",
+      "sha256": "70fcd1c2836358b09c7695f2d1727e07fd9323ea2eb9a4f2cf7e7203cf504a26"
+    },
+    {
+      "file": "assets/hub-korona.svg",
+      "sha256": "5aed816b2961084f0ef507f907faf3ddbc990526ef5f6074371548594fa48343"
+    },
+    {
+      "file": "assets/hub-leveltar.svg",
+      "sha256": "a40bfc7d51fd05ddddbba5dba870fde47113b4025ef9b0c2b7d0712bfe7e02b8"
+    },
+    {
+      "file": "assets/hub-nyolckor.svg",
+      "sha256": "0cf3b783339e9373f3910989b2637faf988ab65e83d087c356257691ad49136d"
+    },
+    {
+      "file": "assets/hub-reformkor.svg",
+      "sha256": "773f5171f44f3e40d6c5127fd9bb396fbed22d99ef061384df5437e70502f4e3"
+    },
+    {
+      "file": "assets/hub-roma.svg",
+      "sha256": "381918bc76a3a04880aef8c1059b1c7683be94ff569ed1d0912a3ed4ff17cf07"
+    },
+    {
+      "file": "assets/hub-szokereso.svg",
+      "sha256": "d4dbb17c5802b5104fd64c683d8c9ae2b6f25d2510a9f4950bc6b1c35e35e788"
+    }
+  ],
+  "results": [
+    {
+      "width": 360,
+      "height": 900,
+      "status": "PASS",
+      "js_errors": [],
+      "console_errors": [],
+      "failed_requests": [],
+      "navigation_cancelled_requests": [],
+      "http_errors": [],
+      "launches": [
+        {
+          "type": "featured",
+          "title": "Irányítsd Rómát! Stratégiai játék · 9.0",
+          "target": "/games/iranyitsd-romat.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "featured",
+          "title": "A korona nyomában Történelmi nyomozás",
+          "target": "/games/korona.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "STRATÉGIAI SZIMULÁCIÓ Irányítsd Rómát! – Császári stratégia",
+          "target": "/games/iranyitsd-romat.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "NYOMOZÓJÁTÉK A korona nyomában",
+          "target": "/games/korona.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "PORTRÉJÁTÉK Ki vagyok én?",
+          "target": "/games/kivagyok.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "ÁLLÁSPONT-SZORTÍROZÓ A reformkor vitaterme",
+          "target": "/games/reformkor.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZABADULÓSZOBA A titkos levéltár",
+          "target": "/games/leveltar.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "LEXIKAGYAKORLÓ Szókereső",
+          "target": "/games/szokereso.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "FORRÁSELEMZÉS Két forrás, két igazság",
+          "target": "/games/ketforras.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "KERESZTREJTVÉNY Keresztrejtvény",
+          "target": "/games/keresztrejtveny.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "NYELVI REJTVÉNY Csak E!",
+          "target": "/games/eszperente.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZEMLÉLTETÉS A nagy földrajzi felfedezések",
+          "target": "/demos/demo_felfedezesek.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZEMLÉLTETÉS A Római Birodalom",
+          "target": "/demos/demo_roma.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZEMLÉLTETÉS Az első világháború frontjai",
+          "target": "/demos/demo_wwi.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZEMLÉLTETÉS A légkör rétegei",
+          "target": "/demos/demo_legkor.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/arpadok-oroksege/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/iuti-haza/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/nyolckor-indul-a-busz/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/junius-tizenhatodika/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/grof-dolgozoszobaja/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/cserepszavazas-napja/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        }
+      ],
+      "cards": [
+        {
+          "src": "assets/hub-roma.webp",
+          "title": "Irányítsd Rómát! – Császári stratégia",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-korona.webp",
+          "title": "A korona nyomában",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-kivagyok.webp",
+          "title": "Ki vagyok én?",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-reformkor.webp",
+          "title": "A reformkor vitaterme",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-leveltar.webp",
+          "title": "A titkos levéltár",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-szokereso.webp",
+          "title": "Szókereső",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-ketforras.webp",
+          "title": "Két forrás, két igazság",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-keresztrejtveny.webp",
+          "title": "Keresztrejtvény",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-eszperente.webp",
+          "title": "Csak E!",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-arpadok.webp",
+          "title": "Az Árpádok öröksége",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-iuti.webp",
+          "title": "Iuti háza",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-nyolckor.webp",
+          "title": "Nyolckor indul a busz",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-junius.webp",
+          "title": "Június tizenhatodika",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-grof.webp",
+          "title": "A gróf dolgozószobája",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-cserepszavazas.svg",
+          "title": "A cserépszavazás napja",
+          "width": 300,
+          "height": 113,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-demo-felfedezesek.webp",
+          "title": "A nagy földrajzi felfedezések",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-demo-roma.webp",
+          "title": "A Római Birodalom",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-demo-wwi.webp",
+          "title": "Az első világháború frontjai",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-demo-legkor.webp",
+          "title": "A légkör rétegei",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        }
+      ],
+      "assets_http": [
+        {
+          "file": "assets/hub-roma.webp",
+          "status": 200,
+          "bytes": 132204,
+          "sha256": "d980f67f9d12eabb2741765cea9278ef4a1c715850159040a292df9bfda0d6f3"
+        },
+        {
+          "file": "assets/hub-korona.webp",
+          "status": 200,
+          "bytes": 134302,
+          "sha256": "431e0660c69a67c65e0d802c01738fea8a1ece61faea73a298cd3a99ac6d5a3c"
+        },
+        {
+          "file": "assets/hub-leveltar.webp",
+          "status": 200,
+          "bytes": 125804,
+          "sha256": "978990719e1cfc7beccb595d67afdf20347f4ff4f0bce8738570bbf853e8f5b8"
+        },
+        {
+          "file": "assets/hub-ketforras.webp",
+          "status": 200,
+          "bytes": 149262,
+          "sha256": "9d393627277a4fb8c929a7ed9c4e35ce167a65625915efbfc9a90ff5378b4944"
+        },
+        {
+          "file": "assets/hub-kivagyok.webp",
+          "status": 200,
+          "bytes": 125114,
+          "sha256": "f05ea2b9d5b76e25cce6ce7f0829b1f137be51271741c129d98b85fe2d53d8a2"
+        },
+        {
+          "file": "assets/hub-nyolckor.webp",
+          "status": 200,
+          "bytes": 147260,
+          "sha256": "59e8cf2ceba8ba7347dc67620add52320959ed2ee2e676eff4b2769065f6f5ec"
+        },
+        {
+          "file": "assets/hub-junius.webp",
+          "status": 200,
+          "bytes": 122804,
+          "sha256": "5133f66779881f3ea3200298e40eae878aca34ef72997adbf8aff685ab5bfa1a"
+        },
+        {
+          "file": "assets/hub-demo-felfedezesek.webp",
+          "status": 200,
+          "bytes": 161698,
+          "sha256": "9d821ebcbf2d54a58a1ed687e473fcb0cdcf2ef0d0bc500cdeac9876247c5e14"
+        },
+        {
+          "file": "assets/hub-demo-roma.webp",
+          "status": 200,
+          "bytes": 132204,
+          "sha256": "d980f67f9d12eabb2741765cea9278ef4a1c715850159040a292df9bfda0d6f3"
+        },
+        {
+          "file": "assets/hub-grof.webp",
+          "status": 200,
+          "bytes": 116400,
+          "sha256": "56c7118f55ed26061ffd1bebf8930aa7f24005f2995b93c12685cc1dbf2369b7"
+        }
+      ],
+      "backgrounds": [
+        {
+          "class": "hero",
+          "image": "linear-gradient(90deg, rgb(9, 24, 39) 0%, rgba(7, 22, 39, 0.94) 50%, rgba(7, 22, 39, 0.55) 100%), url(\"http://127.0.0.1:41981/assets/hub-roma.webp\")"
+        },
+        {
+          "class": "feature-art roma",
+          "image": "url(\"http://127.0.0.1:41981/assets/hub-roma.webp\")"
+        },
+        {
+          "class": "feature-art korona",
+          "image": "url(\"http://127.0.0.1:41981/assets/hub-korona.webp\")"
+        }
+      ],
+      "performance": {
+        "navigation": [
+          {
+            "dom_content_loaded_ms": 10590.40000000014,
+            "load_ms": 23523.90000000014
+          }
+        ],
+        "images": [
+          {
+            "file": "assets/hub-roma.webp",
+            "duration_ms": 29.5,
+            "transfer_bytes": 132504,
+            "encoded_bytes": 132204,
+            "initiator": "css"
+          },
+          {
+            "file": "assets/hub-korona.webp",
+            "duration_ms": 29,
+            "transfer_bytes": 134602,
+            "encoded_bytes": 134302,
+            "initiator": "css"
+          },
+          {
+            "file": "assets/hub-kivagyok.webp",
+            "duration_ms": 68.89999999990687,
+            "transfer_bytes": 125414,
+            "encoded_bytes": 125114,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-reformkor.webp",
+            "duration_ms": 66.9000000001397,
+            "transfer_bytes": 54484,
+            "encoded_bytes": 54184,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-leveltar.webp",
+            "duration_ms": 69.10000000009313,
+            "transfer_bytes": 126104,
+            "encoded_bytes": 125804,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-szokereso.webp",
+            "duration_ms": 63.39999999990687,
+            "transfer_bytes": 86592,
+            "encoded_bytes": 86292,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-ketforras.webp",
+            "duration_ms": 65.30000000004657,
+            "transfer_bytes": 149562,
+            "encoded_bytes": 149262,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-keresztrejtveny.webp",
+            "duration_ms": 62.199999999953434,
+            "transfer_bytes": 53816,
+            "encoded_bytes": 53516,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-eszperente.webp",
+            "duration_ms": 64.5,
+            "transfer_bytes": 77858,
+            "encoded_bytes": 77558,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-arpadok.webp",
+            "duration_ms": 20.100000000093132,
+            "transfer_bytes": 75074,
+            "encoded_bytes": 74774,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-iuti.webp",
+            "duration_ms": 34.699999999953434,
+            "transfer_bytes": 73512,
+            "encoded_bytes": 73212,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-nyolckor.webp",
+            "duration_ms": 35.60000000009313,
+            "transfer_bytes": 147560,
+            "encoded_bytes": 147260,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-junius.webp",
+            "duration_ms": 13.800000000046566,
+            "transfer_bytes": 123104,
+            "encoded_bytes": 122804,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-cserepszavazas.svg",
+            "duration_ms": 22.600000000093132,
+            "transfer_bytes": 3442,
+            "encoded_bytes": 3142,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-grof.webp",
+            "duration_ms": 22.9000000001397,
+            "transfer_bytes": 116700,
+            "encoded_bytes": 116400,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-demo-felfedezesek.webp",
+            "duration_ms": 29.4000000001397,
+            "transfer_bytes": 161998,
+            "encoded_bytes": 161698,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-demo-roma.webp",
+            "duration_ms": 28.9000000001397,
+            "transfer_bytes": 132504,
+            "encoded_bytes": 132204,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-demo-wwi.webp",
+            "duration_ms": 10.199999999953434,
+            "transfer_bytes": 76512,
+            "encoded_bytes": 76212,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-demo-legkor.webp",
+            "duration_ms": 12.600000000093132,
+            "transfer_bytes": 42826,
+            "encoded_bytes": 42526,
+            "initiator": "img"
+          }
+        ]
+      },
+      "filters_navigation_keyboard": "PASS",
+      "broken_images": 0,
+      "svg_preserved": 19
+    },
+    {
+      "width": 768,
+      "height": 900,
+      "status": "PASS",
+      "js_errors": [],
+      "console_errors": [],
+      "failed_requests": [],
+      "navigation_cancelled_requests": [],
+      "http_errors": [],
+      "launches": [
+        {
+          "type": "featured",
+          "title": "Irányítsd Rómát! Stratégiai játék · 9.0",
+          "target": "/games/iranyitsd-romat.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "featured",
+          "title": "A korona nyomában Történelmi nyomozás",
+          "target": "/games/korona.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "STRATÉGIAI SZIMULÁCIÓ Irányítsd Rómát! – Császári stratégia",
+          "target": "/games/iranyitsd-romat.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "NYOMOZÓJÁTÉK A korona nyomában",
+          "target": "/games/korona.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "PORTRÉJÁTÉK Ki vagyok én?",
+          "target": "/games/kivagyok.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "ÁLLÁSPONT-SZORTÍROZÓ A reformkor vitaterme",
+          "target": "/games/reformkor.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZABADULÓSZOBA A titkos levéltár",
+          "target": "/games/leveltar.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "LEXIKAGYAKORLÓ Szókereső",
+          "target": "/games/szokereso.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "FORRÁSELEMZÉS Két forrás, két igazság",
+          "target": "/games/ketforras.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "KERESZTREJTVÉNY Keresztrejtvény",
+          "target": "/games/keresztrejtveny.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "NYELVI REJTVÉNY Csak E!",
+          "target": "/games/eszperente.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZEMLÉLTETÉS A nagy földrajzi felfedezések",
+          "target": "/demos/demo_felfedezesek.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZEMLÉLTETÉS A Római Birodalom",
+          "target": "/demos/demo_roma.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZEMLÉLTETÉS Az első világháború frontjai",
+          "target": "/demos/demo_wwi.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZEMLÉLTETÉS A légkör rétegei",
+          "target": "/demos/demo_legkor.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/arpadok-oroksege/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/iuti-haza/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/nyolckor-indul-a-busz/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/junius-tizenhatodika/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/grof-dolgozoszobaja/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/cserepszavazas-napja/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        }
+      ],
+      "cards": [
+        {
+          "src": "assets/hub-roma.webp",
+          "title": "Irányítsd Rómát! – Császári stratégia",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-korona.webp",
+          "title": "A korona nyomában",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-kivagyok.webp",
+          "title": "Ki vagyok én?",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-reformkor.webp",
+          "title": "A reformkor vitaterme",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-leveltar.webp",
+          "title": "A titkos levéltár",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-szokereso.webp",
+          "title": "Szókereső",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-ketforras.webp",
+          "title": "Két forrás, két igazság",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-keresztrejtveny.webp",
+          "title": "Keresztrejtvény",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-eszperente.webp",
+          "title": "Csak E!",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-arpadok.webp",
+          "title": "Az Árpádok öröksége",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-iuti.webp",
+          "title": "Iuti háza",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-nyolckor.webp",
+          "title": "Nyolckor indul a busz",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-junius.webp",
+          "title": "Június tizenhatodika",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-grof.webp",
+          "title": "A gróf dolgozószobája",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-cserepszavazas.svg",
+          "title": "A cserépszavazás napja",
+          "width": 300,
+          "height": 113,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-demo-felfedezesek.webp",
+          "title": "A nagy földrajzi felfedezések",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-demo-roma.webp",
+          "title": "A Római Birodalom",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-demo-wwi.webp",
+          "title": "Az első világháború frontjai",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-demo-legkor.webp",
+          "title": "A légkör rétegei",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        }
+      ],
+      "assets_http": [
+        {
+          "file": "assets/hub-roma.webp",
+          "status": 200,
+          "bytes": 132204,
+          "sha256": "d980f67f9d12eabb2741765cea9278ef4a1c715850159040a292df9bfda0d6f3"
+        },
+        {
+          "file": "assets/hub-korona.webp",
+          "status": 200,
+          "bytes": 134302,
+          "sha256": "431e0660c69a67c65e0d802c01738fea8a1ece61faea73a298cd3a99ac6d5a3c"
+        },
+        {
+          "file": "assets/hub-leveltar.webp",
+          "status": 200,
+          "bytes": 125804,
+          "sha256": "978990719e1cfc7beccb595d67afdf20347f4ff4f0bce8738570bbf853e8f5b8"
+        },
+        {
+          "file": "assets/hub-ketforras.webp",
+          "status": 200,
+          "bytes": 149262,
+          "sha256": "9d393627277a4fb8c929a7ed9c4e35ce167a65625915efbfc9a90ff5378b4944"
+        },
+        {
+          "file": "assets/hub-kivagyok.webp",
+          "status": 200,
+          "bytes": 125114,
+          "sha256": "f05ea2b9d5b76e25cce6ce7f0829b1f137be51271741c129d98b85fe2d53d8a2"
+        },
+        {
+          "file": "assets/hub-nyolckor.webp",
+          "status": 200,
+          "bytes": 147260,
+          "sha256": "59e8cf2ceba8ba7347dc67620add52320959ed2ee2e676eff4b2769065f6f5ec"
+        },
+        {
+          "file": "assets/hub-junius.webp",
+          "status": 200,
+          "bytes": 122804,
+          "sha256": "5133f66779881f3ea3200298e40eae878aca34ef72997adbf8aff685ab5bfa1a"
+        },
+        {
+          "file": "assets/hub-demo-felfedezesek.webp",
+          "status": 200,
+          "bytes": 161698,
+          "sha256": "9d821ebcbf2d54a58a1ed687e473fcb0cdcf2ef0d0bc500cdeac9876247c5e14"
+        },
+        {
+          "file": "assets/hub-demo-roma.webp",
+          "status": 200,
+          "bytes": 132204,
+          "sha256": "d980f67f9d12eabb2741765cea9278ef4a1c715850159040a292df9bfda0d6f3"
+        },
+        {
+          "file": "assets/hub-grof.webp",
+          "status": 200,
+          "bytes": 116400,
+          "sha256": "56c7118f55ed26061ffd1bebf8930aa7f24005f2995b93c12685cc1dbf2369b7"
+        }
+      ],
+      "backgrounds": [
+        {
+          "class": "hero",
+          "image": "linear-gradient(90deg, rgb(9, 24, 39) 0%, rgba(7, 22, 39, 0.94) 50%, rgba(7, 22, 39, 0.55) 100%), url(\"http://127.0.0.1:41981/assets/hub-roma.webp\")"
+        },
+        {
+          "class": "feature-art roma",
+          "image": "url(\"http://127.0.0.1:41981/assets/hub-roma.webp\")"
+        },
+        {
+          "class": "feature-art korona",
+          "image": "url(\"http://127.0.0.1:41981/assets/hub-korona.webp\")"
+        }
+      ],
+      "performance": {
+        "navigation": [
+          {
+            "dom_content_loaded_ms": 11257.699999999953,
+            "load_ms": 19883.600000000093
+          }
+        ],
+        "images": [
+          {
+            "file": "assets/hub-roma.webp",
+            "duration_ms": 9.099999999860302,
+            "transfer_bytes": 132504,
+            "encoded_bytes": 132204,
+            "initiator": "css"
+          },
+          {
+            "file": "assets/hub-korona.webp",
+            "duration_ms": 8.600000000093132,
+            "transfer_bytes": 134602,
+            "encoded_bytes": 134302,
+            "initiator": "css"
+          },
+          {
+            "file": "assets/hub-reformkor.webp",
+            "duration_ms": 18.5,
+            "transfer_bytes": 54484,
+            "encoded_bytes": 54184,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-kivagyok.webp",
+            "duration_ms": 18.800000000046566,
+            "transfer_bytes": 125414,
+            "encoded_bytes": 125114,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-leveltar.webp",
+            "duration_ms": 25.299999999813735,
+            "transfer_bytes": 126104,
+            "encoded_bytes": 125804,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-szokereso.webp",
+            "duration_ms": 25.4000000001397,
+            "transfer_bytes": 86592,
+            "encoded_bytes": 86292,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-ketforras.webp",
+            "duration_ms": 25.800000000046566,
+            "transfer_bytes": 149562,
+            "encoded_bytes": 149262,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-keresztrejtveny.webp",
+            "duration_ms": 24.5,
+            "transfer_bytes": 53816,
+            "encoded_bytes": 53516,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-eszperente.webp",
+            "duration_ms": 29.5,
+            "transfer_bytes": 77858,
+            "encoded_bytes": 77558,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-arpadok.webp",
+            "duration_ms": 16.899999999906868,
+            "transfer_bytes": 75074,
+            "encoded_bytes": 74774,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-iuti.webp",
+            "duration_ms": 16.300000000046566,
+            "transfer_bytes": 73512,
+            "encoded_bytes": 73212,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-nyolckor.webp",
+            "duration_ms": 34.300000000046566,
+            "transfer_bytes": 147560,
+            "encoded_bytes": 147260,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-junius.webp",
+            "duration_ms": 33.800000000046566,
+            "transfer_bytes": 123104,
+            "encoded_bytes": 122804,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-grof.webp",
+            "duration_ms": 17.100000000093132,
+            "transfer_bytes": 116700,
+            "encoded_bytes": 116400,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-cserepszavazas.svg",
+            "duration_ms": 15.699999999953434,
+            "transfer_bytes": 3442,
+            "encoded_bytes": 3142,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-demo-felfedezesek.webp",
+            "duration_ms": 30.4000000001397,
+            "transfer_bytes": 161998,
+            "encoded_bytes": 161698,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-demo-roma.webp",
+            "duration_ms": 29.799999999813735,
+            "transfer_bytes": 132504,
+            "encoded_bytes": 132204,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-demo-wwi.webp",
+            "duration_ms": 4.600000000093132,
+            "transfer_bytes": 76512,
+            "encoded_bytes": 76212,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-demo-legkor.webp",
+            "duration_ms": 13.899999999906868,
+            "transfer_bytes": 42826,
+            "encoded_bytes": 42526,
+            "initiator": "img"
+          }
+        ]
+      },
+      "filters_navigation_keyboard": "PASS",
+      "broken_images": 0,
+      "svg_preserved": 19
+    },
+    {
+      "width": 1280,
+      "height": 900,
+      "status": "PASS",
+      "js_errors": [],
+      "console_errors": [],
+      "failed_requests": [],
+      "navigation_cancelled_requests": [],
+      "http_errors": [],
+      "launches": [
+        {
+          "type": "featured",
+          "title": "Irányítsd Rómát! Stratégiai játék · 9.0",
+          "target": "/games/iranyitsd-romat.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "featured",
+          "title": "A korona nyomában Történelmi nyomozás",
+          "target": "/games/korona.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "STRATÉGIAI SZIMULÁCIÓ Irányítsd Rómát! – Császári stratégia",
+          "target": "/games/iranyitsd-romat.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "NYOMOZÓJÁTÉK A korona nyomában",
+          "target": "/games/korona.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "PORTRÉJÁTÉK Ki vagyok én?",
+          "target": "/games/kivagyok.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "ÁLLÁSPONT-SZORTÍROZÓ A reformkor vitaterme",
+          "target": "/games/reformkor.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZABADULÓSZOBA A titkos levéltár",
+          "target": "/games/leveltar.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "LEXIKAGYAKORLÓ Szókereső",
+          "target": "/games/szokereso.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "FORRÁSELEMZÉS Két forrás, két igazság",
+          "target": "/games/ketforras.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "KERESZTREJTVÉNY Keresztrejtvény",
+          "target": "/games/keresztrejtveny.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "NYELVI REJTVÉNY Csak E!",
+          "target": "/games/eszperente.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZEMLÉLTETÉS A nagy földrajzi felfedezések",
+          "target": "/demos/demo_felfedezesek.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZEMLÉLTETÉS A Római Birodalom",
+          "target": "/demos/demo_roma.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZEMLÉLTETÉS Az első világháború frontjai",
+          "target": "/demos/demo_wwi.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "catalog",
+          "title": "SZEMLÉLTETÉS A légkör rétegei",
+          "target": "/demos/demo_legkor.html",
+          "status": "PASS",
+          "return_focus": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/arpadok-oroksege/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/iuti-haza/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/nyolckor-indul-a-busz/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/junius-tizenhatodika/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/grof-dolgozoszobaja/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        },
+        {
+          "type": "3d",
+          "target": "/jatekok/cserepszavazas-napja/",
+          "status": "PASS",
+          "canvas": true,
+          "full_game_start": true,
+          "active_game_hint": true
+        }
+      ],
+      "cards": [
+        {
+          "src": "assets/hub-roma.webp",
+          "title": "Irányítsd Rómát! – Császári stratégia",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-korona.webp",
+          "title": "A korona nyomában",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-kivagyok.webp",
+          "title": "Ki vagyok én?",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-reformkor.webp",
+          "title": "A reformkor vitaterme",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-leveltar.webp",
+          "title": "A titkos levéltár",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-szokereso.webp",
+          "title": "Szókereső",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-ketforras.webp",
+          "title": "Két forrás, két igazság",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-keresztrejtveny.webp",
+          "title": "Keresztrejtvény",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-eszperente.webp",
+          "title": "Csak E!",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-arpadok.webp",
+          "title": "Az Árpádok öröksége",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-iuti.webp",
+          "title": "Iuti háza",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-nyolckor.webp",
+          "title": "Nyolckor indul a busz",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-junius.webp",
+          "title": "Június tizenhatodika",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-grof.webp",
+          "title": "A gróf dolgozószobája",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-cserepszavazas.svg",
+          "title": "A cserépszavazás napja",
+          "width": 300,
+          "height": 113,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-demo-felfedezesek.webp",
+          "title": "A nagy földrajzi felfedezések",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-demo-roma.webp",
+          "title": "A Római Birodalom",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-demo-wwi.webp",
+          "title": "Az első világháború frontjai",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        },
+        {
+          "src": "assets/hub-demo-legkor.webp",
+          "title": "A légkör rétegei",
+          "width": 1119,
+          "height": 630,
+          "alt": "",
+          "top_delta": 1
+        }
+      ],
+      "assets_http": [
+        {
+          "file": "assets/hub-roma.webp",
+          "status": 200,
+          "bytes": 132204,
+          "sha256": "d980f67f9d12eabb2741765cea9278ef4a1c715850159040a292df9bfda0d6f3"
+        },
+        {
+          "file": "assets/hub-korona.webp",
+          "status": 200,
+          "bytes": 134302,
+          "sha256": "431e0660c69a67c65e0d802c01738fea8a1ece61faea73a298cd3a99ac6d5a3c"
+        },
+        {
+          "file": "assets/hub-leveltar.webp",
+          "status": 200,
+          "bytes": 125804,
+          "sha256": "978990719e1cfc7beccb595d67afdf20347f4ff4f0bce8738570bbf853e8f5b8"
+        },
+        {
+          "file": "assets/hub-ketforras.webp",
+          "status": 200,
+          "bytes": 149262,
+          "sha256": "9d393627277a4fb8c929a7ed9c4e35ce167a65625915efbfc9a90ff5378b4944"
+        },
+        {
+          "file": "assets/hub-kivagyok.webp",
+          "status": 200,
+          "bytes": 125114,
+          "sha256": "f05ea2b9d5b76e25cce6ce7f0829b1f137be51271741c129d98b85fe2d53d8a2"
+        },
+        {
+          "file": "assets/hub-nyolckor.webp",
+          "status": 200,
+          "bytes": 147260,
+          "sha256": "59e8cf2ceba8ba7347dc67620add52320959ed2ee2e676eff4b2769065f6f5ec"
+        },
+        {
+          "file": "assets/hub-junius.webp",
+          "status": 200,
+          "bytes": 122804,
+          "sha256": "5133f66779881f3ea3200298e40eae878aca34ef72997adbf8aff685ab5bfa1a"
+        },
+        {
+          "file": "assets/hub-demo-felfedezesek.webp",
+          "status": 200,
+          "bytes": 161698,
+          "sha256": "9d821ebcbf2d54a58a1ed687e473fcb0cdcf2ef0d0bc500cdeac9876247c5e14"
+        },
+        {
+          "file": "assets/hub-demo-roma.webp",
+          "status": 200,
+          "bytes": 132204,
+          "sha256": "d980f67f9d12eabb2741765cea9278ef4a1c715850159040a292df9bfda0d6f3"
+        },
+        {
+          "file": "assets/hub-grof.webp",
+          "status": 200,
+          "bytes": 116400,
+          "sha256": "56c7118f55ed26061ffd1bebf8930aa7f24005f2995b93c12685cc1dbf2369b7"
+        }
+      ],
+      "backgrounds": [
+        {
+          "class": "hero",
+          "image": "linear-gradient(90deg, rgb(7, 22, 39) 1%, rgba(7, 22, 39, 0.98) 37%, rgba(7, 22, 39, 0.62) 72%, rgba(7, 22, 39, 0.16)), url(\"http://127.0.0.1:41981/assets/hub-roma.webp\")"
+        },
+        {
+          "class": "feature-art roma",
+          "image": "url(\"http://127.0.0.1:41981/assets/hub-roma.webp\")"
+        },
+        {
+          "class": "feature-art korona",
+          "image": "url(\"http://127.0.0.1:41981/assets/hub-korona.webp\")"
+        }
+      ],
+      "performance": {
+        "navigation": [
+          {
+            "dom_content_loaded_ms": 12575,
+            "load_ms": 22217.899999999907
+          }
+        ],
+        "images": [
+          {
+            "file": "assets/hub-roma.webp",
+            "duration_ms": 9.299999999813735,
+            "transfer_bytes": 132504,
+            "encoded_bytes": 132204,
+            "initiator": "css"
+          },
+          {
+            "file": "assets/hub-korona.webp",
+            "duration_ms": 14.300000000279397,
+            "transfer_bytes": 134602,
+            "encoded_bytes": 134302,
+            "initiator": "css"
+          },
+          {
+            "file": "assets/hub-kivagyok.webp",
+            "duration_ms": 17.300000000279397,
+            "transfer_bytes": 125414,
+            "encoded_bytes": 125114,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-reformkor.webp",
+            "duration_ms": 17,
+            "transfer_bytes": 54484,
+            "encoded_bytes": 54184,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-leveltar.webp",
+            "duration_ms": 21.700000000186265,
+            "transfer_bytes": 126104,
+            "encoded_bytes": 125804,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-szokereso.webp",
+            "duration_ms": 22.699999999720603,
+            "transfer_bytes": 86592,
+            "encoded_bytes": 86292,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-ketforras.webp",
+            "duration_ms": 28.899999999906868,
+            "transfer_bytes": 149562,
+            "encoded_bytes": 149262,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-keresztrejtveny.webp",
+            "duration_ms": 28,
+            "transfer_bytes": 53816,
+            "encoded_bytes": 53516,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-eszperente.webp",
+            "duration_ms": 48.3000000002794,
+            "transfer_bytes": 77858,
+            "encoded_bytes": 77558,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-arpadok.webp",
+            "duration_ms": 51.60000000009313,
+            "transfer_bytes": 75074,
+            "encoded_bytes": 74774,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-iuti.webp",
+            "duration_ms": 52.8000000002794,
+            "transfer_bytes": 73512,
+            "encoded_bytes": 73212,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-nyolckor.webp",
+            "duration_ms": 58.299999999813735,
+            "transfer_bytes": 147560,
+            "encoded_bytes": 147260,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-junius.webp",
+            "duration_ms": 53.299999999813735,
+            "transfer_bytes": 123104,
+            "encoded_bytes": 122804,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-grof.webp",
+            "duration_ms": 57.8000000002794,
+            "transfer_bytes": 116700,
+            "encoded_bytes": 116400,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-cserepszavazas.svg",
+            "duration_ms": 58.200000000186265,
+            "transfer_bytes": 3442,
+            "encoded_bytes": 3142,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-demo-felfedezesek.webp",
+            "duration_ms": 57.60000000009313,
+            "transfer_bytes": 161998,
+            "encoded_bytes": 161698,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-demo-wwi.webp",
+            "duration_ms": 57.39999999990687,
+            "transfer_bytes": 76512,
+            "encoded_bytes": 76212,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-demo-roma.webp",
+            "duration_ms": 57.10000000009313,
+            "transfer_bytes": 132504,
+            "encoded_bytes": 132204,
+            "initiator": "img"
+          },
+          {
+            "file": "assets/hub-demo-legkor.webp",
+            "duration_ms": 54.200000000186265,
+            "transfer_bytes": 42826,
+            "encoded_bytes": 42526,
+            "initiator": "img"
+          }
+        ]
+      },
+      "filters_navigation_keyboard": "PASS",
+      "broken_images": 0,
+      "svg_preserved": 19
+    }
+  ],
+  "browser": "Chromium 153.0.8010.0",
+  "mode": "headless; software WebGL; fresh context for each width",
+  "environment_proxy": true,
+  "status": "PASS"
+}

@@ -1,40 +1,81 @@
-# Cinematic Edition 2.0 – nyolc hiányzó illusztráció pótlása
+# Cinematic Edition 2.0 – integráció és Chromium QA
 
-Dátum: 2026-10-13. Fejlesztési ág: `feature/cinematic-2-eight-webp-20261013`.
+Dátum: 2026-10-13. PR: #28. Ág: `feature/cinematic-2-eight-webp-20261013`.
 
-## Cél és változtatási hatókör
+## Eredmény
 
-A korábbi 18 katalóguskártyából megmaradt 8 SVG helyett önálló, tematikus WebP kerül a kártyákra. A cserépszavazás-napja azóta hozzáadott 19. kártya, **saját SVG-jével marad**. A végső katalógus célja **18 WebP + 1 SVG = 19 kártyakép**. A korábbi 10 WebP, a 19 SVG-fájl és a játéktartalmak nem változnak.
+**PASS – a kért képintegráció beolvasztásra javasolható.** Automatikus merge és kézi production élesítés nem történt.
 
-A nyolc kép: `assets/hub-reformkor.webp`, `assets/hub-szokereso.webp`, `assets/hub-keresztrejtveny.webp`, `assets/hub-eszperente.webp`, `assets/hub-arpadok.webp`, `assets/hub-iuti.webp`, `assets/hub-demo-wwi.webp`, `assets/hub-demo-legkor.webp`.
+| Ellenőrzés | 360 px | 768 px | 1280 px |
+| --- | --- | --- | --- |
+| 19 kártyakép: 18 WebP + 1 SVG | PASS | PASS | PASS |
+| 2 kiemelt játék képe és indítása | PASS | PASS | PASS |
+| 19 katalógusindítás + 2 kiemelt indítás | 21/21 PASS | 21/21 PASS | 21/21 PASS |
+| 6 szabadulószoba: canvas, teljes játék indítása, aktív segítség | 6/6 PASS | 6/6 PASS | 6/6 PASS |
+| Vízszintes kilógás | nincs | nincs | nincs |
+| JavaScript-, konzol-, hálózati és HTTP-hiba | 0 | 0 | 0 |
 
-## Elkészült a GitHubon
+Mindhárom nézet 900 CSS px magas, új böngészőprofilban futott. Összesen **63 sikeres indítás** történt. A képek dekódolhatók, természetes szélességük és magasságuk pozitív; mind a 19 kártya saját képútvonalat használ. A képernyőképeket vizuálisan is ellenőriztük.
 
-- `index.html`: a fenti nyolc kulcsot hozzáadtuk a WebP képlistához.
-- `docs/qa/cinematic-images-v2-manifest.json`: nyolc fájl neve, mérete és SHA-256 értéke.
-- `tests/cinematic-v2-integrity.test.cjs`: bájthű WebP, korábbi képek és az athéni kártya helyben ellenőrizhető integritáskapuja.
-- `tests/cinematic-image-swap.test.cjs`: korábbi, 18 kártyára épülő regressziós teszt javítása 19 kártyára, 6 szabadulószobára, 18 WebP-re és 1 SVG-re. A korábbi tíz WebP és az eredeti 19 SVG fájlintegritását továbbra is ellenőrzi.
-- Módosított főoldali JavaScript, tesztforrás szintaxisa ellenőrizve.
+## Feltöltött fájlok és hatókör
 
-## Kritikus blokk – HIÁNYZÓ BINÁRIS FÁJLOK
+A csatolt `Tanari_Jatektar_Cinematic_2_8_WebP (3).zip` nyolc képe az eredeti `assets/` útvonalra került:
 
-A nyolc optimalizált WebP még **nincs feltöltve** az ágra! A GitHub API itt a szöveges fájlokat írta, a bináris forráscsomag a beszélgetésből tölthető le: `Tanari_Jatektar_Cinematic_2_8_WebP.zip`. Feltöltés nélkül a PR **NEM MERGE-ELHETŐ**, mert a kártyákon törött képek lesznek.
+- `assets/hub-arpadok.webp`
+- `assets/hub-demo-legkor.webp`
+- `assets/hub-demo-wwi.webp`
+- `assets/hub-eszperente.webp`
+- `assets/hub-iuti.webp`
+- `assets/hub-keresztrejtveny.webp`
+- `assets/hub-reformkor.webp`
+- `assets/hub-szokereso.webp`
 
-A Work feltöltési feladata:
-1. ZIP kibontása, az **egyetlen `assets/` mappa nyolc WebP-fájljának** feltöltése pontos útvonalra a meglévő fejlesztési ágon. Ne írja felül a 10 korábbi WebP-t, a SVG-ket vagy a játékok forrását.
-2. A ZIP-ben található manifest bájthű egyezését ellenőrizze a GitHub-beli `docs/qa/cinematic-images-v2-manifest.json` fájllal.
-3. `node tests/cinematic-v2-integrity.test.cjs` → PASS, 8/8 kép.
-4. `node tests/cinematic-image-swap.test.cjs` → PASS, Chromium 360/768/1280 CSS px; legalább a 19 kártyakép, 2 kiemelt ajánló, 19 katalógusindítás, plusz 2 kiemelt indítás.
-5. Valódi HTTP 200 és `image/webp` 8/8 új képen; valamennyi kártya `naturalWidth>0`; nincs 404, JS-hiba, vízszintes kilógás.
-6. Az új athéni szabadulószoba indításának működését és az eredeti 5 szabadulószoba navigációját ellenőrizze. Ha nincs WebGL-képes Chromium, ne jelölje a 3D teljes QA-t PASS-nak.
-7. Az eredményt, tesztnaplót, képernyőképeket rögzítse ezen a QA-lapon, és írja bele, hogy milyen vizsgálat maradt el.
-8. Csak minden kritikus ellenőrzés után javasolja a merge-et. **Ne indítson automatikus merge-et vagy production élesítést.**
+Mind a nyolc fájl 1119 × 630 px méretű. Összméretük 538 274 bájt. A csomag és az ágon található `cinematic-images-v2-manifest.json` bájthűen egyezik; ezért a manifestet nem kellett felülírni.
 
-## Jelenlegi ellenőrzési eredmény
+A képcommit a korábbi **142 repository-fájl egyikét sem módosította vagy törölte**. Megmaradt a korábbi 10 WebP és mind a 19 SVG, köztük az athéni játék saját `assets/hub-cserepszavazas.svg` illusztrációja. A `games/`, `demos/`, `jatekok/` állományok, a játékregiszter, a történelmi tartalmak és a pontozás változatlanok. A főoldal nyolc képútvonalát a PR már korábban bekötötte; ebben a befejezési munkában az `index.html` nem változott.
 
-- A forrásmontázsból kivágott nyolc képet 1119 × 630 px méretű WebP-ként előállítottuk, 538 274 bájt összmérettel.
-- Mindegyikhez SHA-256 készült.
-- A GitHub `main` 19 kártyát tartalmaz; nyolc régi SVG-csere és egy továbbra is SVG-ként működő athéni játék a cél.
-- **Teljes Chromium/browser QA még nem történt.** A tesztek a nyolc WebP hiányában szándékosan hibát adnának.
+A QA-teszt két célzott javítást kapott: a szabadulószobák indítási ciklusa 5 helyett mind a 6 játékot ellenőrzi; a `QA_TIMEOUT_MS` változó lehetővé teszi a lassú proxyhoz szükséges várakozási időt, az alapérték továbbra is 20 000 ms. Az 5 játékos ciklus csak 20 indítást végzett volna az elvárt 21 helyett, és kihagyta volna az athéni játékot.
 
-Történelmi-szakmai megjegyzés: a filmes képek oktatási célú hangulatképek, nem elsődleges történelmi források vagy hiteles rekonstrukciók.
+## Lefuttatott ellenőrzések
+
+```bash
+node tests/cinematic-v2-integrity.test.cjs
+node tests/cinematic-image-swap.test.cjs
+```
+
+- Integritásteszt: **PASS**, 8/8 fájl mérete, RIFF/WEBP fejléc és SHA-256 egyezik; 6 szabadulószoba és az athéni SVG-regisztráció megmaradt.
+- Chromium-teszt: **PASS**, 360/768/1280 px; a korábbi 10 WebP mérete és SHA-256 értéke, illetve a 19 SVG változatlansága is ellenőrizve.
+- Külön HTTP-próba: **PASS**, mind a 8 új kép HTTP 200, `image/webp`, megfelelő méret és SHA-256.
+- Szűrők, navigáció, mobilmenü, Enter/Space, Escape és visszatérő fókusz: **PASS**.
+- Mindkét kiemelt játék tényleges kezdése és külön böngészőlapon megnyitása: **PASS**. A római játék újrakezdése is ellenőrizve.
+- A hat 3D játék látható, nem üres canvasszal indult; a teljes játékmód és az aktív segítség működött.
+- A szabadulószobák tanári letöltéseinek HTTP-elérhetősége: **PASS**.
+- JavaScript-szintaxis: **PASS**.
+- A tesztelt forráscommit Vercel commit-státusza: **success**.
+
+## Környezet és reprodukálhatóság
+
+Böngésző: **Chromium 153.0.8010.0**, Playwright, headless, SwiftShader szoftveres WebGL. A tesztelt GitHub-forráscommit: `f39bfb4b8cc6d25a50ea3b45d80794554840a9f2`. A képcommit: `902a1fef1ee5a7db0eefaf1b754f037570980a82`.
+
+A közvetlen Git-letöltés helyett a GitHub-bővítményből származó 61 tesztelési fájl alapján készült helyi QA-másolat. Minden letöltött fájl Git blob SHA-ja egyezett a kiinduló `e01e09a388a4b499cd836c699c5eeed84c3da77d` commit megfelelő fájljával. A `results.json` `base_commit` mezője a helyi QA-másolat commitja, nem GitHub-commit; a megfeleltetést a `provenance.json` rögzíti. A végső tesztfájl GitHubon és helyben azonos, blob SHA-ja `4200217d029882787039295dc03060af48f08e8d`.
+
+A futtatókörnyezetben `NODE_PATH`, `QA_EXECUTABLE_PATH`, `QA_OUTPUT` és `QA_TIMEOUT_MS=90000` volt beállítva. A Chromium indítási jelzői: `--no-zygote --in-process-gpu --use-gl=angle --use-angle=swiftshader --disable-http2`, továbbá a teszt saját `--enable-unsafe-swiftshader` jelzője.
+
+Az első próbák a proxy miatt lassú Google Fonts-betöltés 20 mp-es időkorlátján, illetve az egyszeres Chromium-folyamat következő profilnál történő leállásán akadtak el. A végső futás többfolyamatos böngészőt és 90 mp-es felső várakozási határt használt. Nem történt hálózati válaszok, betűkészletek vagy játékkód helyettesítése. A hosszabb timeout kizárólag a tesztkörnyezetre vonatkozik.
+
+## Bizonyítékok
+
+- [Részletes Chromium-eredmények](cinematic-v2-evidence/results.json)
+- [Böngészős tesztnapló](cinematic-v2-evidence/browser-test.log)
+- [Integritásteszt naplója](cinematic-v2-evidence/integrity-test.log)
+- [Nyolc új kép HTTP-próbája](cinematic-v2-evidence/new-images-http.json)
+- [Commitok, fájlvédelem és futtatási környezet](cinematic-v2-evidence/provenance.json)
+- [360 px](cinematic-v2-evidence/viewport-360.jpg), [768 px](cinematic-v2-evidence/viewport-768.jpg), [1280 px](cinematic-v2-evidence/viewport-1280.jpg)
+- [Kiemelt játékok mobilon](cinematic-v2-evidence/featured-360.jpg)
+- [9 gyakorlójáték](cinematic-v2-evidence/grid-1280.jpg), [6 szabadulószoba](cinematic-v2-evidence/escapeGrid-1280.jpg), [4 szemléltetés](cinematic-v2-evidence/demoGrid-1280.jpg)
+
+## A vizsgálat határa
+
+A kért kép-, mobilnézet- és játékindítási QA teljesült. Ez a vizsgálat nem jelent minden játék teljes végigjátszását, minden válasz és pontozási ág újraminősítését, valódi mobilkészülékes vagy más böngészős tesztet, illetve éles domainen végzett utólagos tesztet. A játékok belső tartalma és logikája változatlan maradt.
+
+A filmes képek oktatási célú hangulatképek, nem elsődleges történelmi források vagy hiteles rekonstrukciók.
