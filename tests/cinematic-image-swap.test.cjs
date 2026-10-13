@@ -78,7 +78,7 @@ async function featuredStart(frame,kind){
  report.browser='Chromium '+browser.version();report.mode='headless; software WebGL; fresh context for each width';report.environment_proxy=!!proxy;
  for(const width of [360,768,1280]){
   const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce',ignoreHTTPSErrors:true});
-  const page=await context.newPage();page.setDefaultTimeout(20000);
+  const page=await context.newPage();page.setDefaultTimeout(Number(process.env.QA_TIMEOUT_MS||20000));
   const jsErrors=[],consoleErrors=[],failedRequests=[],cancelledRequests=[],httpErrors=[];
   page.on('pageerror',e=>jsErrors.push(e.message));
   page.on('console',m=>{if(m.type()==='error')consoleErrors.push({text:m.text(),url:m.location().url});});
@@ -158,7 +158,7 @@ async function featuredStart(frame,kind){
    }
    const downloads=await page.locator('#escapeGrid a[download]').evaluateAll(es=>es.map(e=>e.getAttribute('href')));
    for(const href of downloads)assert.equal((await page.request.get(base+'/'+href)).status(),200);
-   for(let i=0;i<5;i++){
+   for(let i=0;i<6;i++){
     const trigger=page.locator('#escapeGrid .btn-start').nth(i),href=await trigger.getAttribute('href');
     await trigger.click();await page.waitForURL(base+'/'+href);await page.waitForLoadState('load');
     await page.locator('#goFull').waitFor({state:'visible'});
