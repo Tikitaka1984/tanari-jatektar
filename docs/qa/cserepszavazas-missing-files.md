@@ -2,7 +2,7 @@
 
 ## Állapot: feltöltés kész; böngészős elfogadás BLOCKED; még nem beolvasztható
 
-PR: #26. Ág: `fix/cserepszavazas-missing-files-20261013`.
+Az eredeti PR: #26 (időközben beolvadt, az új fájlok feltöltése előtt). Ág: `fix/cserepszavazas-missing-files-20261013`.
 Tesztelt játékcommit: `95d728bede02ab1170343f5adec4bc6300881c6f`.
 Összehasonlítási főág: `c81da1124cfcf1c9b10666b81971c3803c94e43e`.
 
@@ -54,7 +54,7 @@ A helyi Node verziója v24.19.0. A Playwright Chromium-telepítése a hivatalos 
 
 ## Beolvasztási kapu és következő ellenőrzések
 
-A három hiányzó fájl pótlása elkészült. A PR draft marad, a teljes QA még nem PASS.
+A három hiányzó fájl pótlása elkészült. A PR #26 a GitHub szerint 2026-10-13 08:21:52 UTC-kor (10:21:52 budapesti idő) beolvadt. Ez nem e munkamenet merge-művelete volt. A merge a régi f0b9a3e ágcsúcsot tartalmazza, a később feltöltött három fájlt nem. A frissen lekért főág 9251a44f3064a0161307a9f7fad68a04eac27b85 commitján a jatekok/cserepszavazas-napja mappa még hiányzik. A tényleges fájlpótláshoz ebből az ágból új draft javító PR szükséges. A teljes QA még nem PASS.
 
 WebGL-képes Chromiumban le kell futtatni 360, 768 és 1280 CSS px szélességen:
 - kártyáról indítás és tényleges 3D render;
@@ -68,4 +68,4 @@ WebGL-képes Chromiumban le kell futtatni 360, 768 és 1280 CSS px szélességen
 
 A korábbi 18-kártyás cinematic tesztet a 19-kártyás katalógushoz külön igazítani és újrafuttatni szükséges. E feladatban nem írtuk át más funkció tesztjét.
 
-Valódi iOS/Safari/VoiceOver ellenőrzés nem történt. Merge, automatikus merge, production élesítés nem történt. Az ág frissítését a már beállított Vercel-integráció előnézetté építette; külön deploy-művelet nem indult.
+Valódi iOS/Safari/VoiceOver ellenőrzés nem történt. Az asszisztens nem indított merge-et, automatikus merge-et vagy production élesítést. A PR #26 ettől függetlenül időközben beolvadt; ez kiválthatta a meglévő production integrációt. Az ág frissítését a már beállított Vercel-integráció előnézetté építette; külön deploy-művelet nem indult.
