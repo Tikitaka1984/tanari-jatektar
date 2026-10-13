@@ -1,0 +1,72 @@
+{
+  "source_commit": "e01e09a388a4b499cd836c699c5eeed84c3da77d",
+  "image_commit": "902a1fef1ee5a7db0eefaf1b754f037570980a82",
+  "tested_source_commit": "f39bfb4b8cc6d25a50ea3b45d80794554840a9f2",
+  "downloaded_file_count": 61,
+  "all_downloaded_blobs_verified": true,
+  "existing_repository_files": 142,
+  "changed_existing_at_image_upload": [],
+  "new_images": [
+    {
+      "path": "assets/hub-reformkor.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "60c07f4faa19972ab4ba9f1328ad13d06304536a"
+    },
+    {
+      "path": "assets/hub-eszperente.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bbab148f9e8e1df12b39e4071ccb51abd3328255"
+    },
+    {
+      "path": "assets/hub-demo-wwi.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "09e590b2cad442134db2ee5c5c8125dcb3ce7795"
+    },
+    {
+      "path": "assets/hub-demo-legkor.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c3d05c2a748273c70eb0d1aabb901fc8f4183aaf"
+    },
+    {
+      "path": "assets/hub-arpadok.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d2509d68bcd558b8898950894f8a33dcc9fb4de0"
+    },
+    {
+      "path": "assets/hub-szokereso.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1004f55d4429e249ae57253ff345b12a2ee3f131"
+    },
+    {
+      "path": "assets/hub-iuti.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "11e3a357900d87f2173fd2186c151a5a979ce000"
+    },
+    {
+      "path": "assets/hub-keresztrejtveny.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a327e8d5dc8d5ab3c131f873079f8aa156014a99"
+    }
+  ],
+  "test_changes": [
+    "3D launch loop: 5 -> 6",
+    "QA_TIMEOUT_MS environment option; default 20000 ms"
+  ],
+  "qa_runtime": "Chromium 153.0.8010.0, Playwright, headless, software WebGL; no request mocks",
+  "runtime_flags": [
+    "--no-zygote",
+    "--in-process-gpu",
+    "--use-gl=angle",
+    "--use-angle=swiftshader",
+    "--disable-http2"
+  ],
+  "runtime_timeout_ms": 90000
+}

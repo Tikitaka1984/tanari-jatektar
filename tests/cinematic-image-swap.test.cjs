@@ -19,7 +19,7 @@ const assets=Object.entries(manifest).map(([key,entry])=>{
 });
 assert.equal(assets.length,10);
 const svgFiles=fs.readdirSync(path.join(root,'assets')).filter(x=>x.endsWith('.svg'));
-assert.equal(svgFiles.length,18);
+assert.equal(svgFiles.length,19);
 const svgIntegrity=svgFiles.map(file=>{
  const p='assets/'+file;
  const baseline=cp.execFileSync('git',['-C',root,'show','HEAD:'+p]);
@@ -78,7 +78,7 @@ async function featuredStart(frame,kind){
  report.browser='Chromium '+browser.version();report.mode='headless; software WebGL; fresh context for each width';report.environment_proxy=!!proxy;
  for(const width of [360,768,1280]){
   const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce',ignoreHTTPSErrors:true});
-  const page=await context.newPage();page.setDefaultTimeout(20000);
+  const page=await context.newPage();page.setDefaultTimeout(Number(process.env.QA_TIMEOUT_MS||20000));
   const jsErrors=[],consoleErrors=[],failedRequests=[],cancelledRequests=[],httpErrors=[];
   page.on('pageerror',e=>jsErrors.push(e.message));
   page.on('console',m=>{if(m.type()==='error')consoleErrors.push({text:m.text(),url:m.location().url});});
@@ -88,20 +88,20 @@ async function featuredStart(frame,kind){
   try{
    await page.goto(base,{waitUntil:'networkidle'});
    assert.equal(await page.locator('#grid .card').count(),9);
-   assert.equal(await page.locator('#escapeGrid .card').count(),5);
+   assert.equal(await page.locator('#escapeGrid .card').count(),6);
    assert.equal(await page.locator('#demoGrid .card').count(),4);
    assert.equal(await page.locator('.feature-card').count(),2);
-   const images=page.locator('.card-visual img');assert.equal(await images.count(),18);
+   const images=page.locator('.card-visual img');assert.equal(await images.count(),19);
    row.cards=[];
-   for(let i=0;i<18;i++){
+   for(let i=0;i<19;i++){
     const img=images.nth(i);await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());
     const info=await img.evaluate(e=>({src:e.getAttribute('src'),title:e.closest('.card').querySelector('h3').textContent,width:e.naturalWidth,height:e.naturalHeight,alt:e.alt,top_delta:Math.abs(e.getBoundingClientRect().top-e.closest('.card').getBoundingClientRect().top)}));
     assert(info.width>0&&info.height>0);assert.equal(info.alt,'');assert(info.top_delta<=2);
     row.cards.push(info);
    }
-   assert.equal(new Set(row.cards.map(c=>c.src)).size,18);
-   assert.equal(row.cards.filter(c=>c.src.endsWith('.webp')).length,10);
-   assert.equal(row.cards.filter(c=>c.src.endsWith('.svg')).length,8);
+   assert.equal(new Set(row.cards.map(c=>c.src)).size,19);
+   assert.equal(row.cards.filter(c=>c.src.endsWith('.webp')).length,18);
+   assert.equal(row.cards.filter(c=>c.src.endsWith('.svg')).length,1);
    row.assets_http=[];
    for(const asset of assets){
     const response=await page.request.get(base+'/'+asset.file);assert.equal(response.status(),200);
@@ -158,7 +158,7 @@ async function featuredStart(frame,kind){
    }
    const downloads=await page.locator('#escapeGrid a[download]').evaluateAll(es=>es.map(e=>e.getAttribute('href')));
    for(const href of downloads)assert.equal((await page.request.get(base+'/'+href)).status(),200);
-   for(let i=0;i<5;i++){
+   for(let i=0;i<6;i++){
     const trigger=page.locator('#escapeGrid .btn-start').nth(i),href=await trigger.getAttribute('href');
     await trigger.click();await page.waitForURL(base+'/'+href);await page.waitForLoadState('load');
     await page.locator('#goFull').waitFor({state:'visible'});
@@ -172,11 +172,11 @@ async function featuredStart(frame,kind){
     row.launches.push({type:'3d',target:'/'+href,status:'PASS',canvas:true,full_game_start:true,active_game_hint:true});
     await page.goBack();await page.locator('#escapeGrid .card').first().waitFor();
    }
-   assert.equal(row.launches.length,20);await noOverflow(page);
+   assert.equal(row.launches.length,21);await noOverflow(page);
    assert.deepEqual(jsErrors,[],'JavaScript errors');
    assert.deepEqual(consoleErrors,[],'console errors');
    assert.deepEqual(failedRequests,[],'failed requests');assert.deepEqual(httpErrors,[],'HTTP errors');
-   row.broken_images=0;row.svg_preserved=18;
+   row.broken_images=0;row.svg_preserved=19;
   }catch(e){row.status='FAIL';row.error=e.stack;}
   writeReport();console.log(width,row.status,row.error?.split('\n')[0]||'',JSON.stringify({js:jsErrors,console:consoleErrors,failed:failedRequests,http:httpErrors,launches:row.launches.length}));
   await context.close();

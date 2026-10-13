@@ -1,0 +1,74 @@
+{
+  "reformkor": {
+    "file": "assets/hub-reformkor.webp",
+    "title": "A reformkor vitaterme",
+    "width": 1119,
+    "height": 630,
+    "bytes": 54184,
+    "sha256": "5d0259fb366e3e34adbc4c7fe425424ed3b76774120ac66732f373588f2de9b6",
+    "source": "8-panel cinematic source image generated for second batch"
+  },
+  "szokereso": {
+    "file": "assets/hub-szokereso.webp",
+    "title": "Szókereső",
+    "width": 1119,
+    "height": 630,
+    "bytes": 86292,
+    "sha256": "9090e9d40591e6c061368121a8209932478ffd02bfc3a818b826591de693207b",
+    "source": "8-panel cinematic source image generated for second batch"
+  },
+  "keresztrejtveny": {
+    "file": "assets/hub-keresztrejtveny.webp",
+    "title": "Keresztrejtvény",
+    "width": 1119,
+    "height": 630,
+    "bytes": 53516,
+    "sha256": "06470c882fb9412830f71e32915e09f14395eee30a8c9fcf31235497759a1c27",
+    "source": "8-panel cinematic source image generated for second batch"
+  },
+  "eszperente": {
+    "file": "assets/hub-eszperente.webp",
+    "title": "Csak E!",
+    "width": 1119,
+    "height": 630,
+    "bytes": 77558,
+    "sha256": "00fd6d3247eaa43f13b2ae4057ca5352553f084fa5a77b4f2db732e3e409b562",
+    "source": "8-panel cinematic source image generated for second batch"
+  },
+  "arpadok": {
+    "file": "assets/hub-arpadok.webp",
+    "title": "Az Árpádok öröksége",
+    "width": 1119,
+    "height": 630,
+    "bytes": 74774,
+    "sha256": "22e3627e6ed2e55c3c69075b50c3dd34a62e55aa93394a19f2335757a351500c",
+    "source": "8-panel cinematic source image generated for second batch"
+  },
+  "iuti": {
+    "file": "assets/hub-iuti.webp",
+    "title": "Iuti háza",
+    "width": 1119,
+    "height": 630,
+    "bytes": 73212,
+    "sha256": "8f41cfd0bc2e702261d4564c5dd764e857794cd8a2e6245ae7df1a0c43c32231",
+    "source": "8-panel cinematic source image generated for second batch"
+  },
+  "demo-wwi": {
+    "file": "assets/hub-demo-wwi.webp",
+    "title": "Az első világháború frontjai",
+    "width": 1119,
+    "height": 630,
+    "bytes": 76212,
+    "sha256": "4b46e282573cebb3fbb1095e3d6e17a6f379864b93e17177edb6049a48cd3cd9",
+    "source": "8-panel cinematic source image generated for second batch"
+  },
+  "demo-legkor": {
+    "file": "assets/hub-demo-legkor.webp",
+    "title": "A légkör rétegei",
+    "width": 1119,
+    "height": 630,
+    "bytes": 42526,
+    "sha256": "06fc4ee795114a49bd64d4fc62cc0dd684d27d841c78fa9526bb7403ea6321c1",
+    "source": "8-panel cinematic source image generated for second batch"
+  }
+}
