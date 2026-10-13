@@ -1,0 +1,1040 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A cserépszavazás napja – Athén, az agóra · szabadulójáték</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#efe8d8;--muted:#b9b2a1;--panel:rgba(22,28,24,.9);--line:rgba(239,232,216,.16);--accent:#c9a45c;--ok:#9cc596;--bad:#e3907a;--paper:#f0e6cf;--paperink:#2b241b;--scene:#15120f;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#efe8d8;--panel:rgba(22,28,24,.9);--scene:#15120f}}
+:root[data-theme="dark"]{--ink:#efe8d8;--panel:rgba(22,28,24,.9);--scene:#15120f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0;overflow:hidden;background:var(--scene);color:var(--ink);font:15px/1.5 'Public Sans',system-ui,-apple-system,'Segoe UI',sans-serif}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab;outline:none}
+.hud{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:16px;right:16px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
+.card{pointer-events:auto;background:var(--panel);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:10px;padding:12px 14px;max-width:350px}
+.card h1{font:600 19px/1.2 'Spectral',Georgia,serif;margin:0 0 6px}
+.goal{margin:0;font-size:13.5px;line-height:1.45}
+.goal b{color:var(--accent);font-weight:600}
+.prog{margin:8px 0 0;display:flex;gap:4px;flex-wrap:wrap}
+.prog i{font-style:normal;font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:1px 7px;color:var(--muted)}
+.prog i.on{color:#1d2a1c;background:var(--ok);border-color:var(--ok)}
+.right{display:flex;gap:8px;align-items:center;pointer-events:auto}
+#timer{font-variant-numeric:tabular-nums;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:13px}
+button{font:inherit;font-size:13px;font-weight:500;color:var(--ink);background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer}
+button:hover{border-color:rgba(201,164,92,.6);background:rgba(201,164,92,.16)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.primary{background:var(--accent);border-color:var(--accent);color:#231a0e;font-weight:600}
+.primary:hover{background:#d8b56f}
+#inv{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;gap:6px;flex-wrap:wrap;pointer-events:none;max-width:60vw}
+#inv span{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 9px;font-size:12.5px}
+#keys{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));font-size:12px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;line-height:1.6;max-width:300px}
+kbd{font:11px ui-monospace,Menlo,Consolas,monospace;padding:1px 5px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;color:var(--ink)}
+#dot{position:fixed;left:50%;top:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:rgba(239,232,216,.75);box-shadow:0 0 0 2px rgba(0,0,0,.35);pointer-events:none}
+#tip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:12.5px;white-space:nowrap}
+#toast{position:fixed;left:50%;bottom:calc(70px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px 14px;font-size:14px;max-width:min(520px,90vw);text-align:center;pointer-events:none;transition:opacity .25s}
+#toast.off{opacity:0}
+#joy{position:fixed;left:22px;bottom:calc(64px + env(safe-area-inset-bottom,0px));width:120px;height:120px;border-radius:50%;background:rgba(22,28,24,.55);border:1px solid var(--line);touch-action:none;display:none}
+#knob{position:absolute;left:50%;top:50%;width:50px;height:50px;margin:-25px 0 0 -25px;border-radius:50%;background:rgba(239,232,216,.85)}
+.touch{display:none}
+@media (pointer:coarse){#joy{display:block}.touch{display:inline}.desk{display:none}#dot{display:none}}
+@media (max-width:620px){.hud{flex-direction:column-reverse;align-items:stretch}.right{align-self:flex-end}.card{max-width:none}#keys{display:none}}
+/* Mobil */
+html,body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
+#c,.hud,#joy,#inv{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+button{touch-action:manipulation}
+#nextBtn .sm{display:none}
+@media (pointer:coarse){#keys{display:none}.right button,#timer{min-height:44px;padding:10px 14px;font-size:14px;display:inline-flex;align-items:center}
+ #toast{bottom:calc(206px + env(safe-area-inset-bottom,0px))}#joy{width:132px;height:132px}}
+@media (max-width:620px){.card h1{display:none}.card{padding:10px 12px}.goal{font-size:13px}.prog{margin-top:6px}.prog i{font-size:11px}
+ #nextBtn .lg{display:none}#nextBtn .sm{display:inline}#mbox{padding:18px 16px}#mbox h2{font-size:20px}#mbox.doc{font-size:16px}
+ .pad{grid-template-columns:repeat(3,72px)}.pad button{padding:13px 0;font-size:19px}.big{font-size:54px}}
+@media (max-height:500px){.card h1,.prog{display:none}.card{padding:8px 12px}#mbox{padding:14px 16px;max-height:calc(100% - 12px)}
+ .code{margin:8px 0}.code span{height:44px}.pad button{padding:6px 0}.slots li{min-height:34px;padding-top:6px;padding-bottom:6px}}
+@media (pointer:coarse) and (max-height:500px){#toast{bottom:calc(16px + env(safe-area-inset-bottom,0px))}}
+@media (max-height:520px) and (orientation:landscape){.mapgrid{display:grid;grid-template-columns:1.15fr 1fr;gap:14px;align-items:start}.mapwrap svg{max-height:80vh}}
+#modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,8,6,.55);padding:16px;z-index:5}
+#modal[hidden]{display:none}
+#mbox:focus{outline:none}
+#mbox{width:min(560px,100%);max-height:calc(100% - 24px);overflow:auto;border-radius:12px;padding:22px 24px;position:relative}
+#mbox.wide{width:min(760px,100%)}
+#mbox.panel{background:rgba(24,30,26,.97);border:1px solid var(--line)}
+#mbox.doc{background:var(--paper);color:var(--paperink);font:17px/1.6 'Spectral',Georgia,serif;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+#mbox h2{font:600 22px/1.25 'Spectral',Georgia,serif;margin:0 0 10px}
+#mbox p{margin:0 0 12px}
+#mbox .hand{font-style:italic}
+#mbox .sign{text-align:right;font-style:italic}
+#mbox .date{text-align:right;font-size:15px}
+#mbox .center{text-align:center}
+#mbox.doc button{color:var(--paperink);border-color:rgba(43,36,27,.35);background:rgba(43,36,27,.06)}
+#mbox.doc .primary{background:#3b4a36;border-color:#3b4a36;color:#f0e6cf}
+#mbox .cat{font-size:12.5px;color:var(--accent);font-weight:600;margin:0 0 4px}
+.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+.code{display:flex;gap:10px;justify-content:center;margin:14px 0}
+.code span{width:46px;height:56px;border:1px solid var(--line);border-radius:8px;display:grid;place-items:center;font:600 26px 'Spectral',Georgia,serif;background:rgba(255,255,255,.05)}
+.pad{display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-content:center}
+.pad button{border-radius:8px;padding:10px 0;font-size:17px}
+.msg{min-height:1.5em;margin:12px 0 0!important;font-size:14.5px}
+.msg.bad{color:var(--bad)}.msg.ok{color:var(--ok)}
+.slots{list-style:none;counter-reset:s;padding:0;margin:12px 0;display:grid;gap:6px}
+.slots li{counter-increment:s;border:1px dashed var(--line);border-radius:8px;padding:8px 10px 8px 38px;position:relative;min-height:40px;font-size:14px}
+.slots li::before{content:counter(s);position:absolute;left:12px;top:8px;color:var(--muted);font-weight:600}
+.slots li.filled{border-style:solid;border-color:rgba(156,197,150,.5);background:rgba(156,197,150,.08)}
+.slots li small{display:block;color:var(--ok);font-size:12.5px}
+.cards,.opts{display:grid;gap:6px}
+.cards button,.opts button{border-radius:8px;text-align:left;padding:9px 12px;font-size:14px;line-height:1.35}
+.opts button[disabled]{opacity:.45;cursor:default}
+.opts button.right{opacity:1;border-color:rgba(156,197,150,.65);background:rgba(156,197,150,.15)}
+.match{display:grid;grid-template-columns:1fr 1.4fr;gap:12px}
+.match .col{display:grid;gap:6px;align-content:start}
+.match .colh{font-size:12.5px;color:var(--muted);margin:0!important}
+.match button{border-radius:8px;text-align:left;padding:8px 10px;font-size:13.5px;line-height:1.35}
+.match button.sel{border-color:var(--accent);background:rgba(201,164,92,.24)}
+.match button.done{border-color:rgba(156,197,150,.55);background:rgba(156,197,150,.1);cursor:default}
+.match .n{font-weight:600;color:var(--ok)}
+@media (max-width:560px){.match{grid-template-columns:1fr}}
+.src{border-left:3px solid var(--accent);padding:8px 12px;margin:0 0 14px;font:italic 16.5px/1.55 'Spectral',Georgia,serif;background:rgba(255,255,255,.04)}
+.src cite{display:block;font:normal 12.5px/1.4 'Public Sans',sans-serif;color:var(--muted);margin-top:6px}
+.mapwrap svg{width:100%;max-height:52vh;height:auto;display:block;border-radius:8px}
+.pt{cursor:pointer}.pt circle.hit{fill:transparent;stroke:none}.pt:hover circle.hit,.pt:focus circle.hit,.pt.ok circle.hit{fill:transparent}.pt circle{fill:#7a2a22;stroke:#f0e6cf;stroke-width:2}.pt text{fill:#fff;font:600 13px 'Public Sans',sans-serif;pointer-events:none}
+.pt:hover circle,.pt:focus circle{fill:#b0473a}.pt:focus{outline:none}.pt.ok circle{fill:#4e7d4f}
+.note{font-size:12.5px;color:var(--muted)}
+.cards button.hintc,.match button.hintc{border-color:var(--accent);box-shadow:0 0 0 2px rgba(201,164,92,.55)}
+.pt.off{opacity:.18;pointer-events:none}
+.shake{animation:sh .35s}
+@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){.shake{animation:none}#toast{transition:none}}
+.rep{width:100%;border-collapse:collapse;font-size:15px;margin:6px 0 12px}
+.rep th,.rep td{padding:5px 6px;border-top:1px solid rgba(43,36,27,.2);text-align:left;vertical-align:top}
+.rep th{font-weight:600}
+.rep td.num{text-align:center}
+.tl{list-style:none;padding:0;margin:8px 0 0;font-size:15px}
+.tl li{padding:5px 0;border-top:1px solid rgba(43,36,27,.18);display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:10px}
+#mbox .modes{display:grid;gap:10px;margin:14px 0}
+#mbox .mode{text-align:left;border-radius:10px;padding:12px 14px;display:grid;gap:3px}
+#mbox .mode b{font-size:16px}#mbox .mode span{font-size:14px;font-weight:400;line-height:1.4}
+.big{font:600 64px/1 'Spectral',Georgia,serif;text-align:center;margin:8px 0 2px;color:#3b4a36}
+.chk{font:600 22px ui-monospace,Menlo,Consolas,monospace;letter-spacing:3px}
+#mbox.doc .linkbtn{background:none;border:none;text-decoration:underline;padding:4px 2px;font-size:14px;color:#3b4a36}
+body.teach #c,body.teach .hud,body.teach #inv,body.teach #keys,body.teach #joy,body.teach #dot,body.teach #toast,body.teach #tip{display:none!important}
+#teacher{position:fixed;inset:0;z-index:4;overflow:auto;background:#161b17;padding:calc(18px + env(safe-area-inset-top,0px)) 22px calc(18px + env(safe-area-inset-bottom,0px))}
+#teacher[hidden]{display:none}
+.t-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.t-head h1{font:600 24px/1.2 'Spectral',Georgia,serif;margin:0}
+.t-tools,.t-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.t-grid{display:grid;grid-template-columns:minmax(300px,1fr) 2fr;gap:16px;align-items:start}
+@media (max-width:900px){.t-grid{grid-template-columns:1fr}}
+.t-card{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:16px}
+.t-lab{font-size:13px;color:var(--muted);margin:0 0 6px;font-weight:600}
+.t-code{font:600 clamp(60px,9vw,140px)/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.08em;color:var(--accent);margin:4px 0 12px}
+.t-clock{font:600 clamp(60px,9vw,150px)/1 'Spectral',Georgia,serif;font-variant-numeric:tabular-nums;margin:4px 0 14px}
+.t-clock.warn{color:#e3b35c}.t-clock.end{color:var(--bad)}
+.t-seg{display:flex;gap:6px;margin-bottom:14px}.t-seg button{min-width:58px;font-size:16px}
+.t-seg button.on{background:var(--accent);color:#231a0e;border-color:var(--accent)}
+.t-form{display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:8px}
+@media (max-width:700px){.t-form{grid-template-columns:1fr 1fr}}
+.t-form input{font:inherit;font-size:16px;color:var(--ink);background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:8px;padding:9px 10px;min-width:0}
+.t-form input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.t-tablewrap{overflow-x:auto;margin:10px 0}
+.t-table{width:100%;border-collapse:collapse;font-size:clamp(15px,1.5vw,20px)}
+.t-table th{font-size:13px;color:var(--muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);font-weight:600}
+.t-table td{padding:8px;border-bottom:1px solid var(--line)}
+.t-table tr.top1 td{background:rgba(201,164,92,.22)}.t-table tr.top2 td{background:rgba(201,164,92,.13)}.t-table tr.top3 td{background:rgba(201,164,92,.07)}
+.t-table .bad{color:var(--bad)}.t-table .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.t-hint{font-size:13px;color:var(--muted);margin:6px 0 0}
+.t-del{padding:3px 9px;font-size:12px}
+#copyBox{width:100%;height:120px;font:13px ui-monospace,Menlo,monospace;margin-top:8px}
+#mbox .tpb{display:inline-block;font:600 11.5px 'Public Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#1d2a1c;background:var(--accent);padding:2px 8px;border-radius:4px;margin:0 0 10px}
+@media (max-height:520px) and (orientation:landscape){.mapwrap svg{max-height:58vh}#mbox .tpb{margin-bottom:4px}#mbox h2{font-size:18px;margin-bottom:6px}#mbox .cat{margin-bottom:2px}}
+@media (max-height:520px){#mbox.panel .actions{position:sticky;bottom:-14px;padding:8px 0 4px;margin-top:6px;background:linear-gradient(rgba(24,30,26,0),rgba(24,30,26,.98) 35%)}}
+#homeBtn .sm{display:none}
+@media (max-width:640px){#homeBtn .lg{display:none}#homeBtn .sm{display:inline}#homeBtn{min-width:44px;padding-left:12px;padding-right:12px}}
+#mbox .backbtn{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;margin:0 0 10px;font:600 15px 'Public Sans',system-ui,sans-serif;color:inherit;background:transparent;border:1px solid rgba(43,36,27,.4);border-radius:999px;cursor:pointer}
+#mbox .backbtn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+#mbox .tp{border:1px dashed rgba(43,36,27,.55);background:rgba(47,95,138,.09);padding:8px 12px;border-radius:6px;font:15px/1.5 'Public Sans',system-ui,sans-serif;margin:8px 0 12px}
+</style>
+</head>
+<body>
+<canvas id="c" tabindex="0" aria-label="Az athéni agóra háromdimenziós nézete"></canvas>
+<div id="dot"></div>
+<div class="hud">
+  <div class="card">
+    <h1>A cserépszavazás napja</h1>
+    <p class="goal" id="goal">Athén, az agóra</p>
+    <div class="prog" id="prog" aria-label="Teljesített témakörök"></div>
+  </div>
+  <div class="right">
+    <button id="homeBtn" aria-label="Vissza a főoldalra"><span class="lg">← Főoldal</span><span class="sm">←</span></button>
+    <span id="timer">00:00</span>
+    <button id="nextBtn" aria-label="Következő állomás"><span class="lg">Következő állomás</span><span class="sm">Következő</span></button>
+    <button id="hintBtn">Segítség</button>
+  </div>
+</div>
+<div id="inv" aria-label="Megtalált tárgyak"></div>
+<div id="keys"><span class="desk"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> vagy nyilak: mozgás · húzás egérrel: körülnézés · kattintás: vizsgálat</span></div>
+<div id="joy"><div id="knob"></div></div>
+<div id="tip" hidden></div>
+<div id="toast" class="off" role="status" aria-live="polite"></div>
+<section id="teacher" hidden aria-label="Tanári kivetítő nézet">
+ <header class="t-head"><h1>A cserépszavazás napja – tanári nézet</h1><div class="t-tools"><button id="tFull">Teljes képernyő</button><button id="tBack">← Főoldal</button></div></header>
+ <div class="t-grid">
+  <div>
+   <div class="t-card"><p class="t-lab">Forduló</p><div class="t-seg" role="group" aria-label="Forduló választása"><button data-r="1">1.</button><button data-r="2">2.</button><button data-r="3">3.</button></div>
+    <p class="t-lab">Fordulókód</p><div id="tCode" class="t-code">----</div><div class="t-row"><button id="tNew">Új kód</button></div><p class="t-hint" id="tRoundInfo"></p></div>
+   <div class="t-card"><p class="t-lab">Hátralévő idő</p><div id="tClock" class="t-clock" aria-live="off">10:00</div><div class="t-row"><button id="tStart" class="primary">Rajt</button><button id="tReset">Visszaállítás</button></div></div>
+  </div>
+  <div class="t-card">
+   <p class="t-lab">Eredménytábla</p>
+   <div class="t-form"><input id="fName" placeholder="Becenév" maxlength="20" aria-label="Becenév"><input id="fTime" placeholder="Végidő (pl. 6:42)" inputmode="numeric" aria-label="Végidő"><input id="fChk" placeholder="Ellenőrző kód" maxlength="4" autocapitalize="characters" aria-label="Ellenőrző kód"><button id="tAdd" class="primary">Hozzáadás</button></div>
+   <p id="tMsg" class="msg" aria-live="polite"></p>
+   <div class="t-tablewrap"><table class="t-table"><thead><tr><th>Hely</th><th>Becenév</th><th>Végidő</th><th>Állomás</th><th>Hiba / segítség</th><th>Ellenőrző kód</th><th></th></tr></thead><tbody id="tBody"></tbody></table></div>
+   <div class="t-row"><button id="tClear">Tábla törlése</button></div>
+   <p class="t-hint">Sorrend: előbb a célba érők végidő szerint, utánuk az időkorlátig el nem készültek a teljesített állomások száma szerint. Az adatok csak ezen a gépen, a böngészőben maradnak; valódi nevek helyett becenév használata javasolt.</p>
+  </div>
+ </div>
+</section>
+<div id="modal" hidden><div id="mbox" role="dialog" aria-modal="true" tabindex="-1"></div></div>
+
+<script src="../_lib/three.min.js"></script>
+<script>window.THREE||document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"><\/script>')</script>
+<script>
+(()=>{
+'use strict';
+const $=s=>document.querySelector(s);
+const canvas=$('#c'),modal=$('#modal'),mbox=$('#mbox'),toastEl=$('#toast'),tip=$('#tip');
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const COARSE=matchMedia('(pointer:coarse)').matches;
+const LOW=COARSE||(navigator.hardwareConcurrency||8)<=4;
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+/* ================= PEDAGÓGIAI TARTALOM =================
+   Forrás: Történelem 9. tankönyv (OH-TOR09TB), II. Államok és birodalmak, 6. Az athéni demokrácia (38–41. o.);
+   NAT 2020 és kerettanterv: 9. évfolyam, „Civilizáció és államszervezet az ókorban” – az athéni demokrácia. */
+const CAT={code:'Évszámok',kron:'Kronológia',szem:'Személy–esemény',forras:'Forráselemzés',terkep:'Térképhasználat',fog:'Fogalmak',ok:'Ok-okozat',vegyes:'Vegyes ismétlés'};
+const FULLCATS=['code','kron','szem','forras','terkep','fog','ok'];
+
+const EV=[
+ {id:'dra',t:'Drakón írásba foglalja a szokásjogot',d:'Kr. e. 621'},
+ {id:'sol',t:'Szolón reformjai: jövedelemalapú alkotmány, adósságelengedés',d:'Kr. e. 594'},
+ {id:'tur',t:'Kezdetét veszi a türannisz (egyeduralom)',d:'Kr. e. 560'},
+ {id:'elu',t:'Elűzik az utolsó türannoszt',d:'Kr. e. 510'},
+ {id:'kle',t:'Kleiszthenész reformjai: a phülérendszer átalakítása',d:'Kr. e. 508'},
+ {id:'per',t:'Periklész sztratégoszi korszaka kezdődik',d:'Kr. e. 444'}
+];
+
+const PERSONS=[
+ {a:'Drakón',b:'A hagyomány szerint ő foglalta írásba a törvényeket',why:'Az írásba foglalt, nyilvános törvények csökkentették az önkényt és a vérbosszút.'},
+ {a:'Szolón',b:'Eltörölte az adósrabszolgaságot, a jogokat és kötelességeket vagyon szerint szabta meg',why:'Különleges hatalmú arkhónként lépett fel a Kr. e. 6. század első felében.'},
+ {a:'Kleiszthenész',b:'A polgárokat lakóhely szerinti phülékbe osztotta',why:'Az új területi beosztásban a démosz tagjai voltak többségben (Kr. e. 508).'},
+ {a:'Periklész',b:'Napidíjat vezetett be az esküdtbíróságokban; tizenöt évig volt sztratégosz',why:'A napidíj a szegényebb polgároknak is lehetővé tette a politizálást.'},
+ {a:'Themisztoklész',b:'Nevével rengeteg, hasonló kézírású szavazócserepet találtak',why:'A lelet szervezett szavazatgyűjtésre utalhat; a történészek vitatják, ki vezette be a cserépszavazást.'},
+ {a:'Ariszteidész',b:'Egy írástudatlan szavazó azért kérte a száműzését, mert unta, hogy „Igazságosnak” nevezik',why:'Plutarkhosz anekdotája a cserépszavazás visszaéléseire figyelmeztet.'}
+];
+
+const SOURCE=`<blockquote class="src">Egy írástudatlan falusi ember odalépett egy járókelőhöz, és megkérte, vésse fel a cserépdarabra Ariszteidész nevét. A járókelő – aki történetesen maga Ariszteidész volt – elcsodálkozott, és megkérdezte, mit vétett a férfinak Ariszteidész. „Semmit – felelte a falusi –, csak unom már, hogy mindenütt Igazságosnak nevezik.” Ariszteidész erre szó nélkül felírta a saját nevét a cserépre, és visszaadta.<cite>Plutarkhosz (Kr. u. 1–2. század) Ariszteidészről szóló elbeszélése nyomán, szabad átdolgozás.</cite></blockquote>`;
+const SRC_Q=[
+ {q:'Miért kérte a falusi, hogy Ariszteidész nevét írják a cserépre?',o:['Mert unta, hogy mindenütt „Igazságosnak” nevezik','Mert Ariszteidész zsarnokságra tört','Mert Ariszteidész adósa volt','Mert Ariszteidész külföldi volt'],why:'A szöveg szerint a falusinak nem volt konkrét sérelme: csak unta az „Igazságos” jelzőt.'},
+ {q:'Mit mutat a történet a szavazó írástudásáról, és hogyan viszonyul ez a tankönyv állításához, mely szerint a polgárok többsége tudott írni-olvasni?',o:['A szavazó nem tudott írni, de ez nem mond ellent annak, hogy a többség írástudó volt','Minden szavazó írástudatlan volt','A történet bizonyítja, hogy senki sem járt iskolába','A szavazáshoz nem kellett polgárnak lenni'],why:'Egy kivétel nem cáfolja az általános megállapítást; a tankönyv szerint a polgárok többsége járt iskolába.'},
+ {q:'Forráskritika: mit kell figyelembe venni a forrás értékelésekor?',o:['Plutarkhosz mintegy félezer évvel a történtek után írt, és anekdotát mesél el','A szerző kortárs szemtanú volt','A történet hivatalos jegyzőkönyvből származik','A szöveg tankönyvi összefoglaló'],why:'Plutarkhosz Kr. u. 1–2. századi szerző, Ariszteidész pedig a Kr. e. 5. században élt; az anekdota hitelessége nem biztos.'},
+ {q:'Mire figyelmeztet a történet a cserépszavazással kapcsolatban?',o:['Arra, hogy a szavazás mögött személyes, ésszerűtlen indok is állhatott','Arra, hogy a szavazás mindig igazságos volt','Arra, hogy csak az arisztokraták szavazhattak','Arra, hogy a szavazás titkos volt, ezért nem lehetett visszaélni'],why:'A tankönyv szerint a cserépszavazás sok esetben a politikai ellenfelek eltávolításának eszközévé silányodott.'}
+];
+
+const MAP_Q=[
+ {q:'A Kr. e. 8. századtól itt rendezték az olümpiai játékokat (az első feljegyzett játékok Kr. e. 776-ban voltak). Melyik betű jelöli Olümpiát?',a:'C',why:'Olümpia a Peloponnészosz-félsziget nyugati részén fekszik.'},
+ {q:'Ennek a poliszának a demokráciáját tanuljuk; Attika félszigetén fekszik. Melyik betű jelöli Athént?',a:'A',why:'Athén Attikában, az Égei-tenger partvidékéhez közel fekszik.'},
+ {q:'A Déloszi Szövetség közös pénztára eredetileg ezen a Kükládok közepén fekvő szigeten volt, innen kapta a szövetség a nevét. Melyik betű jelöli Déloszt?',a:'D',why:'Periklész ezt a pénztárat költöztette Déloszról Athénba.'},
+ {q:'Az Égei-tenger északi részén fekvő sziget a Déloszi Szövetség egyik tagja volt. Melyik betű jelöli Thaszoszt?',a:'F',why:'A szövetség tagjai az Égei-tenger szigetein és partvidékein éltek.'},
+ {q:'A kis-ázsiai partvidék közelében fekvő nagy sziget szintén a Szövetség tagja volt. Melyik betű jelöli Szamoszt?',a:'G',why:'A szövetséghez a kis-ázsiai part menti poliszok is tartoztak.'}
+];
+
+const FOG_Q=[
+ {q:'Ki számított polgárnak Periklész intézkedése után?',o:['Akinek mindkét szülője athéni polgárcsaládból származott','Aki Athénban született, bármilyen szülőktől','Aki adót fizetett, származásától függetlenül','Aki katonaként szolgált a flottában'],why:'Periklész szűkítette a polgárok körét: csak az számított polgárnak, akinek mindkét szülője athéni polgárcsaládból származott.'},
+ {q:'Melyik fogalomra illik a meghatározás? „A hatalom közvetlen gyakorlása a polgárok által, képviselők közvetítése nélkül.”',o:['Közvetlen demokrácia','Képviseleti demokrácia','Arisztokrácia','Türannisz'],why:'Athénban közvetlen demokrácia volt, nem a mai polgári demokráciákra jellemző képviseleti rendszer.'},
+ {q:'„Az előkelők uralma; a földek többsége a kezükben volt, és a hivatalokat is ők töltötték be.”',o:['Arisztokrácia','Démosz','Metoikosz','Phülé'],why:'Az arisztokrácia görög szó, jelentése: a legjobbak uralma.'},
+ {q:'Mit jelent a „sztratégosz”?',o:['Phülénként választott hadvezér, akinek hatásköre a külpolitikára és a gazdaságra is kiterjedt','Sorsolással kijelölt esküdt','Az arkhónok közül választott bíró','A tanács ötven tagú küldöttsége'],why:'A rendszeres háborúk nyomán a sztratégoszok hatásköre kiterjedt a külpolitikai és gazdasági problémákra is.'},
+ {q:'Legalább hány szavazat kellett a cserépszavazás (osztrakiszmosz) érvényességéhez?',o:['6000','600','5000','500'],why:'Plutarkhosz szerint ha hatezernél kevesebben szavaztak, a cserépszavazás nem volt érvényes.'}
+];
+
+const TL_Q=[
+ {q:'Melyik történt a legkorábban?',o:['Drakón írásba foglalja a törvényeket','Kleiszthenész reformjai','Periklész sztratégoszi korszaka','Szolón reformjai'],why:'Drakón Kr. e. 621-ben, Szolón Kr. e. 594-ben, Kleiszthenész Kr. e. 508-ban, Periklész Kr. e. 444-ben kezdett.'},
+ {q:'Melyik történt a legkésőbb?',o:['Periklész sztratégoszi korszaka kezdődik','Kleiszthenész reformjai','Elűzik az utolsó türannoszt','Szolón reformjai'],why:'Periklész korszaka (Kr. e. 444–429) követte a Kr. e. 510-es és 508-as eseményeket.'}
+];
+
+const CAUSES=[
+ {a:'Az adósrabszolgaság terjedése: a szegények magukat vagy családjukat adták el adósságukért',b:'Szolón eltörli az adósrabszolgaságot, az adósságokat érvényteleníti',why:'A külföldre eladottakat állami pénzen visszaváltotta.'},
+ {a:'Kr. e. 510-ben elűzik az utolsó türannoszt',b:'Megnyílik a lehetőség a démosz jogainak kiterjesztésére: Kleiszthenész reformjai',why:'Kleiszthenész Kr. e. 508-ban a démosz segítségével került hatalomra.'},
+ {a:'A perzsa háborúkban Athén jelentősen fejleszti a flottáját',b:'A hajón szolgáló démosz befolyása tovább nő',why:'A flotta és a fejlődő kereskedelem erősítette a démosz szerepét.'},
+ {a:'Periklész napidíjat vezet be az esküdtbíróságokban',b:'A szegényebb polgárok is részt tudnak venni a közügyekben',why:'A napidíj anyagi akadályt hárított el a politizálás elől.'},
+ {a:'A zsarnokság visszatérésétől való félelem',b:'Bevezetik a cserépszavazást',why:'A cserépszavazás később gyakran a politikai ellenfelek eltávolításának eszközévé silányodott.'},
+ {a:'Periklész Déloszról Athénba költözteti a Szövetség pénztárát',b:'Athén a szövetségesek adóját saját építkezéseire költi; a szövetségesek elégedetlenek, többen fellázadnak',why:'Periklész szerint a pénzről nem tartoztak számadással a szövetségeseknek.'}
+];
+
+const KEY_DATES=[
+ ['Kr. e. 621','Drakón írásba foglalja a szokásjogot'],['Kr. e. 594','Szolón reformjai'],['Kr. e. 560–510','Türannisz'],
+ ['Kr. e. 508','Kleiszthenész reformjai – az athéni demokrácia kialakulása'],['Kr. e. 5. század közepe','Az athéni demokrácia fénykora'],['Kr. e. 444–429','Periklész sztratégoszi korszaka']
+];
+
+const HINTS={
+ letter:['A viaszostábla a hermaoszlop talapzatán fekszik, a kezdőpontodtól balra. Kattints rá.','A tábla végén egy Tudáspróba-cédula a láda kódját kérdezi.'],
+ drawer:['A láda a Királyi Sztoa oszlopcsarnokában áll, az északi oldalon. A kód egy Kr. e. évszám: Szolón reformjainak éve.','Keresd Szolón nevét a tankönyv időszalagján („A jogegyenlőség kialakulásának állomásai”, 40. o.).'],
+ tube:['A kinyílt ládában van valami. Kattints rá.','A bronz szavazókorong a láda tetején fekszik.'],
+ radio:['Az Eponümosz hősök emlékműve a jobb oldali szélen áll. Illeszd be a korongot, majd állítsd időrendbe az eseményeket.','Támpont: Drakón a legkorábbi, Periklész sztratégoszi korszaka a legkésőbbi esemény. A tankönyv időszalagja (40. o.) segít.'],
+ album:['A hermák sora a bal oldalon áll. Párosítsd a személyeket a tetteikkel.','Támpont: a lakóhely szerinti beosztás Kleiszthenészhez, a napidíj Periklészhez kötődik; a cserepekről szóló részt a 41. oldalon keresd.'],
+ tape:['A sztélé a tér északi részén áll. Olvasd el figyelmesen a szöveget.','A kérdések a szöveg mondataira és a forrás keletkezési idejére vonatkoznak; olvasd vissza a megfelelő mondatot.'],
+ map:['A bronz térképtábla az oszlopcsarnok hátsó falán függ. Kattints rá.','Tájékozódj az Égei-tenger, Attika és a Peloponnészosz-félsziget alapján; a szigetek a tenger közepén és keleti részén vannak.'],
+ fog:['A tanács iratállványa a bal oldali szélen áll. Kattints rá.','Figyelj a rokon fogalmakra: a démosz a nép, az arkhónok az arisztokráciából kerültek ki, a sztratégoszokat választották.'],
+ book:['Az utolsó kérdés válasza megmutatja, melyik viaszostáblát kell kihúzni.','A tábla címkéjén a cserépszavazás érvényességéhez szükséges szavazatok száma áll.'],
+ vitrin:['A kulcs a levéltári kamra ajtajához tartozik, az északkeleti sarokban.','A kamra az Eponümosz hősök emlékművétől balra, a csarnok felé áll.'],
+ diary:['Az arkhón jegyzőkönyve a kamra asztalán fekszik. Párosítsd az okokat a következményekkel.','Minden következményhez azt az okot keresd, amely időben és logikailag megelőzte.'],
+ tv:['A hírnökoszlop a kapu közelében áll. Ismétlő kérdések jelennek meg rajta.','A kérdésablakban korlátozottan kérhetsz segítséget. Idézd fel a kronológiát (Drakón → Szolón → türannisz → Kleiszthenész → Periklész) és a fogalmakat.'],
+ door:['A kapu kódját a jegyzőkönyv utolsó lapján találod.','A kód egy Kr. e. évszám: annak a reformsornak az éve, amelyet a tankönyv a demokrácia kialakulásához köt.']
+};
+const STAGE_KEYS=['drawer','tube','radio','album','tape','map','fog','book','vitrin','diary','door'];
+const GOALS=['','Vedd fel, amit a ládában találsz.','Illeszd be a korongot az emlékmű táblájába a jobb oldalon.','Nézd át a hermák sorát a bal oldalon.','Olvasd el a sztélé szövegét a tér északi részén.','Vizsgáld meg a térképtáblát a csarnok hátsó falán.','Nézd át a tanács iratállványát a bal oldali szélen.','Húzd ki a megfelelő viaszostáblát.','Nyisd ki a levéltári kamrát az északkeleti sarokban.','Olvasd el az arkhón jegyzőkönyvét.','Nyisd ki az agóra kapuját.'];
+/* ================= ÁLLAPOT ================= */
+const S={stage:0,letterRead:false,vitrinOpen:false,mistakes:0,inv:[],hint:{},hints:0,hintPen:0,start:0,playing:false,won:false,
+ err:{code:0,kron:0,szem:0,forras:0,terkep:0,fog:0,ok:0,vegyes:0},done:{},qi:{}};
+const miss=c=>{S.err[c]++;S.mistakes++;};
+let modalOpen=false,codeKeys=null;
+
+/* ================= UI SEGÉDEK ================= */
+let toastT;
+function toast(t,ms=3200){toastEl.textContent=t;toastEl.classList.remove('off');clearTimeout(toastT);toastT=setTimeout(()=>toastEl.classList.add('off'),ms);}
+function openModal(html,cls){if(/\bpanel\b/.test(cls)&&!/\bmeta\b/.test(cls))html='<div class="tpb">Tudáspróba – a mai tankönyv szerint</div>'+html;mbox.className=cls;mbox.innerHTML=html;mbox.scrollTop=0;modal.hidden=false;modalOpen=true;tip.hidden=true;for(const k in keys)keys[k]=false;const f=mbox.querySelector('[data-focus]')||mbox;f.focus({preventScroll:true});lockHelp();}
+function closeModal(){modal.hidden=true;modalOpen=false;codeKeys=null;canvas.focus();}
+function doc(html,after){openModal(html+'<div class="actions"><button data-close data-focus>Bezárás</button></div>','doc');mbox.querySelector('[data-close]').onclick=()=>{closeModal();after&&after();};}
+function setGoal(){helpReady=Date.now()+helpWait();
+ if(Q){const n=Q.route.length,k=Q.route[Q.i];$('#goal').innerHTML=`${Q.round}. forduló, ${Math.min(Q.i+1,n)}/${n}. állomás: <b>${k?QGOAL[k]:'Célba értél.'}</b>`;}
+ else{const g=S.stage===0?(S.letterRead?'Nyisd ki a láda zárját a Királyi Sztoában.':'Olvasd el a hírnök viaszostábláját a hermaoszlopon.'):GOALS[S.stage];
+ $('#goal').innerHTML='Feladat: <b>'+g+'</b>';}
+ $('#prog').innerHTML=(Q?ROUNDS[Q.round].cats:FULLCATS).map(k=>`<i class="${S.done[k]?'on':''}" title="${CAT[k]}">${S.done[k]?'✓ ':''}${CAT[k]}</i>`).join('');
+ $('#inv').innerHTML=S.inv.map(i=>'<span>'+i+'</span>').join('');
+}
+const addInv=i=>{if(!S.inv.includes(i))S.inv.push(i);setGoal();};
+const remInv=i=>{S.inv=S.inv.filter(x=>x!==i);setGoal();};
+const fmt=ms=>{const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');};
+const shakeEl=el=>{el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');};
+const HINT_PEN=[20,45],MODAL_PEN=30,FREEK=['letter','tube','vitrin'];
+const maxH=()=>Q?3:5,helpWait=()=>(Q?30:45)*1000,MODAL_WAIT=25;let helpReady=0;
+function lockHelp(){const b=mbox.querySelector('[data-hint]');if(!b)return;
+ if(S.hints>=maxH()){b.disabled=true;b.textContent='Segítség (elfogyott)';return;}
+ const t0=Date.now();b.disabled=true;
+ const tick=()=>{if(!b.isConnected)return;const r=MODAL_WAIT-Math.floor((Date.now()-t0)/1000);if(r<=0){b.disabled=false;b.textContent=`Segítség (+${MODAL_PEN} mp)`;return;}b.textContent=`Segítség ${r} mp múlva`;setTimeout(tick,500);};tick();}
+function modalHint(){S.hints++;S.hintPen+=MODAL_PEN;helpReady=Date.now()+helpWait();updHelpBtn();}
+const hintBtnHTML=()=>`<button data-hint>Segítség (+${MODAL_PEN} mp)</button>`;
+function finishBtn(label,fn){const a=mbox.querySelector('.actions');a.innerHTML=`<button class="primary" data-next>${label}</button>`;const b=a.querySelector('[data-next]');b.onclick=fn;b.focus({preventScroll:true});}
+
+/* --- Számzár --- */
+function codeModal({title,prompt,answer,onOk}){
+ openModal(`<p class="cat">${CAT.code}</p><h2>${title}</h2><p>${prompt}</p><div class="code">${answer.split('').map(()=>'<span></span>').join('')}</div>
+ <div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-d="${n}">${n}</button>`).join('')}<button data-b aria-label="Törlés">⌫</button><button data-d="0">0</button><button data-ok class="primary">OK</button></div>
+ <p class="msg" style="text-align:center" aria-live="polite"></p><div class="actions"><button data-close>Mégse</button></div>`,'panel');
+ let v='';const spans=[...mbox.querySelectorAll('.code span')],msg=mbox.querySelector('.msg'),codeEl=mbox.querySelector('.code');
+ const upd=()=>spans.forEach((s,i)=>s.textContent=v[i]||'');
+ const press=d=>{if(v.length<answer.length){v+=d;upd();msg.textContent='';}};
+ const back=()=>{v=v.slice(0,-1);upd();};
+ const ok=()=>{if(v.length<answer.length){msg.className='msg bad';msg.textContent='Adj meg '+answer.length+' számjegyet.';return;}
+  if(v===answer){closeModal();onOk();}else{miss('code');msg.className='msg bad';msg.textContent='Hibás kód. Próbáld újra.';v='';upd();shakeEl(codeEl);}};
+ mbox.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>press(b.dataset.d));
+ mbox.querySelector('[data-b]').onclick=back;mbox.querySelector('[data-ok]').onclick=ok;
+ mbox.querySelector('[data-close]').onclick=closeModal;
+ codeKeys=e=>{if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace')back();else if(e.key==='Enter')ok();};
+}
+
+/* --- Kronológia --- */
+function timelineModal(onDone,list=EV){
+ let order;do{order=shuffle(list);}while(order.every((e,i)=>e===list[i]));
+ openModal(`<p class="cat">${CAT.kron}</p><h2>Az évszámtábla</h2><p>A tábla lapjai összekeveredtek. Állítsd időrendbe az eseményeket: kattints rájuk a legkorábbitól a legkésőbbiig.</p>
+ <ol class="slots">${list.map(()=>'<li></li>').join('')}</ol><div class="cards">${order.map(e=>`<button data-id="${e.id}">${e.t}</button>`).join('')}</div>
+ <p class="msg" aria-live="polite"></p><div class="actions"><button data-close>Később</button></div>`,'panel');
+ let n=0;const slots=[...mbox.querySelectorAll('.slots li')],btns=[...mbox.querySelectorAll('.cards button')],msg=mbox.querySelector('.msg');
+ const reset=()=>{n=0;slots.forEach(s=>{s.className='';s.innerHTML='';});btns.forEach(b=>b.hidden=false);};
+ btns.forEach(b=>b.onclick=()=>{
+  const e=list[n];
+  if(b.dataset.id===e.id){slots[n].className='filled';slots[n].innerHTML=e.t+'<small>'+e.d+'</small>';b.hidden=true;n++;msg.className='msg ok';
+   if(n<list.length)msg.textContent='Helyes.';else{msg.textContent='Az idővonal teljes.';finishBtn('Tovább',()=>{closeModal();onDone();});}
+  }else{miss('kron');msg.className='msg bad';msg.textContent='Nem ez az esemény következik. A sorrend elölről indul.';reset();shakeEl(mbox.querySelector('.slots'));}
+ });
+ mbox.querySelector('[data-close]').onclick=closeModal;
+}
+
+/* --- Párosítás (személy–esemény, ok-okozat) --- */
+function matchModal({cat,title,intro,pairs,lh,rh,onDone}){
+ const L=shuffle(pairs.map((p,i)=>({i,t:p.a}))),R=shuffle(pairs.map((p,i)=>({i,t:p.b})));
+ openModal(`<p class="cat">${CAT[cat]}</p><h2>${title}</h2><p>${intro}</p><div class="match">
+ <div class="col"><p class="colh">${lh}</p>${L.map(x=>`<button data-s="L" data-i="${x.i}">${x.t}</button>`).join('')}</div>
+ <div class="col"><p class="colh">${rh}</p>${R.map(x=>`<button data-s="R" data-i="${x.i}">${x.t}</button>`).join('')}</div></div>
+ <p class="msg" aria-live="polite"></p><div class="actions"><button data-close>Később</button></div>`,'panel wide');
+ let sel=null,num=0;const msg=mbox.querySelector('.msg');
+ const pairUp=(lb,rb,pre)=>{num++;[lb,rb].forEach(x=>{x.classList.remove('sel','hintc');x.classList.add('done');x.setAttribute('aria-disabled','true');x.insertAdjacentHTML('afterbegin',`<span class="n">${num}.</span> `);});
+  msg.className='msg ok';msg.textContent=pre+pairs[+rb.dataset.i].why;sel=null;
+  if(num===pairs.length){msg.textContent+=' Minden pár a helyére került.';finishBtn('Tovább',()=>{closeModal();onDone();});}};
+ mbox.querySelectorAll('.match button').forEach(b=>b.onclick=()=>{
+  if(b.classList.contains('done'))return;
+  if(sel===b){b.classList.remove('sel');sel=null;return;}
+  if(!sel||sel.dataset.s===b.dataset.s){if(sel)sel.classList.remove('sel');sel=b;b.classList.add('sel');return;}
+  if(sel.dataset.i===b.dataset.i){pairUp(sel,b,'Helyes pár. ');}else{miss(cat);msg.className='msg bad';msg.textContent='Ez a két elem nem tartozik össze. Próbáld újra.';sel.classList.remove('sel');sel=null;shakeEl(mbox.querySelector('.match'));}
+ });
+ mbox.querySelector('[data-close]').onclick=closeModal;
+}
+
+/* --- Feleletválasztós sor (forráselemzés, fogalmak) --- */
+function quizModal({cat,title,intro,source,qs,onDone}){
+ const render=()=>{
+  const i=S.qi[cat]||0,q=qs[i];
+  openModal(`<p class="cat">${CAT[cat]}, ${i+1}/${qs.length}. kérdés</p><h2>${title}</h2>${intro?`<p>${intro}</p>`:''}${source||''}<p><b>${q.q}</b></p>
+  <div class="opts">${shuffle(q.o.map((t,k)=>({t,k}))).map(o=>`<button data-k="${o.k}">${o.t}</button>`).join('')}</div>
+  <p class="msg" aria-live="polite"></p><div class="actions">${hintBtnHTML()}<button data-close>Később</button></div>`,'panel wide');
+  const msg=mbox.querySelector('.msg');
+  const hb=mbox.querySelector('[data-hint]');hb.onclick=()=>{const wr=[...mbox.querySelectorAll('.opts button')].filter(x=>x.dataset.k!=='0'&&!x.disabled);const k=Math.min(1,wr.length);if(!k)return;shuffle(wr).slice(0,k).forEach(x=>x.disabled=true);modalHint();hb.remove();msg.className='msg';msg.textContent=`Segítség: a játék kizárt ${k===2?'két':'egy'} rossz választ.`;};
+  mbox.querySelectorAll('.opts button').forEach(b=>b.onclick=()=>{
+   if(b.dataset.k==='0'){mbox.querySelectorAll('.opts button').forEach(x=>x.disabled=true);b.classList.add('right');msg.className='msg ok';msg.textContent='Helyes. '+q.why;
+    S.qi[cat]=i+1;
+    if(i+1<qs.length)finishBtn('Következő kérdés',render);else finishBtn('Tovább',()=>{closeModal();onDone();});
+   }else{miss(cat);b.disabled=true;msg.className='msg bad';msg.textContent='Nem ez a helyes válasz. Próbáld újra.';}
+  });
+  mbox.querySelector('[data-close]').onclick=closeModal;
+ };
+ render();
+}
+
+/* --- Térkép: Hellász és az Égei-tenger (Natural Earth, közkincs; a poliszok helye közelítő) --- */
+const PTS={"A": [283.8, 230.1], "B": [205.8, 298.4], "C": [157.8, 255.1], "D": [376.2, 273.4], "E": [453.0, 144.3], "F": [342.0, 22.8], "G": [477.0, 246.8]};
+const GR_LAND="M260.0 392.6 256.3 386.9 259.8 389.9 260.0 392.6ZM244.0 362.5 243.1 368.7 239.4 369.3 234.5 364.0 234.1 354.0 236.7 350.1 240.7 356.3 245.7 360.4 246.2 361.7 244.0 362.5ZM237.9 343.5 236.4 344.3 235.5 344.1 238.2 340.9 239.2 344.9 237.9 343.5ZM165.0 325.6 165.6 322.6 166.8 322.9 166.7 326.6 165.9 325.0 165.0 325.6ZM163.8 319.8 163.0 320.3 161.7 323.5 162.1 319.6 163.8 319.8ZM152.8 301.3 152.2 299.4 153.2 298.8 152.8 301.3ZM249.1 285.5 245.7 282.9 247.7 281.8 249.9 284.5 249.1 285.5ZM269.8 279.4 262.5 280.8 267.8 276.6 275.2 275.6 270.3 277.2 269.8 279.4ZM271.5 263.6 268.9 265.0 266.2 264.1 268.9 261.5 271.5 263.6ZM271.5 251.2 269.0 252.2 267.4 251.2 268.1 249.5 266.1 248.0 265.5 245.4 273.8 245.4 271.5 251.2ZM115.3 248.2 110.6 250.5 110.8 254.1 108.9 254.3 97.2 241.3 97.2 238.1 101.1 233.1 102.5 233.5 104.5 238.3 113.2 241.9 115.1 245.6 119.2 248.3 119.8 250.6 115.3 248.2ZM269.9 230.3 265.3 230.8 267.4 229.8 265.8 228.7 268.2 229.3 269.7 227.7 271.8 228.2 272.8 231.4 274.4 231.4 272.4 232.4 271.1 235.5 268.0 236.6 264.1 234.9 266.4 232.4 268.1 233.0 269.9 230.3ZM93.9 220.9 89.8 218.4 88.1 213.2 90.6 214.2 86.7 206.8 85.7 207.9 85.5 214.5 82.8 216.3 80.3 212.6 83.5 205.0 84.0 200.2 84.4 201.7 85.6 200.2 88.7 204.3 91.8 202.2 91.9 198.0 93.1 198.6 92.3 191.8 94.3 191.8 97.7 201.7 95.9 204.8 98.6 208.6 100.9 206.4 100.5 207.5 105.1 212.9 108.5 220.2 107.7 222.8 104.0 223.1 96.9 218.7 94.8 219.0 93.9 220.9ZM105.8 203.3 103.2 203.8 101.3 202.2 97.2 191.2 98.1 191.9 99.3 189.7 100.3 190.0 99.7 192.8 102.5 193.9 100.5 199.1 104.3 198.6 105.4 199.6 104.3 199.6 105.8 203.3ZM116.5 181.9 113.6 186.1 115.9 182.0 116.5 181.9ZM117.1 178.5 112.2 183.6 114.2 179.0 117.1 178.5ZM105.8 179.3 108.0 182.6 105.1 180.3 104.2 178.3 107.0 176.5 108.3 177.5 105.8 179.3ZM96.2 168.4 101.2 163.3 103.1 165.3 103.8 171.9 101.8 175.4 102.4 176.1 103.4 174.1 103.2 179.3 102.6 180.3 101.7 179.3 102.1 180.9 101.3 180.4 100.9 181.9 98.9 181.6 98.9 183.5 96.1 180.2 92.7 184.6 93.7 175.3 96.2 168.4ZM73.2 141.2 73.7 140.0 75.5 141.8 74.8 142.0 73.2 141.2ZM263.7 140.8 268.2 135.6 270.8 138.3 267.6 141.9 263.7 140.8ZM67.7 134.9 68.4 133.5 72.1 138.2 70.1 138.0 67.7 134.9ZM67.1 123.7 52.7 117.5 49.7 108.4 44.9 104.8 43.1 100.8 40.9 100.2 40.3 96.9 39.2 97.6 39.0 95.5 37.6 95.1 40.0 91.6 47.9 90.9 51.1 89.3 56.9 91.9 56.0 95.6 50.2 99.3 51.5 101.3 50.7 102.3 55.7 104.4 55.4 106.0 54.0 106.0 56.2 116.0 62.0 118.5 64.9 117.9 67.1 123.7ZM30.8 92.3 31.9 93.4 32.3 94.2 31.4 94.2 30.8 92.3ZM22.8 87.0 24.6 86.3 26.0 86.1 23.6 88.2 22.8 87.0ZM35.7 84.2 34.5 85.4 33.9 84.2 34.5 83.5 35.7 84.2ZM-57.8 33.6 -45.7 41.2 -37.8 50.2 -33.8 55.6 -29.0 65.4 -29.0 68.0 -35.3 77.5 -36.6 89.8 -37.9 91.4 -50.3 86.5 -55.7 82.7 -60.0 76.6 -58.7 74.3 -60.0 72.4 -60.0 26.4 -57.4 30.2 -57.8 33.6ZM17.1 40.0 16.3 37.0 17.5 38.4 17.1 40.0ZM302.8 466.6 307.7 466.0 308.1 469.7 305.2 468.8 302.8 466.6ZM332.3 327.9 319.6 330.2 319.4 329.1 320.4 325.6 319.6 325.0 321.3 322.4 325.6 326.6 328.3 326.2 324.5 322.4 325.2 321.1 328.5 322.9 332.0 321.4 332.8 322.4 332.3 327.9ZM337.3 319.3 339.9 320.9 339.6 322.7 336.5 320.3 337.3 319.3ZM331.3 317.6 333.7 315.5 336.5 316.2 334.4 320.3 332.4 320.1 331.3 317.6ZM331.2 288.3 331.9 293.9 331.1 292.8 329.9 295.4 327.6 293.3 325.4 294.3 326.2 289.7 331.2 288.3ZM325.8 269.9 329.0 272.4 328.7 274.1 327.8 273.8 324.7 279.1 322.1 280.2 324.1 275.6 323.7 272.5 322.1 272.5 322.5 270.4 326.6 266.8 325.8 269.9ZM293.8 266.5 296.0 267.4 296.6 268.6 293.8 266.5ZM316.5 262.3 317.4 254.7 319.7 253.2 319.8 251.8 322.5 251.6 324.2 253.9 323.7 256.3 318.8 262.9 317.6 263.8 316.5 262.3ZM308.6 246.6 307.1 253.0 306.3 254.7 307.6 247.3 308.6 246.6ZM313.7 228.7 315.2 226.3 317.0 227.9 315.9 229.4 313.7 228.7ZM330.6 230.6 328.6 230.7 325.8 226.2 323.2 228.1 324.1 229.3 322.3 229.9 318.8 225.6 319.6 224.6 317.2 221.3 312.2 220.9 312.6 218.4 311.0 217.6 312.6 215.2 311.1 211.3 307.6 211.3 309.8 207.5 309.2 206.4 306.6 208.3 306.9 206.9 306.1 206.9 307.3 204.3 301.5 202.7 304.0 201.1 302.5 197.3 279.0 197.0 276.9 192.8 275.6 193.4 278.1 189.8 276.8 185.4 270.3 182.4 269.9 179.9 266.8 176.4 252.1 164.8 248.6 163.2 244.1 163.5 242.2 161.4 238.2 160.3 237.4 161.1 239.5 162.1 238.9 163.6 230.0 165.3 230.2 162.9 242.1 157.5 242.8 155.9 245.2 155.3 245.7 152.8 247.6 151.4 257.9 148.6 262.3 151.1 263.1 154.3 265.5 155.3 268.8 164.2 275.6 167.9 275.6 169.3 283.4 169.9 285.2 173.2 291.5 176.0 304.4 176.2 309.3 178.2 307.6 179.6 307.6 182.4 313.9 188.1 311.3 191.8 311.1 194.4 312.2 196.5 311.1 196.9 315.1 205.6 315.1 210.5 320.7 215.7 323.6 215.3 328.7 217.3 335.3 215.7 334.8 221.4 335.7 223.1 334.5 227.5 330.6 230.6ZM341.0 167.0 337.5 169.4 335.7 167.7 334.0 169.9 331.9 167.4 334.4 166.3 333.4 163.6 330.3 163.7 328.7 161.1 326.2 161.1 327.7 158.6 327.7 154.3 329.5 153.3 334.4 157.0 334.7 161.3 339.8 165.0 341.0 167.0ZM306.9 144.6 307.4 147.1 305.9 147.7 305.9 144.9 306.9 144.6ZM275.2 136.1 283.8 140.8 283.6 141.9 287.6 142.9 284.5 145.8 280.0 144.8 280.2 142.9 275.2 136.1ZM542.7 -67.6 538.7 -67.4 538.3 -62.4 545.3 -51.4 544.6 -50.2 545.8 -47.6 554.0 -39.4 563.1 -34.0 594.5 -20.2 606.6 -17.9 605.2 -14.6 602.4 -12.5 604.2 -9.9 602.5 -5.0 599.4 -2.4 599.5 -0.6 596.8 -0.7 589.3 2.9 586.2 1.6 577.5 2.4 575.7 1.7 576.2 -0.7 574.5 -1.8 575.0 -3.5 573.1 -6.1 571.7 -6.5 573.8 -2.8 572.5 0.8 566.1 -3.3 549.9 -6.5 540.8 -3.1 536.5 2.2 524.3 -1.0 511.5 0.8 508.3 4.4 505.5 12.8 499.8 18.2 497.3 22.5 490.7 27.9 482.9 29.4 479.4 33.1 474.7 34.1 461.0 41.3 456.1 49.7 445.6 58.4 440.7 60.8 442.5 64.3 434.6 70.6 430.7 72.1 429.6 70.8 436.3 58.4 436.0 56.4 433.1 53.4 433.9 52.4 432.6 51.5 433.1 50.8 439.3 48.2 453.9 38.0 460.2 37.1 464.0 33.1 467.3 33.2 469.7 30.2 467.4 25.8 456.6 27.4 450.3 30.5 446.7 28.9 444.0 30.1 425.5 30.0 423.2 25.8 421.6 15.5 420.4 14.9 423.2 14.0 423.2 12.8 420.7 13.3 419.9 12.2 419.9 13.9 415.1 11.2 392.3 9.8 378.0 3.7 376.0 5.6 370.8 4.4 368.0 2.8 370.2 0.3 368.3 -0.8 362.3 -0.5 362.4 0.8 359.5 2.4 359.4 4.4 353.5 6.0 348.1 11.1 345.9 10.2 342.5 11.3 339.8 9.1 337.7 10.7 334.0 3.7 330.3 2.9 327.8 4.5 324.9 4.1 318.8 9.1 319.9 11.0 318.3 12.0 320.4 12.8 306.6 20.7 299.2 20.3 290.5 16.5 283.9 18.8 281.5 23.1 283.1 25.9 285.3 26.9 287.6 31.3 290.8 33.4 293.3 33.1 294.9 35.0 289.4 37.4 289.6 40.9 292.1 44.5 297.8 47.1 300.1 46.6 299.5 41.9 300.7 41.8 305.1 48.1 310.8 49.2 312.2 51.8 314.0 51.9 323.6 64.4 318.0 66.2 310.1 55.0 301.2 52.4 296.2 48.2 283.8 48.7 281.6 52.5 283.0 56.5 286.7 60.5 293.8 62.9 299.5 66.9 298.7 69.0 300.3 70.8 299.2 72.7 300.7 72.6 301.2 74.7 299.3 76.7 299.9 77.9 298.2 78.4 299.5 79.5 296.4 79.5 290.7 74.1 289.6 75.3 287.1 70.8 287.6 68.8 278.5 58.1 272.4 57.3 266.3 54.7 261.9 56.1 260.4 58.6 261.8 64.5 264.0 65.0 269.9 72.7 280.2 77.0 281.8 80.5 284.9 81.2 282.2 82.6 268.3 78.1 261.6 78.9 262.9 75.7 258.4 68.0 259.5 62.6 257.9 58.1 241.7 51.2 237.8 47.1 233.3 46.6 233.4 44.2 229.3 37.8 236.5 36.7 239.0 34.0 234.6 27.0 231.2 27.4 231.0 30.9 229.0 32.6 225.5 32.8 224.2 36.8 220.4 35.9 219.4 37.6 220.5 38.3 219.0 40.0 214.7 40.4 216.4 44.5 219.7 47.9 213.2 63.3 214.3 71.8 216.0 74.7 222.5 78.9 223.8 84.6 231.0 91.8 236.4 107.8 245.8 113.8 247.5 117.4 256.3 127.3 260.6 138.2 258.1 140.4 252.6 141.9 253.8 142.9 252.2 143.9 246.9 145.2 243.1 144.4 244.9 140.7 246.8 139.8 246.0 143.9 250.3 141.6 250.9 139.8 252.0 140.4 253.0 138.2 248.1 129.3 241.2 127.8 239.9 124.8 236.2 124.5 236.6 128.8 230.6 130.0 229.6 131.2 229.6 135.1 231.2 139.8 232.6 137.4 234.1 138.2 235.2 142.4 237.7 142.8 239.9 146.6 239.9 148.1 237.5 150.0 237.8 151.2 244.4 149.1 241.4 151.2 239.1 155.3 233.9 158.0 230.8 157.5 230.2 159.7 227.5 161.1 221.3 161.1 217.3 158.4 211.5 160.6 211.5 162.6 214.4 162.2 213.2 163.4 215.0 164.6 216.0 163.7 215.6 164.8 222.2 163.2 226.7 168.4 229.8 168.1 232.0 170.5 234.9 168.9 242.5 171.1 246.3 179.3 250.9 178.2 251.8 177.2 250.1 176.2 251.2 175.7 258.4 178.2 260.0 181.9 257.6 183.8 257.1 185.5 258.4 184.6 262.9 187.2 260.4 188.1 260.1 189.6 271.2 190.5 272.6 188.9 276.1 191.8 274.4 193.4 280.4 200.7 282.6 202.2 286.9 201.7 297.1 205.7 304.4 212.9 304.8 215.2 303.6 217.8 302.3 216.9 299.3 218.5 302.0 227.2 300.7 233.5 302.8 234.9 300.7 236.0 304.0 238.1 303.2 241.3 305.2 244.1 303.6 248.0 304.3 251.4 302.0 254.3 297.0 252.3 296.6 248.5 295.4 249.0 294.2 244.4 293.3 244.9 289.2 240.7 286.7 242.8 281.8 232.4 277.7 232.9 278.5 231.4 273.2 229.3 275.9 226.2 274.9 224.3 267.0 226.2 263.7 228.7 265.8 229.3 264.5 229.8 253.6 229.8 245.6 234.6 240.9 233.5 239.7 236.8 240.8 239.4 246.8 239.1 250.9 242.3 250.9 244.9 247.7 246.0 247.3 247.5 250.5 249.1 250.1 257.1 260.2 263.1 261.6 262.2 261.5 260.1 258.7 256.9 263.9 255.3 264.3 258.2 262.5 261.5 265.3 263.6 263.7 264.6 271.5 268.8 271.5 270.4 266.8 272.3 255.8 273.3 253.8 275.3 256.7 277.2 251.2 277.9 252.2 280.8 250.1 281.0 248.5 280.2 249.7 279.2 244.4 276.8 244.4 273.3 245.7 274.2 246.8 271.4 248.5 272.5 247.9 269.7 242.8 268.8 243.6 268.3 242.8 266.8 240.3 268.8 238.8 265.1 235.3 262.7 231.2 264.6 226.7 258.4 223.6 260.7 223.8 266.2 225.9 271.0 225.5 273.5 229.2 277.6 229.2 279.7 234.4 289.0 234.2 294.5 237.4 294.3 237.4 296.5 238.9 297.5 237.8 297.4 240.0 301.2 240.7 304.7 239.4 304.7 240.7 305.8 240.7 308.4 245.6 317.5 244.8 319.8 246.8 320.3 245.3 324.0 243.1 322.9 241.9 324.6 241.9 327.1 243.6 327.1 242.1 328.4 242.1 330.4 244.8 335.7 249.3 338.6 248.1 341.1 252.2 345.0 251.8 346.8 245.7 346.0 243.1 340.0 238.3 340.2 235.8 334.4 232.5 331.8 233.1 330.0 230.2 327.5 228.9 328.8 229.0 325.2 227.2 319.4 221.1 318.2 214.6 320.2 214.7 323.5 211.5 327.6 213.0 328.2 213.2 330.2 211.0 329.1 211.6 333.2 210.8 333.9 210.3 332.3 209.0 333.6 209.2 339.8 210.7 344.2 209.5 350.0 208.2 345.3 204.5 342.7 202.9 343.2 201.3 340.8 203.3 337.4 202.4 335.4 203.3 333.9 202.0 333.9 202.3 330.9 203.3 330.8 202.1 329.8 203.3 326.0 201.5 326.4 197.5 317.4 193.3 311.5 190.5 312.0 188.3 310.0 189.2 302.1 182.9 301.1 176.6 304.2 175.3 314.1 175.7 317.2 178.2 319.3 173.0 324.5 169.4 318.3 165.9 319.3 162.4 317.6 161.3 312.0 162.6 308.1 161.3 306.4 160.1 306.8 160.9 305.8 159.7 306.8 159.3 304.1 154.7 297.9 154.2 294.9 154.5 289.1 160.9 282.2 161.7 279.7 160.5 273.7 153.0 261.1 144.1 254.0 140.6 252.9 138.7 255.3 137.9 252.7 138.7 248.6 137.1 244.1 126.8 239.7 126.4 237.1 128.0 231.9 129.9 233.1 132.5 231.9 139.6 226.2 139.1 225.1 137.1 226.6 142.0 218.6 142.5 211.0 144.5 213.7 144.1 211.5 151.4 215.2 157.3 216.1 162.1 212.2 165.9 205.3 171.0 201.9 177.4 202.2 181.2 204.0 182.9 206.9 186.8 207.5 189.7 211.6 193.1 213.5 199.9 214.2 204.9 217.3 210.7 218.0 220.8 222.7 232.0 232.4 236.8 231.9 238.5 229.4 233.2 225.2 231.2 225.1 232.5 224.1 236.6 221.5 244.1 223.3 250.4 221.8 253.0 220.0 250.5 216.8 253.4 215.7 247.7 214.7 248.9 213.7 247.4 212.0 244.0 213.9 241.9 213.7 243.1 213.2 241.5 211.4 237.1 210.7 235.3 212.1 238.2 213.2 234.5 213.2 233.7 209.5 228.3 210.6 225.9 209.0 227.9 206.4 221.8 203.7 220.5 201.7 221.1 200.4 218.8 198.2 217.6 199.6 218.8 200.3 216.7 200.2 215.2 202.2 216.4 203.3 216.0 204.8 213.8 205.5 208.1 195.8 204.1 193.4 204.5 196.2 202.4 198.0 203.9 199.3 202.9 201.8 193.5 200.5 191.4 203.3 188.0 199.5 177.5 196.5 172.8 199.1 169.9 197.7 165.8 202.9 163.0 200.6 156.0 201.1 151.1 205.3 145.7 202.7 149.4 204.3 148.6 201.7 149.4 200.6 148.2 200.6 148.6 199.6 145.3 200.2 145.0 197.9 142.6 197.5 141.6 192.3 139.4 190.1 138.5 190.3 141.2 194.9 140.3 194.9 140.2 197.8 136.2 199.9 135.0 202.2 131.4 201.9 130.9 202.7 132.0 203.3 130.5 204.8 129.3 204.7 128.4 202.2 125.1 201.7 126.3 201.0 126.4 199.6 125.6 200.2 126.4 198.6 126.8 199.4 128.4 197.5 125.7 197.2 124.9 195.9 125.1 194.4 126.4 195.5 127.2 194.4 126.4 194.9 126.4 191.2 124.7 190.8 126.0 190.3 125.1 189.7 125.8 187.4 121.8 189.0 121.5 181.6 118.7 176.7 114.9 175.7 112.4 167.4 110.7 167.1 108.7 169.9 106.4 170.0 103.8 166.3 105.0 162.7 108.3 161.9 105.4 158.9 106.2 155.0 109.0 157.8 111.6 154.9 112.0 157.5 114.2 157.3 115.2 155.3 121.6 157.0 121.5 159.6 125.1 162.2 126.1 158.6 130.6 161.3 128.4 156.3 129.6 152.0 125.1 147.1 124.7 149.1 122.2 150.2 123.5 151.2 117.2 149.3 116.1 147.6 116.9 146.6 114.1 146.0 112.0 147.8 113.2 149.1 110.7 149.1 111.5 147.4 110.8 146.0 109.5 146.6 110.3 144.9 109.3 143.2 106.6 145.0 107.5 145.7 107.0 148.1 105.4 150.2 104.6 149.6 109.9 154.6 106.0 153.6 104.1 155.7 102.1 152.0 102.9 150.7 101.2 146.4 95.8 142.5 88.7 134.8 88.9 130.4 79.5 128.8 76.2 122.5 74.2 121.5 72.9 118.4 76.0 117.9 72.9 114.3 75.3 114.5 75.8 113.2 68.0 111.6 68.8 108.5 70.5 108.1 70.9 104.5 65.3 100.8 59.3 99.7 60.2 95.1 58.8 94.4 60.9 88.6 60.6 86.1 54.4 83.0 56.5 80.5 51.8 72.5 48.4 71.9 46.6 70.0 46.2 71.1 44.0 67.6 28.6 59.7 22.9 53.5 20.7 47.5 17.4 44.0 19.0 42.7 20.9 43.2 25.4 50.9 28.5 49.5 28.7 41.5 25.1 38.6 23.5 36.3 23.2 34.7 26.0 37.5 27.3 33.9 24.9 31.6 23.5 32.0 23.2 34.1 18.3 26.3 21.6 22.0 22.1 15.0 24.4 13.6 23.6 11.8 24.9 10.0 22.9 7.0 26.5 3.9 25.6 4.8 25.6 9.7 26.3 8.6 26.5 9.7 31.4 6.0 29.7 -0.2 27.2 5.8 28.5 0.3 26.4 -1.6 27.4 -8.1 26.5 -10.9 27.8 -11.5 30.8 -21.0 29.3 -23.3 25.1 -24.5 23.6 -31.4 25.7 -30.5 26.5 -33.5 29.4 -35.4 31.0 -39.0 26.5 -44.5 31.7 -43.8 33.9 -44.4 35.1 -47.0 36.8 -46.0 36.0 -48.5 33.5 -50.2 34.7 -52.2 34.3 -58.5 35.4 -58.1 36.0 -60.7 35.5 -62.2 26.0 -66.0 21.9 -64.7 18.6 -67.9 10.2 -71.2 8.3 -74.8 8.6 -75.9 541.2 -75.9 542.7 -67.6ZM290.0 140.8 297.4 129.9 297.0 131.0 298.3 131.2 295.3 137.4 291.9 140.9 290.0 140.8ZM303.8 129.3 302.5 126.8 304.0 124.3 305.6 126.8 304.9 128.7 303.8 129.3ZM309.2 124.4 309.1 122.6 310.4 119.4 310.8 122.4 309.2 124.4ZM294.7 50.0 296.5 52.4 293.0 50.8 294.7 50.0ZM345.9 25.1 346.8 29.4 345.3 28.9 338.5 32.6 335.2 28.7 331.0 27.4 330.7 25.3 334.0 18.6 338.5 14.9 343.9 16.4 347.0 19.6 345.6 21.0 347.2 22.2 345.9 25.1ZM402.6 465.8 401.3 464.6 403.9 464.8 402.6 465.8ZM427.6 459.6 428.8 459.9 429.0 460.7 428.0 461.5 427.6 459.6ZM439.3 440.6 434.5 452.6 428.0 455.7 419.1 452.6 408.5 455.2 396.1 454.6 390.4 456.8 380.9 456.3 366.5 460.3 344.3 460.8 345.5 452.5 343.1 448.5 333.9 447.5 330.0 444.0 324.2 442.3 324.1 441.1 317.6 441.8 312.2 440.0 303.0 441.1 299.3 437.9 294.1 438.1 289.6 436.4 281.0 438.5 276.6 437.8 271.1 432.2 273.2 431.2 272.3 427.2 274.4 422.6 273.6 421.3 274.8 411.9 276.3 409.1 277.2 415.8 279.6 417.5 283.1 416.7 283.8 413.5 282.7 406.3 285.0 403.5 286.7 404.6 286.7 411.9 289.0 415.0 301.5 416.1 303.5 413.6 305.6 413.5 304.9 410.8 306.9 409.9 311.0 411.1 312.2 414.5 311.0 416.6 304.9 416.5 304.3 417.8 311.2 421.3 315.1 419.2 315.9 427.5 320.4 429.2 343.3 423.2 350.4 424.9 353.7 423.4 357.5 424.9 358.3 423.4 363.2 424.9 363.3 428.6 364.6 429.4 382.6 429.5 387.2 433.3 399.6 429.1 406.0 430.1 403.5 433.3 403.8 435.5 405.1 434.0 405.5 435.9 403.9 436.9 402.8 441.7 403.7 445.5 407.7 446.9 409.8 446.3 413.8 441.6 418.7 440.8 423.6 437.9 427.2 439.3 426.5 440.0 427.8 440.7 430.8 439.9 435.6 434.0 437.6 433.7 437.6 431.7 439.3 431.7 438.7 433.1 436.0 435.9 438.0 441.5 439.3 440.6ZM374.3 423.1 371.0 421.9 373.4 420.4 374.8 421.5 374.3 423.1ZM411.3 352.1 404.8 352.5 403.8 350.8 406.1 349.2 411.3 352.1ZM386.8 354.1 381.7 352.6 384.6 352.1 386.2 350.0 385.3 345.4 382.1 343.7 385.1 344.0 388.8 347.4 389.4 351.0 386.8 354.1ZM357.8 334.4 350.4 329.2 352.1 329.2 356.9 332.3 357.8 334.4ZM367.0 326.3 371.1 325.1 367.8 329.5 364.0 331.2 367.0 326.3ZM375.1 324.5 375.8 321.4 378.4 319.3 384.6 325.6 382.4 330.0 376.8 324.5 375.1 324.5ZM388.7 316.3 385.4 316.5 388.7 313.6 388.7 316.3ZM424.5 311.8 416.1 315.2 412.8 319.3 405.3 321.2 404.3 319.3 410.7 318.3 411.8 316.2 410.7 315.2 418.3 311.5 417.0 309.9 419.9 308.4 424.5 311.8ZM401.1 312.0 397.9 312.6 396.5 312.6 399.0 310.4 401.1 312.0ZM342.6 311.0 340.2 305.4 340.6 303.7 338.5 301.6 338.5 300.0 342.3 301.1 345.9 307.0 342.6 311.0ZM365.3 300.6 363.6 305.8 364.9 307.3 362.8 306.1 361.6 303.1 365.3 300.6ZM395.0 300.7 393.2 306.1 387.0 309.9 385.4 306.3 383.3 304.7 382.9 301.1 380.5 297.4 392.0 288.5 394.5 290.2 395.5 292.9 395.0 300.7ZM371.3 304.9 366.2 302.8 366.8 299.0 370.7 293.9 374.3 292.2 373.4 293.5 375.6 294.3 376.0 292.2 377.6 292.2 375.8 296.9 376.8 300.0 371.3 304.9ZM410.1 293.3 409.7 296.3 408.0 296.5 406.8 294.3 410.1 293.3ZM352.9 276.1 353.3 273.5 351.7 273.5 352.9 271.4 352.1 271.0 353.9 269.7 353.7 265.0 355.8 265.2 358.0 272.8 352.9 276.1ZM378.4 272.5 378.8 266.7 380.9 265.2 382.6 268.2 383.7 266.2 387.9 268.6 387.4 269.9 384.5 270.6 384.2 272.0 378.4 272.5ZM424.7 263.7 419.4 264.8 418.3 263.1 424.5 255.3 431.8 255.7 436.8 252.4 441.7 251.6 433.8 260.4 427.7 261.5 424.7 263.7ZM359.1 252.2 363.2 252.2 365.3 254.8 374.7 256.3 375.6 258.9 373.6 262.9 370.2 262.8 359.9 255.3 359.1 252.2ZM339.6 257.7 344.5 256.2 344.5 258.5 339.6 257.7ZM355.6 249.8 353.5 245.4 349.0 241.2 348.0 241.8 346.5 238.3 344.3 236.0 343.0 237.0 341.0 232.9 341.6 230.4 346.7 227.8 349.8 230.6 350.4 234.0 357.8 235.6 356.6 239.7 359.1 241.8 357.5 244.9 359.7 246.5 357.5 250.1 357.8 251.6 355.6 249.8ZM429.2 192.3 428.4 196.0 429.8 204.8 426.8 206.2 426.7 210.9 422.4 212.6 420.6 215.9 417.9 214.8 414.6 210.6 413.4 211.0 413.4 209.0 412.0 209.1 412.6 206.9 417.9 204.8 419.5 201.7 419.1 198.0 417.0 197.0 416.6 193.4 412.5 191.1 410.1 187.7 410.9 183.7 419.7 181.9 423.8 183.0 426.5 186.6 426.9 185.0 428.6 184.9 429.8 186.6 428.7 190.4 427.3 190.8 429.2 192.3ZM389.7 187.1 390.5 185.8 391.4 186.4 391.1 187.6 389.7 187.1ZM396.3 187.2 393.6 187.2 393.6 185.0 391.6 181.9 395.3 181.4 397.3 183.5 396.3 187.2ZM359.8 109.2 362.8 110.5 359.1 116.4 358.4 112.8 359.8 109.2ZM418.7 88.5 424.6 87.7 424.9 91.1 423.5 92.2 418.7 88.5ZM386.8 76.4 383.1 80.2 383.3 82.0 380.9 83.0 382.1 83.6 380.4 85.5 382.2 89.8 380.9 92.1 377.7 90.5 377.4 88.8 374.3 86.7 376.8 84.4 375.0 82.1 371.8 84.1 373.5 84.6 370.6 87.7 372.1 88.0 372.9 90.9 368.6 89.8 369.9 86.6 368.1 88.3 367.3 86.7 362.8 88.3 364.0 86.7 362.8 85.2 364.1 81.9 362.0 76.3 373.5 75.3 377.1 79.5 380.9 77.3 382.9 74.2 387.0 73.2 386.2 74.2 386.8 76.4ZM402.6 67.6 399.8 65.9 403.1 61.7 414.8 57.6 418.3 59.1 417.8 64.0 420.7 63.3 420.7 64.8 419.4 65.5 411.4 67.7 402.6 67.6ZM386.6 39.3 394.6 36.8 400.3 38.9 401.9 40.9 401.7 43.1 394.0 45.6 386.6 39.3ZM480.4 425.4 472.6 429.1 470.9 427.3 474.0 423.4 480.7 422.4 480.4 425.4ZM490.9 420.0 490.3 422.9 488.2 424.9 488.6 423.7 485.6 421.3 487.1 419.0 486.8 413.8 484.2 409.9 486.9 406.8 487.7 403.0 489.2 401.1 489.4 394.8 493.3 392.6 493.1 400.5 489.7 406.1 489.4 408.6 493.3 413.8 492.2 415.6 494.2 418.1 493.9 419.7 490.9 420.0ZM448.0 335.4 442.4 336.2 441.0 340.5 439.1 341.1 436.0 338.1 435.7 335.1 437.7 334.4 440.5 336.5 442.0 334.9 443.6 335.2 443.4 332.9 441.7 331.8 443.6 331.3 448.0 335.4ZM487.6 335.6 490.0 333.0 492.4 335.1 490.5 337.1 487.6 335.6ZM486.5 322.1 482.9 320.8 479.5 322.4 477.9 326.1 478.4 328.1 475.1 325.3 475.6 321.5 477.5 320.3 479.2 321.4 483.7 315.9 489.9 312.0 496.9 310.7 501.3 314.1 492.9 317.1 486.5 322.1ZM489.1 306.9 490.5 309.6 488.2 309.6 486.5 307.6 489.1 306.9ZM477.1 302.1 473.3 298.3 473.4 296.9 479.2 300.0 478.4 300.6 480.4 303.7 482.5 303.1 482.4 307.9 479.6 307.3 479.0 309.1 476.7 309.4 474.7 307.9 477.1 302.1ZM471.0 296.3 470.3 295.2 471.1 294.3 469.0 294.6 469.0 292.6 466.4 289.9 468.5 288.5 471.0 289.5 470.6 291.4 473.2 294.9 471.0 296.3ZM486.3 282.6 484.9 282.6 485.3 280.8 486.2 281.0 485.5 281.9 486.3 282.6ZM465.6 281.1 462.6 279.9 463.2 278.8 467.1 280.3 467.5 281.9 466.8 282.9 465.6 281.1ZM454.3 277.4 452.9 278.9 453.9 280.3 453.4 283.1 451.7 280.9 452.2 275.4 454.8 275.6 456.4 278.0 454.3 277.4ZM464.6 276.4 462.6 273.2 463.0 272.4 465.5 275.2 464.6 276.4ZM480.5 269.0 477.0 269.8 475.6 267.7 478.7 267.6 480.5 269.0ZM447.4 260.1 444.5 260.1 443.8 260.0 446.7 258.1 447.4 260.1ZM450.1 261.1 450.2 263.7 448.4 260.5 448.4 258.0 449.9 259.3 450.8 258.3 449.8 255.3 450.8 254.1 452.4 256.9 450.1 261.1ZM474.0 252.6 472.2 254.8 467.8 254.8 465.7 251.4 462.5 249.6 455.9 252.3 454.8 247.5 459.5 243.5 466.3 241.9 470.5 242.3 478.0 247.0 476.7 243.8 479.6 243.3 484.1 244.9 481.9 246.5 483.9 248.4 483.7 250.1 480.0 250.1 474.0 252.6ZM440.0 195.7 439.5 194.3 441.3 193.4 441.2 195.4 440.0 195.7ZM462.6 186.8 464.9 191.7 463.9 193.0 461.6 191.1 462.6 186.8ZM436.2 188.5 432.1 188.6 431.1 186.6 436.2 188.5ZM452.4 150.4 451.6 145.5 449.4 143.2 446.2 144.0 452.8 151.2 452.8 152.8 445.4 154.3 429.3 150.0 425.3 145.5 433.5 141.9 437.6 138.4 436.8 137.0 431.2 136.5 423.8 145.0 413.3 140.9 410.1 138.2 411.3 135.1 410.5 134.6 415.0 129.3 416.2 130.9 422.0 130.4 422.8 128.8 423.6 129.9 429.8 127.3 429.8 123.1 441.7 123.1 441.3 124.8 445.0 126.8 442.9 130.8 452.4 139.3 451.8 140.4 456.7 148.1 455.8 151.0 452.4 150.4ZM633.6 370.5 634.2 368.2 635.7 367.0 636.2 368.9 633.6 370.5ZM550.1 360.7 543.7 370.8 545.8 371.8 544.6 373.9 545.4 375.5 539.6 375.0 535.9 377.7 529.6 386.2 526.8 388.0 524.0 386.1 522.7 383.3 525.2 376.8 525.4 373.3 521.1 367.7 526.3 364.7 528.5 358.8 534.0 353.8 547.1 347.2 551.0 347.4 553.3 345.0 554.4 346.4 553.6 347.9 554.2 351.3 552.7 352.5 550.1 360.7ZM653.1 366.5 650.6 367.0 650.4 366.7 654.7 364.5 653.1 366.5ZM516.6 363.2 511.1 363.2 511.0 362.1 517.1 361.6 516.6 363.2ZM522.1 359.5 521.0 359.6 523.1 358.2 522.3 360.9 522.1 359.5ZM505.7 350.4 502.7 350.7 501.0 346.9 498.9 348.4 497.7 346.6 498.0 343.7 498.6 344.9 502.1 343.8 504.0 348.5 506.5 348.2 505.7 350.4ZM532.6 338.6 529.7 339.6 531.0 338.1 527.5 336.6 528.5 335.9 525.6 335.9 527.3 332.8 531.7 330.6 528.9 333.4 532.6 332.8 531.8 333.9 532.6 338.6ZM594.9 329.9 594.9 327.8 596.3 328.3 594.9 329.9ZM509.4 305.8 506.7 306.0 505.4 304.4 509.4 305.8ZM660.0 362.8 648.2 366.6 649.4 367.1 646.8 369.1 645.7 369.3 646.5 367.7 643.2 367.3 640.3 370.3 637.4 366.2 638.5 365.5 635.0 365.6 637.4 364.6 636.1 364.0 625.2 362.2 624.7 359.4 621.0 362.0 614.1 355.0 608.7 353.1 608.7 351.0 605.8 350.0 607.8 348.4 607.5 345.2 605.8 343.7 607.5 342.2 606.9 337.7 600.9 338.1 602.2 337.0 601.2 334.9 602.5 332.3 603.4 333.0 605.8 330.8 605.4 332.1 607.0 331.5 605.8 329.2 597.4 324.4 596.3 322.6 591.0 329.2 592.2 331.8 593.0 328.7 594.1 329.7 592.2 333.6 589.7 333.9 589.1 332.5 590.6 331.2 587.3 330.2 587.0 328.2 584.8 326.7 579.9 327.1 579.0 325.1 577.4 326.6 576.2 324.0 576.6 317.7 575.8 319.3 572.8 317.1 571.5 317.9 571.7 319.8 569.2 318.8 570.0 317.7 567.4 316.8 568.0 314.9 567.1 312.6 562.6 314.8 565.5 316.7 563.8 319.7 558.9 317.7 558.9 319.3 556.7 319.2 556.7 317.8 558.9 316.7 555.4 315.4 554.2 317.9 554.9 321.4 557.7 325.0 554.0 325.0 554.0 326.6 549.7 328.6 546.7 333.8 543.7 334.4 542.2 336.8 538.7 336.7 537.6 333.9 542.1 333.9 545.4 330.8 544.6 329.7 542.9 331.2 543.7 329.2 542.3 327.2 541.8 328.8 538.0 327.4 542.5 325.0 547.0 325.1 544.9 322.9 546.6 320.8 547.8 322.4 547.1 318.9 542.8 321.7 542.1 320.8 535.1 323.5 534.7 322.4 531.4 323.5 528.4 321.9 523.2 322.2 521.1 324.5 520.3 329.7 513.3 327.6 508.4 330.2 501.8 327.6 501.3 325.6 504.9 325.8 507.0 322.4 516.7 321.6 517.4 318.8 518.7 318.4 525.6 320.3 527.9 318.4 533.8 318.0 541.7 320.3 543.3 318.3 540.4 316.7 541.5 316.0 540.4 314.6 543.3 313.6 541.3 310.4 543.7 309.4 542.5 308.4 549.4 308.9 549.9 310.4 549.4 307.9 551.1 308.4 552.7 303.7 554.7 304.6 554.8 303.1 559.8 300.9 558.3 299.9 547.6 301.0 546.4 301.3 546.6 302.7 539.2 301.1 527.3 303.1 526.8 304.2 521.3 303.3 518.2 305.2 514.0 304.0 513.7 305.8 508.4 304.2 506.3 301.6 503.8 301.6 503.0 304.2 502.6 301.6 499.7 302.7 498.5 306.8 495.8 306.5 493.7 299.0 497.7 295.4 495.6 295.4 495.2 294.3 499.3 294.3 499.3 291.7 500.5 293.9 503.0 292.2 503.2 293.9 506.3 294.3 507.6 296.9 513.9 294.2 514.5 293.3 513.3 293.9 511.7 289.1 515.3 288.6 514.5 290.2 516.6 288.6 515.4 286.2 517.0 282.9 513.2 283.0 510.9 286.3 510.0 286.0 511.1 285.1 510.5 283.4 507.8 284.6 509.5 278.9 508.4 277.6 508.1 279.8 506.8 280.5 503.8 279.2 503.8 276.0 506.3 274.1 504.4 272.4 499.3 275.6 499.8 277.0 494.8 278.2 491.4 276.6 492.3 273.5 493.6 273.0 493.4 267.5 490.7 268.3 490.8 262.4 492.6 261.0 492.5 258.4 480.7 253.2 481.2 251.6 487.6 251.5 492.8 249.6 495.0 247.2 495.7 242.7 494.3 238.1 496.5 233.2 494.3 228.7 488.5 228.9 484.2 226.3 483.4 224.3 478.5 222.8 473.6 223.5 472.4 225.1 470.5 222.0 470.1 217.8 467.6 214.7 466.6 215.3 465.6 211.3 458.2 212.3 457.4 217.3 456.6 216.8 455.7 219.9 454.1 216.8 453.4 218.5 451.4 216.6 451.2 214.2 449.5 214.6 445.0 211.0 445.0 212.6 443.4 210.8 443.4 207.9 441.2 210.5 434.1 207.0 434.3 205.3 435.9 206.0 438.5 203.3 437.3 201.9 437.6 199.7 438.5 200.6 439.3 199.1 438.9 202.2 443.1 203.6 443.0 201.7 445.0 202.2 448.6 199.9 447.1 195.4 449.3 197.0 450.8 194.9 446.4 191.9 443.3 193.3 444.2 190.8 442.2 187.2 440.9 179.5 441.4 177.6 444.2 176.4 450.3 178.2 457.8 188.4 458.6 192.3 455.3 192.8 456.3 193.3 455.3 196.0 457.3 197.0 460.4 204.5 462.0 203.1 460.7 201.7 460.2 198.6 462.1 195.1 463.5 194.9 466.0 200.2 467.7 200.6 475.5 199.1 480.8 196.5 485.3 197.3 489.9 193.4 481.3 192.7 476.1 194.8 476.7 193.9 473.9 190.2 471.0 188.9 468.9 186.6 473.4 189.2 470.1 186.1 470.9 182.4 467.6 182.4 468.1 181.4 465.2 180.9 465.6 179.3 463.1 178.2 465.2 177.2 463.1 173.1 469.1 170.4 474.2 172.0 473.8 171.0 476.1 169.3 473.8 165.8 476.3 164.8 477.6 166.6 477.5 163.7 480.8 161.7 482.0 162.5 483.8 160.5 482.5 160.1 483.5 158.1 482.5 156.4 479.0 158.0 477.7 156.4 475.5 156.4 472.0 158.4 468.4 155.7 467.9 152.0 468.9 150.2 467.6 150.2 472.4 147.1 472.5 145.0 469.4 140.5 464.3 136.9 463.1 131.9 456.6 131.0 458.7 127.8 459.2 128.6 458.2 129.3 460.2 130.4 460.2 128.6 468.9 121.5 468.1 118.9 471.1 118.5 472.1 116.1 475.8 114.8 476.3 108.2 473.6 107.5 470.0 109.6 468.5 108.5 447.4 112.3 441.7 115.3 437.2 114.8 435.0 116.5 426.8 117.0 424.5 115.8 426.6 106.5 429.4 102.6 429.8 98.4 428.2 94.5 429.3 89.1 428.2 88.3 429.2 80.3 431.3 75.8 435.1 76.3 438.7 74.5 441.7 71.1 442.2 68.1 443.6 67.7 444.5 61.2 450.0 59.8 464.1 45.3 473.8 45.1 479.5 46.4 485.8 41.6 492.9 41.9 497.2 40.4 499.7 44.5 497.7 45.1 507.1 51.5 511.4 52.5 516.8 50.8 521.3 52.1 527.4 51.6 533.0 46.6 527.5 46.1 525.0 41.2 521.1 38.3 525.6 35.2 526.8 36.8 538.2 37.7 542.1 39.9 534.2 45.6 534.5 47.5 536.7 48.1 546.7 45.9 560.9 45.3 569.2 45.6 567.5 47.1 572.7 46.2 578.3 48.2 586.3 45.4 596.3 48.2 603.1 48.0 605.4 43.5 609.1 43.0 603.9 39.3 598.2 40.9 595.0 40.2 586.5 36.2 587.6 33.9 599.2 27.0 616.9 25.4 623.5 22.2 625.0 23.8 629.4 20.7 631.7 21.1 633.6 23.5 645.2 20.9 655.4 21.5 656.4 20.1 655.8 18.4 646.5 19.1 640.0 16.4 625.7 17.0 622.7 18.5 619.7 15.9 620.4 14.6 618.9 13.3 615.3 14.4 617.7 12.2 615.8 9.9 601.7 1.4 600.5 -2.3 603.7 -5.8 605.4 -10.7 604.1 -11.6 607.8 -16.1 613.9 -18.3 637.1 -13.6 660.0 -11.1 660.0 362.8ZM514.9 40.6 516.4 37.6 518.4 38.4 518.1 40.5 519.4 41.8 514.9 40.6ZM571.1 33.3 572.9 33.7 571.1 37.2 571.4 34.6 571.1 33.3ZM517.5 31.7 512.2 30.2 511.9 26.6 517.9 25.6 523.7 27.1 524.0 28.5 517.5 31.7ZM607.1 12.7 606.7 10.2 607.8 9.8 607.1 12.7Z";
+const GR_W=600,GR_H=494;
+const GR_STATIC='<defs><clipPath id="grclip"><rect width="'+GR_W+'" height="'+GR_H+'"/></clipPath></defs><g clip-path="url(#grclip)"><rect width="'+GR_W+'" height="'+GR_H+'" fill="#a9d0e0"/><path d="'+GR_LAND+'" fill="#efe3c2" stroke="#8a7a5e" stroke-width=".9" stroke-linejoin="round"/></g>'
+ +'<text x="400" y="330" text-anchor="middle" class="sea">ÉGEI-TENGER</text><text x="250" y="425" text-anchor="middle" class="sea">Földközi-tenger</text>'
+ +'<text x="150" y="170" text-anchor="middle" class="cn">Hellász</text>'
+ +'<g transform="translate(60 '+(GR_H-70)+')"><path d="M0 -14 L6 4 L0 0 L-6 4 Z" fill="#5a4a36"/><text y="18" text-anchor="middle" class="nt">É</text></g>'
+ +'<g transform="translate(20 '+(GR_H-22)+')"><rect width="68.4" height="5" fill="#5a4a36"/><rect x="34.2" width="34.2" height="5" fill="#efe3c2" stroke="#5a4a36" stroke-width=".8"/><text x="0" y="-5" class="nt" style="font-weight:400">0</text><text x="68.4" y="-5" text-anchor="middle" class="nt" style="font-weight:400">100 km</text></g>';
+const HR={};Object.entries(PTS).forEach(([k,[x,y]])=>{let m=1e9;Object.entries(PTS).forEach(([j,[u,v]])=>{if(j!==k)m=Math.min(m,Math.hypot(x-u,y-v));});HR[k]=Math.min(42,Math.floor(m/2)-1);});
+function mapSVG(ok){
+ return `<svg viewBox="0 0 ${GR_W} ${GR_H}" role="img" aria-label="Hellász és az Égei-tenger vázlattérképe, betűkkel jelölt helyszínekkel"><style>.sea{font:italic 600 13px Spectral,Georgia,serif;fill:#3f7596;letter-spacing:.12em}.cn{font:italic 13px Spectral,Georgia,serif;fill:#7a6a4e}.rv{font:italic 12px Spectral,Georgia,serif;fill:#3f7596}.ct{font:600 12px 'Public Sans',sans-serif;fill:#3b2f22}.nt{font:600 11px 'Public Sans',sans-serif;fill:#5a4a36}</style>${GR_STATIC}
+ ${Object.entries(PTS).map(([k,[x,y]])=>`<g class="pt${ok.includes(k)?' ok':''}" data-p="${k}" tabindex="0" role="button" aria-label="${k} jelű helyszín"><circle class="hit" cx="${x}" cy="${y}" r="${COARSE?HR[k]:20}"/><circle cx="${x}" cy="${y}" r="${COARSE?17:12}"/><text x="${x}" y="${y+(COARSE?6:4.5)}" text-anchor="middle" style="${COARSE?'font-size:18px':''}">${k}</text></g>`).join('')}
+ </svg>`;
+}
+function mapModal(onDone,QS=MAP_Q){
+ const render=()=>{
+  const i=S.qi.terkep||0,q=QS[i],ok=QS.slice(0,i).map(x=>x.a);
+  openModal(`<p class="cat">${CAT.terkep}, ${i+1}/${QS.length}. kérdés</p><h2>Hellász és az Égei-tenger</h2><div class="mapgrid"><div class="mapwrap">${mapSVG(ok)}</div><div>
+  <p class="note">Tudáspróba-vázlattérkép: a partvonalak valódi koordináták alapján készültek (Natural Earth, közkincs); a mai partvonal látható, a poliszok helye közelítő.</p>
+  <p><b>${q.q}</b></p><p class="msg" aria-live="polite"></p></div></div><div class="actions">${hintBtnHTML()}<button data-close>Később</button></div>`,'panel wide');
+  const msg=mbox.querySelector('.msg');let solved=false;
+  const choose=p=>{if(solved)return;
+   if(p===q.a){solved=true;mbox.querySelector(`.pt[data-p="${p}"]`).classList.add('ok');msg.className='msg ok';msg.textContent='Helyes. '+q.why;S.qi.terkep=i+1;
+    if(i+1<QS.length)finishBtn('Következő kérdés',render);else finishBtn('Tovább',()=>{closeModal();onDone();});}
+   else{miss('terkep');msg.className='msg bad';msg.textContent=`A(z) ${p} jelű pont nem ez a helyszín. Tájékozódj az Égei-tenger, Attika és a Peloponnészosz alapján.`;}};
+  const hb=mbox.querySelector('[data-hint]');hb.onclick=()=>{const wr=[...mbox.querySelectorAll('.pt')].filter(g=>g.dataset.p!==q.a&&!g.classList.contains('off'));shuffle(wr).slice(0,Math.max(0,wr.length-3)).forEach(g=>{g.classList.add('off');g.setAttribute('tabindex','-1');});modalHint();hb.remove();msg.className='msg';msg.textContent='Segítség: a játék kizárt néhány helyszínt, négy lehetőség maradt.';};
+  mbox.querySelectorAll('.pt').forEach(g=>{g.onclick=()=>{if(!g.classList.contains('off'))choose(g.dataset.p);};g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(g.dataset.p);}};});
+  mbox.querySelector('[data-close]').onclick=closeModal;
+ };
+ render();
+}
+
+/* ================= 3D JELENET ================= */
+const renderer=new THREE.WebGLRenderer({canvas,antialias:!LOW,powerPreference:'high-performance'});
+let PR=Math.min(window.devicePixelRatio||1,LOW?1.5:2);renderer.setPixelRatio(PR);
+renderer.outputEncoding=THREE.sRGBEncoding;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xbcd8ee);
+const camera=new THREE.PerspectiveCamera(70,1,.05,260);camera.rotation.order='YXZ';
+function resize(){renderer.setSize(innerWidth,innerHeight,false);const a=innerWidth/innerHeight;camera.aspect=a;camera.fov=a<1?clamp(2*Math.atan(Math.tan(37.5*Math.PI/180)/a)*180/Math.PI,70,90):70;camera.updateProjectionMatrix();}
+addEventListener('resize',resize);resize();
+
+function cnv(w,h,draw){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);return c;}
+function tex(c,rx,ry){const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=LOW?1:4;if(rx){t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rx,ry);}return t;}
+const M=(c,o={})=>{const m=new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.8,metalness:0},o));m.color.convertSRGBToLinear();m.emissive.convertSRGBToLinear();return m;};
+function B(w,h,d,m,x,y,z,p=scene){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(x,y,z);p.add(o);return o;}
+function P(w,h,m,x,y,z,ry=0,rx=0,p=scene){const o=new THREE.Mesh(new THREE.PlaneGeometry(w,h),m);o.position.set(x,y,z);o.rotation.set(rx,ry,0);p.add(o);return o;}
+function tag(o,act,label){o.traverse(m=>{if(m.isMesh){m.userData.act=act;m.userData.label=label;}});return o;}
+const books=[];
+
+function build(){
+ const serif="'Spectral', Georgia, serif";
+ const marble=M(0xf0e9d6,{roughness:.7}),marbleD=M(0xd8ceb2,{roughness:.8}),stoneM=M(0xc9bd9d,{roughness:.9}),wood=M(0x6a3c1f,{roughness:.55}),darkw=M(0x3d2a17,{roughness:.75}),
+  bronze=M(0x9c6b2e,{metalness:.5,roughness:.45}),terra=M(0xb5673a,{roughness:.85}),wash=M(0xf1e9da,{roughness:.95}),leafM=M(0x5f7a3c,{roughness:.9}),bark=M(0x7f705b,{roughness:.95}),
+  linen=M(0xece2c6,{roughness:.95}),rock=M(0xa8987c,{roughness:1}),olive=M(0x8a8a54,{roughness:1}),skin=M(0xc99a72,{roughness:.8});
+ const cyl=(rt,rb,h,m,x,y,z,p=scene,seg=14)=>{const o=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,LOW?Math.min(seg,10):seg),m);o.position.set(x,y,z);p.add(o);return o;};
+ const ball=(r,m,x,y,z,p=scene,ws=12,hs=10)=>{const o=new THREE.Mesh(new THREE.SphereGeometry(r,LOW?Math.min(ws,8):ws,LOW?Math.min(hs,6):hs),m);o.position.set(x,y,z);p.add(o);return o;};
+ function glyphs(g,x,y,w,h,col){g.fillStyle=col;const n=Math.floor(h/7);for(let i=0;i<n;i++){let cx=x;while(cx<x+w-6){const lw=6+Math.random()*22;if(cx+lw>x+w)break;g.fillRect(cx,y+i*7+2,lw,2);cx+=lw+4;}}}
+
+ /* Ég és köd */
+ scene.fog=new THREE.Fog(0xdde8ee,45,150);
+ const skyC=cnv(8,256,(g,w,h)=>{const gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,'#5d9bd0');gr.addColorStop(.55,'#a9d0ea');gr.addColorStop(.85,'#e6eef0');gr.addColorStop(1,'#efe6cf');g.fillStyle=gr;g.fillRect(0,0,w,h);});
+ const sky=new THREE.Mesh(new THREE.SphereGeometry(190,16,12),new THREE.MeshBasicMaterial({map:tex(skyC),side:THREE.BackSide,fog:false}));sky.position.y=-10;scene.add(sky);
+
+ /* Talaj: száraz fű, az agóra döngölt földje és kőlapjai */
+ const dirtC=cnv(256,256,(g,w,h)=>{g.fillStyle='#b9a478';g.fillRect(0,0,w,h);for(let i=0;i<2600;i++){const v=Math.random()*30-15;g.fillStyle=`rgba(${140+v},${115+v},${75+v},.5)`;g.fillRect(Math.random()*w,Math.random()*h,3,2);}
+  g.strokeStyle='rgba(90,70,40,.18)';g.lineWidth=1.5;for(let i=0;i<=4;i++){g.beginPath();g.moveTo(i*64,0);g.lineTo(i*64,h);g.stroke();g.beginPath();g.moveTo(0,i*64);g.lineTo(w,i*64);g.stroke();}});
+ const grassC=cnv(128,128,(g,w,h)=>{g.fillStyle='#9a9560';g.fillRect(0,0,w,h);for(let i=0;i<900;i++){const v=Math.random()*40-20;g.fillStyle=`rgba(${130+v},${130+v},${70+v*.5},.6)`;g.fillRect(Math.random()*w,Math.random()*h,2,3);}});
+ const ground=P(520,520,M(0xffffff,{map:tex(grassC,60,60),roughness:1}),0,-.02,0,0,-Math.PI/2);
+ const plaza=P(22,19.6,M(0xffffff,{map:tex(dirtC,7,6),roughness:1}),0,0,-.4,0,-Math.PI/2);plaza.userData.floor=true;
+
+ /* Királyi Sztoa (északi oldal) */
+ B(21.4,.28,2.9,marbleD,0,.14,-9.15);
+ B(21,3.9,.3,wash,0,2.2,-10.5);
+ const muralC=cnv(512,128,(g,w,h)=>{g.fillStyle='#e8dcc2';g.fillRect(0,0,w,h);const cols=['#a8442a','#2f5f8a','#c9a13b','#5e7a3c','#7a3a5a'];for(let i=0;i<9;i++){g.fillStyle=cols[i%5];g.fillRect(14+i*55,34,30,70);g.beginPath();g.arc(29+i*55,24,11,0,7);g.fill();}g.strokeStyle='#8a2a2a';g.lineWidth=4;g.strokeRect(2,2,w-4,h-4);});
+ P(8.4,1.4,M(0xffffff,{map:tex(muralC),roughness:1}),-6.2,2.45,-10.33);P(5.2,1.4,M(0xffffff,{map:tex(muralC),roughness:1}),-0.6,2.45,-10.33);P(3.8,1.4,M(0xffffff,{map:tex(muralC),roughness:1}),8.1,2.45,-10.33);
+ for(let i=0;i<9;i++){const x=-10+i*2.5;cyl(.27,.33,3.3,marble,x,1.93,-8.0,scene,14);B(.8,.2,.8,marble,x,3.68,-8.0);B(.9,.12,.9,marbleD,x,.34,-8.0);}
+ B(21.2,.4,.75,marble,0,3.98,-8.0);
+ for(let i=0;i<22;i++)B(.3,.3,.04,M(0xc9a13b,{metalness:.2}),-10+i*.95,3.98,-7.62);
+ B(21.8,.28,3.4,terra,0,4.32,-9.1);B(21.8,.16,.2,marbleD,0,4.5,-9.1);
+ B(.16,.4,3.3,marble,-10.8,4.0,-9.1);B(.16,.4,3.3,marble,10.8,4.0,-9.1);
+
+ /* Láda a Sztoában */
+ const chestW=M(0x7a4524,{roughness:.5});
+ B(1.0,.46,.6,chestW,-6,.51,-9.3);B(.1,.05,.64,bronze,-6.35,.45,-9.3);B(.1,.05,.64,bronze,-5.65,.45,-9.3);
+ const lid=B(1.06,.1,.66,chestW,-6,.79,-9.3);B(.1,.03,.68,bronze,-.3,.065,0,lid);
+ B(1.1,.04,.04,bronze,-6,.8,-8.98);
+ const tube=cyl(.17,.17,.03,M(0xc9922f,{metalness:.55,roughness:.3,emissive:0x3a2400}),-6.3,.77,-9.3,scene,18);tube.visible=false;
+ tag(lid,'drawer','Láda');[...scene.children].filter(o=>o.isMesh&&o.position.x>-6.6&&o.position.x<-5.4&&o.position.z<-8.6&&o.position.z>-10&&o!==lid&&o!==tube&&o.position.y<1).forEach(o=>tag(o,'drawer','Láda'));
+ tag(tube,'tube','Bronz szavazókorong');
+ /* Térképtábla */
+ const mapC=cnv(600,494,(g,w,h)=>{g.fillStyle='#a9d0e0';g.fillRect(0,0,w,h);g.fillStyle='#efe3c2';g.fill(new Path2D(GR_LAND));g.strokeStyle='#8a7a5e';g.lineWidth=1;g.stroke(new Path2D(GR_LAND));g.fillStyle='rgba(122,42,34,.9)';Object.values(PTS).forEach(([x,y])=>{g.beginPath();g.arc(x,y,10,0,7);g.fill();});g.fillStyle='#3b2f22';g.font='600 30px '+serif;g.textAlign='center';g.fillText('VÁZLATTÉRKÉP',w/2,40);});
+ B(1.6,1.2,.05,darkw,3.75,1.95,-10.33);
+ const mapP=tag(P(1.46,1.06,M(0xffffff,{map:tex(mapC),roughness:.9}),3.75,1.95,-10.295),'map','Térképtábla');
+ /* Szavazókorongok kosara (flavor) */
+ B(.9,.55,.5,stoneM,-3.4,.55,-7.2);cyl(.28,.22,.2,M(0x8a6a3a),-3.4,.93,-7.2,scene,12);
+ const discM=M(0xa9792f,{metalness:.55,roughness:.35});for(let i=0;i<7;i++)cyl(.07,.07,.015,discM,-3.4+(i%3-1)*.1,1.04+Math.floor(i/3)*.012,-7.2+((i*5)%3-1)*.08,scene,12);
+ [...scene.children].filter(o=>o.isMesh&&Math.abs(o.position.x+3.4)<.4&&Math.abs(o.position.z+7.2)<.4).forEach(o=>tag(o,'papyrus','Szavazókorongok'));
+
+ /* Hermaoszlop viaszostáblával (a kezdőpont közelében) */
+ const herm=new THREE.Group();herm.position.set(-2.4,0,3.3);scene.add(herm);
+ B(.42,1.05,.42,stoneM,0,.525,0,herm);ball(.17,skin,0,1.25,0,herm);B(.2,.12,.18,M(0x4a3a2a),0,1.1,.08,herm);
+ const lt=new THREE.Group();lt.position.set(0,1.12,0);herm.add(lt);
+ B(.3,.02,.22,wood,-.16,0,0,lt);B(.3,.02,.22,wood,.16,0,0,lt);B(.26,.015,.18,M(0xd6c188),-.16,.015,0,lt);B(.26,.015,.18,M(0xd6c188),.16,.015,0,lt);
+ lt.position.y=1.08;lt.scale.set(1.3,1.3,1.3);tag(herm,'letter','Viaszostábla');
+
+ /* Eponümosz hősök emlékműve (idővonal) */
+ B(1.1,.4,6.4,stoneM,9.4,.2,0.8);
+ for(let i=0;i<10;i++){const z=-1.9+i*.64;const f=new THREE.Group();f.position.set(9.4,.4,z);scene.add(f);cyl(.07,.1,.7,bronze,0,.35,0,f,8);ball(.08,bronze,0,.8,0,f,8,6);B(.05,.04,.28,bronze,.12,.55,0,f);}
+ const boardC=cnv(320,256,(g,w,h)=>{g.fillStyle='#6a4a2a';g.fillRect(0,0,w,h);g.fillStyle='#e6d9b6';g.fillRect(10,10,w-20,h-20);
+  g.fillStyle='#cdb98a';for(let r=0;r<6;r++){g.fillRect(24,24+r*34,w-140,26);}g.strokeStyle='#8a6234';g.lineWidth=2;for(let r=0;r<6;r++){g.strokeRect(24,24+r*34,w-140,26);}
+  g.beginPath();g.arc(w-56,h/2,34,0,7);g.fillStyle='#4a3318';g.fill();g.strokeStyle='#a9792f';g.lineWidth=3;g.stroke();g.fillStyle='#e6d9b6';g.font='600 13px '+serif;g.textAlign='center';g.fillText('korong',w-56,h/2+4);});
+ const boardTex=tex(boardC);const radFront=M(0xffffff,{map:boardTex,roughness:.6,emissive:0x000000,emissiveMap:boardTex});
+ const wd=M(0x5a3d22,{roughness:.7});
+ const radio=new THREE.Mesh(new THREE.BoxGeometry(.08,.9,1.7),[wd,radFront,wd,wd,wd,wd]);radio.position.set(8.6,1.05,.8);scene.add(radio);
+ B(.08,.7,.08,wd,8.6,.35,-.0);B(.08,.7,.08,wd,8.6,.35,1.6);
+ tag(radio,'radio','Időrendi tábla');
+
+ /* Hermák sora (személyek) */
+ const gal=new THREE.Group();scene.add(gal);
+ B(.7,.1,5.6,marbleD,-6.8,.05,3.6,gal);
+ for(let i=0;i<6;i++){const z=1.2+i*.92;B(.3,1.15,.3,stoneM,-6.8,.675,z,gal);ball(.15,i%2?skin:M(0xb98a64,{roughness:.8}),-6.8,1.45,z,gal);B(.2,.14,.12,M(0x4a3a2a),-6.68,1.34,z,gal);B(.2,.05,.02,M(0xe6d9b6),-6.64,.9,z,gal);}
+ tag(gal,'album','Hermák sora');
+
+ /* Sztélé (forrás) */
+ const stC=cnv(256,512,(g,w,h)=>{g.fillStyle='#e4dcc8';g.fillRect(0,0,w,h);for(let i=0;i<500;i++){g.fillStyle='rgba(120,110,90,.07)';g.fillRect(Math.random()*w,Math.random()*h,3,2);}glyphs(g,24,50,w-48,h-100,'rgba(70,58,40,.75)');g.fillStyle='#8a6234';g.fillRect(24,24,w-48,6);});
+ const tape=new THREE.Group();tape.position.set(-1.2,0,-4.5);scene.add(tape);
+ B(1.2,.2,.5,stoneM,0,.1,0,tape);B(.9,1.9,.2,marble,0,1.15,0,tape);P(.8,1.7,M(0xffffff,{map:tex(stC),roughness:.8}),0,1.15,.105,0,0,tape);B(1.0,.15,.3,marble,0,2.18,0,tape);
+ tag(tape,'tape','Sztélé');
+
+ /* Iratállvány (tanács): viaszostáblák */
+ const rackW=M(0x6b4a2a,{roughness:.7});
+ B(.1,2.0,2.35,darkw,-10.0,1.0,-1.0);B(.55,2.0,.08,darkw,-9.75,1.0,-2.18);B(.55,2.0,.08,darkw,-9.75,1.0,.18);
+ [.36,.91,1.46,2.0].forEach(y=>B(.55,.04,2.3,rackW,-9.75,y,-1.0));
+ const rowY=[.455,1.005,1.555];
+ function tabTex(kind,txt){return cnv(192,132,(g,w,h)=>{g.fillStyle='#7a5a34';g.fillRect(0,0,w,h);g.fillStyle='rgba(0,0,0,.15)';for(let i=0;i<40;i++)g.fillRect(Math.random()*w,Math.random()*h,20,1);
+  g.fillStyle='#d6c188';g.fillRect(14,12,w-28,h-24);g.strokeStyle='#5a3d22';g.lineWidth=3;g.strokeRect(14,12,w-28,h-24);g.fillStyle='#2b241b';g.textAlign='center';
+  if(kind==='year'){g.font='600 17px '+serif;g.fillText('szavazat',w/2,42);g.font='600 48px '+serif;g.fillText(String(txt),w/2,96);}
+  else if(kind==='lex'){g.font='600 29px '+serif;g.fillText('Fogalmak',w/2,80);}
+  else glyphs(g,26,44,w-52,44,'#4a3a22');});}
+ const side=M(0x6b4a2a,{roughness:.8});
+ const special={'1,1':['lex'],'1,4':['year',5000],'1,5':['year',6000],'1,7':['year',600],'0,2':['year',500]};
+ let lexMesh=null,key6000=null;
+ rowY.forEach((y,r)=>{for(let c=0;c<10;c++){const z=-2.0+c*.19,sp=special[r+','+c];
+   const fm2=M(0xffffff,{map:tex(tabTex(sp?sp[0]:'glyph',sp?sp[1]:0)),roughness:.7});
+   const cs=new THREE.Mesh(new THREE.BoxGeometry(.5,.11,.16),[fm2,side,side,side,side,side]);
+   cs.position.set(-9.7,y,z);scene.add(cs);
+   if(sp&&sp[0]==='year'){cs.userData.x0=cs.position.x;cs.userData.year=sp[1];tag(cs,'book','Viaszostábla: '+sp[1]);if(sp[1]===6000)key6000=cs;}
+   else if(sp){tag(cs,'shelf','Iratállvány: fogalmak');lexMesh=cs;}
+   else tag(cs,'shelf','Iratállvány');}});
+ const lex=lexMesh;
+
+ /* Levéltári kamra (kulcs, jegyzőkönyv) */
+ const hw=M(0xf1e9da,{roughness:.95});
+ const bx=7.6;
+ const kamra=[];
+ kamra.push(B(3.4,2.7,.16,hw,bx,1.35,-5.9));kamra.push(B(.16,2.7,2.2,hw,bx-1.7,1.35,-4.85));kamra.push(B(.16,2.7,2.2,hw,bx+1.7,1.35,-4.85));
+ kamra.push(B(1.15,2.7,.16,hw,bx-1.125,1.35,-3.85));kamra.push(B(1.15,2.7,.16,hw,bx+1.125,1.35,-3.85));kamra.push(B(1.1,.6,.16,hw,bx,2.4,-3.85));
+ kamra.push(B(3.7,.2,2.6,terra,bx,2.8,-4.85));kamra.push(B(3.4,.04,2.3,stoneM,bx,.02,-4.85));
+ B(.12,2.2,.12,darkw,bx-.58,1.1,-3.85);B(.12,2.2,.12,darkw,bx+.58,1.1,-3.85);B(1.28,.1,.12,darkw,bx,2.18,-3.85);
+ const doorArt=cnv(128,320,(g,w,h)=>{g.fillStyle='#6b4a2b';g.fillRect(0,0,w,h);for(let x=0;x<w;x+=21){g.fillStyle=(x/21)%2?'rgba(60,35,15,.25)':'rgba(220,170,110,.12)';g.fillRect(x,0,20,h);}g.strokeStyle='#a9792f';g.lineWidth=3;g.strokeRect(6,6,w-12,h-12);});
+ const doorMat=M(0xffffff,{map:tex(doorArt),roughness:.55});
+ function vdoor(sign){const g=new THREE.Group();g.position.set(sign>0?bx-.55:bx+.55,0,-3.85);scene.add(g);const cx=.275*sign;
+  const dm=new THREE.Mesh(new THREE.BoxGeometry(.55,2.1,.05),[wood,wood,wood,wood,doorMat,wood]);dm.position.set(cx,1.07,0);g.add(dm);cyl(.02,.02,.06,bronze,cx*1.7,1.0,.04,g,8);return g;}
+ const vl=vdoor(1),vr=vdoor(-1);
+ [vl,vr].forEach(g=>tag(g,'vitrin','Levéltári kamra'));kamra.forEach(o=>tag(o,'vitrin','Levéltári kamra'));
+ B(1.1,.7,.55,wood,bx,.35,-5.15);B(.9,.04,.4,M(0x8a6234),bx+.9,.9,-5.5);
+ const dg=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,.4,12),M(0xe3cf95,{roughness:.9}));dg.rotation.z=Math.PI/2;dg.position.set(bx,.78,-5.05);scene.add(dg);const diary=dg;tag(diary,'diary','Az arkhón jegyzőkönyve');
+ B(.03,.14,.03,bronze,bx-.22,.78,-5.05);B(.03,.14,.03,bronze,bx+.22,.78,-5.05);
+
+ /* Hírnökoszlop */
+ const tvg=new THREE.Group();tvg.position.set(2.5,0,4.7);scene.add(tvg);
+ cyl(.3,.34,.25,marbleD,0,.125,0,tvg,16);cyl(.2,.22,2.1,marble,0,1.3,0,tvg,16);cyl(.26,.2,.18,marbleD,0,2.44,0,tvg,16);
+ [0,2.1,4.2].forEach(a=>{const n=P(.34,.46,M(0xffffff,{map:tex(cnv(128,170,(g,w,h)=>{g.fillStyle='#ecdfba';g.fillRect(0,0,w,h);glyphs(g,12,18,w-24,h-36,'rgba(45,34,20,.8)');})),roughness:1,side:THREE.DoubleSide}),Math.sin(a)*.215,1.5,Math.cos(a)*.215,a);});
+ tag(tvg,'tv','Hírnökoszlop');
+
+ /* Kapu (a Pnüx felé) */
+ const gz=8.6;
+ B(.55,3.1,.55,marble,-.95,1.55,gz);B(.55,3.1,.55,marble,.95,1.55,gz);B(2.8,.4,.7,marble,0,3.3,gz);B(3.0,.18,.8,marbleD,0,3.57,gz);
+ B(9.9,2.4,.4,wash,-6.15,1.2,gz);B(9.9,2.4,.4,wash,6.15,1.2,gz);B(9.9,.12,.55,marbleD,-6.15,2.46,gz);B(9.9,.12,.55,marbleD,6.15,2.46,gz);
+ const gateMat=M(0xffffff,{map:tex(cnv(128,256,(g,w,h)=>{g.fillStyle='#7a5430';g.fillRect(0,0,w,h);for(let x=0;x<w;x+=21){g.fillStyle=(x/21)%2?'rgba(60,35,15,.25)':'rgba(220,170,110,.15)';g.fillRect(x,0,20,h);g.fillStyle='rgba(30,15,5,.5)';g.fillRect(x+20,0,1.5,h);}g.fillStyle='#a9792f';g.fillRect(0,60,w,8);g.fillRect(0,190,w,8);})),roughness:.6});
+ const doorP=new THREE.Group();doorP.position.set(-.67,0,gz-.05);scene.add(doorP);
+ const l1=new THREE.Mesh(new THREE.BoxGeometry(.67,2.9,.1),gateMat);l1.position.set(.335,1.45,0);doorP.add(l1);
+ const doorP2=new THREE.Group();doorP2.position.set(.67,0,gz-.05);scene.add(doorP2);
+ const l2=new THREE.Mesh(new THREE.BoxGeometry(.67,2.9,.1),gateMat);l2.position.set(-.335,1.45,0);doorP2.add(l2);
+ tag(doorP,'door','Az agóra kapuja');tag(doorP2,'door','Az agóra kapuja');
+ const kpC=cnv(128,160,(g,w,h)=>{g.fillStyle='#3d2a17';g.fillRect(0,0,w,h);g.strokeStyle='#a9792f';g.lineWidth=4;g.strokeRect(6,6,w-12,h-12);g.fillStyle='#a9792f';for(let r=0;r<3;r++)for(let c=0;c<3;c++){g.beginPath();g.arc(30+c*34,40+r*30,9,0,7);g.fill();}g.font='600 16px '+serif;g.textAlign='center';g.fillText('záró-pecsét',w/2,h-14);});
+ const keypad=tag(P(.34,.42,M(0xffffff,{map:tex(kpC),roughness:.6}),.95,1.5,gz-.29,Math.PI),'door','A kapu zárja');
+ /* az úton túl: a Pnüx dombja */
+ P(7,40,M(0xd9c79a,{roughness:1}),0,.01,gz+21,0,-Math.PI/2);
+ const pnyx=cyl(24,44,15,olive,0,7,gz+62,scene,18);
+ for(let i=0;i<5;i++){const t=cyl(10+i*2.2,10.6+i*2.2,.6,rock,0,14.6+i*.6,gz+50-i*.0,scene,24);t.scale.set(1,1,.5);t.position.z=gz+52+i*1.6;}
+ B(3,1.2,2,rock,0,15.5,gz+49);
+
+ /* Palánk a cserépszavazás helyén (flavor) */
+ const pal=new THREE.Group();pal.position.set(3.7,0,-2.8);scene.add(pal);
+ for(let i=0;i<14;i++){const a=i/14*Math.PI*2;if(Math.abs(a-Math.PI/2)<.4)continue;cyl(.05,.05,1.15,wood,Math.cos(a)*1.55,.57,Math.sin(a)*1.55,pal,6);}
+ [.5,.95].forEach(y=>{const r=new THREE.Mesh(new THREE.TorusGeometry(1.55,.03,5,LOW?16:28,Math.PI*2-.8),wood);r.rotation.x=Math.PI/2;r.rotation.z=Math.PI/2+.4;r.position.y=y;pal.add(r);});
+ for(let i=0;i<46;i++){const a=Math.random()*6.28,d=Math.random()*1.1;const o=B(.16,.025,.12,terra,Math.cos(a)*d,.04+Math.random()*.06,Math.sin(a)*d,pal);o.rotation.set(Math.random()*.4,Math.random()*3,Math.random()*.4);}
+ tag(pal,'altar','Cserépszavazás helye (palánk)');
+
+ /* Színházi maszk és napidíj-láda (flavor) */
+ const mk=new THREE.Group();mk.position.set(5.6,0,5.6);scene.add(mk);cyl(.18,.22,1.0,stoneM,0,.5,0,mk,12);
+ const mask=ball(.2,M(0xe6d9b6,{roughness:.8}),0,1.25,0,mk,12,10);mask.scale.set(1,1.2,.5);B(.07,.05,.04,M(0x222222),-.07,1.3,.1,mk);B(.07,.05,.04,M(0x222222),.07,1.3,.1,mk);B(.12,.04,.04,M(0x222222),0,1.15,.1,mk);
+ tag(mk,'usebti','Színházi maszk');
+ const pc=new THREE.Group();pc.position.set(-5.2,0,6.8);scene.add(pc);
+ B(.8,.45,.5,chestW,0,.225,0,pc);B(.82,.12,.52,chestW,0,.5,0,pc);B(.84,.05,.1,bronze,0,.3,.22,pc);B(.84,.05,.1,bronze,0,.3,-.22,pc);
+ tag(pc,'palette','Napidíj (pénzesláda)');
+
+ /* Díszek: tizenkét isten oltára, szökőkút-ház, fák, polgárok */
+ B(1.8,.5,1.8,stoneM,0,.25,-0.2);B(1.4,.18,1.4,marbleD,0,.59,-0.2);B(.6,.5,.6,marble,0,.93,-0.2);cyl(.1,.14,.3,M(0xd9a441,{emissive:0x6a3a00}),0,1.33,-0.2,scene,8);
+ function tree(x,z,s){const t=new THREE.Group();t.position.set(x,0,z);scene.add(t);cyl(.2*s,.3*s,3.1*s,bark,0,1.55*s,0,t,8);[[0,3.7,0,1.9],[1.0,3.3,.4,1.4],[-1.0,3.4,-.3,1.5],[.2,4.5,-.6,1.3]].forEach(([a,b,c,r])=>ball(r*s,leafM,a*s,b*s,c*s,t,9,7));return t;}
+ tree(-8.6,6.2,1);tree(8.9,6.6,1.1);tree(-5.6,-4.3,1.05);tree(5.9,-6.9,.95);tree(-9.3,-5.0,1);
+ function person(x,z,col,ry,tall=1){const g=new THREE.Group();g.position.set(x,0,z);g.rotation.y=ry;scene.add(g);cyl(.2*tall,.28*tall,1.15*tall,M(col,{roughness:.9}),0,.8*tall,0,g,10);ball(.13*tall,skin,0,1.6*tall,0,g,10,8);cyl(.04,.04,.7*tall,M(col,{roughness:.9}),.26*tall,1.0*tall,.04,g,6);return g;}
+ [[-5.2,.9,0x8a6a4a,.6],[1.2,-1.2,0xb08a5a,2.2],[-1.8,-6.1,0x6a7a8a,1.0],[5.6,2.6,0xc9b48a,-1.2],[-8.0,-4.2,0x7a5a4a,.4],[-3.0,7.3,0x8a8a6a,3.0],[-6.3,-6.0,0x9a7a5a,-.3]].forEach(([x,z,c,r])=>person(x,z,c,r));
+
+ /* Távoli látvány: Akropolisz a Parthenónnal, Areioszpagosz, hegyek */
+ const acro=cyl(26,36,24,rock,42,12,-56,scene,18);acro.scale.set(1,1,.8);
+ const par=new THREE.Group();par.position.set(42,24.4,-56);scene.add(par);
+ B(33,.9,15,marble,0,.45,0,par);
+ const pcols=[];for(let i=0;i<16;i++){pcols.push([-14.6+i*1.95,-6.4]);pcols.push([-14.6+i*1.95,6.4]);}for(let j=1;j<6;j++){pcols.push([-14.6,-6.4+j*2.56]);pcols.push([14.6,-6.4+j*2.56]);}
+ pcols.forEach(([x,z])=>cyl(.55,.62,6.4,marble,x,4.3,z,par,8));
+ B(32,.9,13.6,marbleD,0,7.9,0,par);B(33,.5,15,marble,0,8.6,0,par);
+ const tri=new THREE.Shape();tri.moveTo(-7.5,0);tri.lineTo(7.5,0);tri.lineTo(0,2.6);tri.closePath();
+ const gab=new THREE.Mesh(new THREE.ExtrudeGeometry(tri,{depth:32,bevelEnabled:false}),terra);gab.rotation.y=Math.PI/2;gab.position.set(-16,8.8,0);par.add(gab);
+ const areo=cyl(10,17,9,rock,-44,4.2,-14,scene,12);areo.scale.set(1,1,1.2);
+ [[-110,-120,60,40],[0,-150,80,36],[120,-110,70,34],[-150,-30,55,26],[150,0,60,28]].forEach(([x,z,r,h])=>{const m=cyl(1,r,h,M(0x9aa6b4,{roughness:1}),x,h/2-4,z,scene,10);});
+
+ /* Fények */
+ scene.add(new THREE.HemisphereLight(0xcfe5ff,0xb89d6c,.95));
+ const sun=new THREE.DirectionalLight(0xfff1d6,.95);sun.position.set(-10,22,12);scene.add(sun);
+
+ return {doorP,doorP2,drawer:lid,tube,vl,vr,radFront,radLight:null,letter:lt,radio,tv:tvg,album:gal,tape,map:mapP,lex,diary,keypad,book1830:key6000};
+}
+
+
+/* ================= MOZGÁS, VEZÉRLÉS ================= */
+const pos={x:-.2,z:4.6};let yaw=.35,pitch=-.06,walkT=null;
+const OB=[[-3.1,-1.7,2.9,3.7],[-7.2,-6.4,.9,6.1],[8.4,10.6,-2.4,4.1],[-10.6,-9.1,-2.3,.3],[5.5,9.5,-6.2,-3.5],[-2.1,-.3,-4.9,-4.1],[2.1,5.3,-4.4,-1.1],[-1.0,1.0,-1.1,.7],[2.1,2.9,4.3,5.1],[-6.5,-5.5,-9.9,-8.6],[-4.0,-2.8,-7.7,-6.6],[5.2,6.0,5.2,6.0],[-5.7,-4.7,6.4,7.2],
+ ...Array.from({length:9},(_,i)=>[-10.4+i*2.5,-9.6+i*2.5,-8.4,-7.6])];
+function free(x,z){if(x<-10.2||x>10.2||z<-7.3||z>8.0)return false;const r=.22;for(const[a,b,c,d]of OB)if(x>a-r&&x<b+r&&z>c-r&&z<d+r)return false;return true;}
+function tryMove(dx,dz){if(free(pos.x+dx,pos.z+dz)){pos.x+=dx;pos.z+=dz;}}
+
+const keys={};
+addEventListener('keydown',e=>{
+ if(modalOpen){if(e.key==='Escape'&&S.playing&&!S.won)closeModal();else if(codeKeys)codeKeys(e);return;}
+ if(!S.playing)return;
+ keys[e.code]=true;
+ if(e.code==='KeyF'||e.code==='Enter')interact(innerWidth/2,innerHeight/2);
+ if(e.code.startsWith('Arrow'))e.preventDefault();
+});
+addEventListener('keyup',e=>{keys[e.code]=false;});
+
+const ray=new THREE.Raycaster(),ndc=new THREE.Vector2();
+const vis=o=>{while(o){if(!o.visible)return false;o=o.parent;}return true;};
+function pickFloor(x,y){ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,camera);const hs=ray.intersectObjects(scene.children,true);for(const h of hs){if(!vis(h.object))continue;const m=h.object.material;if(m&&!Array.isArray(m)&&m.transparent&&m.opacity<.3)continue;return h.object.userData.floor?h.point:null;}return null;}
+function pick(x,y){ndc.set(x/innerWidth*2-1,-(y/innerHeight)*2+1);ray.setFromCamera(ndc,camera);const hs=ray.intersectObjects(scene.children,true);for(const h of hs){if(!vis(h.object))continue;const m=h.object.material;if(m&&!Array.isArray(m)&&m.transparent&&m.opacity<.3&&!h.object.userData.act)continue;return h.object.userData.act?h:null;}return null;}
+
+let drag=null;
+canvas.addEventListener('pointerdown',e=>{if(!S.playing||modalOpen)return;drag={x:e.clientX,y:e.clientY,moved:0,id:e.pointerId};canvas.setPointerCapture(e.pointerId);canvas.style.cursor='grabbing';});
+canvas.addEventListener('pointermove',e=>{
+ if(drag&&e.pointerId===drag.id){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.moved+=Math.abs(dx)+Math.abs(dy);drag.x=e.clientX;drag.y=e.clientY;yaw+=dx*.0045;pitch=clamp(pitch+dy*.0045,-1.2,1.2);tip.hidden=true;return;}
+ if(e.pointerType==='mouse'&&S.playing&&!modalOpen){const h=pick(e.clientX,e.clientY);if(h){canvas.style.cursor='pointer';tip.textContent=h.object.userData.label;tip.hidden=false;tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY+14)+'px';}else{canvas.style.cursor='grab';tip.hidden=true;}}
+});
+const endDrag=e=>{if(drag&&e.pointerId===drag.id){if(drag.moved<8&&e.type==='pointerup')interact(e.clientX,e.clientY);drag=null;canvas.style.cursor='grab';}};
+canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);
+
+const joy=$('#joy'),knob=$('#knob');let jx=0,jy=0,jid=null;
+function jmove(e){const r=joy.getBoundingClientRect();let dx=(e.clientX-r.left-r.width/2)/(r.width/2),dy=(e.clientY-r.top-r.height/2)/(r.height/2);const l=Math.hypot(dx,dy);if(l>1){dx/=l;dy/=l;}jx=dx;jy=dy;knob.style.transform=`translate(${dx*35}px,${dy*35}px)`;}
+joy.addEventListener('pointerdown',e=>{jid=e.pointerId;joy.setPointerCapture(jid);jmove(e);});
+joy.addEventListener('pointermove',e=>{if(e.pointerId===jid)jmove(e);});
+const jend=e=>{if(e.pointerId===jid){jid=null;jx=jy=0;knob.style.transform='';}};
+joy.addEventListener('pointerup',jend);joy.addEventListener('pointercancel',jend);
+
+const tweens=[];
+function tween(fn,dur,done){tweens.push({t:0,dur,fn,done});}
+
+/* ================= INTERAKCIÓK ================= */
+let W;
+function radioOn(){W.radFront.emissive.setHex(0x6a5230);if(W.radLight)W.radLight.intensity=.8;}
+function interact(x,y){
+ if(!S.playing||modalOpen||S.won)return;
+ let h=pick(x,y);
+ if(!h&&COARSE){for(const r of [14,26]){for(let a=0;a<8&&!h;a++)h=pick(x+Math.cos(a*Math.PI/4)*r,y+Math.sin(a*Math.PI/4)*r);if(h)break;}}
+ if(!h){const f=pickFloor(x,y);if(f)walkT={x:f.x,z:f.z};return;}
+ if(h.distance>3.3){toast('Menj közelebb.');return;}
+ const o=h.object,act=o.userData.act;
+ if(Q){quickInteract(act,o);return;}
+ A[act]&&A[act](o);
+}
+const later='Még nem tudod, mit keress itt. Kövesd a feladatot a bal felső sarokban.';
+const A={
+ letter(){doc(`<p class="date">Athén, az agóra – a cserépszavazás napja</p><p>Ifjú polgártársam!</p>
+  <p>Az arkhónok lezárták az agóra kapuját, amíg a hírnök ki nem hirdeti a cserépszavazás eredményét. A kapu zárját nem erővel, hanem tudással lehet kinyitni: aki érti a polisz rendjét, az a Pnüxre, a népgyűlésre mehet.</p>
+  <p>A téren minden tárgy mást kérdez: éveket, embereket, írást, helyeket, fogalmakat és összefüggéseket. Ha mindegyiket megfejted, a kapu kinyílik.</p><p class="sign">A hírnök</p>
+  <div class="tp"><b>Tudáspróba-cédula.</b> A láda kódja egy Kr. e. évszám: melyik évben kezdődtek Szolón reformjai (adósságelengedés, jövedelemalapú alkotmány)?</div>`,()=>{S.letterRead=true;setGoal();});},
+ papyrus(){toast('Tudáspróba-jegyzet: az esküdtbíróság szavazókorongjai kétfélék voltak, és csak egy apró lyuk különböztette meg őket; a testület hatezer tagú volt.',6400);},
+ altar(){toast('Tudáspróba-jegyzet: a cserépszavazáson a polgárok osztrakonra írták a nevet; ha kevesebben szavaztak hatezernél, a szavazás érvénytelen volt. A legtöbb szavazatot kapott politikust tíz évre száműzték, a vagyonát megtarthatta.',7600);},
+ usebti(){toast('Tudáspróba-jegyzet: Periklész korától a polisz napidíjat juttatott a legszegényebbeknek is, hogy részt vehessenek a színházi előadásokon.',6400);},
+ palette(){toast('Tudáspróba-jegyzet: a napidíj lehetővé tette, hogy az esküdtbíróságok munkájában a szegény polgárok is részt vegyenek.',6000);},
+ drawer(){
+  if(S.stage>=1){toast(W.tube.visible?'A láda nyitva. A tetején egy bronz szavazókorong fekszik.':'A láda üres.');return;}
+  codeModal({title:'A láda zárja',prompt:'Háromjegyű számzár. Tudáspróba: melyik Kr. e. évben kezdődtek Szolón reformjai?',answer:'594',onOk(){
+   const x0=W.drawer.position.x;W.tube.visible=true;tween(k=>W.drawer.position.x=x0+.85*k,.7);S.stage=1;setGoal();toast('A zár kattan, a láda fedele félrecsúszik.');}});
+ },
+ tube(){W.tube.visible=false;addInv('Bronz szavazókorong');S.stage=2;setGoal();toast('Felvetted a szavazókorongot. Az emlékmű táblájának foglalatába illik.');},
+ radio(){
+  if(S.stage<2){toast('Az Eponümosz hősök emlékművének táblája: a lapok összekeveredtek. Jobb oldalán üres foglalat látszik.',3800);return;}
+  if(S.stage===2){if(S.inv.includes('Bronz szavazókorong')){remInv('Bronz szavazókorong');toast('A korongot a foglalatba illesztetted.');}
+   timelineModal(()=>{S.stage=3;S.done.kron=true;radioOn();setGoal();
+    doc(`<h2>Az időrendi tábla</h2><p>A lapok a helyükre kerültek. A tábla hátuljáról hírnöki cédula hullik ki:</p><p class="hand">„Az éveket ismered. De tudod-e, ki mit tett? Nézd át a hermák sorát.”</p>`);});
+   return;}
+  toast('Az időrendi tábla lapjai a helyükön vannak.');
+ },
+ album(){
+  if(S.stage<3){toast('Hermák sora. '+later,3800);return;}
+  if(S.stage>3){toast('A hermákat már átnézted.');return;}
+  matchModal({cat:'szem',title:'A hermák sora',intro:'A polisz nagy alakjainak és emlékezetes szereplőinek hermái. Párosítsd a személyeket a tetteikkel: válassz egy nevet, majd a hozzá tartozó eseményt.',pairs:PERSONS,lh:'Személy',rh:'Esemény',
+   onDone(){S.stage=4;S.done.szem=true;setGoal();
+    doc(`<h2>Az utolsó herma talapzatán</h2><p class="hand">„A sztélén egy történet olvasható. Olvasd el figyelmesen, és gondold végig, mit árul el a cserépszavazásról.”</p>`);}});
+ },
+ tape(){
+  if(S.stage<4){toast('Írásos sztélé. '+later,3800);return;}
+  if(S.stage>4){toast('A sztélé szövegét már elolvastad.');return;}
+  quizModal({cat:'forras',title:'A sztélé',intro:'A sztélén Ariszteidészről szóló történet olvasható (szabad átdolgozásban). Olvasd el figyelmesen, és válaszolj a kérdésekre.',source:SOURCE,qs:SRC_Q,
+   onDone(){S.stage=5;S.done.forras=true;setGoal();
+    doc(`<h2>A sztélé hátoldalán</h2><p class="hand">„Hol fekszenek ezek a helyek? Nézd meg a bronz térképtáblát a csarnok hátsó falán.”</p>`);}});
+ },
+ map(){
+  if(S.stage<5){toast('Bronz térképtábla, rajta jelölések. '+later,4000);return;}
+  if(S.stage>5){toast('A térkép helyszíneit már azonosítottad.');return;}
+  mapModal(()=>{S.stage=6;S.done.terkep=true;setGoal();
+   doc(`<h2>A térképtábla mögött</h2><p class="hand">„A helyeket ismered. A fogalmakat is? Nézd át a tanács iratállványát a bal oldali szélen.”</p>`);});
+ },
+ tv(){toast('A hírnökoszlopon hirdetmények függnek. A népgyűlés napirendjét az ötszázak tanácsa határozta meg.',4600);},
+ shelf(){
+  if(S.stage===6){quizModal({cat:'fog',title:'Az iratállvány',intro:'A viaszostáblák közé tett cédulákon a tanács kérdései állnak.',qs:FOG_Q,
+   onDone(){S.stage=7;S.done.fog=true;setGoal();
+    doc(`<h2>Az utolsó cédula</h2><p class="hand">„A kamra kulcsát annak a viaszostáblának a mögé tettem, amelynek címkéjén a cserépszavazás érvényességéhez szükséges szavazatok száma áll.”</p>`);}});return;}
+  toast(S.stage<6?'A tanács iratai. '+later:'Viaszostáblák, semmi különös.',3800);
+ },
+ book(o){
+  if(S.stage<=6){A.shelf();return;}
+  const yr=o.userData.year,x0=o.userData.x0;
+  if(S.stage===7&&yr===6000){tween(k=>o.position.x=x0+.15*k,.6);S.stage=8;addInv('Kulcs');setGoal();
+   doc(`<h2>A „6000” feliratú tábla mögött</h2><p>A tábla mögött kis kulcs lapul.</p>`);return;}
+  if(S.stage>7&&yr===6000){toast('Ebből a táblából már kivetted a kulcsot.');return;}
+  if(S.stage===7)miss('fog');
+  tween(k=>o.position.x=x0+.07*Math.sin(k*Math.PI),.6);toast(`„${yr}” feliratú viaszostábla. Mögötte nincs semmi.`);
+ },
+ vitrin(){
+  if(S.vitrinOpen){toast('A kamra nyitva. Az arkhón jegyzőkönyve az asztalon fekszik.');return;}
+  if(!S.inv.includes('Kulcs')){toast('A levéltári kamra zárva.');return;}
+  remInv('Kulcs');S.vitrinOpen=true;S.stage=9;setGoal();tween(k=>{W.vl.rotation.y=-1.85*k;W.vr.rotation.y=1.85*k;},1);toast('A kulcs illik a zárba. A kamra kinyílt.');
+ },
+ diary(){
+  if(!S.vitrinOpen){A.vitrin();return;}
+  if(S.stage>9){showInvite();return;}
+  matchModal({cat:'ok',title:'Az arkhón jegyzőkönyve',intro:'A jegyzőkönyv lapjain okok és következmények állnak, de összekeveredtek. Párosítsd az okot a következményével.',pairs:CAUSES,lh:'Ok',rh:'Következmény',
+   onDone(){S.stage=10;S.done.ok=true;setGoal();showInvite();}});
+ },
+ door(){
+  if(S.stage<10){toast('A zár kódját még nem ismered. Járd végig a tér állomásait.');return;}
+  codeModal({title:'Az agóra kapuja',prompt:'Háromjegyű számzár. Tudáspróba: melyik Kr. e. évben hajtotta végre Kleiszthenész a reformjait, amelyek nyomán kialakult az athéni demokrácia?',answer:'508',onOk(){
+   S.won=true;S.done.code=true;setGoal();tween(k=>{W.doorP.rotation.y=1.45*k;W.doorP2.rotation.y=-1.45*k;},1.3,()=>setTimeout(win,300));toast('A zár kattan, a kapu kinyílik.');}});
+ }
+};
+function showInvite(){doc(`<h2>A jegyzőkönyv utolsó lapja</h2><p>Az arkhón sietős sorai:</p><p class="hand">„A nép uralma nem a hangosabbak uralma. Aki ismeri a törvényt és a múltat, nem lesz a szónokok játékszere.”</p><div class="tp"><b>Tudáspróba-cédula.</b> A kapu kódja az az évszám, amikor Kleiszthenész reformjai nyomán kialakult az athéni demokrácia.</div>`);}
+
+
+/* ================= ÉRTÉKELÉS ================= */
+const eva=n=>n===0?'hibátlan':n<=2?'kisebb bizonytalanság':'ismétlés javasolt';
+function win(){
+ const t=fmt(performance.now()-S.start+S.hintPen*1000);
+ const rows=FULLCATS.map(k=>`<tr><td>${CAT[k]}</td><td class="num">${S.err[k]}</td><td>${eva(S.err[k])}</td></tr>`).join('');
+ const txt=`A cserépszavazás napja – eredmény\nIdő: ${t}\nSegítségkérések: ${S.hints}${S.hintPen?' (+'+S.hintPen+' mp)':''}\nHibás próbálkozások összesen: ${S.mistakes}\n`+FULLCATS.map(k=>`${CAT[k]}: ${S.err[k]} hiba (${eva(S.err[k])})`).join('\n');
+ openModal(`<h2>Kijutottál! A kapu megnyílt, mehetsz a népgyűlésre.</h2><p>Időd: <b>${t}</b>${S.hintPen?' (ebből '+S.hintPen+' mp a segítségkérések időbüntetése)':''}. Segítségkérések: <b>${S.hints}</b>. Hibás próbálkozások összesen: <b>${S.mistakes}</b>.</p>
+ <table class="rep"><thead><tr><th>Témakör</th><th>Hibák</th><th>Értékelés</th></tr></thead><tbody>${rows}</tbody></table>
+ <p>Az athéni demokrácia kulcsdátumai:</p>
+ <ul class="tl">${KEY_DATES.map(([d,t2])=>`<li><b>${d}</b>${t2}.</li>`).join('')}</ul>
+ <div id="copyArea"></div>
+ <div class="actions"><button id="copyBtn">Eredmény másolása</button><button class="primary" data-focus id="again">Új játék</button></div>`,'doc');
+ $('#again').onclick=()=>location.reload();
+ $('#copyBtn').onclick=async()=>{
+  try{await navigator.clipboard.writeText(txt);$('#copyBtn').textContent='Kimásolva';}
+  catch(e){$('#copyArea').innerHTML='<textarea id="copyBox" readonly></textarea><p style="font-size:14px">A böngésző nem engedte a közvetlen másolást. Jelöld ki a szöveget, és másold ki kézzel.</p>';const b=$('#copyBox');b.value=txt;b.focus();b.select();}
+ };
+}
+
+$('#hintBtn').onclick=()=>{
+ if(!S.playing||S.won||modalOpen)return;
+ const k=Q?curKey():STAGE_KEYS[S.stage];const hs0=(Q&&k==='door')?ROUNDS[Q.round].dh:HINTS[k];if(!hs0)return;const hs=hs0.slice(0,2);
+ const free=FREEK.includes(k);
+ const used=S.hint[k]||0,repeat=used>=hs.length,l=Math.min(used,hs.length-1);
+ if(!repeat&&!free){
+  if(S.hints>=maxH()){doc(`<h2>A segítségkeret elfogyott</h2><p>${maxH()} segítséget használtál fel. A továbbiakban a feladatot önállóan kell megoldani: olvasd újra az állomás szövegét, és gondold végig a kérdést.</p>`);return;}
+  const w=Math.ceil((helpReady-Date.now())/1000);
+  if(w>0){doc(`<h2>A segítség még nem érhető el</h2><p>Segítség <b>${w} másodperc</b> múlva kérhető. Addig olvasd el figyelmesen újra az állomás szövegét, és próbáld önállóan megoldani a feladatot.</p>`);return;}
+ }
+ const show=()=>{if(!repeat){if(!free){S.hints++;S.hintPen+=HINT_PEN[l];helpReady=Date.now()+helpWait();}S.hint[k]=used+1;updHelpBtn();}
+  doc(`<h2>Segítség, ${l+1}. fokozat</h2><p>${hs[l]}</p><p style="font-size:14px;opacity:.7">${free?'Ez a segítség csak a tájékozódást szolgálja, nem jár büntetéssel.':(l<hs.length-1?'Ha újra kéred, pontosabb támpontot kapsz, de a megoldást nem közöljük.':'Ez a legpontosabb segítség. A megoldást a szövegekből kell kikövetkeztetned.')}</p>`);};
+ if(repeat||free){show();return;}
+ openModal(`<h2>Segítséget kérsz?</h2><p>${l+1}. fokozat: ${['irány','támpont'][l]}. Időbüntetés: <b>+${HINT_PEN[l]} mp</b>. Hátralévő segítségkeret: <b>${maxH()-S.hints}</b> alkalom.</p><div class="actions"><button data-close>Mégse</button><button class="primary" data-yes>Kérem</button></div>`,'doc');
+ mbox.querySelector('[data-close]').onclick=closeModal;mbox.querySelector('[data-yes]').onclick=()=>{closeModal();show();};
+};
+const updHelpBtn=()=>{const b=$('#hintBtn');if(!b)return;const r=Math.ceil((helpReady-Date.now())/1000),left=maxH()-S.hints;
+ if(!S.playing){return;}
+ b.textContent=left<=0?'Segítség (elfogyott)':(r>0?`Segítség ${r} mp múlva`:`Segítség (${left} maradt)`);b.style.opacity=(left<=0||r>0)?'.6':'';};
+setInterval(updHelpBtn,1000);
+
+/* ================= GYORS KÖR ================= */
+let Q=null,marker=null;
+const LIMIT=600;
+const penalty=()=>S.mistakes*15+S.hintPen;
+const fmtS=sec=>String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');
+const pickN=(arr,n)=>shuffle(arr.map((_,i)=>i)).slice(0,n).sort((a,b)=>a-b).map(i=>arr[i]);
+const MIX=()=>[...pickN(FOG_Q.slice(0,4),2),...TL_Q];
+const ROUNDS={
+ 1:{route:['drawer','radio','album','door'],cats:['code','kron','szem'],door:'508',
+  clue:`<h2>Az utolsó herma talapzatán</h2><div class="tp"><b>Tudáspróba-cédula.</b> „A kapu kódja az az évszám, amikor Kleiszthenész reformjai nyomán kialakult az athéni demokrácia.”</div>`,
+  dh:['A kapu kódja Kleiszthenész reformjainak éve.','Keresd az időszalagon (tankönyv, 40. o.), vagy idézd fel az időrendi táblát.']},
+ 2:{route:['tape','map','fog','door'],cats:['forras','terkep','fog','code'],door:'6000',
+  clue:`<h2>Az utolsó cédula</h2><div class="tp"><b>Tudáspróba-cédula.</b> „A kapu kódja az utolsó kérdés válasza.”</div>`,
+  dh:['A kapu kódja az utolsó kérdés válasza.','Az érvényességi küszöb: a cserépszavazáson résztvevők legkisebb száma.']},
+ 3:{route:['tv','diary','door'],cats:['vegyes','ok','code'],door:'444',
+  clue:`<h2>A jegyzőkönyv utolsó lapja</h2><div class="tp"><b>Tudáspróba-cédula.</b> „A kapu kódja annak a Kr. e. évnek a száma, amikor Periklész sztratégoszi korszaka kezdődött (Kr. e. 444–429).”</div>`,
+  dh:['A kapu kódja Periklész sztratégoszi korszakának kezdete.','Periklész tizenöt éven át töltötte be a tisztséget; a korszak vége Kr. e. 429.']}
+};
+const QGOAL={drawer:'Nyisd ki a láda zárját a Királyi Sztoában.',radio:'Állítsd időrendbe az eseményeket az emlékmű táblájánál a jobb oldalon.',album:'Nézd át a hermák sorát a bal oldalon.',
+ tape:'Olvasd el a sztélé szövegét a tér északi részén.',map:'Oldd meg a térkép feladatait a csarnok hátsó falán.',fog:'Nézd át a tanács iratállványát a bal oldali szélen.',
+ tv:'Nézd meg a hírnökoszlopot a kapu közelében.',diary:'Olvasd el az arkhón jegyzőkönyvét a kamrában.',door:'Nyisd ki az agóra kapuját.'};
+const STAND={letter:[-1.2,2.0],drawer:[-6.0,-6.4],tube:[-6.0,-6.4],radio:[6.2,.8],tv:[2.5,2.7],album:[-4.6,3.6],tape:[-1.2,-2.2],map:[3.75,-7.2],
+ fog:[-7.4,-1.0],book:[-7.4,-1.0],vitrin:[7.6,-2.3],diary:[7.6,-2.3],door:[.2,6.0]};
+function curKey(){if(Q)return Q.route[Q.i];const k=STAGE_KEYS[S.stage];return (k==='drawer'&&!S.letterRead)?'letter':k;}
+function targetObj(k){if(!W||!k)return null;return {letter:W.letter,drawer:W.drawer,tube:W.tube,radio:W.radio,tv:W.tv,album:W.album,tape:W.tape,map:W.map,fog:W.lex,book:W.book1830,vitrin:W.vl,diary:W.diary,door:W.keypad}[k]||null;}
+const mkBox=new THREE.Box3(),mkC=new THREE.Vector3();
+function updateMarker(){
+ if(!marker)return;const o=(S.playing&&!S.won)?targetObj(curKey()):null;
+ if(!o||!vis(o)){marker.visible=false;return;}
+ mkBox.setFromObject(o);mkBox.getCenter(mkC);marker.visible=true;
+ marker.position.set(mkC.x,mkBox.max.y+.2+(RM?0:Math.sin(tAcc*3)*.04),mkC.z);
+}
+function lookAtObj(o){mkBox.setFromObject(o);const c=mkBox.getCenter(new THREE.Vector3());const dx=c.x-pos.x,dz=c.z-pos.z;yaw=Math.atan2(-dx,-dz);pitch=clamp(Math.atan2(c.y-1.6,Math.hypot(dx,dz)),-1.2,1.2);}
+$('#nextBtn').onclick=()=>{
+ if(!S.playing||S.won||modalOpen)return;const k=curKey(),o=targetObj(k);if(!o)return;
+ walkT=null;if(Q&&STAND[k]){pos.x=STAND[k][0];pos.z=STAND[k][1];}
+ lookAtObj(o);
+};
+const sub=(key,make)=>Q.sub[key]||(Q.sub[key]=make());
+function qdone(){Q.i++;setGoal();}
+const QKEY={shelf:'fog',book:'fog'};
+const QFLAVOR=['letter','papyrus','altar','usebti','palette','tv','vitrin'];
+function quickInteract(act,o){
+ const k=QKEY[act]||act;
+ if(Q.route.includes(k)){
+  if(k!==curKey()){toast(Q.route.indexOf(k)<Q.i?'Ezt az állomást már teljesítetted.':'Ez még nem a következő állomás. Kövesd a jelzést.');return;}
+  QA[k](o);return;
+ }
+ if(QFLAVOR.includes(act)&&A[act]){A[act](o);return;}
+ toast('Ebben a fordulóban ennek nincs szerepe.');
+}
+const QA={
+ drawer(){codeModal({title:'A láda zárja',prompt:'Háromjegyű számzár. Tudáspróba: melyik Kr. e. évben kezdődtek Szolón reformjai?',answer:'594',onOk(){
+  const x0=W.drawer.position.x;tween(k=>W.drawer.position.x=x0+.85*k,.7);addInv('Bronz szavazókorong');qdone();toast('A láda kinyílt. Elvetted a szavazókorongot: az emlékmű táblájába illik.',3800);}});},
+ radio(){if(S.inv.includes('Bronz szavazókorong'))remInv('Bronz szavazókorong');
+  timelineModal(()=>{S.done.kron=true;radioOn();qdone();toast('Az időrendi tábla kész. Hátulján cédula: „Nézd át a hermák sorát.”',4200);},sub('radio',()=>pickN(EV,4)));},
+ album(){matchModal({cat:'szem',title:'A hermák sora',intro:'Párosítsd a személyeket a tetteikkel: válassz egy nevet, majd a hozzá tartozó eseményt.',pairs:sub('album',()=>pickN(PERSONS,4)),lh:'Személy',rh:'Esemény',
+  onDone(){S.done.szem=true;qdone();doc(ROUNDS[1].clue);}});},
+ tape(){quizModal({cat:'forras',title:'A sztélé',intro:'A sztélén Ariszteidészről szóló történet olvasható (szabad átdolgozásban). Olvasd el figyelmesen, és válaszolj a kérdésekre.',source:SOURCE,qs:sub('tape',()=>pickN(SRC_Q,3)),
+  onDone(){S.done.forras=true;qdone();toast('A sztélé hátoldalán cédula: „Nézd meg a térképtáblát a csarnok hátsó falán.”',4200);}});},
+ map(){mapModal(()=>{S.done.terkep=true;qdone();toast('A tábla mögül cédula esik ki: „Nézd át a tanács iratállványát.”',4200);},sub('map',()=>pickN(MAP_Q,3)));},
+ fog(){quizModal({cat:'fog',title:'Az iratállvány',intro:'',qs:sub('fog',()=>[...pickN(FOG_Q.slice(0,4),2),FOG_Q[4]]),onDone(){S.done.fog=true;qdone();doc(ROUNDS[2].clue);}});},
+ tv(){quizModal({cat:'vegyes',title:'A hírnökoszlop',intro:'A hirdetmények szélére írt kérdések ismétlik az eddigieket.',qs:sub('tv',()=>MIX()),
+  onDone(){S.done.vegyes=true;qdone();toast('A hirdetmény szélén bejegyzés: „A jegyzőkönyv a kamrában vár.”',4200);}});},
+ diary(){matchModal({cat:'ok',title:'Az arkhón jegyzőkönyve',intro:'A lapok összekeveredtek. Párosítsd az okot a következményével.',pairs:sub('diary',()=>pickN(CAUSES,4)),lh:'Ok',rh:'Következmény',
+  onDone(){S.done.ok=true;qdone();doc(ROUNDS[3].clue);}});},
+ door(){codeModal({title:'Az agóra kapuja',prompt:'Számzár. Tudáspróba: kövesd a cédula utasítását.',answer:ROUNDS[Q.round].door,onOk(){
+  S.done.code=true;qdone();tween(k=>{W.doorP.rotation.y=1.45*k;W.doorP2.rotation.y=-1.45*k;},1.3);toast('A zár kattan, a kapu kinyílik.');endQuick(true);}});}
+};
+function startQuick(round,code){
+ Q={round,code,route:ROUNDS[round].route,i:0,sub:{}};
+ if(round===3){S.vitrinOpen=true;W.vl.rotation.y=-1.7;W.vr.rotation.y=1.7;}
+ const k=Q.route[0];pos.x=STAND[k][0];pos.z=STAND[k][1];lookAtObj(targetObj(k));
+ S.playing=true;S.start=performance.now();lastSec=-1;setGoal();toast('Rajt! Az időmérés elindult.');
+}
+function checkCode(str){let h=5381;for(const c of str)h=(((h*33)>>>0)^c.charCodeAt(0))>>>0;const al='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let o='';for(let i=0;i<4;i++){o+=al[h%32];h=Math.floor(h/32);}return o;}
+function endQuick(ok){
+ if(S.won)return;S.won=true;if(modalOpen)closeModal();
+ const raw=Math.min(Math.floor((performance.now()-S.start)/1000),LIMIT),pen=penalty(),fin=raw+pen,n=Q.route.length,dn=Math.min(Q.i,n);
+ $('#timer').textContent=fmtS(raw)+(pen?` +${pen} mp`:'');setGoal();
+ let w=null;ROUNDS[Q.round].cats.forEach(c=>{if(S.err[c]>0&&(!w||S.err[c]>S.err[w]))w=c;});
+ const chk=checkCode(`${Q.code}|${fin}|${S.mistakes}|${S.hints}|${dn}`);
+ const txt=`A cserépszavazás napja – ${Q.round}. forduló (kód: ${Q.code})\nVégidő: ${fmtS(fin)}\nNyers idő: ${fmtS(raw)}\nHibák: ${S.mistakes}\nSegítségkérések: ${S.hints}\nTeljesített állomások: ${dn}/${n}\nEllenőrző kód: ${chk}`;
+ setTimeout(()=>{
+  openModal(`<p class="cat" style="color:#3b4a36">${Q.round}. forduló</p><h2>${ok?'Célba értél!':'Lejárt az idő'}</h2>
+  <div class="big">${fmtS(fin)}</div><p class="center" style="margin-top:0">végidő</p>
+  <table class="rep"><tbody>
+  <tr><td>Nyers idő</td><td class="num">${fmtS(raw)}</td></tr>
+  <tr><td>Büntetőidő (hibánként 15 mp, segítségkérésenként 20–45 mp, kérdésablakban 30 mp)</td><td class="num">${pen} mp</td></tr>
+  <tr><td>Hibák / segítségkérések</td><td class="num">${S.mistakes} / ${S.hints}</td></tr>
+  <tr><td>Teljesített állomások</td><td class="num">${dn}/${n}</td></tr>
+  <tr><td>Legtöbb hibát okozó témakör</td><td class="num">${w?CAT[w]+' ('+S.err[w]+')':'nem volt hiba'}</td></tr>
+  <tr><td>Ellenőrző kód</td><td class="num"><span class="chk">${chk}</span></td></tr>
+  </tbody></table>
+  ${ok?'':'<p>Ha a tanár engedi, a teljes játékban otthon végigjátszhatod az egészet.</p>'}
+  <div id="copyArea"></div>
+  <div class="actions"><button id="copyBtn">Eredmény másolása</button><button class="primary" data-focus id="again">Új kör</button></div>`,'doc');
+  $('#again').onclick=()=>location.reload();
+  $('#copyBtn').onclick=async()=>{try{await navigator.clipboard.writeText(txt);$('#copyBtn').textContent='Kimásolva';}
+   catch(e){$('#copyArea').innerHTML='<textarea id="copyBox" readonly></textarea>';const b=$('#copyBox');b.value=txt;b.focus();b.select();}};
+ },ok?1500:0);
+}
+
+/* ================= TANÁRI KIVETÍTŐ NÉZET ================= */
+let TEACH=false,tTimer=null,tAudio=null;
+const TK='athen-tanar';
+const T=(()=>{try{return JSON.parse(localStorage.getItem(TK))||{};}catch(e){return {};}})();
+T.round=T.round||1;T.byCode=T.byCode||{};T.end=null;T.left=LIMIT;
+const CHK_AL='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const esc=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+function tSave(){try{const ks=Object.keys(T.byCode);while(ks.length>10)delete T.byCode[ks.shift()];localStorage.setItem(TK,JSON.stringify({round:T.round,code:T.code,byCode:T.byCode}));}catch(e){}}
+const genCode=r=>String(Math.floor(Math.random()*1000)).padStart(3,'0')+r;
+function parseTime(v){const m=String(v).trim().match(/^(\d{1,2})[:.,](\d{2})$/);if(!m||+m[2]>59)return null;return +m[1]*60+(+m[2]);}
+function verify(code,fin,chk){const n=ROUNDS[+code[3]].route.length;for(let dn=n;dn>=0;dn--)for(let m=0;m<=60;m++)for(let h=0;h<=30;h++)if(checkCode(`${code}|${fin}|${m}|${h}|${dn}`)===chk)return {m,h,dn,n};return null;}
+function renderT(){
+ document.querySelectorAll('.t-seg button').forEach(b=>b.classList.toggle('on',+b.dataset.r===T.round));
+ $('#tCode').textContent=T.code||'----';
+ const r=ROUNDS[T.round];$('#tRoundInfo').textContent=`${T.round}. forduló: ${r.route.length} állomás (${r.cats.map(c=>CAT[c]).join(', ')}). A tanulók ezt a kódot írják be a Gyors kör indításakor.`;
+ const fin=x=>x.v&&x.v.dn===x.v.n;
+ const rows=(T.byCode[T.code]||[]).slice().sort((a,b)=>(!!b.v-!!a.v)||(fin(b)-fin(a))||((a.v&&b.v)?b.v.dn-a.v.dn:0)||(a.fin-b.fin));
+ let rank=0;
+ $('#tBody').innerHTML=rows.map(x=>{const ok=!!x.v;if(ok)rank++;return `<tr class="${ok&&rank<=3?'top'+rank:''}"><td class="num">${ok?rank+'.':'–'}</td><td>${esc(x.name)}</td><td class="num">${fmtS(x.fin)}</td><td class="num">${ok?x.v.dn+'/'+x.v.n:'?'}</td><td class="num">${ok?x.v.m+' / '+x.v.h:'?'}</td><td>${ok?esc(x.chk):'<span class="bad">'+esc(x.chk)+': érvénytelen</span>'}</td><td><button class="t-del" data-id="${x.id}" aria-label="Sor törlése">Törlés</button></td></tr>`;}).join('')
+  ||'<tr><td colspan="7" class="t-hint">Még nincs eredmény. A tanulók célképernyőjéről írja be a becenevet, a végidőt és az ellenőrző kódot.</td></tr>';
+ $('#tBody').querySelectorAll('.t-del').forEach(b=>b.onclick=()=>{T.byCode[T.code]=(T.byCode[T.code]||[]).filter(x=>String(x.id)!==b.dataset.id);tSave();renderT();});
+}
+function tAdd(){
+ const name=$('#fName').value.trim(),fin=parseTime($('#fTime').value),chk=$('#fChk').value.trim().toUpperCase(),msg=$('#tMsg');
+ if(!T.code){msg.className='msg bad';msg.textContent='Előbb válasszon fordulót.';return;}
+ if(!name||fin===null||!new RegExp('^['+CHK_AL+']{4}$').test(chk)){msg.className='msg bad';msg.textContent='Adja meg a becenevet, a végidőt perc:másodperc formában (pl. 6:42) és a négykarakteres ellenőrző kódot.';return;}
+ const v=verify(T.code,fin,chk);(T.byCode[T.code]=T.byCode[T.code]||[]).push({id:Date.now(),name,fin,chk,v});tSave();renderT();
+ msg.className=v?'msg ok':'msg bad';
+ msg.textContent=v?`${name}: érvényes eredmény.`:`${name}: az ellenőrző kód nem egyezik a végidővel vagy a fordulókóddal. Kérje meg a tanulót, hogy mutassa meg a célképernyőt.`;
+ ['fName','fTime','fChk'].forEach(i=>$('#'+i).value='');$('#fName').focus();
+}
+function beep(){try{if(!tAudio)return;const a=tAudio;[0,.35,.7].forEach(t=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=880;g.gain.setValueAtTime(.0001,a.currentTime+t);g.gain.exponentialRampToValueAtTime(.3,a.currentTime+t+.02);g.gain.exponentialRampToValueAtTime(.0001,a.currentTime+t+.25);o.connect(g).connect(a.destination);o.start(a.currentTime+t);o.stop(a.currentTime+t+.3);});}catch(e){}}
+function tTick(){
+ const left=T.end?Math.max(0,Math.ceil((T.end-Date.now())/1000)):T.left,c=$('#tClock');
+ c.textContent=fmtS(left);c.classList.toggle('warn',left<=60&&left>0);c.classList.toggle('end',left===0);
+ if(T.end&&left===0){clearInterval(tTimer);tTimer=null;T.end=null;T.left=0;$('#tStart').textContent='Rajt';beep();}
+}
+function openTeacher(){
+ TEACH=true;if(modalOpen)closeModal();document.body.classList.add('teach');$('#teacher').hidden=false;
+ if(!T.code)T.code=genCode(T.round);tSave();renderT();tTick();
+}
+document.querySelectorAll('.t-seg button').forEach(b=>b.onclick=()=>{T.round=+b.dataset.r;T.code=genCode(T.round);tSave();renderT();$('#tMsg').textContent='';});
+$('#tNew').onclick=()=>{T.code=genCode(T.round);tSave();renderT();$('#tMsg').textContent='';};
+$('#tStart').onclick=()=>{
+ try{if(!tAudio){const AC=window.AudioContext||window.webkitAudioContext;if(AC)tAudio=new AC();}if(tAudio&&tAudio.state==='suspended')tAudio.resume();}catch(e){}
+ if(T.end){T.left=Math.max(0,Math.ceil((T.end-Date.now())/1000));T.end=null;clearInterval(tTimer);tTimer=null;$('#tStart').textContent='Folytatás';}
+ else{if(T.left<=0)T.left=LIMIT;T.end=Date.now()+T.left*1000;tTimer=setInterval(tTick,250);$('#tStart').textContent='Szünet';}
+ tTick();
+};
+$('#tReset').onclick=()=>{T.end=null;clearInterval(tTimer);tTimer=null;T.left=LIMIT;$('#tStart').textContent='Rajt';tTick();};
+$('#tAdd').onclick=tAdd;
+['fName','fTime','fChk'].forEach(i=>$('#'+i).addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();tAdd();}}));
+let clearArm=0;
+$('#tClear').onclick=()=>{if(Date.now()-clearArm<4000){T.byCode[T.code]=[];tSave();renderT();$('#tClear').textContent='Tábla törlése';clearArm=0;}else{clearArm=Date.now();$('#tClear').textContent='Biztosan? Kattintson újra';setTimeout(()=>{$('#tClear').textContent='Tábla törlése';},4000);}};
+$('#tFull').onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}catch(e){}};
+$('#homeBtn').onclick=()=>{openModal(`<h2>Visszatérsz a főoldalra?</h2><p>A jelenlegi játékállás elvész.</p><div class="actions"><button data-focus id="homeNo">Mégse</button><button class="primary" id="homeYes">Igen, a főoldalra</button></div>`,'doc');$('#homeNo').onclick=closeModal;$('#homeYes').onclick=()=>{location.href=location.pathname+location.search;};};
+$('#tBack').onclick=()=>{TEACH=false;document.body.classList.remove('teach');$('#teacher').hidden=true;intro();};
+
+/* ================= FŐ CIKLUS ================= */
+const clock=new THREE.Clock();let lastSec=-1,tAcc=0,perfT=0,perfN=0;const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function frame(){
+ if(TEACH){clock.getDelta();requestAnimationFrame(frame);return;}
+ const dt=Math.min(clock.getDelta(),.05);
+ if(S.playing&&!modalOpen&&!S.won){
+  let f=0,s=0,turn=0;
+  if(keys.KeyW||keys.ArrowUp)f++;if(keys.KeyS||keys.ArrowDown)f--;if(keys.KeyD)s++;if(keys.KeyA)s--;
+  if(keys.ArrowLeft||keys.KeyQ)turn++;if(keys.ArrowRight||keys.KeyE)turn--;
+  f-=jy;s+=jx;yaw+=turn*1.9*dt;
+  const l=Math.hypot(f,s);if(l>1){f/=l;s/=l;}
+  if(l>.05){const sp=(keys.ShiftLeft||keys.ShiftRight)?2.6:1.5;const fx=-Math.sin(yaw),fz=-Math.cos(yaw),rx=Math.cos(yaw),rz=-Math.sin(yaw);tryMove((fx*f+rx*s)*sp*dt,0);tryMove(0,(fz*f+rz*s)*sp*dt);walkT=null;}
+  if(walkT){const dx=walkT.x-pos.x,dz=walkT.z-pos.z,d=Math.hypot(dx,dz);if(d<.15)walkT=null;else{const st=Math.min(d,1.7*dt),ox=pos.x,oz=pos.z;tryMove(dx/d*st,0);tryMove(0,dz/d*st);if(Math.hypot(pos.x-ox,pos.z-oz)<st*.2)walkT=null;}}
+ }
+ if(S.playing&&!S.won){const ms=performance.now()-S.start,sec=Math.floor(ms/1000);if(sec!==lastSec){lastSec=sec;if(Q){const pen=penalty();$('#timer').textContent=fmt(ms)+(pen?` +${pen} mp`:'');if(sec>=LIMIT)endQuick(false);}else $('#timer').textContent=fmt(ms);}}
+ updateMarker();
+ perfT+=dt;perfN++;if(perfT>3){const fps=perfN/perfT;perfT=0;perfN=0;if(fps<24&&PR>.75){PR=Math.max(.75,PR-.25);renderer.setPixelRatio(PR);resize();}}
+ tAcc+=dt;if(W&&W.pend&&!RM)W.pend.rotation.z=Math.sin(tAcc*2.4)*.12;
+ camera.position.set(pos.x,1.6,pos.z);camera.rotation.set(pitch,yaw,0);
+ for(let i=tweens.length-1;i>=0;i--){const tw=tweens[i];tw.t=Math.min(1,tw.t+dt/tw.dur);tw.fn(ease(tw.t));if(tw.t>=1){tweens.splice(i,1);tw.done&&tw.done();}}
+ renderer.render(scene,camera);requestAnimationFrame(frame);
+}
+
+const BACK_URL='/';
+function goBack(){try{if(history.length>1&&document.referrer){history.back();return;}}catch(e){}
+ try{window.top.location.href=BACK_URL;}catch(e){location.href=BACK_URL;}}
+function intro(){
+ openModal(`<button class="backbtn" id="goBack" aria-label="Vissza az előző oldalra">← Vissza</button>
+ <h2>A cserépszavazás napja</h2>
+ <p style="font-size:18px">Athén, az agóra, a Kr. e. 5. század közepe. Ma van a cserépszavazás napja: a tér zsúfolt, a kaput pedig az arkhónok lezárták, amíg a hírnök ki nem hirdeti az eredményt.</p>
+ <p>Te az ifjú polgár vagy, aki ma először mehet a népgyűlésre a Pnüxre. A kapu zárját csak az nyitja ki, aki érti a polisz rendjét: Drakón, Szolón, Kleiszthenész és Periklész korát.</p>
+ <p style="font-size:15px">A tér a Kr. e. 5. század világát mutatja (az épületek egy része eltérő korból való, a tér összeállított kép). A kérdések a <b>Tudáspróba</b> lapjain jelennek meg, a mai tankönyv szerint. Az ifjú, a hírnök, a kamra és a zár kitaláltak.</p>
+ <div class="modes">
+  <button class="mode primary" id="goQuick" data-focus><b>Gyors kör</b><span>Óra eleji verseny, 6–8 perc. A tanártól kapott fordulókóddal indul. Hibánként 15, segítségkérésenként 20–45 (kérdésablakban 30) másodperc büntetőidő jár. A segítség korlátozott (3 alkalom), és csak várakozás után kérhető; megoldást nem ad.</span></button>
+  <button class="mode" id="goFull"><b>Teljes játék</b><span>Mind a hét témakör, 25–40 perc, témakörönkénti értékeléssel.</span></button>
+ </div>
+ <p style="font-size:15px"><span class="desk">Mozgás: <b>W A S D</b> vagy nyilak. Körülnézés: húzás egérrel. Vizsgálat: kattintás vagy <b>F</b>. A sárga nyíl a következő állomást jelzi.</span><span class="touch">Mozgás: bal alsó joystick. Körülnézés: húzás ujjal. Vizsgálat: koppintás. A sárga nyíl a következő állomást jelzi.</span></p>
+ <p style="margin:0;text-align:right"><button class="linkbtn" id="goTeach">Tanári kivetítő nézet</button></p>`,'doc');
+ $('#goBack').onclick=goBack;
+ $('#goQuick').onclick=roundCodeModal;
+ $('#goTeach').onclick=openTeacher;
+ $('#goFull').onclick=()=>{closeModal();S.playing=true;S.start=performance.now();setGoal();};
+}
+function roundCodeModal(){
+ openModal(`<h2>Fordulókód</h2><p>Add meg a tanártól kapott négyjegyű kódot. Az időmérés a kód elfogadásakor indul.</p><div class="code"><span></span><span></span><span></span><span></span></div>
+ <div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button data-d="${n}">${n}</button>`).join('')}<button data-b aria-label="Törlés">⌫</button><button data-d="0">0</button><button data-ok class="primary">Rajt</button></div>
+ <p class="msg" style="text-align:center" aria-live="polite"></p><div class="actions"><button data-back>Vissza</button></div>`,'panel meta');
+ let v='';const spans=[...mbox.querySelectorAll('.code span')],msg=mbox.querySelector('.msg');
+ const upd=()=>spans.forEach((s,i)=>s.textContent=v[i]||'');
+ const press=d=>{if(v.length<4){v+=d;upd();msg.textContent='';}};
+ const back=()=>{v=v.slice(0,-1);upd();};
+ const ok=()=>{const r=+v[3];if(v.length<4||!(r>=1&&r<=3)){msg.className='msg bad';msg.textContent='Érvénytelen kód. Kérd a tanártól a forduló kódját.';v='';upd();return;}
+  closeModal();startQuick(r,v);};
+ mbox.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>press(b.dataset.d));
+ mbox.querySelector('[data-b]').onclick=back;mbox.querySelector('[data-ok]').onclick=ok;
+ mbox.querySelector('[data-back]').onclick=intro;
+ codeKeys=e=>{if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace')back();else if(e.key==='Enter')ok();};
+}
+const ready=document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]):Promise.resolve();
+ready.then(()=>{try{W=build();marker=new THREE.Mesh(new THREE.ConeGeometry(.06,.15,4),new THREE.MeshBasicMaterial({color:0xf2c14e}));marker.rotation.x=Math.PI;marker.raycast=()=>{};marker.visible=false;scene.add(marker);}catch(err){console.error(err);}setGoal();$('#goal').textContent='Athén, az agóra';requestAnimationFrame(frame);if(location.hash==='#tanar')openTeacher();else intro();});
+
+})();
+</script>
+</body>
+</html>
