@@ -1,0 +1,102 @@
+{
+  "roma": {
+    "file": "assets/hub-roma.webp",
+    "size_bytes": 132204,
+    "sha256": "d980f67f9d12eabb2741765cea9278ef4a1c715850159040a292df9bfda0d6f3",
+    "source": "a_dramatic_cinematic_highly_detailed_epic_histor_1_batch_1.png",
+    "dimensions": [
+      1119,
+      630
+    ]
+  },
+  "korona": {
+    "file": "assets/hub-korona.webp",
+    "size_bytes": 134302,
+    "sha256": "431e0660c69a67c65e0d802c01738fea8a1ece61faea73a298cd3a99ac6d5a3c",
+    "source": "wide_cinematic_scene_a_richly_detailed_medieval_r_2_batch_2.png",
+    "dimensions": [
+      1119,
+      630
+    ]
+  },
+  "leveltar": {
+    "file": "assets/hub-leveltar.webp",
+    "size_bytes": 125804,
+    "sha256": "978990719e1cfc7beccb595d67afdf20347f4ff4f0bce8738570bbf853e8f5b8",
+    "source": "wide_cinematic_atmospheric_interior_scene_of_an_3_batch_3.png",
+    "dimensions": [
+      1119,
+      630
+    ]
+  },
+  "ketforras": {
+    "file": "assets/hub-ketforras.webp",
+    "size_bytes": 149262,
+    "sha256": "9d393627277a4fb8c929a7ed9c4e35ce167a65625915efbfc9a90ff5378b4944",
+    "source": "wide_cinematic_still_life_scene_on_a_dark_wooden_d_4_batch_4.png",
+    "dimensions": [
+      1119,
+      630
+    ]
+  },
+  "kivagyok": {
+    "file": "assets/hub-kivagyok.webp",
+    "size_bytes": 125114,
+    "sha256": "f05ea2b9d5b76e25cce6ce7f0829b1f137be51271741c129d98b85fe2d53d8a2",
+    "source": "a_cinematic_dramatic_high_detail_fantasy_histor_5_batch_5.png",
+    "dimensions": [
+      1119,
+      630
+    ]
+  },
+  "nyolckor": {
+    "file": "assets/hub-nyolckor.webp",
+    "size_bytes": 147260,
+    "sha256": "59e8cf2ceba8ba7347dc67620add52320959ed2ee2e676eff4b2769065f6f5ec",
+    "source": "wide_cinematic_landscape_scene_at_golden_sunrise_6_batch_6.png",
+    "dimensions": [
+      1119,
+      630
+    ]
+  },
+  "junius": {
+    "file": "assets/hub-junius.webp",
+    "size_bytes": 122804,
+    "sha256": "5133f66779881f3ea3200298e40eae878aca34ef72997adbf8aff685ab5bfa1a",
+    "source": "wide_cinematic_ultra_detailed_atmospheric_histor_7_batch_7.png",
+    "dimensions": [
+      1119,
+      630
+    ]
+  },
+  "demo-felfedezesek": {
+    "file": "assets/hub-demo-felfedezesek.webp",
+    "size_bytes": 161698,
+    "sha256": "9d821ebcbf2d54a58a1ed687e473fcb0cdcf2ef0d0bc500cdeac9876247c5e14",
+    "source": "a_cinematic_highly_detailed_golden_hour_seafarin_8_batch_8.png",
+    "dimensions": [
+      1119,
+      630
+    ]
+  },
+  "demo-roma": {
+    "file": "assets/hub-demo-roma.webp",
+    "size_bytes": 132204,
+    "sha256": "d980f67f9d12eabb2741765cea9278ef4a1c715850159040a292df9bfda0d6f3",
+    "source": "a_dramatic_cinematic_highly_detailed_epic_histor_1_batch_1.png",
+    "dimensions": [
+      1119,
+      630
+    ]
+  },
+  "grof": {
+    "file": "assets/hub-grof.webp",
+    "size_bytes": 116400,
+    "sha256": "56c7118f55ed26061ffd1bebf8930aa7f24005f2995b93c12685cc1dbf2369b7",
+    "source": "a_richly_detailed_cinematic_photorealistic_paint_1_batch_1.png",
+    "dimensions": [
+      1119,
+      630
+    ]
+  }
+}
