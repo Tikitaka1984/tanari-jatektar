@@ -28,5 +28,5 @@
 - Közös: „A magyar nyelv ügye nemzeti ügy." A témavázlat az államnyelvvé tételt Széchenyi programjánál említi; Kossuth-nál nem. A közös besorolás közismert tényen alapul, tankönyvi hivatkozás nélkül.
 - Védegylet: a témavázlat szerint Kossuth 1846-tól igazgatója; a játék a szervezet 1844-es alapítására nem hivatkozik.
 
-### 2.3 Évfolyam-jelölés (döntés szükséges)
-A `README.md` és a hub (`index.html`) a játékot a 10–11. évfolyamhoz sorolja, a játék saját címkéje és az évfolyam-taxonómia (reformkor = 10. évfolyam) szerint viszont 10. évfolyamos. Ezt a változtatás nem módosította, mert a hub és a README közös fájl. A javasolt javítás: `grade: ["10"]`.
+### 2.3 Évfolyam-jelölés (eldöntve, 2026-10-15)
+A `README.md` és a hub (`index.html`) a játékot korábban a 10–11. évfolyamhoz sorolta, a játék saját címkéje és az évfolyam-taxonómia (reformkor = 10. évfolyam) szerint viszont 10. évfolyamos. Takács Tamás jóváhagyásával a hub `grade` értéke `["10"]`, a README-sor „10." lett.
