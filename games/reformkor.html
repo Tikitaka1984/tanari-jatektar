@@ -51,7 +51,10 @@
   .vita-card h3{margin:0 0 6px;color:var(--gold-light);font-size:1.12rem;font-family:'Cinzel',serif;}
   .vita-card .vperiod{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--gold-light);opacity:.85;letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px;display:block;}
   .vita-card .vblurb{font-size:.89rem;opacity:.88;line-height:1.55;margin:0;}
-  .vita-card .vlevel{font-family:'Space Mono',monospace;font-size:.68rem;opacity:.6;margin-top:9px;display:block;}
+  .vita-card .vlevel{font-family:'Space Mono',monospace;font-size:.68rem;opacity:.85;margin-top:9px;display:block;}
+  .vita-card .vsrc{font-size:.76rem;line-height:1.45;margin-top:6px;display:block;opacity:.85;}
+  .vita-card .vsrc.warn{color:#ffd9a0;opacity:1;border-left:3px solid #e8a33d;padding-left:8px;}
+  .warnbox{background:rgba(232,163,61,.14);border:1px solid #e8a33d;border-radius:10px;padding:11px 13px;font-size:.88rem;line-height:1.55;}
 
   .podiums{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
   .podium{background:rgba(0,0,0,.28);border:1px solid rgba(201,162,39,.3);border-radius:14px;padding:12px 14px;min-height:120px;}
@@ -65,7 +68,7 @@
   .card{background:linear-gradient(180deg,#f6ecd1,var(--parchment));color:var(--ink);border-radius:16px;padding:22px;box-shadow:0 18px 44px rgba(0,0,0,.4);}
   .card h3{color:var(--crimson-dark);margin:0 0 8px;font-size:1.1rem;}
   .statement{background:#fff;border:1.5px solid #d8c79e;border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:14px 16px;font-size:1rem;font-style:italic;line-height:1.6;margin-bottom:6px;}
-  .stmt-note{font-size:.74rem;opacity:.6;margin:0 0 12px;}
+  .stmt-note{font-size:.78rem;color:#5a4630;margin:0 0 12px;}
   .sort-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;}
   @media(max-width:600px){.sort-btns{grid-template-columns:1fr;} .podiums{grid-template-columns:1fr;}}
   .sort-btn{border:1.5px solid #d8c79e;background:#fff;color:var(--ink);border-radius:10px;padding:12px 10px;font-size:.9rem;font-weight:600;transition:.15s;}
@@ -80,7 +83,7 @@
   .feedback.ok{background:rgba(47,93,58,.15);border:1px solid var(--forest);color:#1d3d26;display:block;}
   .feedback.bad{background:rgba(139,26,26,.12);border:1px solid var(--crimson);color:var(--crimson-dark);display:block;}
   .actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;}
-  .progress{font-family:'Space Mono',monospace;font-size:.78rem;opacity:.75;margin-bottom:10px;color:var(--forest);}
+  .progress{font-family:'Space Mono',monospace;font-size:.78rem;margin-bottom:10px;color:#1f4a2b;}
 
   .opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid #d8c79e;color:var(--ink);border-radius:10px;padding:12px 14px;margin-bottom:9px;font-size:.93rem;transition:.15s;}
   .opt:hover{border-color:var(--crimson);}
@@ -101,14 +104,36 @@
   .essay .vaz b{color:var(--crimson-dark);}
   footer.tiny{text-align:center;opacity:.5;font-size:.78rem;margin-top:46px;font-family:'Space Mono',monospace;}
   :focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+  .card :focus-visible,.essay :focus-visible{outline-color:var(--crimson-dark);}
+  .statement:focus,.feedback:focus,.card h3:focus,.cover h1:focus,.ending h2:focus{outline:none;}
+  .sort-btn.correct::after,.opt.correct::after{content:" \2713";font-weight:700;color:var(--forest);}
+  .sort-btn.incorrect::after,.opt.incorrect::after{content:" \2717";font-weight:700;color:var(--crimson);}
+  .sort-btn,.opt,.btn{min-height:44px;}
+  .btnrow{margin-top:26px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .cover .btnrow{margin-top:0;}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+  @media(max-width:600px){
+    #app{padding:16px 12px 60px;}
+    .cover h1{font-size:1.65rem;}
+    .story{padding:16px;font-size:.92rem;}
+    .card{padding:16px;}
+    .btnrow .btn,.actions .btn{width:100%;justify-content:center;}
+    .essay{padding:14px;}
+    .essay table,.essay tbody,.essay tr,.essay td{display:block;width:100%;}
+    .essay tr.hd{display:none;}
+    .essay tr{border:1px solid #cdb480;border-radius:10px;margin-bottom:10px;padding:6px 8px;background:rgba(255,255,255,.35);}
+    .essay td{border:none;padding:4px 2px;}
+    .essay td[data-label]::before{content:attr(data-label);display:block;font-family:'Space Mono',monospace;font-size:.68rem;color:var(--crimson-dark);text-transform:uppercase;letter-spacing:.06em;}
+    .stat-box{padding:12px 14px;font-size:.82rem;}
+  }
 </style>
 </head>
 <body>
-<div id="app">
+<main id="app">
 
   <div class="hud" id="hud" style="display:none;">
     <div class="hud-title" id="hudTitle">A reformkor vitaterme</div>
-    <div class="pill">&#9878; <b id="hudErr">0</b> hiba</div>
+    <div class="pill" role="status" aria-live="polite">&#9878; <b id="hudErr">0</b> hiba</div>
   </div>
 
   <!-- PICK -->
@@ -127,8 +152,10 @@
       <div class="eyebrow" id="introEyebrow"></div>
       <h1 id="introTitle"></h1>
       <div class="story" id="introStory"></div>
-      <button class="btn" onclick="startGame()">Belépek a vitaterembe &rarr;</button>
-      <button class="btn secondary" onclick="go('pick')" style="margin-left:10px;">&larr; Másik vita</button>
+      <div class="btnrow">
+        <button class="btn" onclick="startGame()">Belépek a vitaterembe &rarr;</button>
+        <button class="btn secondary" onclick="go('pick')">&larr; Másik vita</button>
+      </div>
     </div>
   </section>
 
@@ -141,14 +168,14 @@
     <div class="card">
       <div class="progress" id="sortProgress"></div>
       <h3>Kié ez az álláspont?</h3>
-      <div class="statement" id="stmtText"></div>
-      <p class="stmt-note">Álláspont-kártya: tartalmi összefoglalás, nem szó szerinti idézet.</p>
+      <div class="statement" id="stmtText" tabindex="-1"></div>
+      <p class="stmt-note">Tartalmi összefoglalás, nem szó szerinti idézet.</p>
       <div class="sort-btns">
-        <button class="sort-btn a" id="sb-a" onclick="sortAnswer('a')"></button>
-        <button class="sort-btn k" id="sb-k" onclick="sortAnswer('k')">Közös reformcél</button>
-        <button class="sort-btn b" id="sb-b" onclick="sortAnswer('b')"></button>
+        <button class="sort-btn a" id="sb-a" aria-describedby="stmtText" onclick="sortAnswer('a')"></button>
+        <button class="sort-btn k" id="sb-k" aria-describedby="stmtText" onclick="sortAnswer('k')">Közös reformcél</button>
+        <button class="sort-btn b" id="sb-b" aria-describedby="stmtText" onclick="sortAnswer('b')"></button>
       </div>
-      <div class="feedback" id="sortFb" role="status" aria-live="polite"></div>
+      <div class="feedback" id="sortFb" role="status" aria-live="polite" tabindex="-1"></div>
       <div class="actions" id="sortActions"></div>
     </div>
   </section>
@@ -157,9 +184,9 @@
   <section class="screen" id="screen-quiz">
     <div class="card">
       <div class="progress" id="quizProgress"></div>
-      <h3 id="quizQ"></h3>
+      <h3 id="quizQ" tabindex="-1"></h3>
       <div id="quizOpts"></div>
-      <div class="feedback" id="quizFb" role="status" aria-live="polite"></div>
+      <div class="feedback" id="quizFb" role="status" aria-live="polite" tabindex="-1"></div>
       <div class="actions" id="quizActions"></div>
     </div>
   </section>
@@ -171,18 +198,20 @@
       <h2 id="endingH2">Két álláspont — egy nemzet</h2>
       <div class="stat-box" id="endStats"></div>
       <div class="essay" id="essayBox"></div>
-      <div style="margin-top:26px;text-align:center;">
+      <div class="btnrow">
         <button class="btn" onclick="startGame()">Újra ez a vita (új kártyákkal)</button>
-        <button class="btn secondary" onclick="backToPick()" style="margin-left:10px;">&larr; Másik vita</button>
+        <button class="btn secondary" onclick="backToPick()">&larr; Másik vita</button>
       </div>
     </div>
   </section>
-</div>
+</main>
 <footer class="tiny">Történelem érettségi felkészítő &middot; Reformkor &middot; az álláspont-kártyák tartalmi összefoglalások</footer>
 
 <script>
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 function sample(a,n){return shuffle(a).slice(0,n);}
+function focusEl(el){ if(!el) return; try{ el.focus({preventScroll:true}); }catch(e){} }
+function shortText(t,n){ if(t.length<=n) return t; var c=t.slice(0,n); var i=c.lastIndexOf(' '); return (i>20?c.slice(0,i):c)+'&hellip;'; }
 
 /* ============ portrék ============ */
 const FACE_SZECHENYI='<svg class="pface" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="16" r="10" fill="#c98a5b"/><path d="M11 15 Q11 6 20 6 Q29 6 29 15 L27 13 Q25 8 20 8 Q15 8 13 13 Z" fill="#3d2c1a"/><path d="M14 21 Q20 26 26 21 L26 25 Q20 29 14 25 Z" fill="#3d2c1a"/><path d="M8 40 Q8 29 20 29 Q32 29 32 40Z" fill="#2b3a52"/><circle cx="16.5" cy="15.5" r="1.4" fill="#2b1b12"/><circle cx="23.5" cy="15.5" r="1.4" fill="#2b1b12"/></svg>';
@@ -447,29 +476,34 @@ centralistak_kossuth:{
 };
 
 /* ============ állapot ============ */
-const G={vitaId:null,vita:null,cards:[],idx:0,errors:0,quiz:[],qidx:0,locked:false};
+const G={vitaId:null,vita:null,cards:[],idx:0,errors:0,quiz:[],qidx:0,locked:false,readyAt:0};
+/* az új kártya/kérdés első 350 ms-ában érkező kattintást (dupla kattintás második fele) figyelmen kívül hagyjuk */
+function arm(){ G.readyAt=Date.now()+350; }
 function err(){G.errors++;document.getElementById('hudErr').textContent=G.errors;}
 function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
+  var hd=document.querySelector('#screen-'+id+' h1, #screen-'+id+' h2');
+  if(hd){ hd.setAttribute('tabindex','-1'); focusEl(hd); }
 }
 
 /* ============ pick screen ============ */
 function renderPick(){
   document.getElementById('vitaList').innerHTML = Object.entries(VITAK).map(([id,v])=>
-    `<button class="vita-card" role="listitem" onclick="openVita('${id}')">
+    `<div role="listitem"><button class="vita-card" onclick="openVita('${id}')">
       <span class="vperiod">${v.period}</span>
       <h3>${v.title}</h3>
       <p class="vblurb">${v.blurb}</p>
       <span class="vlevel">${v.level}</span>
-    </button>`).join('');
+      ${v.src?'<span class="vsrc'+(v.warn?' warn':'')+'">'+v.src+'</span>':''}
+    </button></div>`).join('');
 }
 function openVita(id){
   G.vitaId=id; G.vita=VITAK[id];
   document.getElementById('introEyebrow').innerHTML='Érettségi felkészítő vitajáték &middot; '+G.vita.period;
   document.getElementById('introTitle').textContent=G.vita.title;
-  document.getElementById('introStory').innerHTML=G.vita.lede.map(p=>'<p>'+p+'</p>').join('');
+  document.getElementById('introStory').innerHTML=G.vita.lede.map(p=>'<p>'+p+'</p>').join('')+(G.vita.warn?'<p class="warnbox" role="note"><b>&#9888; </b>'+G.vita.warn+'</p>':'');
   go('intro');
 }
 function backToPick(){
@@ -496,17 +530,15 @@ function renderPodiums(){
 /* ============ 1. felvonás: sort ============ */
 function startGame(){
   const v=G.vita;
-  G.cards=sample(v.cards,Math.min(9,v.cards.length));
-  /* biztosítjuk, hogy mindhárom kategóriából legyen */
+  /* kategóriánként legalább egy kártya, a többi véletlenszerűen; majd keverés */
+  const want=Math.min(9,v.cards.length);
+  const picked=[];
   ['a','b','k'].forEach(w=>{
-    if(!G.cards.some(c=>c.who===w)){
-      const pool=v.cards.filter(c=>c.who===w);
-      if(pool.length){
-        const cand=pool[Math.floor(Math.random()*pool.length)];
-        G.cards[Math.floor(Math.random()*G.cards.length)]=cand;
-      }
-    }
+    const pool=v.cards.filter(c=>c.who===w);
+    if(pool.length) picked.push(pool[Math.floor(Math.random()*pool.length)]);
   });
+  const rest=shuffle(v.cards.filter(c=>picked.indexOf(c)<0));
+  G.cards=shuffle(picked.concat(rest.slice(0,Math.max(0,want-picked.length))));
   G.idx=0; G.errors=0; G.locked=false;
   renderPodiums();
   document.getElementById('hud').style.display='flex';
@@ -514,19 +546,22 @@ function startGame(){
   go('sort'); renderCard();
 }
 function renderCard(){
-  G.locked=false;
+  G.locked=false; arm();
   const c=G.cards[G.idx];
   document.getElementById('sortProgress').textContent='1. felvonás — álláspont-kártya '+(G.idx+1)+' / '+G.cards.length;
-  document.getElementById('stmtText').textContent='„'+c.text+'”';
+  document.getElementById('stmtText').textContent=c.text;
   ['a','k','b'].forEach(k=>{
     const b=document.getElementById('sb-'+k);
     b.disabled=false; b.classList.remove('correct','incorrect');
   });
   const fb=document.getElementById('sortFb'); fb.className='feedback'; fb.textContent='';
   document.getElementById('sortActions').innerHTML='';
+  focusEl(document.getElementById('stmtText'));
 }
+function nextCard(){ if(!G.locked) return; G.idx++; renderCard(); }
+function nextQuiz(){ if(!G.locked) return; G.qidx++; renderQuiz(); }
 function sortAnswer(k){
-  if(G.locked) return;
+  if(G.locked||Date.now()<G.readyAt) return;
   const c=G.cards[G.idx];
   const v=G.vita;
   const fb=document.getElementById('sortFb');
@@ -536,14 +571,16 @@ function sortAnswer(k){
     ['a','k','b'].forEach(x=>document.getElementById('sb-'+x).disabled=true);
     fb.className='feedback ok'; fb.innerHTML='&#10003; '+c.why;
     const list = c.who==='k' ? null : document.getElementById('won-'+c.who);
-    if(list) list.insertAdjacentHTML('beforeend','<li>'+c.text.slice(0,64)+'&hellip;</li>');
+    if(list) list.insertAdjacentHTML('beforeend','<li>'+shortText(c.text,64)+'</li>');
     document.getElementById('sortActions').innerHTML =
       G.idx<G.cards.length-1
-        ? '<button class="btn" onclick="G.idx++; renderCard();">Következő kártya &rarr;</button>'
+        ? '<button class="btn" onclick="nextCard()">Következő kártya &rarr;</button>'
         : '<button class="btn" onclick="startQuiz()">2. felvonás: elemzés &rarr;</button>';
+    focusEl(document.getElementById('sortFb'));
   }else{
     err();
     document.getElementById('sb-'+k).classList.add('incorrect');
+    document.getElementById('sb-'+k).disabled=true;
     fb.className='feedback bad';
     fb.innerHTML = k==='k'
       ? 'Ez az álláspont nem közös cél — a kártya olyasmiről beszél, amiben a két fél <b>különbözik</b>. Kinek a programjára jellemzőbb ez a hangsúly?'
@@ -553,12 +590,13 @@ function sortAnswer(k){
 
 /* ============ 2. felvonás: quiz ============ */
 function startQuiz(){
+  if(!G.locked) return;
   const v=G.vita;
   G.quiz=sample(v.quiz,Math.min(4,v.quiz.length)); G.qidx=0;
   go('quiz'); renderQuiz();
 }
 function renderQuiz(){
-  G.locked=false;
+  G.locked=false; arm();
   const q=G.quiz[G.qidx];
   document.getElementById('quizProgress').textContent='2. felvonás — elemző kérdés '+(G.qidx+1)+' / '+G.quiz.length;
   document.getElementById('quizQ').textContent=q.q;
@@ -567,9 +605,10 @@ function renderQuiz(){
     opts.map(o=>'<button class="opt" data-ok="'+(o.ok?1:0)+'" onclick="quizAnswer(this)">'+o.t+'</button>').join('');
   const fb=document.getElementById('quizFb'); fb.className='feedback'; fb.textContent='';
   document.getElementById('quizActions').innerHTML='';
+  focusEl(document.getElementById('quizQ'));
 }
 function quizAnswer(btn){
-  if(G.locked) return;
+  if(G.locked||Date.now()<G.readyAt) return;
   const q=G.quiz[G.qidx];
   const ok=btn.dataset.ok==='1';
   const fb=document.getElementById('quizFb');
@@ -580,11 +619,13 @@ function quizAnswer(btn){
     fb.className='feedback ok'; fb.innerHTML='&#10003; '+q.fb;
     document.getElementById('quizActions').innerHTML =
       G.qidx<G.quiz.length-1
-        ? '<button class="btn" onclick="G.qidx++; renderQuiz();">Következő kérdés &rarr;</button>'
+        ? '<button class="btn" onclick="nextQuiz()">Következő kérdés &rarr;</button>'
         : '<button class="btn" onclick="endGame()">A vita mérlege &rarr;</button>';
+    focusEl(document.getElementById('quizFb'));
   }else{
     err();
     btn.classList.add('incorrect');
+    btn.disabled=true;
     fb.className='feedback bad';
     fb.innerHTML='Nem pontos — idézd fel a mű vagy esemény keletkezési évét és szereplőit, és gondold végig, melyik program logikájába illik!';
   }
@@ -592,6 +633,7 @@ function quizAnswer(btn){
 
 /* ============ zárás ============ */
 function endGame(){
+  if(!G.locked) return;
   go('ending');
   const v=G.vita;
   let grade;
@@ -602,13 +644,14 @@ function endGame(){
   document.getElementById('endingH2').textContent=v.whoA.name+' — '+v.whoB.name;
 
   const rowsHtml = v.essay.rows.map(r=>
-    '<tr><td><b>'+r.label+'</b></td><td>'+r.a+'</td><td>'+r.b+'</td></tr>').join('');
+    '<tr><td data-label="Szempont"><b>'+r.label+'</b></td><td data-label="'+v.whoA.name+'">'+r.a+'</td><td data-label="'+v.whoB.name+'">'+r.b+'</td></tr>').join('');
   document.getElementById('essayBox').innerHTML =
     '<h3>'+v.essay.title+'</h3>'+
-    '<table><tr><th>Szempont</th><th>'+v.whoA.name+'</th><th>'+v.whoB.name+'</th></tr>'+
+    '<table><tr class="hd"><th>Szempont</th><th>'+v.whoA.name+'</th><th>'+v.whoB.name+'</th></tr>'+
     rowsHtml+
-    '<tr><td><b>Közös célok</b></td><td colspan="2">'+v.essay.common+'</td></tr></table>'+
-    '<div class="vaz"><b>Esszé-gondolatmenet:</b> '+v.essay.vazlat+'</div>';
+    '<tr><td data-label="Szempont"><b>Közös célok</b></td><td colspan="2" data-label="Közös célok">'+v.essay.common+'</td></tr></table>'+
+    '<div class="vaz"><b>Esszé-gondolatmenet:</b> '+v.essay.vazlat+'</div>'+
+    (v.src?'<div class="vaz"><b>Forrásjelzés:</b> '+v.src.replace(/^Forrás: /,'')+'</div>':'');
 }
 
 renderPick();
