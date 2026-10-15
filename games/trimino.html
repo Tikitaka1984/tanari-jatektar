@@ -67,14 +67,14 @@
 
   /* the growing chain — real alternating triangle tiles */
   .tristrip{display:flex;align-items:flex-start;flex-wrap:wrap;gap:5px;margin-bottom:22px;}
-  .tri{width:108px;height:126px;flex:none;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;border:1.5px solid var(--edge-2);}
+  .tri{width:124px;height:144px;flex:none;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;border:1.5px solid var(--edge-2);}
   .tri.up{clip-path:polygon(50% 0%, 0% 100%, 100% 100%);}
   .tri.down{clip-path:polygon(0% 0%, 100% 0%, 50% 100%);}
   .tri.solved.up{background:linear-gradient(160deg,var(--acc),var(--acc-2));border-color:transparent;}
   .tri.solved.down{background:var(--surf-2);border-color:var(--acc);}
-  .tri .label{font-size:.72rem;font-weight:700;line-height:1.25;max-width:76px;}
-  .tri.up .label{color:var(--acc-ink);margin-top:34px;}
-  .tri.down .label{color:var(--text);margin-bottom:34px;}
+  .tri .label{font-size:.7rem;font-weight:700;line-height:1.25;max-width:88px;}
+  .tri.up .label{color:var(--acc-ink);margin-top:60px;}
+  .tri.down .label{color:var(--text);margin-bottom:60px;}
   .tri.pending{border-style:dashed;opacity:.55;}
   .tri.pending .qm{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:1.1rem;}
   .tri.pending.up .qm{margin-top:34px;}
@@ -109,17 +109,34 @@
   .recap .ritem{margin-bottom:10px;font-size:.85rem;line-height:1.5;}
   .recap .ritem b{color:var(--acc);}
 
+  .opt,.btn,.chaincard{min-height:44px;}
+  .currentterm:focus,.hero h1:focus,.end h2:focus{outline:none;}
+  .feedback:focus{outline:none;}
+  .opt.correct::after{content:" \2713";font-weight:700;color:var(--win);}
+  .opt.incorrect::after{content:" \2717";font-weight:700;color:var(--fail);}
+  .btnrow{margin-top:26px;}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+  @media(max-width:480px){
+    #app{padding:18px 12px 56px;}
+    .hero h1{font-size:1.9rem;}
+    .card{padding:18px;}
+    .btn{width:100%;justify-content:center;}
+    .tri{width:108px;height:124px;}
+    .tri .label{font-size:.62rem;max-width:72px;}
+    .tri.up .label{margin-top:54px;}
+    .tri.down .label{margin-bottom:54px;}
+  }
   footer.tiny{text-align:center;opacity:.45;font-size:.76rem;margin-top:50px;font-family:'JetBrains Mono',monospace;}
 </style>
 </head>
 <body>
-<div id="app">
+<main id="app">
 
   <!-- PICK -->
   <section class="screen active" id="screen-pick">
     <div class="hero">
       <div class="eyebrow">Fogalomgyakorló · Trimino-ihletésű láncjáték</div>
-      <h1>Trimino</h1>
+      <h1 id="pickTitle" tabindex="-1">Trimino</h1>
       <p>Fogalmakat kell a helyes meghatározásukhoz párosítanod — minden helyes válasz egy új háromszög-összekötővel bővíti a láncot.</p>
     </div>
 
@@ -155,17 +172,17 @@
   <section class="screen" id="screen-play">
     <div class="hud">
       <div class="pill">Fogalom <b id="hudIdx">1</b> / <b id="hudTotal">6</b></div>
-      <div class="pill">Hiba: <b id="hudErr">0</b></div>
+      <div class="pill" role="status" aria-live="polite">Hiba: <b id="hudErr">0</b></div>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
+    <div class="progress-bar" id="progressBar" role="progressbar" aria-label="Haladás a láncban" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
 
-    <div class="tristrip" id="strip"></div>
+    <div class="tristrip" id="strip" role="group" aria-label="A lánc eddigi láncszemei"></div>
 
     <div class="card">
       <div class="promptlabel">Melyik meghatározás illik ehhez a fogalomhoz?</div>
-      <div class="currentterm" id="currentTerm"></div>
+      <div class="currentterm" id="currentTerm" tabindex="-1"></div>
       <div class="opts" id="optsBox"></div>
-      <div class="feedback" id="fb"></div>
+      <div class="feedback" id="fb" role="status" aria-live="polite" tabindex="-1"></div>
       <div class="actions" id="actionsBox"></div>
     </div>
   </section>
@@ -174,21 +191,21 @@
   <section class="screen" id="screen-end">
     <div class="end">
       <div class="eyebrow" style="display:block;">Kész a lánc!</div>
-      <h2 id="endTitle">Szép munka!</h2>
+      <h2 id="endTitle" tabindex="-1">Szép munka!</h2>
       <div class="scorebig" id="endScore">6/6</div>
       <div class="scoresub" id="endSub">hibátlanul összekapcsolva</div>
-      <div class="tristrip" id="endStrip" style="justify-content:center;"></div>
+      <div class="tristrip" id="endStrip" style="justify-content:center;" role="group" aria-label="A kész lánc"></div>
       <div class="recap" id="recap">
         <h4>A megfejtett fogalmak áttekintése</h4>
         <div id="recapList"></div>
       </div>
-      <div style="margin-top:26px;">
+      <div class="btnrow">
         <button class="btn" onclick="location.reload()">Új lánc indítása</button>
       </div>
     </div>
   </section>
 
-</div>
+</main>
 <footer class="tiny">Történelem érettségi felkészítő · Fogalomgyakorló · trimino-ihletésű láncjáték (a valódi 2D lapkakirakó egyszerűsített, önellenőrző digitális változata)</footer>
 
 <script>
@@ -230,12 +247,17 @@ const CHAINS = {
 
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 
-const G = {items:[], order:[], idx:0, errors:0, solved:[], locked:false};
+const G = {items:[], order:[], idx:0, errors:0, solved:[], locked:false, readyAt:0};
+/* az új fogalom első 350 ms-ában érkező kattintást (dupla kattintás második fele) figyelmen kívül hagyjuk */
+function arm(){ G.readyAt = Date.now() + 350; }
+function focusEl(el){ if(!el) return; try{ el.focus({preventScroll:true}); }catch(e){} }
 
 function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
+  var hd = document.querySelector('#screen-'+id+' h1, #screen-'+id+' h2');
+  if(hd){ hd.setAttribute('tabindex','-1'); focusEl(hd); }
 }
 
 function startChain(id){
@@ -259,7 +281,7 @@ function renderStrip(targetId){
     const orient = (i % 2 === 0) ? 'up' : 'down';
     const t = document.createElement('div');
     t.className = 'tri solved ' + orient;
-    t.innerHTML = '<span class="label">' + s.term + '</span>';
+    t.innerHTML = '<span class="label">' + s.term.replace('Jobbágyfelszabadítás', 'Jobbágy&shy;felszabadítás') + '</span>';
     strip.appendChild(t);
   });
   if(!targetId){
@@ -269,7 +291,41 @@ function renderStrip(targetId){
     p.innerHTML = '<span class="qm">?</span>';
     strip.appendChild(p);
   }
+  fitLabels(strip);
 }
+
+/* a címke betűméretét addig csökkentjük, amíg a szöveg teljesen a háromszögön belülre nem kerül */
+function labelFits(t, lab, up){
+  const tb = t.getBoundingClientRect();
+  if(!tb.width) return true;
+  const rg = document.createRange(); rg.selectNodeContents(lab);
+  const cx = tb.left + tb.width/2;
+  return [...rg.getClientRects()].every(r => [r.top, r.bottom].every(y => {
+    const f = (y - tb.top) / tb.height;
+    const half = (up ? f : 1 - f) * tb.width / 2;
+    return half - Math.max(Math.abs(r.left - cx), Math.abs(r.right - cx)) >= 4;
+  }));
+}
+function fitLabels(root){
+  root.querySelectorAll('.tri.solved').forEach(t=>{
+    const lab = t.querySelector('.label');
+    lab.style.fontSize = ''; lab.style.overflowWrap = '';
+    const base = parseFloat(getComputedStyle(lab).fontSize);
+    const up = t.classList.contains('up');
+    const shrink = () => {
+      for(let f = base; f >= 7; f -= 0.5){
+        lab.style.fontSize = f + 'px';
+        if(labelFits(t, lab, up)) return true;
+      }
+      return false;
+    };
+    /* előbb csak a betűméretet csökkentjük (a szó egyben marad); ha így sem fér el, megengedjük a szótörést */
+    if(!shrink()){ lab.style.overflowWrap = 'anywhere'; shrink(); }
+  });
+}
+function refitAll(){ ['strip','endStrip'].forEach(id => fitLabels(document.getElementById(id))); }
+window.addEventListener('resize', refitAll);
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(refitAll);
 
 function renderRecap(){
   const box = document.getElementById('recapList');
@@ -279,12 +335,13 @@ function renderRecap(){
 }
 
 function renderStep(){
-  G.locked = false;
+  G.locked = false; arm();
   const itemIdx = G.order[G.idx];
   const item = G.items[itemIdx];
   document.getElementById('hudIdx').textContent = G.idx+1;
   document.getElementById('hudErr').textContent = G.errors;
   document.getElementById('progressFill').style.width = Math.round((G.idx/G.items.length)*100)+'%';
+  document.getElementById('progressBar').setAttribute('aria-valuenow', Math.round((G.idx/G.items.length)*100));
   document.getElementById('currentTerm').textContent = item.term;
 
   const distractPool = G.items.filter((_,i)=>i!==itemIdx).map(x=>x.def);
@@ -304,10 +361,11 @@ function renderStep(){
   document.getElementById('fb').className = 'feedback';
   document.getElementById('fb').textContent = '';
   document.getElementById('actionsBox').innerHTML = '';
+  focusEl(document.getElementById('currentTerm'));
 }
 
 function choose(picked, correctDef, item){
-  if(G.locked) return;
+  if(G.locked || Date.now() < G.readyAt) return;
   const buttons = [...document.getElementById('optsBox').children];
   const correctBtn = buttons.find(b=>b.textContent===correctDef);
   const fb = document.getElementById('fb');
@@ -323,6 +381,7 @@ function choose(picked, correctDef, item){
       (G.idx < G.items.length-1)
         ? '<button class="btn" onclick="nextStep()">Következő fogalom &rarr;</button>'
         : '<button class="btn" onclick="endGame()">Lánc lezárása &rarr;</button>';
+    focusEl(fb);
   } else {
     G.errors++;
     document.getElementById('hudErr').textContent = G.errors;
@@ -334,9 +393,10 @@ function choose(picked, correctDef, item){
   }
 }
 
-function nextStep(){ G.idx++; renderStep(); }
+function nextStep(){ if(!G.locked) return; G.idx++; renderStep(); }
 
 function endGame(){
+  if(!G.locked) return;
   go('end');
   const pct = Math.round(((G.items.length - Math.min(G.errors,G.items.length)) / G.items.length) * 100);
   let title;
