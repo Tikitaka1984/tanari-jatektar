@@ -21,7 +21,7 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | --- | --- | --- | --- |
 | A korona nyomában | `games/korona.html` | 9–10. | Térképes nyomozójáték a középkori magyar államon át. |
 | Ki vagyok én? | `games/kivagyok.html` | 9–12. | Portréjáték, 42 történelmi személy, fokozatosan könnyülő nyomokkal. |
-| A reformkor vitaterme | `games/reformkor.html` | 10–11. | Három vitatéma (Széchenyi–Kossuth, Dessewffy–Széchenyi, centralisták–Kossuth) témaválasztóval. |
+| A reformkor vitaterme | `games/reformkor.html` | 10. | Három vitatéma (Széchenyi–Kossuth, Dessewffy–Széchenyi, centralisták–Kossuth) témaválasztóval. |
 | A titkos levéltár | `games/leveltar.html` | 11–12. | Szabadulószoba évszám-, fogalom-, személy- és térképfeladatokkal. |
 | Szókereső | `games/szokereso.html` | 9–12. | 428 fogalom, név és helyszín, klasszikus és nehéz móddal, nyomtatható feladatlappal. |
 | Két forrás, két igazság | `games/ketforras.html` | 9–12. | 21 esetpár forráselemzésre, mind a négy évfolyamról. |
