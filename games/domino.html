@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dominó — fogalomlánc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#150F31; --surf:#1F1749; --surf-2:#2A2060;
+    --edge:rgba(255,255,255,.10); --edge-2:rgba(255,255,255,.2);
+    --text:#F3F0FF; --muted:#B4A9E0;
+    --win:#3DDC97; --win-bg:rgba(61,220,151,.16);
+    --fail:#FF7A8A; --fail-bg:rgba(255,122,138,.18);
+    --acc:#FFC24B; --acc-ink:#2B1B00; --r:16px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{min-height:100vh;color:var(--text);font-family:'Manrope',system-ui,sans-serif;font-size:15px;line-height:1.55;
+    background:radial-gradient(900px 520px at 8% -8%,rgba(255,194,75,.14),transparent 62%),radial-gradient(760px 460px at 96% 4%,rgba(158,139,255,.18),transparent 58%),var(--bg);
+    background-attachment:fixed;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;letter-spacing:-.03em;margin:0;line-height:1.1;}
+  h1{font-size:2.1rem;} h2{font-size:1.5rem;} h3{font-size:1.05rem;}
+  button{font-family:inherit;font-size:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  button:disabled{cursor:not-allowed;opacity:.45;}
+  :focus-visible{outline:3px solid var(--acc);outline-offset:3px;border-radius:8px;}
+  [tabindex="-1"]:focus{outline:none;} [tabindex="-1"]:focus-visible{outline:3px solid var(--acc);outline-offset:3px;}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+  #app{max-width:820px;margin:0 auto;padding:26px 16px 70px;}
+  .screen{display:none;animation:fade .35s ease;} .screen.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .mono{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);}
+  .lead{color:var(--muted);margin:10px 0 18px;max-width:62ch;}
+  .btn{min-height:46px;padding:10px 20px;border-radius:12px;font-weight:700;border:1.5px solid var(--edge-2);background:var(--surf);}
+  .btn:hover:not(:disabled){border-color:var(--acc);}
+  .btn.cta{background:linear-gradient(135deg,var(--acc),#FF8A6B);color:var(--acc-ink);border-color:transparent;}
+  .btn.ghost{background:transparent;}
+  .row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px;}
+  .pick{min-height:64px;text-align:left;padding:12px;border-radius:14px;background:var(--surf);border:2px solid var(--edge);}
+  .pick .big{display:block;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.2rem;}
+  .pick .sm{display:block;font-size:.78rem;color:var(--muted);}
+  .pick[aria-pressed="true"]{border-color:var(--pa,var(--acc));background:linear-gradient(160deg,rgba(255,255,255,.1),transparent);}
+  .pick[aria-pressed="true"] .big{color:var(--pa,var(--acc));}
+  .sect{margin-top:22px;}
+  details.rules{margin-top:20px;background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:12px 16px;}
+  details.rules summary{cursor:pointer;font-weight:700;min-height:32px;}
+  details.rules li{margin:6px 0;}
+  .src{margin-top:18px;font-size:.8rem;color:var(--muted);border-left:3px solid var(--edge-2);padding-left:12px;}
+  /* learn */
+  .card{background:var(--surf);border:1.5px solid var(--edge);border-radius:var(--r);padding:22px 18px;margin-top:16px;}
+  .card .term{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.9rem;margin:6px 0 10px;overflow-wrap:anywhere;}
+  .card .defn{font-size:1.1rem;min-height:3.2em;overflow-wrap:anywhere;}
+  .prog{height:8px;border-radius:99px;background:var(--surf-2);margin-top:12px;overflow:hidden;}
+  .prog>i{display:block;height:100%;background:var(--acc);transition:width .3s;}
+  /* play */
+  .bar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
+  .chip{padding:6px 12px;border-radius:99px;background:var(--surf);border:1px solid var(--edge);font-family:'JetBrains Mono',monospace;font-size:.76rem;}
+  .chip.turn{border-color:var(--acc);color:var(--acc);}
+  .fb{margin:12px 0;padding:12px 14px;border-radius:12px;background:var(--surf);border:1.5px solid var(--edge);min-height:52px;overflow-wrap:anywhere;}
+  .fb.ok{border-color:var(--win);background:var(--win-bg);} .fb.bad{border-color:var(--fail);background:var(--fail-bg);}
+  .chain{list-style:none;margin:8px auto;padding:0;max-width:460px;}
+  .chain li{margin:0;}
+  .half{display:block;padding:10px 12px;overflow-wrap:anywhere;}
+  .half .lab{display:block;font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
+  .half .txt{display:block;}
+  .half.def .txt{font-size:.9rem;} .half.term .txt{font-weight:800;font-size:1.05rem;color:var(--acc);}
+  .tile{display:block;width:100%;text-align:left;background:#FBF7EA;color:#241A4A;border-radius:12px;border:2px solid #CFC5A3;overflow:hidden;box-shadow:0 3px 0 rgba(0,0,0,.35);}
+  .tile .half .lab{color:#6B5F8C;} .tile .half.term .txt{color:#8A4B00;}
+  .tile .half.def{border-bottom:2px dashed #B9AE8A;}
+  button.tile{min-height:44px;} button.tile:hover{border-color:var(--acc);}
+  button.tile[aria-pressed="true"]{border-color:var(--acc);box-shadow:0 0 0 4px rgba(255,194,75,.55);transform:translateY(-2px);}
+  button.tile.hint{border-color:var(--win);box-shadow:0 0 0 4px rgba(61,220,151,.5);}
+  .link{text-align:center;color:var(--win);font-size:.85rem;font-weight:700;line-height:1.2;padding:3px 0;}
+  .endlab{max-width:460px;margin:10px auto 0;text-align:center;}
+  .endbtn{display:block;width:100%;max-width:460px;margin:6px auto;min-height:48px;border:2px dashed var(--acc);border-radius:12px;font-weight:700;color:var(--acc);}
+  .endbtn:enabled:hover{background:rgba(255,194,75,.12);}
+  .mid{max-width:460px;margin:8px auto;background:var(--surf);border:1px solid var(--edge);border-radius:12px;padding:8px 12px;}
+  .mid summary{cursor:pointer;min-height:32px;font-weight:600;}
+  .mid dl{margin:8px 0 0;} .mid dt{font-weight:800;margin-top:8px;} .mid dd{margin:0;color:var(--muted);font-size:.88rem;}
+  .hand{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:10px;list-style:none;padding:0;}
+  .hand li{margin:0;}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.9rem;}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--edge);vertical-align:top;overflow-wrap:anywhere;}
+  th{font-family:'JetBrains Mono',monospace;font-size:.68rem;text-transform:uppercase;color:var(--muted);}
+  .weak{color:var(--fail);font-weight:700;} .good{color:var(--win);font-weight:700;}
+  .big-res{font-size:2rem;}
+  @media(max-width:560px){ h1{font-size:1.7rem;} .grid4{grid-template-columns:repeat(2,1fr);} .grid3{grid-template-columns:1fr;} .hand{grid-template-columns:1fr 1fr;gap:8px;} .half{padding:8px;} .half.def .txt{font-size:.82rem;} .btn{width:100%;}
+    table.rev thead{display:none;} table.rev tr{display:block;border-bottom:1px solid var(--edge);padding:6px 0;} table.rev td{display:block;border:none;padding:2px 10px;} table.rev td::before{content:attr(data-label)": ";color:var(--muted);font-size:.72rem;} }
+  @media(max-width:400px){ .hand{grid-template-columns:1fr;} }
+  @media(prefers-reduced-motion:reduce){ *,*::before,*::after{animation:none!important;transition:none!important;} }
+</style>
+</head>
+<body>
+<main id="app">
+<section class="screen active" id="s-home" aria-labelledby="h-home">
+  <div class="mono">Történelem · 9–12. évfolyam</div>
+  <h1 id="h-home" tabindex="-1">Dominó — fogalomlánc</h1>
+  <p class="lead">Klasszikus dominó történelmi fogalmakkal: a lapok két felén egy meghatározás és egy fogalom áll. A láncba csak az illeszkedő lap kerülhet. Előbb átnézheted a fogalmakat, majd játszhatsz a gép ellen vagy egyedül.</p>
+  <h2 class="sect" style="font-size:1.1rem">1. Évfolyam</h2>
+  <div class="grid4" id="gradeBtns" role="group" aria-label="Évfolyam"></div>
+  <h2 class="sect" style="font-size:1.1rem">2. Korszak</h2>
+  <div class="grid3" id="scopeBtns" role="group" aria-label="Korszak"></div>
+  <p class="mono" id="pickInfo" style="margin-top:12px">Válassz évfolyamot és korszakot.</p>
+  <div class="row">
+    <button class="btn" id="bLearn" disabled>Tanulás: fogalmak átnézése</button>
+    <button class="btn cta" id="bCpu" disabled>Játék a gép ellen</button>
+    <button class="btn" id="bSolo" disabled>Gyakorlás egyedül</button>
+  </div>
+  <details class="rules"><summary>Játékszabályok és pontozás</summary>
+    <ol>
+      <li>Minden lap két félből áll: felül egy <b>meghatározás</b>, alul egy <b>fogalom</b>. A lap fogalma és a lap meghatározása nem tartozik össze.</li>
+      <li>Az asztalon lévő lánc két nyitott végén egy-egy fél áll. Egy lapot csak úgy tehetsz le, ha a fogalma a lánc <i>elején</i> álló meghatározáshoz, vagy a meghatározása a lánc <i>végén</i> álló fogalomhoz tartozik.</li>
+      <li>Ha nincs illeszkedő lapod, húzol a talonból; ha a talon üres, passzolsz. Ha van illeszkedő lapod, nem húzhatsz.</li>
+      <li>Gép ellen az nyer, aki előbb leteszi az összes lapját. Ha mindketten passzolnak, akinek kevesebb lapja maradt, az nyer. Egyedül akkor végeztél, ha minden lap a láncban van.</li>
+      <li>Pontozás: lerakott lap +10, rossz illesztési kísérlet −3, tipp −2 (a pontszám nem megy 0 alá), győzelem vagy befejezés +20.</li>
+    </ol>
+  </details>
+  <p class="src">Fogalmak és meghatározások: a Keresztrejtvény játék fogalomtára, változtatás nélkül, évfolyam és korszak szerinti bontásban. Új történelmi tartalom nem került be; a tartalmi felülvizsgálat a tanár feladata.</p>
+</section>
+
+<section class="screen" id="s-learn" aria-labelledby="h-learn">
+  <div class="mono" id="learnMeta"></div>
+  <h2 id="h-learn" tabindex="-1">Tanulás</h2>
+  <div class="prog" aria-hidden="true"><i id="learnBar" style="width:0"></i></div>
+  <div class="card" id="learnCard"></div>
+  <div class="row" id="learnBtns"></div>
+</section>
+
+<section class="screen" id="s-play" aria-labelledby="h-play">
+  <div class="mono" id="playMeta"></div>
+  <h2 id="h-play" tabindex="-1">Dominó</h2>
+  <div class="bar" id="bar"></div>
+  <div class="fb" id="fb" role="status" tabindex="-1"></div>
+  <h3 class="mono" style="margin-top:14px">A lánc</h3>
+  <div class="endlab mono" id="topLab"></div>
+  <button class="endbtn" id="btnTop" disabled>Lerakás a lánc elejére (felülre)</button>
+  <ol class="chain" id="chain" aria-label="A lerakott lapok láncban"></ol>
+  <button class="endbtn" id="btnBot" disabled>Lerakás a lánc végére (alulra)</button>
+  <div class="endlab mono" id="botLab"></div>
+  <h3 class="mono" style="margin-top:20px">A te lapjaid</h3>
+  <ul class="hand" id="hand" aria-label="A te lapjaid"></ul>
+  <div class="row">
+    <button class="btn" id="bDraw">Húzás a talonból</button>
+    <button class="btn" id="bPass">Passz</button>
+    <button class="btn" id="bTip">Tipp (−2 pont)</button>
+    <button class="btn ghost" id="bQuit">Kilépés a főmenübe</button>
+  </div>
+</section>
+
+<section class="screen" id="s-end" aria-labelledby="h-end">
+  <div class="mono" id="endMeta"></div>
+  <h2 id="h-end" tabindex="-1" class="big-res">Vége</h2>
+  <p class="lead" id="endSum"></p>
+  <div id="endReview"></div>
+  <div class="row">
+    <button class="btn cta" id="eAgain">Új játék ugyanezzel</button>
+    <button class="btn" id="eLearn">Tanulás a gyakorlandó fogalmakkal</button>
+    <button class="btn ghost" id="eHome">Főmenü</button>
+  </div>
+</section>
+</main>
+<script>
+const BANK = {"okor":[{"t":"szenátus","d":"Róma legfőbb tanácsadó testülete, a köztársaság korában a valódi hatalom birtokosa"},{"t":"konzul","d":"A római köztársaság két, egy évre választott legfőbb tisztségviselője"},{"t":"légió","d":"A római hadsereg alapvető katonai egysége"},{"t":"Caesar","d":"Római hadvezér és államférfi, akit szenátorok gyilkoltak meg Kr. e. 44-ben"},{"t":"Attila","d":"A hunok legendás nagykirálya, „Isten ostora\""},{"t":"Zeusz","d":"A görög istenek királya"},{"t":"mítosz","d":"Istenekről és hősökről szóló elbeszélés az ókori népeknél"},{"t":"agora","d":"Az athéni piactér és gyülekezőhely, a közélet színtere"},{"t":"Buddha","d":"Indiai vallásalapító, a buddhizmus tanítója"},{"t":"Szolón","d":"Athéni államférfi, aki az adósrabszolgaság eltörlésével alapozta meg a népuralmat"},{"t":"Platón","d":"Görög bölcselő, az Akadémia alapítója, az ideák tanának hirdetője"},{"t":"Mózes","d":"A zsidó nép hagyomány szerinti vezetője és törvényhozója"},{"t":"Augustus","d":"Az első római császár, aki Kr. e. 27-től egyeduralkodóként kormányzott"},{"t":"diktátor","d":"A római köztársaságban rendkívüli helyzetben, hat hónapra kinevezett korlátlan hatalmú vezető"}],"kozepkor":[{"t":"vármegye","d":"A magyar királyi közigazgatás és birtokszervezet területi alapegysége"},{"t":"ispán","d":"A megye élén álló, király által kinevezett tisztségviselő"},{"t":"Aranybulla","d":"1222-ben kiadott oklevél, amely a köznemesség jogait rögzítette"},{"t":"serviens","d":"Királyi szolgálattevő kisbirtokos a középkori Magyarországon"},{"t":"tatárjárás","d":"A mongol sereg 1241–42-es pusztítása Magyarországon"},{"t":"hűbériség","d":"A középkori nyugat-európai birtok- és szolgálati rendszer"},{"t":"jobbágy","d":"A középkori uradalom földjén dolgozó, röghöz kötött paraszti népesség tagja"},{"t":"céh","d":"Az azonos mesterséget űző iparosok középkori érdekvédelmi szervezete"},{"t":"Korán","d":"Az iszlám vallás szent könyve, a próféta kinyilatkoztatásainak gyűjteménye"},{"t":"Mohamed","d":"Az iszlám vallás alapítója"},{"t":"I. (Szent) István","d":"Az első magyar király, az államalapító"},{"t":"I. (Szent) László","d":"A „lovagkirály\", szigorú törvényeivel szilárdította meg a rendet"},{"t":"Hunyadi Mátyás","d":"Reneszánsz magyar király, a fekete sereg és a Corvina megalapítója"},{"t":"Luxemburgi Zsigmond","d":"Magyar király és német-római császár, a déli végvárrendszer megalapozója"}],"kora_ujkor":[{"t":"reformáció","d":"A 16. századi vallási megújulási mozgalom, amely a wittenbergi tételekkel indult"},{"t":"Luther Márton","d":"Wittenbergi szerzetes, aki 1517-ben tételeivel elindította a hitújítást"},{"t":"Kálvin János","d":"Genfi hitújító, az eleve elrendelés tanának hirdetője"},{"t":"abszolutizmus","d":"Korlátlan uralkodói hatalomra épülő kormányzati rendszer"},{"t":"Mohács","d":"A magyar sereg 1526-os vereségének színhelye"},{"t":"Szigetvár","d":"Vár, amelyet 1566-ban a szultán seregével szemben védtek"},{"t":"végvár","d":"Az oszmán terjeszkedés ellen kiépített határvédelmi erősség"},{"t":"kuruc","d":"A Habsburg-ellenes felkelők elnevezése a 17–18. században"},{"t":"Bocskai István","d":"Erdélyi fejedelem, aki 1604-ben Habsburg-ellenes felkelést indított"},{"t":"Bethlen Gábor","d":"Erdély fejedelme 1613–1629 között, a harmincéves háború résztvevője"},{"t":"Kolumbusz","d":"Genovai hajós, aki 1492-ben átszelte az Atlanti-óceánt"},{"t":"Galilei","d":"Itáliai tudós, akit a Nap középpontú világkép hirdetéséért perbe fogtak"},{"t":"Mária Terézia","d":"Habsburg uralkodónő 1740–1780 között, a kettős vámrendszer bevezetője"},{"t":"manufaktúra","d":"Kézi munkán és munkamegosztáson alapuló nagyüzem a korai kapitalizmusban"}],"reformkor":[{"t":"liberalizmus","d":"Eszmeáramlat, amely az egyéni szabadságjogokat és a szabad versenyt hirdeti"},{"t":"Széchenyi István","d":"A „legnagyobb magyar\", a Hitel szerzője, a Lánchíd kezdeményezője"},{"t":"Kossuth Lajos","d":"A reformellenzék vezére, 1849-ben kormányzó-elnök"},{"t":"Deák Ferenc","d":"„A haza bölcse\", az Ellenzéki Nyilatkozat megfogalmazója"},{"t":"Védegylet","d":"1844-ben alakult mozgalom a honi ipar pártolására"},{"t":"cenzúra","d":"A sajtótermékek előzetes hatósági engedélyezése"},{"t":"örökváltság","d":"A paraszt egy összegben megválthatja szolgáltatásait, és földje tulajdonosává válik"},{"t":"közteherviselés","d":"Az elv, hogy az ország terheiből a kiváltságosoknak is részt kell vállalniuk"},{"t":"Petőfi Sándor","d":"A forradalom költője, a Nemzeti dal szerzője"},{"t":"Batthyány Lajos","d":"Az első felelős magyar kormány miniszterelnöke"},{"t":"Görgei Artúr","d":"A honvédsereg fővezére, aki Világosnál letette a fegyvert"},{"t":"Világos","d":"Település, ahol 1849 augusztusában a magyar fősereg letette a fegyvert"},{"t":"Pozsony","d":"Város, ahol a reformkori rendi országgyűlések üléseztek"},{"t":"nemzetőrség","d":"1848-ban szervezett fegyveres polgári testület a rend fenntartására"}],"dualizmus":[{"t":"kiegyezés","d":"1867-es megállapodás az uralkodó és a magyar politikai vezetés között"},{"t":"dualizmus","d":"Az Osztrák–Magyar Monarchia kétközpontú államszerkezete"},{"t":"obstrukció","d":"A parlamenti munka szándékos akadályozása hosszú beszédekkel"},{"t":"koalíció","d":"Több párt szövetsége a kormányzás érdekében"},{"t":"Bismarck","d":"A „vaskancellár\", a német egység megteremtője"},{"t":"Andrássy Gyula","d":"A megegyezés utáni első magyar miniszterelnök, később közös külügyminiszter"},{"t":"antant","d":"Az első világháborúban Németországgal szemben álló hatalmi tömb"},{"t":"marxizmus","d":"Az osztályharcra és a termelési viszonyokra épülő társadalomelmélet"},{"t":"millennium","d":"A honfoglalás ezredik évfordulójának 1896-os ünnepsége"},{"t":"Fiume","d":"A Magyar Királyság tengeri kikötője az Adrián"},{"t":"Lincoln","d":"Amerikai elnök, aki alatt eltörölték a rabszolgaságot"},{"t":"Herzl Tivadar","d":"A cionista mozgalom megalapítója, aki a magyar fővárosban született"},{"t":"szecesszió","d":"A századforduló díszítő, természeti formákat követő művészeti stílusa"}],"vilaghaboruk":[{"t":"Trianon","d":"A magyar békediktátum aláírásának helye 1920-ban"},{"t":"Horthy Miklós","d":"Kormányzó 1920 és 1944 között"},{"t":"numerus clausus","d":"1920-as törvény, amely korlátozta a zsidó fiatalok egyetemi felvételét"},{"t":"holokauszt","d":"A zsidóság módszeres, iparszerű elpusztítása a második világháborúban"},{"t":"fasizmus","d":"Mussolini olaszországi tekintélyuralmi rendszere és eszméje"},{"t":"Hitler","d":"A Harmadik Birodalom vezére"},{"t":"Sztálin","d":"A Szovjetunió diktátora, a tisztogatások irányítója"},{"t":"Churchill","d":"Brit miniszterelnök a második világháború idején"},{"t":"világválság","d":"Az 1929-ben kirobbant gazdasági összeomlás"},{"t":"Teleki Pál","d":"Miniszterelnök, aki 1941-ben önkezével vetett véget életének"},{"t":"Károlyi Mihály","d":"Az 1918-as őszirózsás forradalom miniszterelnöke, majd köztársasági elnök"},{"t":"Szálasi Ferenc","d":"A nyilas mozgalom vezetője, 1944 októberétől „nemzetvezető\""},{"t":"jegyrendszer","d":"A hiánycikkek elosztása fejadagot igazoló szelvényekkel"},{"t":"gettó","d":"Elkülönített városrész, ahová a zsidóságot zárták"}],"hideghaboru":[{"t":"vasfüggöny","d":"Churchill képe az Európát kettéosztó zárt határról"},{"t":"peresztrojka","d":"Gorbacsov átalakítási programja a Szovjetunióban"},{"t":"glasznoszty","d":"A nyíltság politikája a gorbacsovi Szovjetunióban"},{"t":"Kádár János","d":"Pártvezető 1956 novemberétől 1988-ig"},{"t":"Nagy Imre","d":"Az 1956-os forradalom miniszterelnöke, akit 1958-ban kivégeztek"},{"t":"szamizdat","d":"Illegálisan sokszorosított ellenzéki kiadvány"},{"t":"Gorbacsov","d":"Az utolsó szovjet pártfőtitkár, a reformok elindítója"},{"t":"Jalta","d":"Város, ahol 1945 februárjában a nagyhatalmak Európa sorsáról tárgyaltak"},{"t":"Rákosi Mátyás","d":"A „Sztálin legjobb magyar tanítványának\" nevezett pártvezető"},{"t":"enyhülés","d":"A nagyhatalmi feszültség csökkenésének időszaka"},{"t":"kulák","d":"A gazdagparaszt megbélyegző neve az ötvenes években"},{"t":"téesz","d":"A mezőgazdasági termelőszövetkezet rövidített neve"},{"t":"Hruscsov","d":"Szovjet pártvezető, aki leleplezte elődje bűneit"}],"jelenkor":[{"t":"Európai Unió","d":"Az európai államok gazdasági és politikai közössége"},{"t":"schengeni övezet","d":"Az egyezmény, amely megszüntette a belső határellenőrzést"},{"t":"globalizáció","d":"A világ gazdasági, kulturális és technikai összefonódásának folyamata"},{"t":"Alaptörvény","d":"Magyarország 2011-ben elfogadott alkotmánya"},{"t":"Országgyűlés","d":"A magyar törvényhozó hatalom testülete"},{"t":"önkormányzat","d":"A település ügyeit intéző választott helyi testület"},{"t":"népszavazás","d":"Közvetlen döntéshozatal, amelyben a választópolgárok mondanak véleményt egy kérdésről"},{"t":"autonómia","d":"Egy közösség önigazgatási joga saját ügyeiben"},{"t":"demográfia","d":"A népesség számának és összetételének változásait vizsgáló tudomány"},{"t":"Antall József","d":"A rendszerváltoztatás utáni első szabadon választott miniszterelnök"},{"t":"Göncz Árpád","d":"A köztársaság első szabadon választott elnöke"},{"t":"rendszerváltoztatás","d":"Az egypárti diktatúra békés felszámolása 1989–90-ben"},{"t":"Ellenzéki Kerekasztal","d":"Az 1989-es tárgyalássorozat a hatalom és az ellenzék között"},{"t":"Robert Schuman","d":"Francia politikus, az európai egyesülés egyik atyja"}]};
+const GRADES = {
+  9:{label:'9. évfolyam',span:'ókor – 1490',accent:'#FFC24B',eras:[['okor','Ókor'],['kozepkor','Középkor']]},
+  10:{label:'10. évfolyam',span:'1490 – 1849',accent:'#3DDC97',eras:[['kora_ujkor','Kora újkor'],['reformkor','Reformkor']]},
+  11:{label:'11. évfolyam',span:'1849 – 1945',accent:'#FF7A8A',eras:[['dualizmus','Dualizmus'],['vilaghaboruk','Világháborúk']]},
+  12:{label:'12. évfolyam',span:'1945 – ma',accent:'#9E8BFF',eras:[['hideghaboru','Hidegháború'],['jelenkor','Jelenkor']]}
+};
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function shuffle(a){ const b=[...a]; for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; }
+const GUARD = 350;
+let GEN = 0;
+let NAV = 0;
+const P = {grade:null, scope:null};
+const L = {deck:[], i:0, revealed:false, weak:[], ready:0};
+let G = {turn:'none'};
+
+function go(id){
+  if(id !== 's-play') GEN++;
+  NAV = Date.now() + 500;
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+  const h = document.querySelector('#'+id+' [id^="h-"]');
+  if(h) h.focus();
+  window.scrollTo(0,0);
+}
+
+/* ---------- főmenü ---------- */
+function scopeLabel(){
+  const g = GRADES[P.grade]; if(!g) return '';
+  return P.scope === 'AB' ? 'Az egész évfolyam' : g.eras[P.scope === 'A' ? 0 : 1][1];
+}
+function conceptsFor(){
+  const g = GRADES[P.grade];
+  const idx = P.scope === 'AB' ? [0,1] : [P.scope === 'A' ? 0 : 1];
+  const out = [];
+  idx.forEach(i => BANK[g.eras[i][0]].forEach(e => out.push({t:e.t, d:e.d, era:g.eras[i][1]})));
+  return out;
+}
+function renderHome(){
+  $('gradeBtns').innerHTML = Object.keys(GRADES).map(k => {
+    const g = GRADES[k];
+    return `<button class="pick" id="g-${k}" data-act="grade" data-v="${k}" style="--pa:${g.accent}" aria-pressed="${P.grade===k}"><span class="big">${k}.</span><span class="sm">${esc(g.span)}</span></button>`;
+  }).join('');
+  const g = GRADES[P.grade];
+  const sc = g ? [['A',g.eras[0][1]],['B',g.eras[1][1]],['AB','Az egész évfolyam']] : [];
+  $('scopeBtns').innerHTML = g ? sc.map(([k,l]) =>
+    `<button class="pick" id="sc-${k}" data-act="scope" data-v="${k}" style="--pa:${g.accent}" aria-pressed="${P.scope===k}"><span class="big">${esc(l)}</span><span class="sm">${k==='AB'?'két korszak együtt':'egy korszak'}</span></button>`).join('')
+    : '<p class="lead">Előbb válassz évfolyamot.</p>';
+  const ok = !!(P.grade && P.scope);
+  ['bLearn','bCpu','bSolo'].forEach(i => $(i).disabled = !ok);
+  $('pickInfo').textContent = ok ? `${g.label} · ${scopeLabel()} · ${conceptsFor().length} fogalom` : 'Válassz évfolyamot és korszakot.';
+  if(g){ document.documentElement.style.setProperty('--acc', g.accent); document.documentElement.style.setProperty('--acc-ink', '#1A1030'); }
+}
+
+/* ---------- tanulás ---------- */
+function startLearn(list){
+  L.deck = shuffle(list); L.i = 0; L.revealed = false; L.weak = []; L.ready = Date.now() + GUARD;
+  go('s-learn'); renderLearn();
+}
+function renderLearn(){
+  const n = L.deck.length;
+  $('learnMeta').textContent = `${GRADES[P.grade].label} · ${scopeLabel()}`;
+  if(L.i >= n){ return learnDone(); }
+  const c = L.deck[L.i];
+  $('learnBar').style.width = (L.i / n * 100) + '%';
+  $('learnCard').innerHTML = `<div class="mono">${esc(c.era)} · ${L.i+1} / ${n}</div>
+    <div class="term" id="lTerm" tabindex="-1">${esc(c.t)}</div>
+    <div class="defn" id="lDef" tabindex="-1">${L.revealed ? esc(c.d) : 'Mondd el magadban a meghatározást, majd fedd fel.'}</div>`;
+  $('learnBtns').innerHTML = L.revealed
+    ? '<button class="btn cta" data-act="known">Tudtam</button><button class="btn" data-act="notyet">Még gyakorolom</button>'
+    : '<button class="btn cta" data-act="reveal">Meghatározás felfedése</button>';
+  const f = $(L.revealed ? 'lDef' : 'lTerm'); if(f) f.focus();
+}
+function reveal(){ if(L.revealed || Date.now() < L.ready) return; L.revealed = true; L.ready = Date.now() + GUARD; renderLearn(); }
+function rate(known){
+  if(!L.revealed || Date.now() < L.ready) return;
+  if(!known) L.weak.push(L.deck[L.i]);
+  L.i++; L.revealed = false; L.ready = Date.now() + GUARD; renderLearn();
+}
+function learnDone(){
+  const n = L.deck.length, w = L.weak;
+  $('learnBar').style.width = '100%';
+  $('learnCard').innerHTML = `<div class="mono">Összegzés</div><div class="term" id="lTerm" tabindex="-1">${n - w.length} / ${n} fogalmat tudtál</div>` +
+    (w.length ? `<p>Még gyakorolandó:</p><ul>${w.map(c => `<li><b>${esc(c.t)}</b> — ${esc(c.d)}</li>`).join('')}</ul>` : '<p>Minden fogalmat tudtál. Mehet a játék!</p>');
+  $('learnBtns').innerHTML = (w.length ? '<button class="btn" data-act="relearn">Gyakorolandók újra</button>' : '') +
+    '<button class="btn cta" data-act="cpu">Játék a gép ellen</button><button class="btn" data-act="solo">Gyakorlás egyedül</button><button class="btn ghost" data-act="home">Főmenü</button>';
+  $('lTerm').focus();
+}
+
+/* ---------- játék ---------- */
+const topNeed = () => G.chain[0].def;
+const botNeed = () => G.chain[G.chain.length-1].term;
+const fits = (t, end) => end === 'top' ? t.term === topNeed() : t.def === botNeed();
+const canPlay = t => fits(t,'top') || fits(t,'bottom');
+const arm = () => { G.readyAt = Date.now() + GUARD; };
+function say(msg, cls){ const f = $('fb'); f.textContent = msg; f.className = 'fb' + (cls ? ' ' + cls : ''); }
+const focusFb = () => $('fb').focus();
+
+function startGame(mode){
+  GEN++;
+  const C = shuffle(conceptsFor()), n = C.length;
+  const deck = shuffle(C.map((_,i) => ({id:i, def:i, term:(i+1)%n})));
+  const H = n >= 20 ? 7 : 5;
+  const chain = [deck.pop()];
+  G = {mode, C, n, H, chain, hand:deck.splice(0,H), cpu: mode==='cpu' ? deck.splice(0,H) : [], bone:deck,
+       sel:null, hint:null, score:0, mist:0, tips:0, weak:new Set(), turn:'p', passes:0, readyAt:0};
+  $('playMeta').textContent = `${GRADES[P.grade].label} · ${scopeLabel()} · ${n} fogalom · ${mode==='cpu' ? 'gép ellen' : 'egyedül'}`;
+  go('s-play');
+  say('A lánc egy lappal indul. Jelölj ki egy lapot, majd válaszd ki, a lánc melyik végére teszed. Ha nincs illeszkedő lapod, húzz a talonból.');
+  renderPlay();
+}
+function tileHTML(t){
+  const c = G.C;
+  return `<span class="half def"><span class="lab">Meghatározás</span><span class="txt">${esc(c[t.def].d)}</span></span><span class="half term"><span class="lab">Fogalom</span><span class="txt">${esc(c[t.term].t)}</span></span>`;
+}
+function renderPlay(){
+  const ch = G.chain, n = ch.length, mine = G.turn === 'p';
+  const anyLegal = G.hand.some(canPlay);
+  $('bar').innerHTML = `<span class="chip">Pont: ${G.score}</span><span class="chip">Hiba: ${G.mist}</span><span class="chip">Talon: ${G.bone.length}</span>` +
+    (G.mode==='cpu' ? `<span class="chip">Gép lapjai: ${G.cpu.length}</span>` : '') +
+    `<span class="chip turn">${G.turn==='p' ? 'Te jössz' : G.turn==='c' ? 'A gép gondolkodik…' : 'Vége'}</span>`;
+  const tileLi = (t,i) => `<li class="ptile"><div class="tile">${tileHTML(t)}</div></li>`;
+  const linkLi = j => `<li class="link"><span aria-hidden="true">✓</span> összetartozik: ${esc(G.C[ch[j].term].t)}</li>`;
+  let h = '';
+  if(n <= 5){ ch.forEach((t,i) => { h += tileLi(t,i) + (i < n-1 ? linkLi(i) : ''); }); }
+  else {
+    h += tileLi(ch[0],0) + linkLi(0) + tileLi(ch[1],1);
+    let dl = ''; for(let j=1;j<=n-3;j++){ const c = G.C[ch[j].term]; dl += `<dt>${esc(c.t)}</dt><dd>${esc(c.d)}</dd>`; }
+    h += `<li><details class="mid"><summary>Középső kapcsolatok (${n-3} pár)</summary><dl>${dl}</dl></details></li>`;
+    h += tileLi(ch[n-2],n-2) + linkLi(n-2) + tileLi(ch[n-1],n-1);
+  }
+  $('chain').innerHTML = h;
+  $('topLab').textContent = '▲ Nyitott meghatározás: keresd a hozzá tartozó fogalmat';
+  $('botLab').textContent = '▼ Nyitott fogalom: keresd a hozzá tartozó meghatározást';
+  $('btnTop').disabled = $('btnBot').disabled = !(mine && G.sel);
+  $('hand').innerHTML = G.hand.map(t =>
+    `<li><button class="tile${G.hint===t.id?' hint':''}" data-act="sel" data-tid="${t.id}" aria-pressed="${G.sel===t}" ${mine?'':'disabled'}>${tileHTML(t)}${G.hint===t.id?'<span class="sr">Tipp: ez a lap illeszkedik.</span>':''}</button></li>`).join('');
+  $('bDraw').disabled = !(mine && !anyLegal && G.bone.length > 0);
+  $('bPass').disabled = !(mine && !anyLegal && G.bone.length === 0 && G.mode === 'cpu');
+  $('bPass').style.display = G.mode === 'cpu' ? '' : 'none';
+  $('bTip').disabled = !(mine && anyLegal);
+}
+function selectTile(id){
+  if(G.turn !== 'p' || Date.now() < G.readyAt) return;
+  const t = G.hand.find(x => x.id === id); if(!t) return;
+  arm();
+  if(G.sel === t){ G.sel = null; renderPlay(); say('Kijelölés megszüntetve.'); const b = document.querySelector(`[data-tid="${id}"]`); if(b) b.focus(); return; }
+  G.sel = t; renderPlay();
+  say(`Kijelölt lap — fogalma: „${G.C[t.term].t}”. Válaszd ki, a lánc melyik végére teszed.`);
+  $('btnTop').focus();
+}
+function placeOn(t, end, who){
+  const cid = end === 'top' ? t.term : t.def;
+  if(end === 'top') G.chain.unshift(t); else G.chain.push(t);
+  return G.C[cid];
+}
+function attempt(end){
+  if(G.turn !== 'p' || !G.sel || Date.now() < G.readyAt) return;
+  const t = G.sel; arm();
+  if(!fits(t, end)){
+    G.mist++; G.score = Math.max(0, G.score - 3);
+    G.weak.add(end === 'top' ? topNeed() : botNeed());
+    G.sel = null;
+    const open = end === 'top' ? `a lánc elején álló meghatározás: „${G.C[topNeed()].d}”` : `a lánc végén álló fogalom: „${G.C[botNeed()].t}”`;
+    renderPlay();
+    say(`Nem illeszkedik. Nézd meg újra ${open}. Olyan lapot keress, amelynek ${end==='top' ? 'alsó fele (fogalom)' : 'felső fele (meghatározás)'} ehhez tartozik.`, 'bad');
+    focusFb(); return;
+  }
+  const c = placeOn(t, end);
+  G.hand = G.hand.filter(x => x !== t); G.sel = null; G.hint = null; G.score += 10; G.passes = 0;
+  if(G.mode === 'solo') while(G.hand.length < G.H && G.bone.length) G.hand.push(G.bone.pop());
+  if(G.hand.length === 0){ renderPlay(); say(`Helyes! ${c.t} — ${c.d}`, 'ok'); return finish('player'); }
+  if(G.mode === 'cpu'){ G.turn = 'c'; }
+  renderPlay();
+  say(`Helyes! ${c.t} — ${c.d} (${c.era})`, 'ok');
+  focusFb();
+  if(G.mode === 'cpu') scheduleCpu();
+}
+function draw(){
+  if(G.turn !== 'p' || Date.now() < G.readyAt || G.hand.some(canPlay) || !G.bone.length) return;
+  arm(); G.hand.push(G.bone.pop()); renderPlay();
+  say(`Húztál egy lapot. A talonban ${G.bone.length} lap maradt.${G.hand.some(canPlay) ? '' : ' Még mindig nincs illeszkedő lapod.'}`);
+  focusFb();
+}
+function pass(){
+  if(G.turn !== 'p' || Date.now() < G.readyAt || G.mode !== 'cpu' || G.hand.some(canPlay) || G.bone.length) return;
+  arm(); G.passes++;
+  if(G.passes >= 2){ return finish('blocked'); }
+  G.turn = 'c'; renderPlay(); say('Passzoltál.'); focusFb(); scheduleCpu();
+}
+function tip(){
+  if(G.turn !== 'p' || Date.now() < G.readyAt) return;
+  if(G.hint !== null){ say('A tipp már látható: a kiemelt lap illeszkedik.'); focusFb(); return; }
+  const t = G.hand.find(canPlay);
+  if(!t){ say('Nincs illeszkedő lapod: húzz a talonból.'); focusFb(); return; }
+  arm(); G.hint = t.id; G.score = Math.max(0, G.score - 2); G.tips++;
+  renderPlay();
+  say(`Tipp: a kiemelt lap illeszkedik a lánc ${fits(t,'top') ? 'elejéhez (felül)' : 'végéhez (alul)'}.`);
+  focusFb();
+}
+function scheduleCpu(){ const g = GEN; setTimeout(() => { if(g === GEN && G.turn === 'c') cpuMove(); }, 1100); }
+function cpuMove(){
+  let drew = 0;
+  const opts = () => { const o = []; G.cpu.forEach(t => ['top','bottom'].forEach(e => { if(fits(t,e)) o.push([t,e]); })); return o; };
+  let o = opts();
+  while(!o.length && G.bone.length){ G.cpu.push(G.bone.pop()); drew++; o = opts(); }
+  let msg;
+  if(!o.length){
+    G.passes++;
+    msg = `A gép ${drew ? drew + ' lapot húzott, de ' : ''}nem tudott lerakni: passzolt.`;
+    if(G.passes >= 2){ renderPlay(); say(msg); return finish('blocked'); }
+  } else {
+    const [t,e] = o[Math.floor(Math.random()*o.length)];
+    const c = placeOn(t, e);
+    G.cpu = G.cpu.filter(x => x !== t); G.passes = 0; G.hint = null;
+    msg = `A gép ${drew ? drew + ' lapot húzott, majd ' : ''}lerakott egy lapot: ${c.t} — ${c.d}`;
+    if(G.cpu.length === 0){ renderPlay(); say(msg); return finish('cpu'); }
+  }
+  G.turn = 'p'; renderPlay();
+  const need = !G.hand.some(canPlay) ? (G.bone.length ? ' Nincs illeszkedő lapod: húzz a talonból.' : ' Nincs illeszkedő lapod, a talon üres: passzolj.') : ' Te jössz.';
+  say(msg + need);
+}
+function finish(kind){
+  if(G.turn === 'over') return;
+  G.turn = 'over'; GEN++;
+  let head, sum;
+  if(G.mode === 'solo'){ head = 'Kész a lánc!'; G.score += 20; sum = 'Minden lapot sikerült a láncba illesztened.'; }
+  else if(kind === 'player'){ head = 'Győztél!'; G.score += 20; sum = 'Elsőként tetted le az összes lapodat.'; }
+  else if(kind === 'cpu'){ head = 'A gép nyert.'; sum = 'A gép előbb lerakta az összes lapját.'; }
+  else {
+    const a = G.hand.length, b = G.cpu.length;
+    head = a < b ? 'Győztél!' : a > b ? 'A gép nyert.' : 'Döntetlen.';
+    if(a < b) G.score += 20;
+    sum = `Zsákutca: senki sem tud lépni. Nálad ${a}, a gépnél ${b} lap maradt.`;
+  }
+  $('h-end').textContent = head;
+  $('endMeta').textContent = `${GRADES[P.grade].label} · ${scopeLabel()}`;
+  $('endSum').textContent = `${sum} Pontszám: ${G.score} · Hibás kísérlet: ${G.mist} · Tipp: ${G.tips}.`;
+  const rows = G.C.map(c => `<tr><td data-label="Fogalom"><b>${esc(c.t)}</b></td><td data-label="Meghatározás">${esc(c.d)}</td><td data-label="Állapot" class="${G.weak.has(G.C.indexOf(c)) ? 'weak' : 'good'}">${G.weak.has(G.C.indexOf(c)) ? 'Gyakorolandó' : 'Rendben'}</td></tr>`).join('');
+  $('endReview').innerHTML = `<h3>Áttekintés: a játék fogalmai</h3><table class="rev"><caption class="sr">A játékban szereplő fogalmak és meghatározásuk</caption><thead><tr><th scope="col">Fogalom</th><th scope="col">Meghatározás</th><th scope="col">Állapot</th></tr></thead><tbody>${rows}</tbody></table>`;
+  go('s-end');
+}
+function weakList(){ return G.C.filter((c,i) => G.weak.has(i)); }
+
+/* ---------- események ---------- */
+const ACT = {
+  grade: d => { P.grade = d.v; P.scope = null; renderHome(); $('g-'+d.v).focus(); },
+  scope: d => { P.scope = d.v; renderHome(); $('sc-'+d.v).focus(); },
+  bLearn: () => startLearn(conceptsFor()),
+  bCpu: () => startGame('cpu'), cpu: () => startGame('cpu'),
+  bSolo: () => startGame('solo'), solo: () => startGame('solo'),
+  reveal, known: () => rate(true), notyet: () => rate(false),
+  relearn: () => startLearn(L.weak.slice()),
+  home: () => { renderHome(); go('s-home'); }, bQuit: () => { renderHome(); go('s-home'); }, eHome: () => { renderHome(); go('s-home'); },
+  sel: d => selectTile(+d.tid),
+  btnTop: () => attempt('top'), btnBot: () => attempt('bottom'),
+  bDraw: draw, bPass: pass, bTip: tip,
+  eAgain: () => startGame(G.mode),
+  eLearn: () => { const w = weakList(); startLearn(w.length ? w : G.C); }
+};
+document.addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b || b.disabled || Date.now() < NAV) return;
+  const f = ACT[b.dataset.act || b.id]; if(f) f(b.dataset);
+});
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && G.turn === 'p' && G.sel && $('s-play').classList.contains('active')){
+    const id = G.sel.id; G.sel = null; renderPlay(); say('Kijelölés megszüntetve.');
+    const b = document.querySelector(`[data-tid="${id}"]`); if(b) b.focus();
+  }
+});
+renderHome();
+
+</script>
+</body>
+</html>
