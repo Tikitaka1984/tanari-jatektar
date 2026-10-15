@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trimino — fogalomlánc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F1A2B; --surf:#16263D; --surf-2:#1E3352;
+    --edge:rgba(255,255,255,.09); --edge-2:rgba(255,255,255,.16);
+    --text:#EFF6FF; --muted:#8FAAC9;
+    --win:#3DDC97; --win-bg:rgba(61,220,151,.16);
+    --fail:#FF6B6B; --fail-bg:rgba(255,107,107,.18);
+    --acc:#2DD4BF; --acc-2:#38BDF8; --acc-ink:#052A28;
+    --r:18px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(900px 520px at 10% -8%, rgba(45,212,191,.22) 0%, transparent 62%),
+      radial-gradient(760px 460px at 95% 6%, rgba(56,189,248,.18) 0%, transparent 58%),
+      var(--bg);
+    background-attachment:fixed;
+    color:var(--text);
+    font-family:'Manrope',system-ui,sans-serif; font-size:15px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;letter-spacing:-0.03em;margin:0;line-height:1.05;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  :focus-visible{outline:3px solid var(--acc);outline-offset:3px;border-radius:6px;}
+
+  #app{max-width:780px;margin:0 auto;padding:28px 18px 70px;}
+  .screen{display:none;animation:fade .4s ease;}
+  .screen.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+  .eyebrow{font-family:'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;font-size:.7rem;color:var(--acc);}
+  .hero{text-align:center;padding:20px 0 8px;}
+  .hero h1{font-size:2.4rem;background:linear-gradient(90deg,var(--acc),var(--acc-2));-webkit-background-clip:text;background-clip:text;color:transparent;margin:10px 0 6px;}
+  .hero p{color:var(--muted);max-width:580px;margin:0 auto;font-size:.96rem;}
+
+  .rulebox{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:18px 20px;margin:22px 0;font-size:.88rem;color:var(--muted);line-height:1.6;}
+  .rulebox b{color:var(--text);}
+
+  .chaingrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;}
+  @media(max-width:520px){.chaingrid{grid-template-columns:1fr;}}
+  .chaincard{background:var(--surf);border:1.5px solid var(--edge);border-radius:var(--r);padding:18px;text-align:left;transition:.15s;}
+  .chaincard:hover{border-color:var(--acc);transform:translateY(-2px);}
+  .chaincard h3{font-size:1.05rem;margin-bottom:4px;}
+  .chaincard .cnt{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+  .chaincard p{margin:8px 0 0;font-size:.84rem;color:var(--muted);}
+  .chaincard.c1{border-top:4px solid #FFC24B;}
+  .chaincard.c2{border-top:4px solid var(--win);}
+  .chaincard.c3{border-top:4px solid #FF7A8A;}
+  .chaincard.mix{border-top:4px solid var(--acc);grid-column:1/-1;}
+
+  .hud{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+  .pill{font-family:'JetBrains Mono',monospace;font-size:.76rem;background:var(--surf);border:1px solid var(--edge);border-radius:999px;padding:7px 13px;color:var(--muted);}
+  .pill b{color:var(--text);}
+  .progress-bar{height:6px;background:var(--surf-2);border-radius:4px;overflow:hidden;margin-bottom:20px;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc-2));transition:width .3s ease;}
+
+  /* the growing chain — real alternating triangle tiles */
+  .tristrip{display:flex;align-items:flex-start;flex-wrap:wrap;gap:5px;margin-bottom:22px;}
+  .tri{width:108px;height:126px;flex:none;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;border:1.5px solid var(--edge-2);}
+  .tri.up{clip-path:polygon(50% 0%, 0% 100%, 100% 100%);}
+  .tri.down{clip-path:polygon(0% 0%, 100% 0%, 50% 100%);}
+  .tri.solved.up{background:linear-gradient(160deg,var(--acc),var(--acc-2));border-color:transparent;}
+  .tri.solved.down{background:var(--surf-2);border-color:var(--acc);}
+  .tri .label{font-size:.72rem;font-weight:700;line-height:1.25;max-width:76px;}
+  .tri.up .label{color:var(--acc-ink);margin-top:34px;}
+  .tri.down .label{color:var(--text);margin-bottom:34px;}
+  .tri.pending{border-style:dashed;opacity:.55;}
+  .tri.pending .qm{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:1.1rem;}
+  .tri.pending.up .qm{margin-top:34px;}
+  .tri.pending.down .qm{margin-bottom:34px;}
+
+  .card{background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:26px;}
+  .promptlabel{font-family:'JetBrains Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;}
+  .currentterm{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.5rem;color:var(--acc);margin-bottom:18px;}
+
+  .opts{display:grid;gap:10px;}
+  .opt{background:var(--surf-2);border:1.5px solid var(--edge);border-radius:12px;padding:13px 16px;text-align:left;font-size:.92rem;transition:.15s;line-height:1.5;}
+  .opt:hover{border-color:var(--acc);}
+  .opt.correct{border-color:var(--win);background:var(--win-bg);}
+  .opt.incorrect{border-color:var(--fail);background:var(--fail-bg);}
+  .opt:disabled{cursor:default;}
+
+  .feedback{margin-top:16px;padding:14px 16px;border-radius:12px;font-size:.88rem;line-height:1.6;display:none;}
+  .feedback.ok{background:var(--win-bg);border:1px solid var(--win);color:var(--text);display:block;}
+  .feedback.bad{background:var(--fail-bg);border:1px solid var(--fail);color:var(--text);display:block;}
+
+  .actions{margin-top:18px;}
+  .btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(90deg,var(--acc),var(--acc-2));color:var(--acc-ink);border-radius:12px;padding:13px 24px;font-weight:700;font-size:.95rem;}
+  .btn:hover{filter:brightness(1.06);}
+  .btn.ghost{background:transparent;border:1.5px solid var(--edge-2);color:var(--text);}
+
+  .end{text-align:center;padding:20px 0;}
+  .end h2{font-size:1.8rem;margin-bottom:6px;}
+  .scorebig{font-family:'JetBrains Mono',monospace;font-size:3rem;font-weight:700;color:var(--acc);margin:14px 0 4px;}
+  .scoresub{color:var(--muted);font-size:.9rem;margin-bottom:26px;}
+  .recap{text-align:left;max-width:520px;margin:22px auto 0;background:var(--surf);border:1px solid var(--edge);border-radius:var(--r);padding:18px 20px;}
+  .recap h4{font-size:.9rem;color:var(--muted);margin:0 0 12px;font-weight:600;}
+  .recap .ritem{margin-bottom:10px;font-size:.85rem;line-height:1.5;}
+  .recap .ritem b{color:var(--acc);}
+
+  footer.tiny{text-align:center;opacity:.45;font-size:.76rem;margin-top:50px;font-family:'JetBrains Mono',monospace;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- PICK -->
+  <section class="screen active" id="screen-pick">
+    <div class="hero">
+      <div class="eyebrow">Fogalomgyakorló · Trimino-ihletésű láncjáték</div>
+      <h1>Trimino</h1>
+      <p>Fogalmakat kell a helyes meghatározásukhoz párosítanod — minden helyes válasz egy új háromszög-összekötővel bővíti a láncot.</p>
+    </div>
+
+    <div class="rulebox">
+      <b>A játékszabály:</b> a klasszikus "trimino" nevű, háromszög lapkás párosítójáték digitális, önellenőrző változata. Egy fogalom jelenik meg — válaszd ki a négy meghatározás közül a hozzá illőt. Minden helyes választás egy új láncszemmel bővíti a fogalomláncot.
+    </div>
+
+    <div class="chaingrid">
+      <button class="chaincard c1" onclick="startChain('okorkozepkor')">
+        <span class="cnt">9. évfolyam · 6 fogalom</span>
+        <h3>Ókor és középkor</h3>
+        <p>Patrícius, légió, hűbériség és társaik.</p>
+      </button>
+      <button class="chaincard c2" onclick="startChain('ujkorreformkor')">
+        <span class="cnt">10. évfolyam · 6 fogalom</span>
+        <h3>Újkor és reformkor</h3>
+        <p>Reformáció, ősiség, abszolutizmus és társaik.</p>
+      </button>
+      <button class="chaincard c3" onclick="startChain('modernkor')">
+        <span class="cnt">11–12. évfolyam · 6 fogalom</span>
+        <h3>Modernkor</h3>
+        <p>Dualizmus, totalitárius rendszer, rendszerváltás és társaik.</p>
+      </button>
+      <button class="chaincard mix" onclick="startChain('vegyes')">
+        <span class="cnt">Vegyes kihívás · mind a 18 fogalom</span>
+        <h3>Teljes lánc</h3>
+        <p>Minden korszak fogalmai összekeverve, egy hosszú láncban.</p>
+      </button>
+    </div>
+  </section>
+
+  <!-- PLAY -->
+  <section class="screen" id="screen-play">
+    <div class="hud">
+      <div class="pill">Fogalom <b id="hudIdx">1</b> / <b id="hudTotal">6</b></div>
+      <div class="pill">Hiba: <b id="hudErr">0</b></div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%;"></div></div>
+
+    <div class="tristrip" id="strip"></div>
+
+    <div class="card">
+      <div class="promptlabel">Melyik meghatározás illik ehhez a fogalomhoz?</div>
+      <div class="currentterm" id="currentTerm"></div>
+      <div class="opts" id="optsBox"></div>
+      <div class="feedback" id="fb"></div>
+      <div class="actions" id="actionsBox"></div>
+    </div>
+  </section>
+
+  <!-- END -->
+  <section class="screen" id="screen-end">
+    <div class="end">
+      <div class="eyebrow" style="display:block;">Kész a lánc!</div>
+      <h2 id="endTitle">Szép munka!</h2>
+      <div class="scorebig" id="endScore">6/6</div>
+      <div class="scoresub" id="endSub">hibátlanul összekapcsolva</div>
+      <div class="tristrip" id="endStrip" style="justify-content:center;"></div>
+      <div class="recap" id="recap">
+        <h4>A megfejtett fogalmak áttekintése</h4>
+        <div id="recapList"></div>
+      </div>
+      <div style="margin-top:26px;">
+        <button class="btn" onclick="location.reload()">Új lánc indítása</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+<footer class="tiny">Történelem érettségi felkészítő · Fogalomgyakorló · trimino-ihletésű láncjáték (a valódi 2D lapkakirakó egyszerűsített, önellenőrző digitális változata)</footer>
+
+<script>
+const CHAINS = {
+  okorkozepkor: {
+    title: 'Ókor és középkor',
+    items: [
+      {term:'Patrícius', def:'Az ókori Rómában a régi nemesi családok leszármazottja, aki teljes politikai jogokkal rendelkezett.'},
+      {term:'Légió', def:'Az ókori római hadsereg alapvető, több ezer fős harcászati egysége.'},
+      {term:'Hűbériség', def:'Középkori függési rendszer, amelyben a hűbérúr földet adott a hűbéresnek katonai szolgálat fejében.'},
+      {term:'Jobbágy', def:'A középkori földesúri birtokon élő, röghöz kötött, szolgáltatásokra kötelezett paraszt.'},
+      {term:'Kolostor', def:'Szerzetesek közösségének lakó- és imahelye, a középkori műveltség egyik központja.'},
+      {term:'Iszlám', def:'A 7. században Arábiában keletkezett monoteista vallás, amelyet Mohamed próféta hirdetett.'}
+    ]
+  },
+  ujkorreformkor: {
+    title: 'Újkor és reformkor',
+    items: [
+      {term:'Reformáció', def:'A 16. századi egyházi megújulási mozgalom, amely szakított a katolikus egyházzal (pl. Luther, Kálvin fellépése nyomán).'},
+      {term:'Ősiség', def:'A nemesi birtok elidegeníthetetlenségét biztosító, középkori eredetű jogintézmény Magyarországon.'},
+      {term:'Rendi országgyűlés', def:'A nemesség (és egyéb rendek) képviseleti testülete, amely adókról és törvényekről döntött a középkori-koraújkori Magyarországon.'},
+      {term:'Jobbágyfelszabadítás', def:'A jobbágyi függés (röghöz kötöttség, robot) eltörlése, Magyarországon az 1848-as törvényekben véglegesítve.'},
+      {term:'Abszolutizmus', def:'Olyan kormányzati forma, amelyben az uralkodó korlátlan, ellenőrizetlen hatalommal rendelkezik.'},
+      {term:'Felvilágosodás', def:'A 18. századi szellemi mozgalom, amely az ész, a tudomány és az egyéni jogok elsődlegességét hirdette.'}
+    ]
+  },
+  modernkor: {
+    title: 'Modernkor',
+    items: [
+      {term:'Dualizmus', def:'Az 1867-es kiegyezéssel létrejött államforma, amelyben Ausztria és Magyarország közös uralkodó alatt, önálló kormányokkal működött.'},
+      {term:'Antiszemitizmus', def:'Zsidóellenes előítélet, gyűlölet vagy megkülönböztetés, amely a 20. században törvényi szintre is emelkedett Magyarországon.'},
+      {term:'Totalitárius rendszer', def:'Olyan politikai berendezkedés, amely az állam teljes ellenőrzése alá vonja a társadalom és az egyén életét.'},
+      {term:'Kollektivizálás', def:'A mezőgazdasági termelőszövetkezetek erőltetett, gyakran kényszerrel végrehajtott létrehozása a szocialista rendszerekben.'},
+      {term:'Vasfüggöny', def:'A hidegháború idején Európát kettéosztó, szimbolikus és fizikai határvonal a szovjet és a nyugati blokk között.'},
+      {term:'Rendszerváltás', def:'A szocialista egypárti rendszer békés lebontása és a többpárti demokrácia bevezetése Kelet-Közép-Európában 1989–90-ben.'}
+    ]
+  }
+};
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+const G = {items:[], order:[], idx:0, errors:0, solved:[], locked:false};
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function startChain(id){
+  if(id === 'vegyes'){
+    G.items = Object.values(CHAINS).flatMap(c=>c.items);
+  } else {
+    G.items = CHAINS[id].items;
+  }
+  G.order = shuffle(G.items.map((_,i)=>i));
+  G.idx = 0; G.errors = 0; G.solved = [];
+  document.getElementById('hudTotal').textContent = G.items.length;
+  go('play');
+  renderStrip();
+  renderStep();
+}
+
+function renderStrip(targetId){
+  const strip = document.getElementById(targetId || 'strip');
+  strip.innerHTML = '';
+  G.solved.forEach((s,i)=>{
+    const orient = (i % 2 === 0) ? 'up' : 'down';
+    const t = document.createElement('div');
+    t.className = 'tri solved ' + orient;
+    t.innerHTML = '<span class="label">' + s.term + '</span>';
+    strip.appendChild(t);
+  });
+  if(!targetId){
+    const orient = (G.solved.length % 2 === 0) ? 'up' : 'down';
+    const p = document.createElement('div');
+    p.className = 'tri pending ' + orient;
+    p.innerHTML = '<span class="qm">?</span>';
+    strip.appendChild(p);
+  }
+}
+
+function renderRecap(){
+  const box = document.getElementById('recapList');
+  box.innerHTML = G.solved.map(s =>
+    '<div class="ritem"><b>' + s.term + '</b> — ' + s.def + '</div>'
+  ).join('');
+}
+
+function renderStep(){
+  G.locked = false;
+  const itemIdx = G.order[G.idx];
+  const item = G.items[itemIdx];
+  document.getElementById('hudIdx').textContent = G.idx+1;
+  document.getElementById('hudErr').textContent = G.errors;
+  document.getElementById('progressFill').style.width = Math.round((G.idx/G.items.length)*100)+'%';
+  document.getElementById('currentTerm').textContent = item.term;
+
+  const distractPool = G.items.filter((_,i)=>i!==itemIdx).map(x=>x.def);
+  const distractors = shuffle(distractPool).slice(0,3);
+  const opts = shuffle([item.def, ...distractors]);
+
+  const box = document.getElementById('optsBox');
+  box.innerHTML = '';
+  opts.forEach(defText=>{
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = defText;
+    b.onclick = ()=>choose(defText, item.def, item);
+    box.appendChild(b);
+  });
+
+  document.getElementById('fb').className = 'feedback';
+  document.getElementById('fb').textContent = '';
+  document.getElementById('actionsBox').innerHTML = '';
+}
+
+function choose(picked, correctDef, item){
+  if(G.locked) return;
+  const buttons = [...document.getElementById('optsBox').children];
+  const correctBtn = buttons.find(b=>b.textContent===correctDef);
+  const fb = document.getElementById('fb');
+  if(picked === correctDef){
+    G.locked = true;
+    correctBtn.classList.add('correct');
+    buttons.forEach(b=>b.disabled=true);
+    fb.className = 'feedback ok';
+    fb.innerHTML = '<b>Helyes!</b> A lánc egy új láncszemmel bővült.';
+    G.solved.push(item);
+    renderStrip();
+    document.getElementById('actionsBox').innerHTML =
+      (G.idx < G.items.length-1)
+        ? '<button class="btn" onclick="nextStep()">Következő fogalom &rarr;</button>'
+        : '<button class="btn" onclick="endGame()">Lánc lezárása &rarr;</button>';
+  } else {
+    G.errors++;
+    document.getElementById('hudErr').textContent = G.errors;
+    const clickedBtn = buttons.find(b=>b.textContent===picked);
+    clickedBtn.classList.add('incorrect');
+    clickedBtn.disabled = true;
+    fb.className = 'feedback bad';
+    fb.innerHTML = 'Nem ez illik ide — próbáld a maradék lehetőségek közül!';
+  }
+}
+
+function nextStep(){ G.idx++; renderStep(); }
+
+function endGame(){
+  go('end');
+  const pct = Math.round(((G.items.length - Math.min(G.errors,G.items.length)) / G.items.length) * 100);
+  let title;
+  if(G.errors===0) title = 'Hibátlan lánc!';
+  else if(G.errors<=2) title = 'Nagyon szép munka!';
+  else if(G.errors<=5) title = 'Jó alap, gyakorolj még!';
+  else title = 'Nehéz kör volt — próbáld újra!';
+  document.getElementById('endTitle').textContent = title;
+  document.getElementById('endScore').textContent = G.items.length + '/' + G.items.length;
+  document.getElementById('endSub').textContent = G.errors===0 ? 'hibátlanul összekapcsolva' : (G.errors + ' hibás próbálkozással összekapcsolva');
+  renderStrip('endStrip');
+  renderRecap();
+}
+</script>
+</body>
+</html>
