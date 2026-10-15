@@ -119,9 +119,9 @@
     "bytes": 106486,
     "md5": "a9b792a289094753c7a06b3e19c7370d"
   },
-  "trimino": {
-    "path": "games/trimino.html",
-    "bytes": 21516,
-    "md5": "afb7f47ebbd057f84a0638e0df68ad44"
+  "domino": {
+    "path": "games/domino.html",
+    "bytes": 37958,
+    "md5": "ab43ad7a66040192c56cea195251378a"
   }
 }

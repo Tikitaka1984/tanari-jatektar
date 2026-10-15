@@ -27,7 +27,7 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | Két forrás, két igazság | `games/ketforras.html` | 9–12. | 21 esetpár forráselemzésre, mind a négy évfolyamról. |
 | Keresztrejtvény | `games/keresztrejtveny.html` | 9–12. | Generált keresztrejtvény évfolyam és téma szerint. |
 | Csak E! | `games/eszperente.html` | 9–12. | Eszperente nyelvi rejtvény — történelmi események és szereplők leírásában csak "e"/"é" magánhangzó szerepel, három nehézségi szinttel. |
-| Trimino – fogalomlánc | `games/trimino.html` | 9–12. | Háromszög lapkás fogalomlánc: 18 fogalom három korszaklánc és vegyes mód szerint, meghatározás-párosítással. |
+| Dominó – fogalomlánc | `games/domino.html` | 9–12. | Klasszikus dominó meghatározás–fogalom párokkal, évfolyam és korszak szerint, tanulórésszel; gép ellen vagy egyedül játszható. |
 
 ## 3D szabadulószobák
 
@@ -69,7 +69,7 @@ tanari-jatektar/
 │   ├── ketforras.html
 │   ├── keresztrejtveny.html
 │   ├── eszperente.html
-│   └── trimino.html
+│   └── domino.html
 ├── jatekok/                 (3D szabadulószobák)
 │   ├── _lib/three.min.js
 │   ├── jatekok.json
