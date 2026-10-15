@@ -51,7 +51,10 @@
   .vita-card h3{margin:0 0 6px;color:var(--gold-light);font-size:1.12rem;font-family:'Cinzel',serif;}
   .vita-card .vperiod{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--gold-light);opacity:.85;letter-spacing:.08em;text-transform:uppercase;margin-bottom:7px;display:block;}
   .vita-card .vblurb{font-size:.89rem;opacity:.88;line-height:1.55;margin:0;}
-  .vita-card .vlevel{font-family:'Space Mono',monospace;font-size:.68rem;opacity:.6;margin-top:9px;display:block;}
+  .vita-card .vlevel{font-family:'Space Mono',monospace;font-size:.68rem;opacity:.85;margin-top:9px;display:block;}
+  .vita-card .vsrc{font-size:.76rem;line-height:1.45;margin-top:6px;display:block;opacity:.85;}
+  .vita-card .vsrc.warn{color:#ffd9a0;opacity:1;border-left:3px solid #e8a33d;padding-left:8px;}
+  .warnbox{background:rgba(232,163,61,.14);border:1px solid #e8a33d;border-radius:10px;padding:11px 13px;font-size:.88rem;line-height:1.55;}
 
   .podiums{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
   .podium{background:rgba(0,0,0,.28);border:1px solid rgba(201,162,39,.3);border-radius:14px;padding:12px 14px;min-height:120px;}
@@ -65,7 +68,7 @@
   .card{background:linear-gradient(180deg,#f6ecd1,var(--parchment));color:var(--ink);border-radius:16px;padding:22px;box-shadow:0 18px 44px rgba(0,0,0,.4);}
   .card h3{color:var(--crimson-dark);margin:0 0 8px;font-size:1.1rem;}
   .statement{background:#fff;border:1.5px solid #d8c79e;border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:14px 16px;font-size:1rem;font-style:italic;line-height:1.6;margin-bottom:6px;}
-  .stmt-note{font-size:.74rem;opacity:.6;margin:0 0 12px;}
+  .stmt-note{font-size:.78rem;color:#5a4630;margin:0 0 12px;}
   .sort-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;}
   @media(max-width:600px){.sort-btns{grid-template-columns:1fr;} .podiums{grid-template-columns:1fr;}}
   .sort-btn{border:1.5px solid #d8c79e;background:#fff;color:var(--ink);border-radius:10px;padding:12px 10px;font-size:.9rem;font-weight:600;transition:.15s;}
@@ -80,7 +83,7 @@
   .feedback.ok{background:rgba(47,93,58,.15);border:1px solid var(--forest);color:#1d3d26;display:block;}
   .feedback.bad{background:rgba(139,26,26,.12);border:1px solid var(--crimson);color:var(--crimson-dark);display:block;}
   .actions{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;}
-  .progress{font-family:'Space Mono',monospace;font-size:.78rem;opacity:.75;margin-bottom:10px;color:var(--forest);}
+  .progress{font-family:'Space Mono',monospace;font-size:.78rem;margin-bottom:10px;color:#1f4a2b;}
 
   .opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid #d8c79e;color:var(--ink);border-radius:10px;padding:12px 14px;margin-bottom:9px;font-size:.93rem;transition:.15s;}
   .opt:hover{border-color:var(--crimson);}
@@ -101,14 +104,36 @@
   .essay .vaz b{color:var(--crimson-dark);}
   footer.tiny{text-align:center;opacity:.5;font-size:.78rem;margin-top:46px;font-family:'Space Mono',monospace;}
   :focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+  .card :focus-visible,.essay :focus-visible{outline-color:var(--crimson-dark);}
+  .statement:focus,.feedback:focus,.card h3:focus,.cover h1:focus,.ending h2:focus{outline:none;}
+  .sort-btn.correct::after,.opt.correct::after{content:" \2713";font-weight:700;color:var(--forest);}
+  .sort-btn.incorrect::after,.opt.incorrect::after{content:" \2717";font-weight:700;color:var(--crimson);}
+  .sort-btn,.opt,.btn{min-height:44px;}
+  .btnrow{margin-top:26px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .cover .btnrow{margin-top:0;}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+  @media(max-width:600px){
+    #app{padding:16px 12px 60px;}
+    .cover h1{font-size:1.65rem;}
+    .story{padding:16px;font-size:.92rem;}
+    .card{padding:16px;}
+    .btnrow .btn,.actions .btn{width:100%;justify-content:center;}
+    .essay{padding:14px;}
+    .essay table,.essay tbody,.essay tr,.essay td{display:block;width:100%;}
+    .essay tr.hd{display:none;}
+    .essay tr{border:1px solid #cdb480;border-radius:10px;margin-bottom:10px;padding:6px 8px;background:rgba(255,255,255,.35);}
+    .essay td{border:none;padding:4px 2px;}
+    .essay td[data-label]::before{content:attr(data-label);display:block;font-family:'Space Mono',monospace;font-size:.68rem;color:var(--crimson-dark);text-transform:uppercase;letter-spacing:.06em;}
+    .stat-box{padding:12px 14px;font-size:.82rem;}
+  }
 </style>
 </head>
 <body>
-<div id="app">
+<main id="app">
 
   <div class="hud" id="hud" style="display:none;">
     <div class="hud-title" id="hudTitle">A reformkor vitaterme</div>
-    <div class="pill">&#9878; <b id="hudErr">0</b> hiba</div>
+    <div class="pill" role="status" aria-live="polite">&#9878; <b id="hudErr">0</b> hiba</div>
   </div>
 
   <!-- PICK -->
@@ -127,8 +152,10 @@
       <div class="eyebrow" id="introEyebrow"></div>
       <h1 id="introTitle"></h1>
       <div class="story" id="introStory"></div>
-      <button class="btn" onclick="startGame()">Belépek a vitaterembe &rarr;</button>
-      <button class="btn secondary" onclick="go('pick')" style="margin-left:10px;">&larr; Másik vita</button>
+      <div class="btnrow">
+        <button class="btn" onclick="startGame()">Belépek a vitaterembe &rarr;</button>
+        <button class="btn secondary" onclick="go('pick')">&larr; Másik vita</button>
+      </div>
     </div>
   </section>
 
@@ -141,14 +168,14 @@
     <div class="card">
       <div class="progress" id="sortProgress"></div>
       <h3>Kié ez az álláspont?</h3>
-      <div class="statement" id="stmtText"></div>
-      <p class="stmt-note">Álláspont-kártya: tartalmi összefoglalás, nem szó szerinti idézet.</p>
+      <div class="statement" id="stmtText" tabindex="-1"></div>
+      <p class="stmt-note">Tartalmi összefoglalás, nem szó szerinti idézet.</p>
       <div class="sort-btns">
-        <button class="sort-btn a" id="sb-a" onclick="sortAnswer('a')"></button>
-        <button class="sort-btn k" id="sb-k" onclick="sortAnswer('k')">Közös reformcél</button>
-        <button class="sort-btn b" id="sb-b" onclick="sortAnswer('b')"></button>
+        <button class="sort-btn a" id="sb-a" aria-describedby="stmtText" onclick="sortAnswer('a')"></button>
+        <button class="sort-btn k" id="sb-k" aria-describedby="stmtText" onclick="sortAnswer('k')">Közös reformcél</button>
+        <button class="sort-btn b" id="sb-b" aria-describedby="stmtText" onclick="sortAnswer('b')"></button>
       </div>
-      <div class="feedback" id="sortFb" role="status" aria-live="polite"></div>
+      <div class="feedback" id="sortFb" role="status" aria-live="polite" tabindex="-1"></div>
       <div class="actions" id="sortActions"></div>
     </div>
   </section>
@@ -157,9 +184,9 @@
   <section class="screen" id="screen-quiz">
     <div class="card">
       <div class="progress" id="quizProgress"></div>
-      <h3 id="quizQ"></h3>
+      <h3 id="quizQ" tabindex="-1"></h3>
       <div id="quizOpts"></div>
-      <div class="feedback" id="quizFb" role="status" aria-live="polite"></div>
+      <div class="feedback" id="quizFb" role="status" aria-live="polite" tabindex="-1"></div>
       <div class="actions" id="quizActions"></div>
     </div>
   </section>
@@ -171,18 +198,20 @@
       <h2 id="endingH2">Két álláspont — egy nemzet</h2>
       <div class="stat-box" id="endStats"></div>
       <div class="essay" id="essayBox"></div>
-      <div style="margin-top:26px;text-align:center;">
+      <div class="btnrow">
         <button class="btn" onclick="startGame()">Újra ez a vita (új kártyákkal)</button>
-        <button class="btn secondary" onclick="backToPick()" style="margin-left:10px;">&larr; Másik vita</button>
+        <button class="btn secondary" onclick="backToPick()">&larr; Másik vita</button>
       </div>
     </div>
   </section>
-</div>
+</main>
 <footer class="tiny">Történelem érettségi felkészítő &middot; Reformkor &middot; az álláspont-kártyák tartalmi összefoglalások</footer>
 
 <script>
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 function sample(a,n){return shuffle(a).slice(0,n);}
+function focusEl(el){ if(!el) return; try{ el.focus({preventScroll:true}); }catch(e){} }
+function shortText(t,n){ if(t.length<=n) return t; var c=t.slice(0,n); var i=c.lastIndexOf(' '); return (i>20?c.slice(0,i):c)+'&hellip;'; }
 
 /* ============ portrék ============ */
 const FACE_SZECHENYI='<svg class="pface" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="16" r="10" fill="#c98a5b"/><path d="M11 15 Q11 6 20 6 Q29 6 29 15 L27 13 Q25 8 20 8 Q15 8 13 13 Z" fill="#3d2c1a"/><path d="M14 21 Q20 26 26 21 L26 25 Q20 29 14 25 Z" fill="#3d2c1a"/><path d="M8 40 Q8 29 20 29 Q32 29 32 40Z" fill="#2b3a52"/><circle cx="16.5" cy="15.5" r="1.4" fill="#2b1b12"/><circle cx="23.5" cy="15.5" r="1.4" fill="#2b1b12"/></svg>';
@@ -197,11 +226,12 @@ szechenyi_kossuth:{
  period:'1841 &middot; a Kelet népe vitája',
  blurb:'Két reformer, két út: a fontolva haladás és az érdekegyesítés programja csap össze a Kelet népe vitájában.',
  level:'10. évfolyam &middot; reformkor',
+ src:'Forrás: a témavázlatok (Széchenyi és Kossuth reformprogramja) és az OH-TOR10TA tankönyv',
  lede:['1841. Széchenyi megjelenteti a <i>Kelet népét</i>, s ezzel nyílt vitába száll Kossuthtal. Két program, egy cél: a haza felemelkedése. De melyik úton?',
        '<b>1. felvonás — a vitaterem:</b> álláspont-kártyák kerülnek eléd (tartalmi összefoglalások, nem szó szerinti idézetek). Döntsd el mindegyikről: melyik félhez, vagy a közös reformcélokhoz tartozik-e.',
        '<b>2. felvonás — az elemzés:</b> kérdések a vita hátteréről és tétjéről. A végén kész <b>esszévázlatot</b> kapsz.'],
- whoA:{name:'Széchenyi István', role:'fontolva haladás &middot; arisztokrácia vezetésével &middot; Béccsel egyezve', face:FACE_SZECHENYI},
- whoB:{name:'Kossuth Lajos', role:'érdekegyesítés &middot; köznemesi vezetés &middot; nyilvánosság ereje', face:FACE_KOSSUTH},
+ whoA:{name:'Széchenyi István', role:'fontolva haladás &middot; arisztokrata, udvarhű &middot; korlátozott autonómia', face:FACE_SZECHENYI},
+ whoB:{name:'Kossuth Lajos', role:'érdekegyesítés &middot; köznemesi környezet &middot; népképviselet', face:FACE_KOSSUTH},
  cards:[
   {who:'a',text:'A haladás kulcsa a gazdaság: amíg a birtokos nem juthat kölcsönhöz, nem tud korszerűsíteni — ezért kell eltörölni az ősiséget, amely a birtokot hitelképtelenné teszi.',
    why:'A Hitel (1830) központi gondolata: az ősiség miatt a birtok nem lehet kölcsön fedezete — Széchenyi a gazdasági megújulást tette első helyre.'},
@@ -211,26 +241,32 @@ szechenyi_kossuth:{
    why:'A Kelet népe (1841) fő tétele: Széchenyi nem a Pesti Hírlap céljait, hanem „modorát", az agitációt tartotta veszélyesnek.'},
   {who:'a',text:'Előbb a gazdasági és műveltségi felemelkedés — a politikai jogok kiterjesztése csak erre az alapra épülhet.',
    why:'Széchenyi sorrendje: gazdaság és „kiművelt emberfő" előbb, politikai átalakulás utána.'},
+  {who:'a',text:'A jobbágyfelszabadítást önkéntes alapon kell elindítani: a földesurak belátására építő, önkéntes örökváltsággal.',
+   why:'A témavázlat Széchenyi társadalmi programját „mérsékelt átalakításként" írja le, benne az önkéntes örökváltsággal.'},
+  {who:'a',text:'A nemesi adómentesség megszüntetése csak részleges közteherviseléssel indulhat.',
+   why:'A témavázlat Széchenyi programjában „részleges közteherviselést" említ — Kossuthnál a közteherviselés elve teljes jogegyenlőséggel párosul.'},
+  {who:'a',text:'Magyarországnak a birodalmon belül korlátozott autonómiára kell törekednie, a fennálló politikai keretek megtartásával.',
+   why:'A témavázlat szerint Széchenyi politikai programja a „status quo": korlátozott autonómia a birodalmon belül.'},
   {who:'b',text:'A nemzet ereje az érdekegyesítés: a köznemességnek a néppel összefogva kell kivívnia az átalakulást — jogkiterjesztéssel.',
    why:'Kossuth programjának magja az érdekegyesítés: a nemesi alkotmány sáncai közé beemelni a népet.'},
   {who:'b',text:'A nyilvánosság a leghatásosabb fegyver: a sajtó tájékoztat, mozgósít, és nyomás alá helyezi a hatalmat.',
    why:'Kossuth pályáját a nyilvánosság fórumai vitték: Országgyűlési Tudósítások, majd 1841-től a Pesti Hírlap vezércikkei.'},
   {who:'b',text:'Önálló hazai ipar kell: társadalmi mozgalommal, a honi termékek pártolásával kell függetlenedni az örökös tartományok iparától.',
-   why:'A Védegylet (1844) gondolata: vámvédelem híján társadalmi összefogással pártolni a hazai ipart.'},
+   why:'A témavázlat Kossuth gazdasági programjában az önálló nemzeti ipart, vámokkal védve említi; a Védegylet tagjai a honi termékek pártolását vállalták (Kossuth lett az igazgatója).'},
   {who:'b',text:'Az átalakulást nem lehet a kormányzat jóindulatára bízni: alkotmányos eszközökkel, de határozottan ki kell kényszeríteni.',
-   why:'Kossuth a megyei ellenállás, az országgyűlési küzdelem és a sajtó együttes nyomásában látta az utat — Bécs jóindulatában nem bízott.'},
+   why:'Kossuth programja nagyfokú politikai és gazdasági önállóságot, népképviseleti országgyűlést követelt — a változást nem a kormányzat engedményeire építette.'},
+  {who:'b',text:'Az örökváltságot kötelezővé kell tenni, a földesurakat pedig az állam kárpótolja.',
+   why:'A témavázlat szerint Kossuth gazdasági programja a kötelező örökváltság állami kárpótlással — Széchenyi önkéntes örökváltsággal szemben.'},
+  {who:'b',text:'A közteherviselés és a polgári jogegyenlőség elve a nemzet minden tagjára kiterjed: a nemesség és a nép között nem maradhat jogi különbség.',
+   why:'Kossuth társadalmi programjának pontjai: jogegyenlőség, közteherviselés, nemzeti érdekegyesítés, szabadságjogok (témavázlat).'},
+  {who:'b',text:'A nemzetnek nagyfokú politikai és gazdasági önállóságot kell kivívnia a birodalmon belül, népképviseleti országgyűléssel.',
+   why:'A témavázlat szerint Kossuth politikai programja: nagyfokú önállóság a birodalmon belül és népképviseleti országgyűlés.'},
   {who:'k',text:'A jobbágyi kötöttségek felszámolása elkerülhetetlen: a feudális viszonyok fenntartása a nemzet egészének fejlődését gátolja.',
-   why:'Közös reformcél: a jobbágyfelszabadítás szükségességében egyetértettek — a megvalósítás ütemében és módjában tértek el.'},
+   why:'Közös reformcél: a jobbágyi kötöttségek felszámolásának szükségességében egyetértettek — a módjában tértek el (önkéntes, illetve kötelező örökváltság).'},
   {who:'k',text:'A magyar nyelv ügye nemzeti ügy: a tudomány és a közélet nyelvévé kell tenni.',
    why:'Közös cél: a nyelvújítás örökségén a reformkor egésze osztozott — az Akadémia alapításától az 1844-es nyelvtörvényig.'},
-  {who:'k',text:'Az elavult szállítási viszonyok mellett a magyar termény drágán és lassan jut piacra: a közlekedés korszerűsítése minden más reform előfeltétele.',
-   why:'Közös cél — a közlekedés korszerűsítésének <b>szükségességében</b> egyetértettek. A vita nem erről szólt, hanem a hálózat <b>irányáról és sorrendjéről</b>: lásd a két vasútvonal-kártyát!'},
-  {who:'b',text:'A vasútnak egyenesen a tengerhez kell vinnie: csak saját kikötőn át szabadulhat a magyar áru az osztrák közvetítés alól. Tengerhez, magyar!',
-   why:'Kossuth a Vukovár–Fiume vonalat szorgalmazta: a cél a Bécstől való gazdasági függetlenedés volt, s a hálózat kérdését is ennek rendelte alá.'},
-  {who:'a',text:'A vasúthálózatot Pest központtal, sugarasan kell kiépíteni — a tengerhez is Pesten át vezessen az út. Előbb az ország belső egysége, utána a kijárat.',
-   why:'Széchenyi 1848-as közlekedési javaslata Pest-központú, sugaras hálózatot tervezett; a Pestet elkerülő vonalat azért bírálta, mert nem az ország belső integrációját szolgálja.'},
-  {who:'k',text:'A közteherviselés elve igazságos: a nemesi adómentesség hosszú távon fenntarthatatlan.',
-   why:'Közös reformcél: az elvben egyetértettek; a vita a bevezetés üteméről és politikai kereteiről szólt.'}
+  {who:'k',text:'Az ősiség eltörlése a gazdasági átalakulás elengedhetetlen része.',
+   why:'A témavázlat mindkét program gazdasági részénél szerepelteti az ősiség (aviticitas) eltörlését.'}
  ],
  quiz:[
   {q:'Mit ajánlott fel Széchenyi az 1825-ös országgyűlésen, és mire?',
@@ -242,40 +278,46 @@ szechenyi_kossuth:{
    opts:[{t:'Nem a célokat, hanem a „modort": az érzelmekre ható agitációt, amely szerinte forradalomba sodorhatja a nemzetet',ok:true},
          {t:'A magyar nyelv használatát a közéletben',ok:false},
          {t:'A vasútépítés támogatását',ok:false}],
-   fb:'A vita lényege nem a cél, hanem az út volt: Széchenyi az izgatás módszerét tartotta veszélyesnek — a célok jelentős részében egyetértettek.'},
+   fb:'A tankönyvi idézet szerint Széchenyi a „képzelet és gerjedelmek fegyverével" dolgozó modort kifogásolta, nem Kossuth elveit — a célok jelentős részében egyetértettek.'},
   {q:'Mit jelentett Kossuth programjában az érdekegyesítés?',
    opts:[{t:'A nemesség és a nép érdekeinek összekapcsolását: jogkiterjesztéssel a népet is a nemzet részévé tenni',ok:true},
          {t:'A főnemesség és a köznemesség vagyonának egyesítését',ok:false},
          {t:'Magyarország és Ausztria vámhatárainak eltörlését',ok:false}],
    fb:'Az érdekegyesítés a reformellenzék kulcsfogalma: a kiváltságok sáncainak megnyitásával a jobbágyot is érdekeltté tenni a nemzeti ügyben.'},
-  {q:'Mi volt a Védegylet (1844) célja?',
+  {q:'Mi volt a Védegylet célja?',
    opts:[{t:'A hazai ipar pártolása: tagjai vállalták, hogy lehetőleg csak honi termékeket vásárolnak',ok:true},
          {t:'A határok katonai védelme a betörésekkel szemben',ok:false},
          {t:'A nemesi birtokok védelme a hitelezőktől',ok:false}],
-   fb:'Miután az önálló védővámrendszer kivihetetlennek bizonyult, Kossuth társadalmi mozgalommal pótolta: a Védegylet a honi ipar tudatos pártolására szerveződött.'},
+   fb:'A témavázlat Kossuth gazdasági programjában az önálló nemzeti ipart említi, vámokkal védve; a Védegylet tagjai aláírásukkal vállalták a honi termékek pártolását. Igazgatója Kossuth lett.'},
   {q:'Melyik mű jelölte meg a gazdasági elmaradottság fő okaként az ősiséget és a kölcsönhöz jutás lehetetlenségét?',
    opts:[{t:'Széchenyi: Hitel (1830)',ok:true},
          {t:'Kossuth: Pesti Hírlap vezércikkei',ok:false},
          {t:'Széchenyi: Kelet népe (1841)',ok:false}],
-   fb:'A Hitel a reformkor programadó műve: az ősiség miatt a birtok nem lehet fedezet, a birtokos nem jut tőkéhez — a rendszer tehát magát a birtokosságot is szegényíti. (A Kelet népe már a Kossuth-vita irata.)'},
-  {q:'Hogyan viszonyult egymáshoz a két program 1848 tavaszán?',
-   opts:[{t:'Az események rövid távon Kossuth taktikáját igazolták — de Széchenyi is szerepet vállalt: a Batthyány-kormány minisztere lett',ok:true},
-         {t:'Széchenyi programja győzött: a forradalom elmaradt',ok:false},
-         {t:'Mindketten visszavonultak a közélettől',ok:false}],
-   fb:'1848 tavaszán a törvényes forradalom Kossuth vonalát igazolta; Széchenyi közlekedési miniszterként a kormányba lépett — a szabadságharc kimenetele viszont az ő félelmeit idézte fel.'}
+   fb:'A Hitel a reformkor programadó műve: az ősiség miatt a birtok nem lehet fedezet, a birtokos nem jut tőkéhez. (A Kelet népe már a Kossuth-vita irata.)'},
+  {q:'Milyen szerepet töltött be 1848-ban Széchenyi és Kossuth?',
+   opts:[{t:'Mindketten a Batthyány-kormány miniszterei lettek',ok:true},
+         {t:'Széchenyi miniszter lett, Kossuth külföldre emigrált',ok:false},
+         {t:'Egyikük sem vállalt kormányzati szerepet',ok:false}],
+   fb:'A témavázlat szerint mindketten a Batthyány-kormány miniszterei voltak; Széchenyi később idegösszeroppanást kapott, Kossuth az OHB elnöke lett.'},
+  {q:'Miben tért el Széchenyi és Kossuth a jobbágyfelszabadítás módjában?',
+   opts:[{t:'Széchenyi önkéntes örökváltságot, Kossuth kötelező örökváltságot javasolt állami kárpótlással',ok:true},
+         {t:'Széchenyi kötelező, Kossuth önkéntes örökváltságot javasolt',ok:false},
+         {t:'Mindketten a jobbágyság fenntartása mellett álltak ki',ok:false}],
+   fb:'A témavázlat szerint Széchenyi társadalmi programja az önkéntes, Kossuthé a kötelező, állami kárpótlással járó örökváltság volt.'}
  ],
  essay:{
   title:'Esszévázlat: Széchenyi és Kossuth programjának összehasonlítása',
   rows:[
    {label:'Kiindulópont', a:'gazdasági-erkölcsi felemelkedés előbb, politikai jogok utána', b:'politikai átalakulás és gazdasági önállósodás együtt'},
    {label:'Vezető erő', a:'a nagybirtokos arisztokrácia, személyes példával', b:'a köznemesség, a néppel érdekegyesítésben'},
-   {label:'Viszony Bécshez', a:'együttműködés, a nyílt konfliktus kerülése', b:'alkotmányos küzdelem, a nyilvánosság nyomása'},
+   {label:'Jobbágyfelszabadítás', a:'mérsékelt átalakítás: önkéntes örökváltság', b:'kötelező örökváltság állami kárpótlással'},
+   {label:'Közteherviselés', a:'részleges közteherviselés', b:'közteherviselés és polgári jogegyenlőség'},
+   {label:'Politikai cél', a:'korlátozott autonómia a birodalmon belül (status quo)', b:'nagyfokú politikai és gazdasági önállóság; népképviseleti országgyűlés'},
    {label:'Módszer, ütem', a:'fontolva haladás; a forradalomtól való félelem', b:'gyorsabb ütem; agitáció, sajtó, egyesületek'},
-   {label:'Vasútterv', a:'Pest-központú, sugaras hálózat; a tengerhez is Pesten át (1848. évi javaslat)', b:'Vukovár–Fiume: közvetlen kijárat a tengerhez, az osztrák közvetítés megkerülésével'},
-   {label:'Fő művek, fórumok', a:'Hitel (1830), Világ, Stádium, Kelet népe (1841)', b:'Országgyűlési Tudósítások, Pesti Hírlap (1841-től), Védegylet (1844)'}
+   {label:'Fő művek, fórumok', a:'Hitel (1830), Világ (1831), Stádium (1833), Kelet népe (1841)', b:'Országgyűlési Tudósítások (1832–36), Pesti Hírlap (1841–44), Felelet Gróf Széchenyi Istvánnak (1841), Védegylet'}
   ],
-  common:'jobbágyi kötöttségek felszámolása &middot; ősiség eltörlése &middot; közteherviselés elve &middot; magyar nyelv ügye &middot; közlekedés és gazdaság fejlesztése &middot; polgári átalakulás',
-  vazlat:'1) közös kiindulópont: az ország elmaradottságának felismerése &rarr; 2) a célok nagyfokú egyezése &rarr; 3) az út, az ütem és a társadalmi bázis különbsége &rarr; 4) a Kelet népe-vita (1841) tétje: agitáció vagy fontolt haladás &rarr; 5) kitekintés: 1848 tavasza rövid távon Kossuth taktikáját igazolta, Széchenyi félelmei a forradalom és szabadságharc bukásában köszöntek vissza — a kiegyezés utáni fejlődés pedig sok ponton Széchenyi gyakorlati programját valósította meg.'
+  common:'jobbágyi kötöttségek felszámolása &middot; ősiség eltörlése &middot; magyar nyelv ügye &middot; polgári átalakulás',
+  vazlat:'1) közös kiindulópont: az ország elmaradottságának felismerése &rarr; 2) a célok nagyfokú egyezése (ősiség, jobbágyi kötöttségek, nyelv) &rarr; 3) az út, az ütem és a társadalmi bázis különbsége: önkéntes vagy kötelező örökváltság, részleges vagy teljes közteherviselés, korlátozott autonómia vagy nagyfokú önállóság &rarr; 4) a Kelet népe-vita (1841) tétje: agitáció vagy fontolt haladás &rarr; 5) kitekintés: 1848-ban mindketten a Batthyány-kormány miniszterei lettek.'
  }
 },
 
@@ -283,7 +325,9 @@ dessewffy_szechenyi:{
  title:'Dessewffy József – Széchenyi vitája a Hitelről',
  period:'1830–1831 &middot; a Hitel–Taglalat vita',
  blurb:'Széchenyi a Hitellel az ősiség eltörlését sürgeti — Dessewffy Taglalata a rendi rend védelmében válaszol.',
- level:'10. évfolyam &middot; reformkor',
+ level:'10. évfolyam &middot; reformkor &middot; kiegészítő tananyag',
+ src:'Kiegészítő tananyag: a témavázlatok és a használt tankönyvek nem tárgyalják — tanári ellenőrzés javasolt',
+ warn:'Kiegészítő tananyag: a Hitel–Taglalat vitát sem a hivatalos témavázlat, sem a használt tankönyvek (OH-TOR10TA, Katolikus 10.) nem tárgyalják. A Széchenyi-kártyák a témavázlat Hitelre vonatkozó adataira épülnek; a Dessewffy-kártyák a vita ismert tartalmi összefoglalásán alapulnak, forrásból nem igazoltak — érettségi felkészítéshez önmagában ne használd.',
  lede:['1830-ban jelenik meg Széchenyi <i>Hitel</i> című munkája, amely az ősiséget teszi felelőssé a magyar gazdaság elmaradottságáért. 1831-ben Dessewffy József <i>Taglalat</i> címmel válaszol — a rendi hagyomány védelmében.',
        '<b>1. felvonás — a vitaterem:</b> álláspont-kártyák kerülnek eléd (tartalmi összefoglalások). Döntsd el mindegyikről: melyik félhez, vagy a közös alaphoz tartozik-e.',
        '<b>2. felvonás — az elemzés:</b> kérdések a vita hátteréről. A végén kész <b>esszévázlatot</b> kapsz.'],
@@ -293,46 +337,42 @@ dessewffy_szechenyi:{
   {who:'a',text:'A birtok csak úgy válhat hitelképessé, ha megszűnik az ősiség — enélkül a nemesi vagyon holt tőke marad.',
    why:'A Hitel (1830) központi tézise: az ősiség teszi lehetetlenné, hogy a birtok kölcsön fedezete legyen.'},
   {who:'a',text:'A magyar nemesség jelentős része elmaradott szemléletű: kényelemben él, nem fektet be, nem vállal kockázatot.',
-   why:'Széchenyi kritikájának éle a nemesség önelégültsége ellen irányult — ez váltotta ki Dessewffy legélesebb tiltakozását.'},
+   why:'Széchenyi kritikájának éle a nemesség önelégültsége ellen irányult — ez váltotta ki a Hitel-vita élességét.'},
   {who:'a',text:'A változást felülről, önkéntes példamutatással kell elindítani, nem várva a kormányzat kezdeményezésére.',
    why:'Széchenyi saját felajánlásaival (1825) demonstrálta ezt az elvet.'},
   {who:'a',text:'Hitel és szabad tőkeáramlás nélkül a gazdaság nem tud korszerűsödni, bármilyen szorgalmasak is az emberek.',
    why:'Gazdasági-szerkezeti érv: nem az egyéni igyekezet, hanem a jogi keret (az ősiség) a fő akadály.'},
   {who:'a',text:'A bírálat nem a nemesség egyénei ellen szól, hanem az elavult rendszer ellen, amely fenntartja tehetetlenségüket.',
-   why:'Ez volt Széchenyi válasza a Taglalatra: a kritika a rendszernek, nem a személyeknek szólt.'},
+   why:'Széchenyi érvelésének visszatérő eleme: a kritika a rendszernek szól, nem a személyeknek.'},
   {who:'b',text:'Az ősiség nem önkényes teher, hanem a nemesi birtokrend és vele az alkotmányos rend évszázados alapja — elhamarkodott eltörlése veszélyes.',
-   why:'A Taglalat (1831) fő érve: az ősiség gyökeres átalakítása az egész rendi berendezkedést megrengetné.'},
+   why:'A Taglalat (1831) fő érve (kiegészítő tananyag): az ősiség gyökeres átalakítása az egész rendi berendezkedést megrengetné.'},
   {who:'b',text:'Széchenyi túl sötét, igazságtalanul általánosító képet fest a magyar nemességről.',
-   why:'Dessewffy szerint Széchenyi elfogult, és a bírálat sértő a nemesség egészére nézve.'},
+   why:'Dessewffy szerint Széchenyi elfogult, és a bírálat sértő a nemesség egészére nézve (kiegészítő tananyag).'},
   {who:'b',text:'A fokozatos, tapasztalatra épülő reform biztonságosabb út, mint a gyors, elméleti alapú átalakítás.',
-   why:'Dessewffy konzervatív reformfelfogása: a bevált intézményeket óvatosan, lépésről lépésre kell módosítani.'},
-  {who:'b',text:'A gazdasági elmaradottság okai részben az ország kedvezőtlen külső, birodalmi gazdasági helyzetében is keresendők, nem kizárólag a nemesség hozzáállásában.',
-   why:'Dessewffy szélesebb okrendszert javasolt Széchenyi belső-szemléleti magyarázatával szemben.'},
-  {who:'b',text:'A hitel kérdésének megoldásához nem feltétlenül szükséges az ősiség teljes eltörlése — részleges, óvatos módosítások is elegendők lehetnek.',
-   why:'Dessewffy nem vetette el a hitelproblémát, de a megoldás mértékét és módját vitatta.'},
-  {who:'b',text:'A nemesi kiváltságok nem önkényes teher, hanem történelmi jogon, az ország védelmében vállalt szolgálat fejében állnak fenn.',
+   why:'Dessewffy konzervatív reformfelfogása: a bevált intézményeket óvatosan, lépésről lépésre kell módosítani (kiegészítő tananyag).'},
+  {who:'b',text:'A nemesi kiváltságok történelmi jogon, az ország védelmében vállalt szolgálat fejében állnak fenn.',
    why:'Rendi jogfelfogás: a nemesi kiváltság hagyományosan kötelezettségekkel (pl. honvédelem) is járt.'},
   {who:'k',text:'Mindketten az ország gazdasági felemelkedését tartották végső célnak.',
    why:'Közös hazafias szándék — eltérő út és ütem.'},
   {who:'k',text:'Mindketten elismerték, hogy a birtokrendszer valamilyen módon összefügg a hitelhiánnyal.',
-   why:'A probléma létét mindketten elismerték, csak mértékét és orvoslását ítélték meg eltérően.'},
-  {who:'k',text:'Mindketten írásban, nyilvános vitairat formájában fejtették ki álláspontjukat.',
-   why:'Mindkettőjük érvelése a nyilvánosság előtt zajlott — ez maga is a reformkori politizálás új formája volt.'}
+   why:'A probléma létét mindketten elismerték, csak mértékét és orvoslását ítélték meg eltérően (kiegészítő tananyag).'}
  ],
  quiz:[
-  {q:'Melyik évben jelent meg Széchenyi Hitel című munkája?',
-   opts:[{t:'1830',ok:true},{t:'1841',ok:false},{t:'1825',ok:false}],
-   fb:'A Hitel 1830-ban jelent meg — 1841 a Kelet népe, 1825 az akadémiai felajánlás éve.'},
+  {q:'Melyik javaslat szerepelt Széchenyi gazdasági programjában a témavázlat szerint?',
+   opts:[{t:'A kihalt családok birtokai ne szálljanak vissza a kincstárra (fiscalitas eltörlése)',ok:true},
+         {t:'Kötelező örökváltság állami kárpótlással',ok:false},
+         {t:'Védővámok bevezetése az önálló nemzeti ipar számára',ok:false}],
+   fb:'A témavázlat Széchenyi gazdasági programjában említi az ősiség és a fiscalitas eltörlését, az örökösödési illetéket, a birtokszerzés jogát mindenkinek. A kötelező örökváltság és a védővámos nemzeti ipar Kossuth programja.'},
   {q:'Hogyan hívták Dessewffy József Hitelre írt válaszát?',
    opts:[{t:'Taglalat (1831)',ok:true},{t:'Balítéletekről',ok:false},{t:'Világ',ok:false}],
-   fb:'A Taglalat 1831-ben jelent meg. A Balítéletekről Wesselényi Miklós műve, a Világ Széchenyi későbbi vitairata.'},
+   fb:'A Taglalat 1831-ben jelent meg (kiegészítő tananyag). A Balítéletekről Wesselényi Miklós műve; a Világ Széchenyi 1831-es műve.'},
   {q:'Mi volt Dessewffy fő érve az ősiség fenntartása mellett?',
    opts:[{t:'Hogy a rendi-alkotmányos rend alapja, elhamarkodott eltörlése veszélyes lenne',ok:true},
          {t:'Hogy a nemesség amúgy is elég gazdag, nincs szüksége hitelre',ok:false},
          {t:'Hogy az ősiség jogintézménye akkoriban még nem is létezett',ok:false}],
-   fb:'Dessewffy nem a hitelhiány létét tagadta, hanem attól tartott, hogy az ősiség gyökeres eltörlése az egész rendi berendezkedést megingatná.'},
+   fb:'Dessewffy attól tartott, hogy az ősiség gyökeres eltörlése az egész rendi berendezkedést megingatná (kiegészítő tananyag).'},
   {q:'Mit jelentett az ősiség (aviticitas) jogintézménye?',
-   opts:[{t:'A nemesi birtok elidegeníthetetlenségét; a család kihalása esetén a koronára szállt',ok:true},
+   opts:[{t:'A nemesi birtok elidegeníthetetlenségét; a család kihalása esetén a koronára (kincstárra) szállt',ok:true},
          {t:'A jobbágy röghöz kötöttségét',ok:false},
          {t:'A nemesség adómentességét',ok:false}],
    fb:'Az ősiség a nemesi birtok szabad elidegenítését és megterhelését korlátozta — ez tette lehetetlenné, hogy a birtok banki fedezet legyen.'},
@@ -340,7 +380,7 @@ dessewffy_szechenyi:{
    opts:[{t:'A hitelhiányban, amelyet elsősorban az ősiség okoz',ok:true},
          {t:'Kizárólag a Habsburg gazdaságpolitikában',ok:false},
          {t:'A kedvezőtlen éghajlati viszonyokban',ok:false}],
-   fb:'Széchenyi a belső, jogi-szemléleti okokra (ősiség, nemesi mentalitás) helyezte a hangsúlyt — ezzel szemben Dessewffy a külső tényezőket is fontosnak tartotta.'},
+   fb:'Széchenyi a belső, jogi-szemléleti okokra (ősiség, nemesi mentalitás) helyezte a hangsúlyt.'},
   {q:'Hogyan viszonyult a Hitel-vita a későbbi reformkori fejlődéshez?',
    opts:[{t:'Az ősiséget végül csak az 1848-as áprilisi törvények törölték el, de a vita napirenden tartotta a kérdést',ok:true},
          {t:'Az ősiséget azonnal, már 1831-ben eltörölték',ok:false},
@@ -356,70 +396,70 @@ dessewffy_szechenyi:{
    {label:'A nemesség megítélése', a:'kritikus, a szemléletváltás szükségességét hangsúlyozza', b:'védi a nemesség méltóságát és történelmi szerepét'},
    {label:'Fő művek', a:'Hitel (1830), Világ (1831), Stádium (1833)', b:'Taglalat (1831)'}
   ],
-  common:'az ország gazdasági felemelkedésének szükségessége &middot; a hitelhiány problémájának létezése &middot; a nyilvános vita mint politizálási forma',
-  vazlat:'1) közös felismerés: a magyar gazdaság elmaradott &rarr; 2) Széchenyi diagnózisa: az ősiség és a nemesi szemlélet a fő ok &rarr; 3) Dessewffy válasza: a rendi rend értékének védelme, a fokozatosság igénye &rarr; 4) a vita tétje: mennyire gyors és mennyire gyökeres lehet egy reform &rarr; 5) kitekintés: az ősiséget végül csak 1848-ban, törvényben törölték el — a Hitel-vita azonban évtizedekkel korábban napirendre tűzte a kérdést.'
+  common:'az ország gazdasági felemelkedésének szükségessége &middot; a hitelhiány problémájának létezése',
+  vazlat:'1) közös felismerés: a magyar gazdaság elmaradott &rarr; 2) Széchenyi diagnózisa: az ősiség és a nemesi szemlélet a fő ok &rarr; 3) Dessewffy válasza: a rendi rend értékének védelme, a fokozatosság igénye &rarr; 4) a vita tétje: mennyire gyors és mennyire gyökeres lehet egy reform &rarr; 5) kitekintés: az ősiséget végül csak 1848-ban, törvényben törölték el. (Figyelem: a Dessewffy-oldal kiegészítő tananyag, érettségi esszéhez a témavázlat Széchenyi–Kossuth anyagára építs.)'
  }
 },
 
 centralistak_kossuth:{
  title:'A centralisták és Kossuth vitája a megyerendszerről',
  period:'1840-es évek &middot; a kormányzati berendezkedés vitája',
- blurb:'Felelős, központi kormányzat vagy a vármegyék önvédelme? A centralisták és Kossuth vitája a reform intézményi kereteiről.',
+ blurb:'Felelős, központi kormányzat vagy a vármegyék önállósága? A centralisták és a reformellenzék többsége vitája a reform intézményi kereteiről.',
  level:'10. évfolyam &middot; reformkor',
- lede:['Az 1840-es években a fiatal liberális értelmiség egy csoportja — a centralisták, élükön Eötvös Józseffel és Szalay Lászlóval — a vármegyerendszert bírálta, és felelős, központi kormányzatot sürgetett. Kossuth és a reformellenzék többsége a megyerendszert az alkotmányos szabadság védőbástyájának tekintette.',
+ src:'Forrás: OH-TOR10TA (a centralisták, az Ellenzéki Nyilatkozat) és a Katolikus 10. tankönyv',
+ lede:['Az 1840-es években fellépő, főleg értelmiségiekből álló centralisták — Eötvös József, Trefort Ágoston és Szalay László — a vármegye elavult működését bírálták, és erősebb központi kormányzatot, felelős kormányt sürgettek.',
+       'A reformerek többsége, Kossuth is, úgy ítélte meg, hogy a centralisták javaslata csak a többi reform elérése után lehet időszerű — a kormányzattal szembeni fellépés legjobb terepe ugyanis éppen a vármegye volt.',
        '<b>1. felvonás — a vitaterem:</b> álláspont-kártyák kerülnek eléd (tartalmi összefoglalások). Döntsd el mindegyikről: melyik félhez, vagy a közös alaphoz tartozik-e.',
        '<b>2. felvonás — az elemzés:</b> kérdések a vita hátteréről. A végén kész <b>esszévázlatot</b> kapsz.'],
- whoA:{name:'A centralisták', role:'Eötvös József, Szalay László &middot; felelős kormányzat &middot; angol minta', mono:{text:'EJ', bg:'#3d5a80'}},
- whoB:{name:'Kossuth Lajos', role:'megyerendszer védelme &middot; alkotmányos ellenállás', face:FACE_KOSSUTH},
+ whoA:{name:'A centralisták', role:'Eötvös József, Trefort Ágoston, Szalay László &middot; erős, felelős központi kormányzat', mono:{text:'C', bg:'#3d5a80'}},
+ whoB:{name:'Kossuth Lajos', role:'a reformellenzék többségével &middot; a megye mint ellenállási terep &middot; a reformok sorrendje', face:FACE_KOSSUTH},
  cards:[
   {who:'a',text:'A vármegyerendszer sokszor a maradi, változást elutasító nemesi érdekek védőbástyája, nem a szabadságé.',
-   why:'A centralisták szerint a megyei önkormányzat a haladás fékjévé is válhat, nem csak a szabadság védelmévé.'},
-  {who:'a',text:'Felelős, egységes kormányzatra van szükség, amely a törvényhozásnak tartozik elszámolással — angol minta szerint.',
-   why:'Eötvösék az angol parlamentáris, miniszteri felelősségen alapuló kormányzati modellt tekintették követendő példának.'},
-  {who:'a',text:'A vármegyék versengése és önkénye akadályozza az egységes, korszerű törvények végrehajtását.',
-   why:'A decentralizált megyerendszer a centralisták szerint akadályozta a reformok egységes érvényesülését.'},
-  {who:'a',text:'A modern állam működéséhez szakszerű, központi közigazgatásra van szükség, nem esetleges megyei tisztségviselőkre.',
-   why:'A centralisták a hivatalnoki szakszerűséget hangsúlyozták a nemesi tisztújítással szemben.'},
-  {who:'a',text:'A megyerendszer önmagában nem garancia a szabadságra — a valódi biztosíték a felelős kormányzat és a törvény uralma.',
-   why:'Eötvös József fő tétele: nem az intézmény formája, hanem a felelősség elve védi meg a szabadságot.'},
-  {who:'a',text:'A megyerendszer fenntartása hosszú távon akadályozza Magyarország felzárkózását a nyugat-európai államokhoz.',
-   why:'A centralisták modernizációs érve: a decentralizált igazgatás versenyhátrányt jelent.'},
-  {who:'b',text:'A vármegyei önkormányzat az alkotmányos szabadság védőbástyája a bécsi abszolutizmussal szemben.',
-   why:'Kossuth és a reformellenzék többsége a megyerendszert az önkényuralom elleni történelmi garanciának tekintette.'},
+   why:'A centralisták szerint a rendi jogok védelmében jeleskedő megyei közgyűlések a hasznos, modernizáló központi döntéseket sem hajtják végre (OH-TOR10TA).'},
+  {who:'a',text:'Felelős, egységes kormányzatra van szükség, amely a törvényhozásnak tartozik elszámolással.',
+   why:'A felelős kormány követelése a reformprogram eleme volt; a centralisták az erős, felelős központi kormányzatot sürgették.'},
+  {who:'a',text:'A vármegyék közgyűlései még a hasznos, korszerűsítő központi döntéseket sem hajtják végre.',
+   why:'A tankönyv szerint a centralisták ezt tekintették a megyerendszer egyik fő hátrányának: az egységes, hatékony irányítás hiányát.'},
+  {who:'a',text:'A modern állam működéséhez szakszerű, központi közigazgatásra van szükség, nem képzetlen megyei tisztviselőkre.',
+   why:'A tankönyv a vármegye hátrányai között említi a nem kellően képzett tisztviselőket; a centralisták a szakszerű igazgatást hangsúlyozták.'},
+  {who:'a',text:'A modern állam nem szervezhető meg a rendi vármegye működése mellett: erősebb központi hatalom és kisebb megyei önállóság kell.',
+   why:'Az OH-TOR10TA összegzése: a centralisták arra jutottak, hogy a modern állam a rendi vármegyével nem szervezhető meg (centralizáció).'},
+  {who:'b',text:'A vármegyei önkormányzat a kormány sérelmesnek tekintett intézkedéseivel szembeni ellenállás fóruma — a sérelmi politika terepe.',
+   why:'A tankönyv a vármegye előnyei között említi: ellenállási fórum a kormány intézkedéseivel szemben, helyi autonómia.'},
   {who:'b',text:'A központosítás veszélyes: ha egyszer kiépül, egy jövőbeli önkényuralom könnyen a saját céljaira fordíthatja.',
-   why:'Kossuth félelme: a ma liberális célra épített központi hatalom holnap az elnyomás eszköze is lehet.'},
+   why:'A megyerendszer védői szerint a központi hatalom megerősítése a kormányzattal szembeni védekezés lehetőségeit szűkíti (értelmezés a tankönyv előny–hátrány táblázata alapján).'},
+  {who:'b',text:'A centralisták javaslata csak a többi reform elérése után lehet időszerű; addig a vármegye a kormány elleni fellépés legjobb terepe.',
+   why:'Az OH-TOR10TA szerint a reformerek többsége így ítélte meg a kérdést: a vita a reformok sorrendjéről szólt.'},
   {who:'b',text:'A megyegyűlések a nyilvánosság és a politikai részvétel élő fórumai, amelyeket nem szabad feladni.',
-   why:'A vármegyei közgyűlések a rendi Magyarországon a politikai nyilvánosság egyik legfontosabb terepei voltak.'},
-  {who:'b',text:'A vármegyei ellenállás történelmileg bizonyította, hogy meg tudja védeni az ország törvényeit az udvar túlkapásaival szemben.',
-   why:'A rendi alkotmányosság hagyományos védekező eszköze volt a megyei ellenállás, például törvénytelen rendeletek végrehajtásának megtagadása.'},
-  {who:'b',text:'A központosítás előbb erősítené meg a bécsi kormányzatot, mint a magyar nemzeti érdeket.',
-   why:'Kossuth attól tartott, hogy a centralista reform gyakorlatilag Bécs kezére játszaná az országot.'},
+   why:'A vármegyei közgyűlések a rendi Magyarországon a politikai nyilvánosság egyik legfontosabb terepei voltak; a helyi autonómia a megye előnye.'},
   {who:'k',text:'Mindkét oldal a liberális, alkotmányos átalakulás híve volt, nem a fennálló rend fenntartója.',
-   why:'Mindketten a reformellenzék táborához tartoztak — csak a kormányzati berendezkedés kérdésében váltak szét.'},
+   why:'Mindketten a reformellenzék táborához tartoztak — a Katolikus 10. tankönyv szerint a centralisták az Ellenzéki Pártot támogatták.'},
   {who:'k',text:'Mindketten elismerték, hogy a kormányzati rendszer valamilyen reformra szorul.',
-   why:'A vita nem arról szólt, kell-e reform, hanem arról, milyen intézményi keretben valósuljon meg.'},
-  {who:'k',text:'Mindketten a sajtó nyilvánosságát használták álláspontjuk kifejtésére.',
-   why:'Mind Eötvösék, mind Kossuth a nyilvánosságra — elsősorban a Pesti Hírlapra és a hozzá kapcsolódó vitákra — építették politizálásukat.'}
+   why:'A vita nem arról szólt, kell-e reform, hanem arról, milyen intézményi keretben és milyen sorrendben valósuljon meg.'},
+  {who:'k',text:'A felelős kormány és a népképviselet követelése végül közös programpontként került be az 1847-es Ellenzéki Nyilatkozatba.',
+   why:'Az OH-TOR10TA szerint az Ellenzéki Nyilatkozat a korábbi elvek mellett átvette a centralisták egyes törekvéseit (népképviselet, felelős kormány).'}
  ],
  quiz:[
   {q:'Kik voltak a centralisták legismertebb képviselői?',
-   opts:[{t:'Eötvös József és Szalay László',ok:true},
+   opts:[{t:'Eötvös József, Szalay László és Trefort Ágoston',ok:true},
          {t:'Deák Ferenc és Batthyány Lajos',ok:false},
          {t:'Kossuth Lajos és Wesselényi Miklós',ok:false}],
-   fb:'A centralisták vezéralakjai Eötvös József és Szalay László voltak; Kossuth és Wesselényi éppen a vitapartnerük oldalán álltak.'},
-  {q:'Milyen kormányzati mintát tartottak követendőnek a centralisták?',
-   opts:[{t:'Az angol parlamentáris, miniszteri felelősségen alapuló kormányzatot',ok:true},
-         {t:'A porosz abszolutista mintát',ok:false},
-         {t:'A francia forradalmi köztársasági modellt',ok:false}],
-   fb:'A centralisták az angol mintájú, a törvényhozásnak felelős kormányzatot tekintették a modern, hatékony államszervezet alapjának.'},
-  {q:'Miért ragaszkodott Kossuth a vármegyerendszerhez?',
-   opts:[{t:'Mert az alkotmányos szabadság történelmi védőbástyájának tartotta a bécsi abszolutizmussal szemben',ok:true},
-         {t:'Mert személyesen vármegyei tisztséget viselt, és nem akart lemondani róla',ok:false},
-         {t:'Mert teljes egészében elutasította a felelős kormányzat elvét is',ok:false}],
-   fb:'Kossuth nem a felelős kormányzat elvét vetette el, hanem attól tartott, hogy a megyerendszer feladása a szabadság egyik garanciájáról mondana le.'},
-  {q:'Melyik évtizedben zajlott ez a vita?',
-   opts:[{t:'Az 1840-es években',ok:true},{t:'Az 1790-es években',ok:false},{t:'Az 1860-as években',ok:false}],
-   fb:'A centralisták és Kossuth vitája az 1840-es évek reformkori közéletének egyik meghatározó vitája volt.'},
+   fb:'A tankönyvek szerint a centralisták vezéralakjai Eötvös József, Szalay László és Trefort Ágoston voltak.'},
+  {q:'Mit gondolt a reformerek többsége a centralisták javaslatáról?',
+   opts:[{t:'Csak a többi reform elérése után lehet időszerű',ok:true},
+         {t:'Azonnal, minden más reform előtt végre kell hajtani',ok:false},
+         {t:'Alkotmányellenes, ezért el kell vetni',ok:false}],
+   fb:'Az OH-TOR10TA szerint a reformerek többsége a vitát a reformok sorrendjének kérdésében látta: előbb a többi reform, a megyerendszer átalakítása utána.'},
+  {q:'Miért tartották a reformerek többsége szerint fontosnak a vármegyét?',
+   opts:[{t:'Mert a kormányzattal szembeni fellépés legjobb terepe a vármegye volt',ok:true},
+         {t:'Mert a vármegyék adták az ország hadseregét',ok:false},
+         {t:'Mert a vármegyék választották a királyt',ok:false}],
+   fb:'A tankönyv szerint a vármegye volt a kormányzattal szembeni fellépés legjobb terepe (sérelmi politika, ellenállási fórum, helyi autonómia).'},
+  {q:'Melyik 1847-es dokumentum vette át a centralisták egyes követeléseit?',
+   opts:[{t:'Az Ellenzéki Nyilatkozat',ok:true},
+         {t:'A Tizenkét pont',ok:false},
+         {t:'A Kelet népe',ok:false}],
+   fb:'Az Ellenzéki Nyilatkozat (Deák Ferenc és Kossuth Lajos útmutatója az Ellenzéki Pártnak) a kötelező örökváltság és a polgári jogegyenlőség mellett a népképviseletet és a felelős kormányt is felvette.'},
   {q:'Mi volt a centralisták fő kritikája a megyerendszerrel szemben?',
    opts:[{t:'Hogy akadályozza az egységes, szakszerű, felelős kormányzást',ok:true},
          {t:'Hogy túl sok adót szedett be',ok:false},
@@ -429,47 +469,53 @@ centralistak_kossuth:{
    opts:[{t:'Mindketten a liberális, alkotmányos átalakulás hívei voltak',ok:true},
          {t:'Mindketten a rendi kiváltságok változatlan fenntartása mellett álltak ki',ok:false},
          {t:'Egyikük sem támogatott semmilyen reformot',ok:false}],
-   fb:'A vita a reformellenzéken belül zajlott: mindkét fél a liberális átalakulás híve volt, csak az intézményi keretben tért el az álláspontjuk.'}
+   fb:'A vita a reformellenzéken belül zajlott: mindkét fél a liberális átalakulás híve volt, csak az intézményi keretben és a sorrendben tért el az álláspontjuk.'}
  ],
  essay:{
   title:'Esszévázlat: a centralisták és Kossuth vitája a megyerendszerről',
   rows:[
-   {label:'Kiindulópont', a:'a megyerendszer akadályozza a modern, egységes kormányzást', b:'a megyerendszer az alkotmányos szabadság védőbástyája'},
-   {label:'Javasolt modell', a:'angol mintájú, felelős, központi parlamentáris kormányzat', b:'a hagyományos vármegyei önkormányzat megőrzése és megerősítése'},
-   {label:'Fő félelem', a:'a decentralizált rendszer akadályozza a reformok érvényesülését', b:'a központosítás egy jövőbeli önkényuralom eszközévé válhat'},
-   {label:'Fő fórum', a:'elméleti-publicisztikai munkák (pl. Eötvös: Reform)', b:'megyegyűlések, Pesti Hírlap'}
+   {label:'Képviselők', a:'Eötvös József, Trefort Ágoston, Szalay László', b:'Kossuth Lajos és a reformellenzék többsége'},
+   {label:'Kiindulópont', a:'a modern állam nem szervezhető meg a rendi vármegye mellett', b:'a vármegye a kormányzattal szembeni fellépés legjobb terepe'},
+   {label:'Javasolt modell', a:'erős, felelős központi kormányzat; kisebb megyei önállóság', b:'a megyei önkormányzat megőrzése; előbb a többi reform'},
+   {label:'A megye előnyei, hátrányai', a:'hátrány: az egységes irányítás hiánya, a korszerűsítő döntések akadályozása, képzetlen tisztviselők', b:'előny: helyi autonómia, az ellenállás fóruma (sérelmi politika)'},
+   {label:'Fő félelem', a:'a decentralizált rendszer akadályozza a reformok érvényesülését', b:'a központosítás gyengíti a kormányzattal szembeni védekezés lehetőségeit'}
   ],
-  common:'a liberális, alkotmányos átalakulás szükségessége &middot; a kormányzati rendszer reformra szorul &middot; a nyilvánosság politikai szerepe',
-  vazlat:'1) közös kiindulópont: mindketten a rendi Magyarország alkotmányos átalakítását akarták &rarr; 2) a centralisták kritikája: a megyerendszer maga is akadálya lehet a haladásnak &rarr; 3) Kossuth válasza: a megyerendszer a szabadság történelmi garanciája, a központosítás veszélyes &rarr; 4) a vita tétje: melyik intézmény védi meg jobban a szabadságot — a decentralizált ellenállás vagy a felelős, központi kormányzat &rarr; 5) kitekintés: 1848-ban a felelős magyar kormány (Batthyány-kormány) felállítása részben a centralisták elvét valósította meg, miközben a megyerendszer is fennmaradt — a kérdés véglegesen csak jóval később dőlt el.'
+  common:'a polgári, alkotmányos átalakulás szükségessége &middot; felelős kormány és népképviselet követelése &middot; az Ellenzéki Párt támogatása',
+  vazlat:'1) közös kiindulópont: mindketten a rendi Magyarország alkotmányos átalakítását akarták &rarr; 2) a centralisták kritikája: a megyerendszer maga is akadálya lehet a haladásnak &rarr; 3) a reformerek többségének válasza: a javaslat csak a többi reform után időszerű, addig a megye az ellenállás terepe &rarr; 4) a vita tétje: a reformok sorrendje és az, hogy melyik intézmény védi jobban a szabadságot &rarr; 5) kitekintés: az 1847-es Ellenzéki Nyilatkozat már átvette a centralisták egyes követeléseit (népképviselet, felelős kormány).'
  }
 }
 
 };
 
 /* ============ állapot ============ */
-const G={vitaId:null,vita:null,cards:[],idx:0,errors:0,quiz:[],qidx:0,locked:false};
+const G={vitaId:null,vita:null,cards:[],idx:0,errors:0,quiz:[],qidx:0,locked:false,readyAt:0};
+/* az új kártya/kérdés első 350 ms-ában érkező kattintást (dupla kattintás második fele) figyelmen kívül hagyjuk */
+function arm(){ G.readyAt=Date.now()+350; }
 function err(){G.errors++;document.getElementById('hudErr').textContent=G.errors;}
 function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById('screen-'+id).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
+  var hd=document.querySelector('#screen-'+id+' h1, #screen-'+id+' h2');
+  if(hd){ hd.setAttribute('tabindex','-1'); focusEl(hd); }
 }
 
 /* ============ pick screen ============ */
 function renderPick(){
   document.getElementById('vitaList').innerHTML = Object.entries(VITAK).map(([id,v])=>
-    `<button class="vita-card" role="listitem" onclick="openVita('${id}')">
+    `<div role="listitem"><button class="vita-card" onclick="openVita('${id}')">
       <span class="vperiod">${v.period}</span>
       <h3>${v.title}</h3>
       <p class="vblurb">${v.blurb}</p>
       <span class="vlevel">${v.level}</span>
-    </button>`).join('');
+      ${v.src?'<span class="vsrc'+(v.warn?' warn':'')+'">'+v.src+'</span>':''}
+    </button></div>`).join('');
 }
 function openVita(id){
   G.vitaId=id; G.vita=VITAK[id];
   document.getElementById('introEyebrow').innerHTML='Érettségi felkészítő vitajáték &middot; '+G.vita.period;
   document.getElementById('introTitle').textContent=G.vita.title;
-  document.getElementById('introStory').innerHTML=G.vita.lede.map(p=>'<p>'+p+'</p>').join('');
+  document.getElementById('introStory').innerHTML=G.vita.lede.map(p=>'<p>'+p+'</p>').join('')+(G.vita.warn?'<p class="warnbox" role="note"><b>&#9888; </b>'+G.vita.warn+'</p>':'');
   go('intro');
 }
 function backToPick(){
@@ -496,17 +542,15 @@ function renderPodiums(){
 /* ============ 1. felvonás: sort ============ */
 function startGame(){
   const v=G.vita;
-  G.cards=sample(v.cards,Math.min(9,v.cards.length));
-  /* biztosítjuk, hogy mindhárom kategóriából legyen */
+  /* kategóriánként legalább egy kártya, a többi véletlenszerűen; majd keverés */
+  const want=Math.min(9,v.cards.length);
+  const picked=[];
   ['a','b','k'].forEach(w=>{
-    if(!G.cards.some(c=>c.who===w)){
-      const pool=v.cards.filter(c=>c.who===w);
-      if(pool.length){
-        const cand=pool[Math.floor(Math.random()*pool.length)];
-        G.cards[Math.floor(Math.random()*G.cards.length)]=cand;
-      }
-    }
+    const pool=v.cards.filter(c=>c.who===w);
+    if(pool.length) picked.push(pool[Math.floor(Math.random()*pool.length)]);
   });
+  const rest=shuffle(v.cards.filter(c=>picked.indexOf(c)<0));
+  G.cards=shuffle(picked.concat(rest.slice(0,Math.max(0,want-picked.length))));
   G.idx=0; G.errors=0; G.locked=false;
   renderPodiums();
   document.getElementById('hud').style.display='flex';
@@ -514,19 +558,22 @@ function startGame(){
   go('sort'); renderCard();
 }
 function renderCard(){
-  G.locked=false;
+  G.locked=false; arm();
   const c=G.cards[G.idx];
   document.getElementById('sortProgress').textContent='1. felvonás — álláspont-kártya '+(G.idx+1)+' / '+G.cards.length;
-  document.getElementById('stmtText').textContent='„'+c.text+'”';
+  document.getElementById('stmtText').textContent=c.text;
   ['a','k','b'].forEach(k=>{
     const b=document.getElementById('sb-'+k);
     b.disabled=false; b.classList.remove('correct','incorrect');
   });
   const fb=document.getElementById('sortFb'); fb.className='feedback'; fb.textContent='';
   document.getElementById('sortActions').innerHTML='';
+  focusEl(document.getElementById('stmtText'));
 }
+function nextCard(){ if(!G.locked) return; G.idx++; renderCard(); }
+function nextQuiz(){ if(!G.locked) return; G.qidx++; renderQuiz(); }
 function sortAnswer(k){
-  if(G.locked) return;
+  if(G.locked||Date.now()<G.readyAt) return;
   const c=G.cards[G.idx];
   const v=G.vita;
   const fb=document.getElementById('sortFb');
@@ -536,14 +583,16 @@ function sortAnswer(k){
     ['a','k','b'].forEach(x=>document.getElementById('sb-'+x).disabled=true);
     fb.className='feedback ok'; fb.innerHTML='&#10003; '+c.why;
     const list = c.who==='k' ? null : document.getElementById('won-'+c.who);
-    if(list) list.insertAdjacentHTML('beforeend','<li>'+c.text.slice(0,64)+'&hellip;</li>');
+    if(list) list.insertAdjacentHTML('beforeend','<li>'+shortText(c.text,64)+'</li>');
     document.getElementById('sortActions').innerHTML =
       G.idx<G.cards.length-1
-        ? '<button class="btn" onclick="G.idx++; renderCard();">Következő kártya &rarr;</button>'
+        ? '<button class="btn" onclick="nextCard()">Következő kártya &rarr;</button>'
         : '<button class="btn" onclick="startQuiz()">2. felvonás: elemzés &rarr;</button>';
+    focusEl(document.getElementById('sortFb'));
   }else{
     err();
     document.getElementById('sb-'+k).classList.add('incorrect');
+    document.getElementById('sb-'+k).disabled=true;
     fb.className='feedback bad';
     fb.innerHTML = k==='k'
       ? 'Ez az álláspont nem közös cél — a kártya olyasmiről beszél, amiben a két fél <b>különbözik</b>. Kinek a programjára jellemzőbb ez a hangsúly?'
@@ -553,12 +602,13 @@ function sortAnswer(k){
 
 /* ============ 2. felvonás: quiz ============ */
 function startQuiz(){
+  if(!G.locked) return;
   const v=G.vita;
   G.quiz=sample(v.quiz,Math.min(4,v.quiz.length)); G.qidx=0;
   go('quiz'); renderQuiz();
 }
 function renderQuiz(){
-  G.locked=false;
+  G.locked=false; arm();
   const q=G.quiz[G.qidx];
   document.getElementById('quizProgress').textContent='2. felvonás — elemző kérdés '+(G.qidx+1)+' / '+G.quiz.length;
   document.getElementById('quizQ').textContent=q.q;
@@ -567,9 +617,10 @@ function renderQuiz(){
     opts.map(o=>'<button class="opt" data-ok="'+(o.ok?1:0)+'" onclick="quizAnswer(this)">'+o.t+'</button>').join('');
   const fb=document.getElementById('quizFb'); fb.className='feedback'; fb.textContent='';
   document.getElementById('quizActions').innerHTML='';
+  focusEl(document.getElementById('quizQ'));
 }
 function quizAnswer(btn){
-  if(G.locked) return;
+  if(G.locked||Date.now()<G.readyAt) return;
   const q=G.quiz[G.qidx];
   const ok=btn.dataset.ok==='1';
   const fb=document.getElementById('quizFb');
@@ -580,11 +631,13 @@ function quizAnswer(btn){
     fb.className='feedback ok'; fb.innerHTML='&#10003; '+q.fb;
     document.getElementById('quizActions').innerHTML =
       G.qidx<G.quiz.length-1
-        ? '<button class="btn" onclick="G.qidx++; renderQuiz();">Következő kérdés &rarr;</button>'
+        ? '<button class="btn" onclick="nextQuiz()">Következő kérdés &rarr;</button>'
         : '<button class="btn" onclick="endGame()">A vita mérlege &rarr;</button>';
+    focusEl(document.getElementById('quizFb'));
   }else{
     err();
     btn.classList.add('incorrect');
+    btn.disabled=true;
     fb.className='feedback bad';
     fb.innerHTML='Nem pontos — idézd fel a mű vagy esemény keletkezési évét és szereplőit, és gondold végig, melyik program logikájába illik!';
   }
@@ -592,6 +645,7 @@ function quizAnswer(btn){
 
 /* ============ zárás ============ */
 function endGame(){
+  if(!G.locked) return;
   go('ending');
   const v=G.vita;
   let grade;
@@ -602,13 +656,14 @@ function endGame(){
   document.getElementById('endingH2').textContent=v.whoA.name+' — '+v.whoB.name;
 
   const rowsHtml = v.essay.rows.map(r=>
-    '<tr><td><b>'+r.label+'</b></td><td>'+r.a+'</td><td>'+r.b+'</td></tr>').join('');
+    '<tr><td data-label="Szempont"><b>'+r.label+'</b></td><td data-label="'+v.whoA.name+'">'+r.a+'</td><td data-label="'+v.whoB.name+'">'+r.b+'</td></tr>').join('');
   document.getElementById('essayBox').innerHTML =
     '<h3>'+v.essay.title+'</h3>'+
-    '<table><tr><th>Szempont</th><th>'+v.whoA.name+'</th><th>'+v.whoB.name+'</th></tr>'+
+    '<table><tr class="hd"><th>Szempont</th><th>'+v.whoA.name+'</th><th>'+v.whoB.name+'</th></tr>'+
     rowsHtml+
-    '<tr><td><b>Közös célok</b></td><td colspan="2">'+v.essay.common+'</td></tr></table>'+
-    '<div class="vaz"><b>Esszé-gondolatmenet:</b> '+v.essay.vazlat+'</div>';
+    '<tr><td data-label="Szempont"><b>Közös célok</b></td><td colspan="2" data-label="Közös célok">'+v.essay.common+'</td></tr></table>'+
+    '<div class="vaz"><b>Esszé-gondolatmenet:</b> '+v.essay.vazlat+'</div>'+
+    (v.src?'<div class="vaz"><b>Forrásjelzés:</b> '+v.src.replace(/^Forrás: /,'')+'</div>':'');
 }
 
 renderPick();
