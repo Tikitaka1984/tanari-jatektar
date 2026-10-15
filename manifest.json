@@ -11,8 +11,8 @@
   },
   "reformkor": {
     "path": "games/reformkor.html",
-    "bytes": 48414,
-    "md5": "1f721c21146615b62e2130fe325bd566"
+    "bytes": 53772,
+    "md5": "78c4645200dcde962eb29ae846f7943f"
   },
   "leveltar": {
     "path": "games/leveltar.html",
@@ -118,5 +118,10 @@
     "path": "games/iranyitsd-romat.html",
     "bytes": 106486,
     "md5": "a9b792a289094753c7a06b3e19c7370d"
+  },
+  "trimino": {
+    "path": "games/trimino.html",
+    "bytes": 21516,
+    "md5": "afb7f47ebbd057f84a0638e0df68ad44"
   }
 }

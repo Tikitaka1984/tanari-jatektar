@@ -22,14 +22,14 @@ const server=http.createServer((req,res)=>{
   const p=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'});
   const errors=[];p.on('pageerror',e=>errors.push(e.message));
   await p.goto(url);await p.locator('#grid .card').first().waitFor();
-  assert.equal(await p.locator('#grid .card').count(),9);
-  assert.equal(await p.locator('#escapeGrid .card').count(),5);
+  assert.equal(await p.locator('#grid .card').count(),10);
+  assert.equal(await p.locator('#escapeGrid .card').count(),6);
   assert.equal(await p.locator('#demoGrid .card').count(),4);
   const artwork=p.locator('.card-visual img');
-  assert.equal(await artwork.count(),18,'every catalog card has an illustration');
+  assert.equal(await artwork.count(),20,'every catalog card has an illustration');
   const sources=await artwork.evaluateAll(es=>es.map(e=>e.getAttribute('src')));
-  assert.equal(new Set(sources).size,18,'each card has its own thematic artwork');
-  for(let i=0;i<18;i++){
+  assert.equal(new Set(sources).size,20,'each card has its own thematic artwork');
+  for(let i=0;i<20;i++){
    const image=artwork.nth(i);await image.scrollIntoViewIfNeeded();
    await image.evaluate(e=>e.decode());
    assert(await image.evaluate(e=>e.complete&&e.naturalWidth>0),'image decoded');
@@ -84,7 +84,7 @@ const server=http.createServer((req,res)=>{
   for(const href of links){const response=await p.request.get(url+'/'+href.split('#')[0]);assert.equal(response.status(),200,href);}
   for(const asset of ['assets/hub-roma.svg','assets/hub-korona.svg'])assert.equal((await p.request.get(url+'/'+asset)).status(),200);
   assert.deepEqual(errors,[]);
-  results.push({width,status:'PASS',checks:'layout, 18 unique decoded decorative card illustrations aligned to card tops, navigation, keyboard, filters, empty state, featured/game/demo iframe, return focus, new tab, player Escape, escape/teacher/download links, SVG, no JS errors'});
+  results.push({width,status:'PASS',checks:'layout, 20 unique decoded decorative card illustrations aligned to card tops, navigation, keyboard, filters, empty state, featured/game/demo iframe, return focus, new tab, player Escape, escape/teacher/download links, SVG, no JS errors'});
   await p.close();
  }
  fs.writeFileSync(path.join(output,'hub-browser-results.json'),JSON.stringify({browser:browser.version(),time:new Date().toISOString(),source_sha256:require('node:crypto').createHash('sha256').update(fs.readFileSync(path.join(root,'index.html'))).digest('hex'),results},null,2));
