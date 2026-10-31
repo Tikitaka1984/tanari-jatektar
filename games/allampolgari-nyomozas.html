@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Az eltűnt árvízvédelmi alap</title>
+<style>
+:root{
+  --bg:#eef1f5; --card:#ffffff; --ink:#17212e; --muted:#51606f; --line:#cbd5e0;
+  --accent:#1f4e79; --accent-ink:#fff; --ok:#2f6b3a; --bad:#a32a2a; --warn:#8a6100; --chip:#e3e9f0;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#121820; --card:#1b2430; --ink:#e8edf3; --muted:#a9b6c4; --line:#2f3d4f; --accent:#6aa8e0; --accent-ink:#0e141b; --ok:#7fc58b; --bad:#f08a8a; --warn:#e6bd5a; --chip:#243142; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.55;font-size:17px}
+.wrap{max-width:900px;margin:0 auto;padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--line);padding-bottom:10px;margin-bottom:14px}
+h1{font-size:1.45rem;margin:0;color:var(--accent);letter-spacing:.2px}
+h2{font-size:1.2rem;margin:0 0 8px;color:var(--accent)}
+h3{font-size:1.02rem;margin:0 0 4px}
+.score{font-family:system-ui,sans-serif;font-size:.9rem;background:var(--chip);border:1px solid var(--line);padding:4px 10px;border-radius:999px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.muted{color:var(--muted);font-size:.93rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.sus{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--card);position:relative}
+.sus .role{font-family:system-ui,sans-serif;font-size:.8rem;color:var(--muted);margin-bottom:6px}
+.sus blockquote{margin:6px 0;padding-left:10px;border-left:3px solid var(--line);font-style:italic;font-size:.95rem}
+.sus.out{opacity:.62}
+.badge{display:inline-block;font-family:system-ui,sans-serif;font-size:.75rem;padding:2px 8px;border-radius:999px;margin:2px 4px 2px 0;border:1px solid var(--line);background:var(--chip)}
+.badge.ok{color:var(--ok);border-color:var(--ok)}
+.badge.no{color:var(--bad);border-color:var(--bad)}
+.badge.sus-m{color:var(--warn);border-color:var(--warn)}
+.secret{font-size:.9rem;margin-top:6px;border-top:1px dashed var(--line);padding-top:6px}
+button,.btn{font-family:system-ui,sans-serif;font-size:.95rem;cursor:pointer;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:9px 16px;min-height:44px}
+button.ghost{background:transparent;color:var(--accent)}
+button.small{min-height:36px;padding:5px 10px;font-size:.82rem}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,label:focus-within{outline:3px solid var(--warn);outline-offset:2px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin:6px 0;cursor:pointer;background:var(--card)}
+.opt input{margin-top:5px;width:18px;height:18px;flex:none}
+.opt.sel{border-color:var(--accent);background:var(--chip)}
+.progress{display:flex;gap:6px;margin:6px 0 14px}
+.progress span{flex:1;height:8px;border-radius:4px;background:var(--line)}
+.progress span.done{background:var(--ok)}
+.progress span.cur{background:var(--accent)}
+.fb{padding:10px 12px;border-radius:8px;margin:10px 0;font-size:.97rem}
+.fb.bad{border:1px solid var(--bad);color:var(--ink);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.fb.good{border:1px solid var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
+.fb.hint{border:1px dashed var(--warn)}
+.clue{border-left:4px solid var(--accent);padding:6px 12px;margin:8px 0;background:var(--chip);border-radius:0 8px 8px 0}
+.clue b{font-family:system-ui,sans-serif;font-size:.8rem;color:var(--muted);display:block}
+ul.tight{margin:6px 0 6px 18px;padding:0}
+ul.tight li{margin:3px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.sr{position:absolute;left:-9999px}
+.res-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.big{font-size:2rem;font-weight:bold;color:var(--accent)}
+[hidden]{display:none!important}
+.tabs{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap}
+.tab{background:transparent;color:var(--accent);border:1px solid var(--line);border-radius:8px;padding:8px 14px;min-height:44px}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+textarea.notes{width:100%;min-height:110px;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);resize:vertical}
+@media (max-width:520px){body{font-size:16px}h1{font-size:1.25rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Az eltűnt árvízvédelmi alap</h1>
+    <div class="score" id="score" aria-live="polite"></div>
+  </header>
+  <nav id="tabs" class="tabs" role="tablist" aria-label="Nyomozás nézetei" hidden></nav>
+  <main id="app"></main>
+  <p class="muted" style="margin-top:24px">Állampolgári nyomozójáték 12. évfolyamnak. A történet és szereplői kitaláltak; az intézmények szabályai az Állampolgári ismeretek 12. tankönyv 4. leckéje (A magyar állam) alapján szerepelnek.</p>
+</div>
+
+<script>
+"use strict";
+/* ---------- ADATOK ---------- */
+const SUSPECTS=[
+ {id:"elnok",name:"Bartos Elemér",role:"köztársasági elnök",
+  say:"A költségvetési törvényt az Alaptörvény szabályai szerint kihirdettem. A szövegébe nem szólhattam bele.",
+  secret:"A kihirdetés előtt egy rendezvényen beszélt a polgármesterrel, de a pénzről nem esett szó."},
+ {id:"kepv",name:"Kerekes Dóra",role:"országgyűlési képviselő",
+  say:"A törvényt megszavaztam, utána pedig interpellációt nyújtottam be a pénz sorsáról. Mentelmi jogom van, engem nem lehet kihallgatni.",
+  secret:"A választókerületében van Folyóváros, és a következő választás előtt szerepelni szeretne az ügyben."},
+ {id:"allt",name:"Dr. Szalai Gergő",role:"pénzügyi államtitkár",
+  say:"A minisztérium a törvény szerint teljesítette a kifizetést. Az összeg megérkezett az önkormányzathoz.",
+  secret:"A minisztérium a jelentését késve küldte meg az Országgyűlésnek."},
+ {id:"polg",name:"Fehér Margit",role:"Folyóváros polgármestere",
+  say:"A pénz nagy részét a gátra költöttük. A tanácsadói szerződést a képviselőtestület is jóváhagyta.",
+  secret:"A tanácsadó cég a sógorának vállalkozása."},
+ {id:"jegy",name:"Dr. Tóth Béla",role:"Folyóváros jegyzője",
+  say:"Kinevezett köztisztviselő vagyok, nem politikus. A hivatal törvényes működéséért felelek, a kifizetésekről a polgármester és a testület dönt.",
+  secret:"Írásban jelezte a törvénysértést, de a polgármester nem reagált."}
+];
+const SN=Object.fromEntries(SUSPECTS.map(s=>[s.id,s.name]));
+const REVEAL={elnok:2,kepv:3,allt:4,jegy:5,polg:6};
+const CULPRIT="polg", MOTIVE_OK="b", PROC_OK="a", COURT_OK="b";
+
+const STEPS=[
+ {title:"1. feladat: A költségvetés",type:"multi",
+  q:"A folyóvárosi gát felújítására szánt összeget az idei költségvetés tartalmazta. Mi igaz az Országgyűlés költségvetési döntésére? (Több válasz is lehet.)",
+  opts:[["1","Az Országgyűlés minden évben törvényt hoz a következő év költségvetéséről."],["2","A költségvetésről népszavazást lehet kezdeményezni."],["3","Az Országgyűlés a megelőző év költségvetésének végrehajtásáról is törvényt hoz."],["4","A Kormány az Országgyűlés nélkül, rendelettel is elfogadhatja a költségvetést."]],
+  correct:["1","3"],
+  hint:"A költségvetés törvényben születik meg, és bizonyos kérdésekről nem lehet népszavazást tartani.",
+  expl:"Az Országgyűlés köteles minden évben törvényt hozni a következő év költségvetéséről és a megelőző év költségvetésének végrehajtásáról. Népszavazást nem lehet tartani az Alaptörvényről, a költségvetésről, a kormányprogramról és a nemzetközi szerződésekből fakadó kötelezettségekről.",
+  clue:{t:"A költségvetési törvény fejezete",x:"Az Országgyűlés elfogadta a 300 millió forintos árvízvédelmi keretet. A pénz elkülönítése törvényes volt, a hiba tehát a végrehajtás során keletkezett."},
+  after:"Ismerjük a törvényes keretet. Most azt kell kideríteni, ki mit tehetett a törvény elfogadása után."},
+ {title:"2. feladat: A köztársasági elnök",type:"single",
+  q:"Az Országgyűlés elfogadta a költségvetési törvényt. Mit tehet ezután a köztársasági elnök?",
+  opts:[["a","Kihirdeti a törvényt, vagy visszaküldi az Országgyűlésnek megfontolásra, vagy az Alkotmánybírósághoz fordulhat."],["b","Átírhatja a törvény szövegét, ha hibát talál benne."],["c","Maga dönt a költségvetési források felhasználásáról."],["d","Népszavazást írhat ki a költségvetésről."]],
+  correct:["a"],
+  hint:"A köztársasági elnök feladatai békeidőben főként reprezentatívak.",
+  expl:"A köztársasági elnök hirdeti ki az Országgyűlés törvényeit. Ha nem ért egyet velük, visszaküldheti megfontolásra, vagy az Alkotmánybírósághoz fordulhat. A szöveget nem módosíthatja, a pénz felhasználásáról nem rendelkezik.",
+  clue:{t:"Kihirdetési okirat",x:"A köztársasági elnök a költségvetési törvényt változtatás nélkül kihirdette."},
+  elim:{elnok:"A köztársasági elnök a törvényt csak kihirdetheti, visszaküldheti vagy az Alkotmánybírósághoz fordulhat; a pénz sorsáról nem rendelkezik."},
+  after:"Az elnök szerepe a kihirdetéssel véget ért, ő kikerül a gyanúsítottak közül."},
+ {title:"3. feladat: A képviselők",type:"multi",
+  q:"Kerekes Dóra országgyűlési képviselő mentelmi jogára hivatkozik. Mi igaz az országgyűlési képviselőkre? (Több válasz is lehet.)",
+  opts:[["1","Mentelmi joguk célja, hogy politikai véleményük miatt ne lehessen felelősségre vonni őket."],["2","Mentelmi jogukra hivatkozva bármilyen bűncselekményért büntetlenek."],["3","Képviselő ellen eljárást csak akkor lehet indítani, ha az Országgyűlés felfüggeszti a mentelmi jogát."],["4","Kérdést és interpellációt intézhetnek a Kormány tagjaihoz."],["5","A törvények végrehajtásáról szóló rendeleteket a képviselők alkotják."]],
+  correct:["1","3","4"],
+  hint:"A képviselők törvényt alkotnak és ellenőrzik a Kormányt, de nem ők hajtják végre a törvényeket.",
+  expl:"A mentelmi jog célja, hogy a képviselőt politikai véleménye miatt ne lehessen felelősségre vonni; eljárás csak a mentelmi jog felfüggesztésével indítható. A képviselők kérdést és interpellációt intézhetnek a Kormány tagjaihoz. A végrehajtás a Kormány feladata.",
+  clue:{t:"Kerekes Dóra interpellációja",x:"A képviselő megkérdezte a Kormányt, hová lett a pénz. A Pénzügyminisztérium azt válaszolta, hogy az összeg teljes egészében megérkezett az önkormányzathoz."},
+  elim:{kepv:"A képviselő törvényt alkot és a Kormányt ellenőrzi, a költségvetést nem hajtja végre, és az önkormányzat pénzéről nem rendelkezik."},
+  after:"A képviselő nem rendelkezett a pénzről, ő is kikerül a gyanúsítottak közül."},
+ {title:"4. feladat: A Kormány és a minisztériumok",type:"multi",
+  q:"A központi költségvetés végrehajtása a Kormány feladata. Mi igaz a Kormányra és a minisztériumokra? (Több válasz is lehet.)",
+  opts:[["1","A Kormány az Országgyűlésnek felelős."],["2","A Kormány feladata a törvények végrehajtásáról szóló rendeletek megalkotása és az állami intézmények felügyelete."],["3","Az államtitkárok a minisztert segítik, és egyes részterületeket felügyelnek."],["4","A Kormány a köztársasági elnöknek tartozik felelősséggel."],["5","A Kormány felülbírálhatja a bíróságok ítéleteit."]],
+  correct:["1","2","3"],
+  hint:"A Kormány az Országgyűlés bizalmából működik; az államtitkárok a miniszter segítői.",
+  expl:"A parlamentáris demokráciában a Kormány az Országgyűlésnek felelős. A végrehajtás a rendeletek alkotását és az állami intézmények felügyeletét jelenti. Az államtitkárok a minisztert segítik, és részterületeket felügyelnek.",
+  clue:{t:"Államkincstári átutalási igazolás",x:"A 300 millió forint teljes összege megérkezett Folyóváros önkormányzatának számlájára. A központi költségvetés végrehajtása tehát rendben lezajlott."},
+  elim:{allt:"A központi költségvetés végrehajtása teljesült: az átutalás megtörtént, a pénz megérkezett az önkormányzathoz."},
+  after:"A központi szint rendben teljesített, a hiba a településen történt."},
+ {title:"5. feladat: Az önkormányzat",type:"multi",
+  q:"A pénz Folyóváros önkormányzatához került. Mi igaz a települési önkormányzat szereplőire? (Több válasz is lehet.)",
+  opts:[["1","A polgármestert a lakosság közvetlenül választja."],["2","A jegyző választott politikus."],["3","A jegyző a hivatal törvényes működéséért felel."],["4","A polgármester feladata az önkormányzati döntések előkészítése és végrehajtása."],["5","A település vagyonának felügyelete a jegyző kizárólagos joga."]],
+  correct:["1","3","4"],
+  hint:"Az önkormányzati képviselőtestület felügyeli a vagyont; a polgármester végrehajt, a jegyző a törvényességért felel.",
+  expl:"A polgármestert a lakosság közvetlenül választja, feladata a döntések előkészítése és végrehajtása. A jegyző nem választott politikus, hanem kinevezett köztisztviselő, aki a törvényes működésért felel. A vagyont a képviselőtestület felügyeli.",
+  clue:{t:"A testületi jegyzőkönyv és a jegyzői észrevétel",x:"A képviselőtestület nem hozott határozatot a 160 millió forint tanácsadói díjként való kifizetéséről. A jegyző írásban jelezte, hogy a kifizetésnek nincs testületi döntése, és kérte a leállítását."},
+  elim:{jegy:"A jegyző nem választott politikus, és írásban jelezte a törvénysértést, a kifizetést nem ő rendelte el."},
+  after:"A polgármester azt állította, hogy a testület jóváhagyta a szerződést, de a jegyzőkönyv ennek ellentmond."},
+ {title:"6. feladat: Az ellenőrző intézmények",type:"single",
+  q:"Melyik intézmény ellenőrzi a közpénzek felhasználását, a költségvetés végrehajtását és az állami vagyon kezelését?",
+  opts:[["a","Az Állami Számvevőszék."],["b","Az Alkotmánybíróság."],["c","Az alapvető jogok biztosa."],["d","A Kúria."]],
+  correct:["a"],
+  hint:"A közpénzek ellenőrzésére külön intézmény létezik, amelynek elnökét az Országgyűlés választja 12 évre.",
+  expl:"Az Állami Számvevőszék a közpénzek felhasználását ellenőrzi, vizsgálja a költségvetés végrehajtását és az állami vagyon kezelését. Az Alkotmánybíróság a jogszabályok alaptörvény-ellenességét vizsgálja, az alapvető jogok biztosa alapjogsértéseket.",
+  clue:{t:"Az Állami Számvevőszék jelentése",x:"140 millió forintot a gátra költöttek, 160 millió forint pedig a Folyó-Konzult Kft. számlájára ment tanácsadói díjként. A kifizetési utalványt Fehér Margit polgármester írta alá. A cég tulajdonosa a polgármester sógora."},
+  elim:null,
+  after:"Mindenki kikerült a gyanúsítottak közül, kivéve a polgármestert. Ideje vádat emelni."}
+];
+
+const MOTIVES=[
+ ["a","A polgármester politikai ellenfelei hamis vádat koholtak ellene."],
+ ["b","A polgármester testületi határozat nélkül, a saját családi vállalkozásának utalta a pénzt."],
+ ["c","Adminisztrációs tévedés történt, senki nem tehető felelőssé."],
+ ["d","A minisztérium tévedésből kevesebb pénzt utalt át, mint amennyi járt."]
+];
+const WARE=[
+ {id:"v1",type:"Irat",t:"A költségvetési törvény fejezete",from:0,rel:false,
+  x:"A költségvetési törvény szerint 300 millió forint jár Folyóváros árvízvédelmi gátjának felújítására."},
+ {id:"v2",type:"Névtelen levél",t:"Névtelen levél",from:0,rel:false,
+  x:"„A köztársasági elnök mindent tudott, és hallgatott.” A levél szerzője ismeretlen, állítását semmi sem igazolja."},
+ {id:"v3",type:"Szakvélemény",t:"A gát állapotfelmérése",from:0,rel:false,
+  x:"A gát egyik szakasza a tavaszi áradáskor megrepedt; a felújítás a tervezett munkák mintegy felével készült el."},
+ {id:"v4",type:"Hír",t:"Sajtócikk",from:0,rel:false,
+  x:"„Hová lett a gátpénz?” A lakók válaszokat követelnek. A cikk a felháborodást írja le, tényt nem közöl."},
+ {id:"v5",type:"Irat",t:"Kihirdetési okirat",from:2,rel:false,
+  x:"A köztársasági elnök a költségvetési törvényt változtatás nélkül kihirdette."},
+ {id:"v6",type:"Irat",t:"Kerekes Dóra interpellációja",from:3,rel:false,
+  x:"A képviselő megkérdezte a Kormányt, hová lett a pénz. A minisztérium azt válaszolta, hogy az összeg megérkezett az önkormányzathoz."},
+ {id:"v7",type:"Irat",t:"Államkincstári átutalási igazolás",from:4,rel:true,
+  x:"A 300 millió forint teljes összege megérkezett Folyóváros önkormányzatának számlájára."},
+ {id:"v8",type:"Irat",t:"Képviselőtestületi jegyzőkönyv",from:5,rel:true,
+  x:"A testület nem hozott határozatot a 160 millió forint tanácsadói díjként való kifizetéséről."},
+ {id:"v9",type:"Irat",t:"Jegyzői törvényességi észrevétel",from:5,rel:true,
+  x:"A jegyző írásban jelezte, hogy a kifizetésnek nincs testületi döntése, és kérte a leállítását."},
+ {id:"v10",type:"Jelentés",t:"Az Állami Számvevőszék jelentése",from:6,rel:true,
+  x:"140 millió forintot a gátra költöttek, 160 millió forint pedig a Folyó-Konzult Kft. számlájára ment tanácsadói díjként."},
+ {id:"v11",type:"Irat",t:"Kifizetési utalvány",from:6,rel:true,
+  x:"A 160 millió forint kifizetését Fehér Margit polgármester írta alá."},
+ {id:"v12",type:"Irat",t:"A Folyó-Konzult Kft. cégkivonata",from:6,rel:true,
+  x:"A cég tulajdonosa Fehér Margit sógora."}
+];
+function wareAvail(){ return WARE.filter(w=>S.clues.length>=w.from); }
+function wareText(w){ let t=w.x; (w.o||[]).forEach(o=>{ if(S.clues.length>=o[0]) t=o[1]; }); return t; }
+const PROC=[
+ ["a","Az ügyész képviseli az államot mint vádló, a gyanúsított mellett védőügyvéd áll, és a bíróság dönt az ártatlanság vélelme alapján."],
+ ["b","A Kormány dönt a büntetésről."],
+ ["c","Az Alkotmánybíróság hoz ítéletet az ügyben."],
+ ["d","A köztársasági elnök kegyelmet ad, és az ügy lezárul."]
+];
+const COURTS=[
+ ["a","A járásbíróságon, a vádat a járási ügyész képviseli."],
+ ["b","A vármegyei törvényszéken, a vádat a főügyész képviseli."],
+ ["c","Az ítélőtáblán, a vádat a fellebbviteli főügyész képviseli."],
+ ["d","A Kúrián, a vádat a legfőbb ügyész képviseli."]
+];
+
+/* ---------- ÁLLAPOT ---------- */
+const S={phase:"intro",step:0,score:100,tries:0,sel:[],fb:null,hintShown:false,
+  clues:[],elim:{},marks:{},notes:"",rev:0,ret:"case",tab:"game",scoring:true,acc:{killer:null,motive:null,ev:[],proc:null,court:null},accErr:null,result:null};
+const $=id=>document.getElementById(id);
+const app=$("app");
+
+function setScore(){ $("score").textContent=S.scoring?("Pontszám: "+S.score):"Tanári mód (pontozás nélkül)"; }
+function arrEq(a,b){return a.length===b.length&&a.every(x=>b.includes(x));}
+
+/* ---------- NÉZETEK ---------- */
+function suspectsHtml(){
+  return '<div class="grid">'+SUSPECTS.map(s=>{
+    const out=S.elim[s.id];
+    const m=S.marks[s.id]||"";
+    const showSecret=S.phase!=="intro" && S.clues.length>=REVEAL[s.id];
+    return '<div class="sus'+(out?' out':'')+'">'
+      +'<h3>'+s.name+'</h3><div class="role">'+s.role+'</div>'
+      +'<blockquote>„'+s.say+'”</blockquote>'
+      +(out?'<span class="badge no">Kizárva</span><div class="muted">'+out+'</div>':'')
+      +(m==="gyanus"?'<span class="badge sus-m">Gyanús (saját jelölés)</span>':'')
+      +(m==="artatlan"?'<span class="badge ok">Ártatlan (saját jelölés)</span>':'')
+      +(showSecret?'<div class="secret"><b>Kiderült:</b> '+s.secret+'</div>':'')
+      +(S.phase==="case"?'<div class="row"><button class="ghost small" data-act="mark" data-id="'+s.id+'" data-v="gyanus">Gyanús</button><button class="ghost small" data-act="mark" data-id="'+s.id+'" data-v="artatlan">Ártatlan</button><button class="ghost small" data-act="mark" data-id="'+s.id+'" data-v="">Töröl</button></div>':'')
+      +'</div>';
+  }).join('')+'</div>';
+}
+function cluesHtml(){
+  if(!S.clues.length) return '<p class="muted">Még nincs feloldott nyom. Oldja meg az első feladatot!</p>';
+  return S.clues.map((c,i)=>'<div class="clue"><b>'+(i+1)+'. nyom: '+c.t+'</b>'+c.x+'</div>').join('');
+}
+function progressHtml(){
+  return '<div class="progress" aria-label="Haladás">'+STEPS.map((_,i)=>'<span class="'+(i<S.step?'done':(i===S.step&&S.phase==='case'?'cur':''))+'"></span>').join('')+'</div>';
+}
+
+function viewIntro(){
+  app.innerHTML=
+  '<div class="card"><h2>A történet</h2>'
+  +'<p>Az idei költségvetési törvényben az Országgyűlés <b>300 millió forintot</b> különített el Folyóváros árvízvédelmi gátjának felújítására. A pénz átutalása megtörtént, a felújítás azonban csak félig készült el. Az első tavaszi áradásnál a gát megrepedt. Szerencsére nem történt tragédia, de a lakók haragszanak: hová lett a pénz?</p>'
+  +'<p>Az Állami Számvevőszék közpénz-ellenőrzést indít. Ön a vizsgálócsoport tagja. A helyszínen a következőket találják:</p>'
+  +'<ul class="tight"><li>a költségvetési törvény idevonatkozó fejezetét,</li><li>egy névtelen levelet,</li><li>a gát állapotfelmérését,</li><li>egy sajtócikket a lakók felháborodásáról.</li></ul>'
+  +'<p><b>Az Ön feladata:</b> kiderítse, ki térítette el a pénzt, miért tette, és milyen eljárás következik.</p></div>'
+  +'<div class="card"><h2>Gyanúsítottak</h2>'+suspectsHtml()+'</div>'
+  +'<div class="card"><h2>Játékszabályok</h2><ul class="tight"><li>Hat feladatot kell megoldania az állam működéséről. Minden helyes válasz feloldja a következő nyomot.</li><li>Kezdőpontszám: 100. Rossz válasz: −10 pont. Tipp kérése: −5 pont.</li><li>A Bizonyíték raktárban gyűlnek a tárgyi bizonyítékok és iratok, a Nyomnaplóban az események.</li><li>A végén vádat emel, és megtudja, helyesen nyomozott-e.</li></ul>'
+  +'<label class="opt" style="max-width:420px"><input type="checkbox" id="teach"> <span>Tanári mód: pontozás nélkül</span></label>'
+  +'<div class="row"><button data-act="start">Nyomozás megkezdése</button></div></div>';
+}
+
+function viewCase(){
+  const st=STEPS[S.step];
+  const multi=st.type==="multi";
+  const opts=st.opts.map(o=>{
+    const on=S.sel.includes(o[0]);
+    return '<label class="opt'+(on?' sel':'')+'"><input type="'+(multi?'checkbox':'radio')+'" name="ans" value="'+o[0]+'"'+(on?' checked':'')+' data-act="pick"><span>'+o[1]+'</span></label>';
+  }).join('');
+  const fb=S.fb?'<div class="fb '+S.fb.kind+'" role="status">'+S.fb.text+'</div>':'';
+  const hint=S.hintShown?'<div class="fb hint"><b>Tipp:</b> '+st.hint+'</div>':'';
+  app.innerHTML=
+  progressHtml()
+  +'<div class="card"><h2>'+st.title+'</h2><p>'+st.q+'</p>'
+  +'<fieldset style="border:0;padding:0;margin:0"><legend class="sr">Válaszlehetőségek</legend>'+opts+'</fieldset>'
+  +hint+fb
+  +'<div class="row"><button data-act="check"'+(S.sel.length?'':' disabled')+'>Válasz ellenőrzése</button>'
+  +(S.hintShown?'':'<button class="ghost" data-act="hint">Tipp'+(S.scoring?' (−5 pont)':'')+'</button>')
+  +(S.step>0?'<button class="ghost" data-act="back">◀ Előző feladat áttekintése</button>':'')
+  +'</div></div>'
+  +'<div class="card"><h2>Nyomnapló</h2>'+cluesHtml()+'</div>'
+  +'<div class="card"><h2>Gyanúsítottak</h2><p class="muted">Saját jelöléseit bármikor módosíthatja; a „Kizárva” jelzést a játék a nyomok alapján adja.</p>'+suspectsHtml()+'</div>';
+}
+
+function viewStepDone(){
+  const st=STEPS[S.step];
+  app.innerHTML=
+  progressHtml()
+  +'<div class="card"><h2>'+st.title+'</h2><div class="fb good"><b>Helyes válasz.</b> '+st.expl+'</div>'
+  +'<div class="clue"><b>Új nyom: '+st.clue.t+'</b>'+st.clue.x+'</div>'
+  +'<p>'+st.after+'</p>'
+  +'<div class="row"><button data-act="next">'+(S.step===STEPS.length-1?'Tovább a vádemeléshez':'Következő feladat')+'</button></div></div>'
+  +'<div class="card"><h2>Nyomnapló</h2>'+cluesHtml()+'</div>'
+  +'<div class="card"><h2>Gyanúsítottak</h2>'+suspectsHtml()+'</div>';
+}
+
+function radioGroup(name,list,cur,act){
+  return list.map(o=>'<label class="opt'+(cur===o[0]?' sel':'')+'"><input type="radio" name="'+name+'" value="'+o[0]+'"'+(cur===o[0]?' checked':'')+' data-act="'+act+'"><span>'+o[1]+'</span></label>').join('');
+}
+function viewAccuse(){
+  const a=S.acc;
+  const killers=SUSPECTS.map(s=>[s.id,s.name+' ('+s.role+')']);
+  const ev=wareAvail().map(w=>'<label class="opt'+(a.ev.includes(w.id)?' sel':'')+'"><input type="checkbox" value="'+w.id+'"'+(a.ev.includes(w.id)?' checked':'')+' data-act="ev"><span><b>'+w.type+': '+w.t+'</b><br><span class="muted">'+wareText(w)+'</span></span></label>').join('');
+  const ready=a.killer&&a.motive&&a.ev.length===4&&a.proc&&a.court;
+  app.innerHTML=
+  '<div class="card"><h2>Vádemelés</h2><p>Foglalja össze a nyomozás eredményét. A beküldés után már nem módosíthat.</p></div>'
+  +'<div class="card"><h3>1. Ki térítette el a pénzt?</h3>'+radioGroup('killer',killers,a.killer,'killer')+'</div>'
+  +'<div class="card"><h3>2. Mi volt az indíték?</h3>'+radioGroup('motive',MOTIVES,a.motive,'motive')+'</div>'
+  +'<div class="card"><h3>3. Válasszon ki pontosan négy bizonyítékot a Bizonyíték raktárból ('+a.ev.length+'/4)</h3>'+ev+'</div>'
+  +'<div class="card"><h3>4. Hogyan folytatódik az ügy a büntetőeljárásban?</h3>'+radioGroup('proc',PROC,a.proc,'proc')+'</div>'
+  +'<div class="card"><h3>5. Hol indulna a per a tankönyv szerint?</h3><p class="muted">Tegyük fel, hogy az ügy a súlyosabb ügyek közé tartozik.</p>'+radioGroup('court',COURTS,a.court,'court')+'</div>'
+  +(S.accErr?'<div class="fb bad">'+S.accErr+'</div>':'')
+  +'<div class="row"><button data-act="submit"'+(ready?'':' disabled')+'>Vád beküldése</button><button class="ghost" data-act="backacc">◀ Nyomok áttekintése</button></div>';
+}
+
+function viewResult(){
+  const r=S.result;
+  const rows=r.lines.map(l=>'<div class="res-row"><span>'+l[0]+'</span><span>'+l[1]+'</span></div>').join('');
+  app.innerHTML=
+  '<div class="card"><h2>A vizsgálat eredménye</h2>'
+  +(S.scoring?'<div class="big">'+S.score+' / 100</div><p><b>Rang: '+r.rank+'</b></p>':'<p><b>Tanári mód: a pontozás ki van kapcsolva.</b></p>')
+  +rows+'</div>'
+  +'<div class="card"><h2>Mi történt valójában?</h2>'
+  +'<p>A pénzt <b>Fehér Margit polgármester</b> térítette el. A központi költségvetés végrehajtása rendben lezajlott: az Országgyűlés elfogadta a költségvetést, a köztársasági elnök kihirdette, a minisztérium pedig átutalta az összeget. A pénz megérkezett Folyóváros önkormányzatához.</p>'
+  +'<p>A polgármester a 160 millió forintot a képviselőtestület határozata nélkül, tanácsadói díj címén egy olyan cég számlájára utalta, amelynek tulajdonosa a sógora. A jegyző, aki a hivatal törvényes működéséért felel, írásban jelezte a törvénysértést, de a polgármester nem foglalkozott vele. A szabálytalanságot az Állami Számvevőszék közpénz-ellenőrzése derítette fel.</p>'
+  +'<p><b>Az eljárás:</b> büntetőperben az ügyész képviseli az államot mint vádló, a vádlott mellett védőügyvéd áll, és a bíróság az ártatlanság vélelme alapján dönt. A tankönyv szerint a súlyosabb ügyek a vármegyei törvényszéken indulnak, a vádat itt a főügyész képviseli.</p></div>'
+  +'<div class="card"><h2>Amit megtanult</h2><ul class="tight">'
+  +'<li>A költségvetésről az Országgyűlés évente törvényt hoz; népszavazás nem tartható róla.</li>'
+  +'<li>A köztársasági elnök kihirdeti a törvényt, visszaküldheti vagy az Alkotmánybírósághoz fordulhat; a szöveget nem módosíthatja.</li>'
+  +'<li>A képviselők törvényt alkotnak és ellenőriznek; a mentelmi jog a politikai véleményt védi.</li>'
+  +'<li>A Kormány az Országgyűlésnek felelős, és végrehajtja a törvényeket.</li>'
+  +'<li>A polgármester végrehajtja az önkormányzati döntéseket, a jegyző a törvényességért felel, a vagyont a képviselőtestület felügyeli.</li>'
+  +'<li>A közpénzek ellenőrzése az Állami Számvevőszék feladata.</li>'
+  +'<li>A bíróságok és az ügyészség az igazságszolgáltatás szervei; érvényesül az ártatlanság vélelme.</li></ul>'
+  +'<div class="row"><button data-act="restart">Új játék</button></div></div>';
+}
+
+function viewReview(){
+  const st=STEPS[S.rev];
+  const ans=st.correct.map(c=>st.opts.find(o=>o[0]===c)[1]).join('; ');
+  app.innerHTML=
+  '<div class="card"><h2>Áttekintés: '+st.title+'</h2><p class="muted">Ez csak áttekintés, a pontszámot nem érinti.</p>'
+  +'<p>'+st.q+'</p>'
+  +'<div class="fb good"><b>Helyes válasz:</b> '+ans+'<br>'+st.expl+'</div>'
+  +'<div class="clue"><b>Nyom: '+st.clue.t+'</b>'+st.clue.x+'</div>'
+  +'<p>'+st.after+'</p>'
+  +'<div class="row"><button class="ghost" data-act="revprev"'+(S.rev>0?'':' disabled')+'>◀ Előző</button>'
+  +'<button class="ghost" data-act="revnext"'+(S.rev<S.clues.length-1?'':' disabled')+'>Következő ▶</button>'
+  +'<button data-act="revret">Vissza a játékhoz</button></div></div>'
+  +'<div class="card"><h2>Gyanúsítottak</h2>'+suspectsHtml()+'</div>';
+}
+function viewLog(){
+  const cl=S.clues.length?S.clues.map((c,i)=>'<div class="clue"><b>'+(i+1)+'. nyom: '+c.t+'</b>'+c.x
+    +'<div class="row"><button class="ghost small" data-act="revi" data-i="'+i+'">'+(i+1)+'. feladat áttekintése</button></div></div>').join('')
+    :'<p class="muted">Még nincs feloldott nyom.</p>';
+  const el=Object.entries(S.elim);
+  const ex=el.length?'<ul class="tight">'+el.map(e=>'<li><b>'+SN[e[0]]+':</b> '+e[1]+'</li>').join('')+'</ul>':'<p class="muted">Még senkit nem zártak ki.</p>';
+  app.innerHTML='<div class="card"><h2>Nyomnapló</h2><p class="muted">A nyomozás eseményei időrendben. A tárgyi bizonyítékok és iratok a Bizonyíték raktárban találhatók.</p>'+cl+'</div>'
+   +'<div class="card"><h2>Kizárt gyanúsítottak</h2>'+ex+'</div>'
+   +'<div class="card"><h2><label for="notes">Saját jegyzet</label></h2><textarea id="notes" class="notes" placeholder="Ide írhat saját megfigyeléseket.">'+S.notes.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</textarea></div>';
+}
+function viewStore(){
+  const items=wareAvail(), n=S.acc.ev.length;
+  app.innerHTML='<div class="card"><h2>Bizonyíték raktár</h2><p class="muted">Itt gyűlnek a tárgyi bizonyítékok, iratok, vallomások és alibik. Legfeljebb négyet jelölhet ki a vádemeléshez ('+n+'/4); a kijelölés a vádemelésnél is megjelenik. A raktárban nem minden tétel bizonyítja a gyilkos kilétét.</p>'
+   +(S.accErr?'<div class="fb bad">'+S.accErr+'</div>':'')+'</div>'
+   +'<div class="grid">'+items.map(w=>{
+      const on=S.acc.ev.includes(w.id);
+      return '<div class="sus"><span class="badge">'+w.type+'</span><h3>'+w.t+'</h3><p style="margin:4px 0 8px;font-size:.95rem">'+wareText(w)+'</p>'
+       +'<label class="opt'+(on?' sel':'')+'"><input type="checkbox" value="'+w.id+'" data-act="ev"'+(on?' checked':'')+'><span>Vádhoz kijelölöm</span></label></div>';
+   }).join('')+'</div>';
+}
+function renderTabs(){
+  const t=$("tabs");
+  t.hidden=(S.phase==="intro");
+  const tabs=[["game","Nyomozás"],["log","Nyomnapló ("+S.clues.length+")"],["store","Bizonyíték raktár ("+wareAvail().length+")"]];
+  t.innerHTML=tabs.map(x=>'<button class="tab" role="tab" aria-selected="'+(S.tab===x[0])+'" data-tab="'+x[0]+'">'+x[1]+'</button>').join('');
+}
+$("tabs").addEventListener("click",e=>{
+  const b=e.target.closest("[data-tab]"); if(!b) return;
+  S.tab=b.dataset.tab; render();
+});
+document.addEventListener("input",e=>{ if(e.target.id==="notes") S.notes=e.target.value; });
+
+function render(){
+  setScore(); renderTabs();
+  if(S.phase!=="intro" && S.tab==="log") viewLog();
+  else if(S.phase!=="intro" && S.tab==="store") viewStore();
+  else if(S.phase==="intro") viewIntro();
+  else if(S.phase==="case") viewCase();
+  else if(S.phase==="done") viewStepDone();
+  else if(S.phase==="accuse") viewAccuse();
+  else if(S.phase==="result") viewResult();
+  else if(S.phase==="review") viewReview();
+  window.scrollTo({top:0,behavior:"auto"});
+}
+function pen(n){ if(S.scoring) S.score=Math.max(0,S.score-n); }
+function rankOf(sc){ return sc>=90?"Számvevőszéki főellenőr":sc>=70?"Ügyész":sc>=50?"Köztisztviselő":"Gyakornok nyomozó"; }
+
+/* ---------- ESEMÉNYEK ---------- */
+app.addEventListener("click",ev=>{
+  const t=ev.target.closest("[data-act]"); if(!t) return;
+  const act=t.dataset.act;
+  if(t.tagName==="INPUT") return; // change eseményre bízzuk
+  if(act==="start"){ S.scoring=!$("teach").checked; S.tab="game"; S.phase="case"; S.step=0; S.score=100; S.sel=[]; S.fb=null; S.hintShown=false; S.tries=0; render(); }
+  else if(act==="mark"){ S.marks[t.dataset.id]=t.dataset.v; const y=window.scrollY; renderKeep(y); }
+  else if(act==="hint"){ S.hintShown=true; pen(5); renderKeep(window.scrollY); }
+  else if(act==="check"){ check(); }
+  else if(act==="next"){
+    if(S.step===STEPS.length-1){ S.phase="accuse"; }
+    else { S.step++; S.phase="case"; S.sel=[]; S.fb=null; S.hintShown=false; S.tries=0; }
+    render();
+  }
+  else if(act==="submit"){ submit(); }
+  else if(act==="back"){ S.ret=S.phase; S.rev=S.clues.length-1; S.phase="review"; render(); }
+  else if(act==="backacc"){ S.ret="accuse"; S.rev=S.clues.length-1; S.phase="review"; render(); }
+  else if(act==="revprev"){ if(S.rev>0) S.rev--; render(); }
+  else if(act==="revnext"){ if(S.rev<S.clues.length-1) S.rev++; render(); }
+  else if(act==="revret"){ S.phase=S.ret; render(); }
+  else if(act==="revi"){ S.tab="game"; if(S.phase!=="review") S.ret=S.phase; S.rev=+t.dataset.i; S.phase="review"; render(); }
+  else if(act==="restart"){ Object.assign(S,{phase:"intro",step:0,score:100,tries:0,sel:[],fb:null,hintShown:false,clues:[],elim:{},marks:{},notes:"",rev:0,ret:"case",tab:"game",acc:{killer:null,motive:null,ev:[],proc:null,court:null},accErr:null,result:null}); render(); }
+});
+app.addEventListener("change",ev=>{
+  const t=ev.target; if(!t.dataset||!t.dataset.act) return;
+  const act=t.dataset.act, y=window.scrollY;
+  if(act==="pick"){
+    const st=STEPS[S.step];
+    if(st.type==="multi"){ S.sel=[...app.querySelectorAll('input[name="ans"]:checked')].map(i=>i.value); }
+    else S.sel=[t.value];
+    S.fb=null; renderKeep(y);
+  } else if(act==="killer"){ S.acc.killer=t.value; renderKeep(y); }
+  else if(act==="motive"){ S.acc.motive=t.value; renderKeep(y); }
+  else if(act==="court"){ S.acc.court=t.value; renderKeep(y); }
+  else if(act==="proc"){ S.acc.proc=t.value; renderKeep(y); }
+  else if(act==="ev"){
+    const cur=[...app.querySelectorAll('input[data-act="ev"]:checked')].map(i=>i.value);
+    if(cur.length>4){ t.checked=false; S.accErr="Legfeljebb négy bizonyítékot választhat."; }
+    else { S.acc.ev=cur; S.accErr=null; }
+    renderKeep(y);
+  }
+});
+function renderKeep(y){ setScore(); renderTabs();
+  if(S.phase!=="intro" && S.tab==="store") viewStore(); else if(S.phase!=="intro" && S.tab==="log") viewLog(); else
+  if(S.phase==="case") viewCase(); else if(S.phase==="accuse") viewAccuse(); else if(S.phase==="done") viewStepDone(); else render();
+  window.scrollTo(0,y);
+}
+
+function check(){
+  const st=STEPS[S.step];
+  if(arrEq(S.sel,st.correct)){
+    S.clues.push(st.clue);
+    if(st.elim) Object.assign(S.elim,st.elim);
+    S.phase="done"; S.fb=null; render();
+  } else {
+    S.tries++; pen(10);
+    let text="Nem egészen pontos a válasz"+(S.scoring?" (−10 pont)":"")+". Gondolja át újra.";
+    if(S.tries>=2 && !S.hintShown){ S.hintShown=true; }
+    if(S.tries>=3){
+      text="Három sikertelen próbálkozás után a helyes megoldás: <b>"+st.correct.map(c=>st.opts.find(o=>o[0]===c)[1]).join("; ")+"</b><br>"+st.expl;
+    }
+    S.fb={kind:"bad",text};
+    if(S.tries>=3){ S.sel=st.correct.slice(); }
+    renderKeep(window.scrollY);
+  }
+}
+
+function submit(){
+  const a=S.acc, lines=[]; let pts=0;
+  const kOK=a.killer===CULPRIT; if(!kOK) pts+=20;
+  lines.push(["Elkövető: "+SN[a.killer], kOK?"helyes":"helytelen (helyes: "+SN[CULPRIT]+")"]);
+  const mOK=a.motive===MOTIVE_OK; if(!mOK) pts+=10;
+  lines.push(["Indíték", mOK?"helyes":"helytelen (helyes: testületi határozat nélkül a családi vállalkozásnak utalta a pénzt)"]);
+  const good=a.ev.filter(id=>WARE.find(w=>w.id===id).rel).length;
+  const bad=4-good; pts+=bad*5;
+  lines.push(["Bizonyítékok ("+good+"/4 releváns)", bad?("−"+bad*5+" pont"):"mind releváns"]);
+  const pOK=a.proc===PROC_OK; if(!pOK) pts+=10;
+  lines.push(["Eljárás", pOK?"helyes":"helytelen (helyes: ügyész vádol, védő, bíróság dönt)"]);
+  const cOK=a.court===COURT_OK; if(!cOK) pts+=10;
+  lines.push(["Bíróság", cOK?"helyes (vármegyei törvényszék, a vádat a főügyész képviseli)":"helytelen (helyes: vármegyei törvényszék, a vádat a főügyész képviseli)"]);
+  pen(pts);
+  S.result={lines,rank:rankOf(S.score)}; S.phase="result"; render();
+}
+
+render();
+</script>
+</body>
+</html>

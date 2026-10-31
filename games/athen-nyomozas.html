@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gyilkosság az athéni demokráciában</title>
+<style>
+:root{
+  --bg:#f4ecdd; --card:#fffaf0; --ink:#2b1f14; --muted:#6b5a47; --line:#d9c7a6;
+  --accent:#8c3a17; --accent-ink:#fff; --ok:#2f6b3a; --bad:#a32a2a; --warn:#8a6100; --chip:#efe2c8;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#1d1812; --card:#2a2219; --ink:#f1e7d3; --muted:#c1b295; --line:#4a3d2b; --accent:#d6733f; --accent-ink:#1d1812; --ok:#7fc58b; --bad:#f08a8a; --warn:#e6bd5a; --chip:#3a2f21; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.55;font-size:17px}
+.wrap{max-width:900px;margin:0 auto;padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--line);padding-bottom:10px;margin-bottom:14px}
+h1{font-size:1.45rem;margin:0;color:var(--accent);letter-spacing:.2px}
+h2{font-size:1.2rem;margin:0 0 8px;color:var(--accent)}
+h3{font-size:1.02rem;margin:0 0 4px}
+.score{font-family:system-ui,sans-serif;font-size:.9rem;background:var(--chip);border:1px solid var(--line);padding:4px 10px;border-radius:999px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.muted{color:var(--muted);font-size:.93rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.sus{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--card);position:relative}
+.sus .role{font-family:system-ui,sans-serif;font-size:.8rem;color:var(--muted);margin-bottom:6px}
+.sus blockquote{margin:6px 0;padding-left:10px;border-left:3px solid var(--line);font-style:italic;font-size:.95rem}
+.sus.out{opacity:.62}
+.badge{display:inline-block;font-family:system-ui,sans-serif;font-size:.75rem;padding:2px 8px;border-radius:999px;margin:2px 4px 2px 0;border:1px solid var(--line);background:var(--chip)}
+.badge.ok{color:var(--ok);border-color:var(--ok)}
+.badge.no{color:var(--bad);border-color:var(--bad)}
+.badge.sus-m{color:var(--warn);border-color:var(--warn)}
+.secret{font-size:.9rem;margin-top:6px;border-top:1px dashed var(--line);padding-top:6px}
+button,.btn{font-family:system-ui,sans-serif;font-size:.95rem;cursor:pointer;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:9px 16px;min-height:44px}
+button.ghost{background:transparent;color:var(--accent)}
+button.small{min-height:36px;padding:5px 10px;font-size:.82rem}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,label:focus-within{outline:3px solid var(--warn);outline-offset:2px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin:6px 0;cursor:pointer;background:var(--card)}
+.opt input{margin-top:5px;width:18px;height:18px;flex:none}
+.opt.sel{border-color:var(--accent);background:var(--chip)}
+.progress{display:flex;gap:6px;margin:6px 0 14px}
+.progress span{flex:1;height:8px;border-radius:4px;background:var(--line)}
+.progress span.done{background:var(--ok)}
+.progress span.cur{background:var(--accent)}
+.fb{padding:10px 12px;border-radius:8px;margin:10px 0;font-size:.97rem}
+.fb.bad{border:1px solid var(--bad);color:var(--ink);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.fb.good{border:1px solid var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
+.fb.hint{border:1px dashed var(--warn)}
+.clue{border-left:4px solid var(--accent);padding:6px 12px;margin:8px 0;background:var(--chip);border-radius:0 8px 8px 0}
+.clue b{font-family:system-ui,sans-serif;font-size:.8rem;color:var(--muted);display:block}
+ul.tight{margin:6px 0 6px 18px;padding:0}
+ul.tight li{margin:3px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.sr{position:absolute;left:-9999px}
+.res-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.big{font-size:2rem;font-weight:bold;color:var(--accent)}
+[hidden]{display:none!important}
+.tabs{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap}
+.tab{background:transparent;color:var(--accent);border:1px solid var(--line);border-radius:8px;padding:8px 14px;min-height:44px}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+textarea.notes{width:100%;min-height:110px;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);resize:vertical}
+@media (max-width:520px){body{font-size:16px}h1{font-size:1.25rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Gyilkosság az athéni demokráciában</h1>
+    <div class="score" id="score" aria-live="polite"></div>
+  </header>
+  <nav id="tabs" class="tabs" role="tablist" aria-label="Nyomozás nézetei" hidden></nav>
+  <main id="app"></main>
+  <p class="muted" style="margin-top:24px">Történelmi nyomozójáték 9. évfolyamnak. Szereplői kitalált alakok; az athéni intézmények Arisztotelész <em>Athéni alkotmány</em> című műve alapján szerepelnek.</p>
+</div>
+
+<script>
+"use strict";
+/* ---------- ADATOK ---------- */
+const SUSPECTS=[
+ {id:"leon",name:"Leon",role:"athéni polgár, a bulé tagja",
+  say:"Aznap éjjel a Tholoszban voltam, mert engem sorsoltak a prütaneiszek elnökének. Nikiásszal sokat vitatkoztunk, de nem ölnék.",
+  secret:"Nikiász nemrég nyilvánosan megvádolta, hogy pénzt fogadott el egy kereskedőtől."},
+ {id:"kleo",name:"Kleonikosz",role:"sztratégosz (első éve)",
+  say:"Az éjszakát a Pireuszban töltöttem, a hajók felszerelését ellenőriztem.",
+  secret:"Aláírt egy hajóhad-elszámolást, amelyben hibák vannak. Ellenfelei cserépszavazásról suttognak."},
+ {id:"mena",name:"Menandrosz",role:"metoikosz, korinthoszi kereskedő",
+  say:"Aznap a népgyűlésen felszólaltam és szavaztam a hajóhad pénzéről, utána a barátaimmal vacsoráztam. Nikiász régi üzleti barátom.",
+  secret:"Faárut és kötelet szállít a hajóhadnak. Nikiász kétezer drachmával tartozik neki."},
+ {id:"thal",name:"Thaleia",role:"Nikiász feleségének barátnője",
+  say:"Aznap este ott jártam, de amikor eljöttem, Nikiász még élt.",
+  secret:"Hallotta, hogy Nikiász egy férfival veszekedik."},
+ {id:"phil",name:"Philón",role:"Nikiász rabszolgája",
+  say:"Én a parancsot teljesítem. Reggel én találtam meg a holttestet.",
+  secret:"Régóta szökést tervez."}
+];
+const SN=Object.fromEntries(SUSPECTS.map(s=>[s.id,s.name]));
+
+const STEPS=[
+ {title:"1. feladat: Kik tagjai a testületeknek?",type:"multi",
+  q:"A bulé (az ötszázak tanácsa) és az esküdtbíróság tagjait sorsolással választották. Az öt gyanúsított közül kik lehettek tagjai ezeknek a testületeknek? (Több válasz is lehet.)",
+  opts:[["leon","Leon"],["kleo","Kleonikosz"],["mena","Menandrosz"],["thal","Thaleia"],["phil","Philón"]],
+  correct:["leon","kleo"],
+  hint:"Gondolja végig, kik voltak athéni polgárok, és milyen korhatár kellett a testületi tagsághoz.",
+  expl:"A bulé tagja és esküdt csak 30. életévét betöltött athéni polgár lehetett (Nikiász is bulé-tag volt). Nő, rabszolga és metoikosz nem lehetett tag.",
+  clue:{t:"Viasztábla (csonka)",x:"„A holnapi bulé-ülésen előterjesztem a hajóhad számláiról szóló jelentésem. Ha ezt megteszem, valakinek véget ér a pályafutása.”"},
+  after:"A „pálya” kétértelmű: lehet politikai, de kereskedői is. Egyelőre mindenki politikai indítékra gyanakszik."},
+ {title:"2. feladat: Leon alibije",type:"single",
+  q:"Leont aznap a prütaneiszek, a bulé soron lévő ötven tagja közül sorsolták a testület elnökének (epistatész). Mennyi ideig töltötte be ezt a tisztséget, és mi következik ebből az alibijére?",
+  opts:[["a","Egy évig, mert a bulé elnöke egész évben hivatalban maradt."],["b","Egy éjszakára és egy nappalra; ezalatt a Tholoszban kellett maradnia."],["c","Egy órára; utána bárhová elmehetett."],["d","Egy hónapig; ezalatt a Pireuszban kellett tartózkodnia."]],
+  correct:["b"],
+  hint:"Az elnököt sorsolták, és nem lehetett kétszer elnök. A tisztség időtartama nagyon rövid volt.",
+  expl:"Az elnök tisztsége „egy éjszakára és egy nappalra” szólt, és senki sem tölthette be kétszer (Ath. alk. 44.). A prütaneiszek a Tholoszban étkeztek és tartózkodtak.",
+  clue:{t:"Thaleia kiegészítő vallomása",x:"„Később egy ismeretlen férfi érkezett Nikiász házába. A beszélgetésből két szót hallottam: »kétezer drachma« és »a bulé elé viszem«.”"},
+  elim:{leon:"Alibije igazolt: az ötven prütaneisz látta a Tholoszban."},
+  after:"Leon alibije igazolt, így kikerül a gyanúsítottak közül."},
+ {title:"3. feladat: A sztratégosz",type:"single",
+  q:"Kleonikosz sztratégosz, az első évét tölti hivatalban. A sztratégoszokat nem sorsolták, és Periklészt évről évre újraválasztották. Miért nem sorsolták őket, és hányszor lehetett újraválasztani őket?",
+  opts:[["a","Hozzáértés kellett a hadvezetéshez, ezért választották őket; korlátlanul újraválaszthatták őket."],["b","Sorsolták őket, de csak egyszer lehettek sztratégoszok."],["c","A bulé nevezte ki őket élethosszig."],["d","Az areopagosz választotta őket, évente egyszer."]],
+  correct:["a"],
+  hint:"Egy hadvezérnél fontosabb a tapasztalat, mint a véletlen.",
+  expl:"A katonai tisztségeket a népgyűlésen nyílt szavazással választották, és bárhányszor betölthették, míg a legtöbb más tisztséget csak egyszer (Ath. alk. 61–62.).",
+  clue:{t:"A pireuszi kikötő jelentése",x:"A kikötői tisztviselők és két hajóparancsnok igazolja: Kleonikosz egész éjjel a hajók mellett volt. A bronz kapocs egy khlamüsz (utazó- és katonaköpeny) összefogására szolgált, amelyet katona, utazó és kereskedő egyaránt viselt, így nem azonosít senkit."},
+  elim:{kleo:"Alibije igazolt: a Pireuszban volt, tisztviselők látták."},
+  after:"Kleonikosz elmondja: a hajóhad-elszámolásban hibát vett észre, a számlákat a szállító állította ki, ő csak aláírta."},
+ {title:"4. feladat: Cserépszavazás vagy elszámoltatás?",type:"multi",
+  q:"Kleonikosz ellenfelei cserépszavazásról (ostrakizmosz) suttognak. Mi igaz a cserépszavazásra? (Több válasz is lehet.)",
+  opts:[["1","A népgyűlés előbb szavazott arról, hogy tartsanak-e cserépszavazást."],["2","A száműzetés tíz évre szólt."],["3","A száműzött elvesztette a vagyonát és a polgárjogát."],["4","Csak bűncselekmény bizonyítása után, bírósági ítélettel lehetett alkalmazni."],["5","A szavazók egy cseréptöredékre írták annak nevét, akit száműzni akartak."]],
+  correct:["1","2","5"],
+  hint:"Az ostrakizmosz a túl nagy politikai befolyás elleni biztosíték volt, nem büntetés.",
+  expl:"A népgyűlés előbb eldöntötte, hogy lesz-e szavazás. A száműzetés tíz évre szólt, a száműzött megtartotta vagyonát és polgárjogát. Bűncselekmény és bizonyíték nem kellett hozzá (Ath. alk. 22. és 43.; Livius.org). A számlahiba viszont elszámoltatási ügy, és bíróság elé tartozik (Ath. alk. 48.).",
+  clue:{t:"Az özvegy jelentése",x:"Nikiász iratai közül hiányoznak a hajóhad szállítási számlái. A megmaradt másolaton az egyik szállító neve Menandrosz, és ugyanaz a faáru-tétel kétszer szerepel."},
+  after:"A cserépszavazás nem kötődik bizonyítékhoz. Akit a számlák leleplezése fenyegetett, az nem a sztratégosz, hanem a szállító."},
+ {title:"5. feladat: Két kupa",type:"single",
+  q:"Az udvaron két borospohár volt, az egyik összetört. Nikiász tehát valakivel együtt ivott. Ki lehetett a vendég?",
+  opts:[["a","Bármely szabad felnőtt férfi."],["b","Nikiász felesége barátnője, Thaleia."],["c","Nikiász rabszolgája, Philón."],["d","Egy gyermek."]],
+  correct:["a"],
+  hint:"Ki ülhetett le egy athéni férfi mellé a borozáshoz (szimpozion), és ki csak felszolgált?",
+  expl:"A szimpozionon szabad férfiak vettek részt; a tekintélyes helyzetű szabad nők nem, a rabszolgák pedig felszolgáltak. A bort vízzel keverték.",
+  clue:{t:"A házkutatás eredménye",x:"A hiányzó pénzesládikót Philón holmija között sem találták meg."},
+  elim:{thal:"A szimpozion vendége szabad férfi volt, nő nem.",phil:"A szimpozion vendége szabad férfi volt, a rabszolga csak felszolgált."},
+  after:"Már csak egy gyanúsított marad. Szavait érdemes ellenőrizni."},
+ {title:"6. feladat: Menandrosz állítása",type:"single",
+  q:"Menandrosz azt állítja, hogy aznap a népgyűlésen felszólalt és szavazott. Elképzelhető ez?",
+  opts:[["a","Igen, mert adót fizet, így szavazati joga van."],["b","Nem, a metoikosz nem vehetett részt a népgyűlésen."],["c","Igen, ha egy polgár a védnöke (prostatész)."],["d","Igen, de csak felszólalási joga volt."]],
+  correct:["b"],
+  hint:"A metoikosz adót fizetett és katonai szolgálatot teljesített, de politikai jogai nem voltak.",
+  expl:"A metoikosz nem vehetett részt a népgyűlésen és semmilyen politikai tisztséget nem viselhetett. Évente metoikion adót fizetett, és katonáskodott.",
+  clue:{t:"Menandrosz alibije",x:"Menandrosz alibije összeomlik: nem lehetett a népgyűlésen, tehát hazudott."},
+  elim:null,
+  after:"Nincs más gyanúsított. Itt az ideje a vádemelésnek."}
+];
+
+const MOTIVES=[
+ ["a","Politikai ellenfele akarta eltenni láb alól Nikiászt, mert a hadvezér karrierjét veszélyeztette."],
+ ["b","Menandrosz el akarta hallgattatni Nikiászt, aki a túlszámlázott hajóhad-szállítások leleplezésével és az adósság miatt fenyegette; a pénzt és a számlákat elvitte."],
+ ["c","Philón szabadulni akart a rabszolgasorból, és a gazdája halála ezt lehetővé tette."],
+ ["d","Thaleia féltékenységből bosszút állt Nikiászon."]
+];
+const WARE=[
+ {id:"w1",type:"Tárgyi bizonyíték",t:"Két borospohár",from:0,rel:true,
+  x:"Az udvaron két borospohár állt: az egyik összetört, a másik ép. Nikiász tehát valakivel együtt ivott.",
+  o:[[5,"Az udvaron két borospohár állt: az egyik összetört, a másik ép. Nikiász tehát valakivel együtt ivott, és a szimpozion vendége szabad felnőtt férfi lehetett (5. feladat)."]]},
+ {id:"w2",type:"Tárgyi bizonyíték",t:"Vérfoltos bronz kapocs",from:0,rel:false,
+  x:"Köpeny összefogására szolgáló, vérfoltos bronz kapocs.",
+  o:[[3,"Köpeny összefogására szolgáló, vérfoltos bronz kapocs. Khlamüszé volt, amelyet katona, utazó és kereskedő egyaránt viselt, ezért senkit nem azonosít (3. feladat)."]]},
+ {id:"w3",type:"Irat",t:"Félbetépett viasztábla",from:0,rel:false,
+  x:"Félbetépett viasztábla; a szövege egyelőre nem olvasható.",
+  o:[[1,"Szöveg: „A holnapi bulé-ülésen előterjesztem a hajóhad számláiról szóló jelentésem. Ha ezt megteszem, valakinek véget ér a pályafutása.”"]]},
+ {id:"w4",type:"Helyszíni lelet",t:"Falfelirat",from:0,rel:false,
+  x:"„Aki túl sokat tud a városról, annak el kell hallgatnia.”"},
+ {id:"w9",type:"Vád",t:"Leon vesztegetési vádja",from:1,rel:false,
+  x:"Nikiász nyilvánosan megvádolta Leont, hogy pénzt fogadott el egy kereskedőtől."},
+ {id:"w5",type:"Tanúvallomás",t:"Thaleia kiegészítő vallomása",from:2,rel:true,
+  x:"Egy ismeretlen férfi érkezett Nikiász házába. A beszélgetésből két szót hallott: „kétezer drachma” és „a bulé elé viszem”."},
+ {id:"w6",type:"Alibi",t:"Leon és Kleonikosz igazolt alibije",from:3,rel:true,
+  x:"Leon a Tholoszban volt (a prütaneiszek elnöke), Kleonikosz a Pireuszban (kikötői tisztviselők igazolták)."},
+ {id:"w8",type:"Hír",t:"Pletyka a cserépszavazásról",from:3,rel:false,
+  x:"Kleonikosz ellenfelei cserépszavazásról suttognak.",
+  o:[[4,"Kleonikosz ellenfelei cserépszavazásról suttognak. A cserépszavazás nem bűnvádi eljárás volt, bizonyíték sem kellett hozzá (4. feladat)."]]},
+ {id:"w7",type:"Irat",t:"Hiányzó szállítási számlák",from:4,rel:true,
+  x:"Az özvegy szerint Nikiász iratai közül hiányoznak a hajóhad szállítási számlái. A megmaradt másolaton Menandrosz neve áll, és ugyanaz a faáru-tétel kétszer szerepel."},
+ {id:"w10",type:"Titok",t:"Philón szökési terve",from:5,rel:false,
+  x:"Philón régóta szökést tervezett. A hiányzó pénzesládikót a holmija között nem találták meg."},
+ {id:"w11",type:"Állítás",t:"Menandrosz állítása a népgyűlésről",from:6,rel:true,
+  x:"Azt mondta, aznap a népgyűlésen felszólalt és szavazott. Metoikosz erre nem volt jogosult, így az alibije hamis."}
+];
+function wareAvail(){ return WARE.filter(w=>S.clues.length>=w.from); }
+function wareText(w){ let t=w.x; (w.o||[]).forEach(o=>{ if(S.clues.length>=o[0]) t=o[1]; }); return t; }
+const COURTS=[
+ ["a","A bulé előtt; a vádat a bulé emeli."],
+ ["b","A népgyűlésen; a vádat bármelyik polgár emeli."],
+ ["c","Az areopagosz előtt; a vádat az áldozat rokonai emelik."],
+ ["d","A Palladion bírósága előtt; a vádat a sztratégosz emeli."]
+];
+
+/* ---------- ÁLLAPOT ---------- */
+const S={phase:"intro",step:0,score:100,tries:0,sel:[],fb:null,hintShown:false,
+  clues:[],elim:{},marks:{},notes:"",rev:0,ret:"case",tab:"game",scoring:true,acc:{killer:null,motive:null,ev:[],court:null},accErr:null,result:null};
+const $=id=>document.getElementById(id);
+const app=$("app");
+
+function setScore(){ $("score").textContent=S.scoring?("Pontszám: "+S.score):"Tanári mód (pontozás nélkül)"; }
+function arrEq(a,b){return a.length===b.length&&a.every(x=>b.includes(x));}
+
+/* ---------- NÉZETEK ---------- */
+function suspectsHtml(){
+  return '<div class="grid">'+SUSPECTS.map(s=>{
+    const out=S.elim[s.id];
+    const m=S.marks[s.id]||"";
+    const showSecret=S.phase!=="intro" && S.clues.length>=({leon:1,thal:2,kleo:3,mena:4,phil:5})[s.id];
+    return '<div class="sus'+(out?' out':'')+'">'
+      +'<h3>'+s.name+'</h3><div class="role">'+s.role+'</div>'
+      +'<blockquote>„'+s.say+'”</blockquote>'
+      +(out?'<span class="badge no">Kizárva</span><div class="muted">'+out+'</div>':'')
+      +(m==="gyanus"?'<span class="badge sus-m">Gyanús (saját jelölés)</span>':'')
+      +(m==="artatlan"?'<span class="badge ok">Ártatlan (saját jelölés)</span>':'')
+      +(showSecret?'<div class="secret"><b>Kiderült:</b> '+s.secret+'</div>':'')
+      +(S.phase==="case"?'<div class="row"><button class="ghost small" data-act="mark" data-id="'+s.id+'" data-v="gyanus">Gyanús</button><button class="ghost small" data-act="mark" data-id="'+s.id+'" data-v="artatlan">Ártatlan</button><button class="ghost small" data-act="mark" data-id="'+s.id+'" data-v="">Töröl</button></div>':'')
+      +'</div>';
+  }).join('')+'</div>';
+}
+function cluesHtml(){
+  if(!S.clues.length) return '<p class="muted">Még nincs feloldott nyom. Oldja meg az első feladatot!</p>';
+  return S.clues.map((c,i)=>'<div class="clue"><b>'+(i+1)+'. nyom: '+c.t+'</b>'+c.x+'</div>').join('');
+}
+function progressHtml(){
+  return '<div class="progress" aria-label="Haladás">'+STEPS.map((_,i)=>'<span class="'+(i<S.step?'done':(i===S.step&&S.phase==='case'?'cur':''))+'"></span>').join('')+'</div>';
+}
+
+function viewIntro(){
+  app.innerHTML=
+  '<div class="card"><h2>A történet</h2>'
+  +'<p><b>Kr. e. 440 tavasza, Athén.</b> A város hadjáratra készül a lázadó Szamosz ellen, a Pireuszban javában folyik a hajóhad felszerelése. A bulé, az ötszázak tanácsa, felügyeli a hadi előkészületeket és a számlákat.</p>'
+  +'<p>Egy reggel holtan találják Nikiászt, a bulé tagját, egy módos athéni polgárt. A halál éjszaka történt a háza udvarán. A helyszínen a következőket találják:</p>'
+  +'<ul class="tight"><li>egy összetört boroskupát, mellette egy másik kupa az asztalon,</li><li>egy vérfoltos bronz kapcsot, amely köpeny összefogására szolgált,</li><li>egy félbetépett viasztáblát,</li><li>a falon egy feliratot: <em>„Aki túl sokat tud a városról, annak el kell hallgatnia.”</em></li></ul>'
+  +'<p>A város vezetői politikai gyilkosságtól tartanak. <b>Az Ön feladata:</b> kiderítse, ki ölte meg Nikiászt, mi volt az indítéka, és mit akart eltitkolni.</p></div>'
+  +'<div class="card"><h2>Gyanúsítottak</h2>'+suspectsHtml()+'</div>'
+  +'<div class="card"><h2>Játékszabályok</h2><ul class="tight"><li>Hat feladatot kell megoldania. Minden helyes válasz feloldja a következő nyomot.</li><li>Kezdőpontszám: 100. Rossz válasz: −10 pont. Tipp kérése: −5 pont.</li><li>A feladatok után vádat emelhet, és megtudja, helyesen nyomozott-e.</li></ul>'
+  +'<label class="opt" style="max-width:420px"><input type="checkbox" id="teach"> <span>Tanári mód: pontozás nélkül</span></label>'
+  +'<div class="row"><button data-act="start">Nyomozás megkezdése</button></div></div>';
+}
+
+function viewCase(){
+  const st=STEPS[S.step];
+  const multi=st.type==="multi";
+  const opts=st.opts.map(o=>{
+    const on=S.sel.includes(o[0]);
+    return '<label class="opt'+(on?' sel':'')+'"><input type="'+(multi?'checkbox':'radio')+'" name="ans" value="'+o[0]+'"'+(on?' checked':'')+' data-act="pick"><span>'+o[1]+'</span></label>';
+  }).join('');
+  const fb=S.fb?'<div class="fb '+S.fb.kind+'" role="status">'+S.fb.text+'</div>':'';
+  const hint=S.hintShown?'<div class="fb hint"><b>Tipp:</b> '+st.hint+'</div>':'';
+  app.innerHTML=
+  progressHtml()
+  +'<div class="card"><h2>'+st.title+'</h2><p>'+st.q+'</p>'
+  +'<fieldset style="border:0;padding:0;margin:0"><legend class="sr">Válaszlehetőségek</legend>'+opts+'</fieldset>'
+  +hint+fb
+  +'<div class="row"><button data-act="check"'+(S.sel.length?'':' disabled')+'>Válasz ellenőrzése</button>'
+  +(S.hintShown?'':'<button class="ghost" data-act="hint">Tipp'+(S.scoring?' (−5 pont)':'')+'</button>')
+  +(S.step>0?'<button class="ghost" data-act="back">◀ Előző feladat áttekintése</button>':'')
+  +'</div></div>'
+  +'<div class="card"><h2>Nyomnapló</h2>'+cluesHtml()+'</div>'
+  +'<div class="card"><h2>Gyanúsítottak</h2><p class="muted">Saját jelöléseit bármikor módosíthatja; a „Kizárva” jelzést a játék a nyomok alapján adja.</p>'+suspectsHtml()+'</div>';
+}
+
+function viewStepDone(){
+  const st=STEPS[S.step];
+  app.innerHTML=
+  progressHtml()
+  +'<div class="card"><h2>'+st.title+'</h2><div class="fb good"><b>Helyes válasz.</b> '+st.expl+'</div>'
+  +'<div class="clue"><b>Új nyom: '+st.clue.t+'</b>'+st.clue.x+'</div>'
+  +'<p>'+st.after+'</p>'
+  +'<div class="row"><button data-act="next">'+(S.step===STEPS.length-1?'Tovább a vádemeléshez':'Következő feladat')+'</button></div></div>'
+  +'<div class="card"><h2>Nyomnapló</h2>'+cluesHtml()+'</div>'
+  +'<div class="card"><h2>Gyanúsítottak</h2>'+suspectsHtml()+'</div>';
+}
+
+function radioGroup(name,list,cur,act){
+  return list.map(o=>'<label class="opt'+(cur===o[0]?' sel':'')+'"><input type="radio" name="'+name+'" value="'+o[0]+'"'+(cur===o[0]?' checked':'')+' data-act="'+act+'"><span>'+o[1]+'</span></label>').join('');
+}
+function viewAccuse(){
+  const a=S.acc;
+  const killers=SUSPECTS.map(s=>[s.id,s.name+' ('+s.role+')']);
+  const ev=wareAvail().map(w=>'<label class="opt'+(a.ev.includes(w.id)?' sel':'')+'"><input type="checkbox" value="'+w.id+'"'+(a.ev.includes(w.id)?' checked':'')+' data-act="ev"><span><b>'+w.type+': '+w.t+'</b><br><span class="muted">'+wareText(w)+'</span></span></label>').join('');
+  const ready=a.killer&&a.motive&&a.ev.length===4&&a.court;
+  app.innerHTML=
+  '<div class="card"><h2>Vádemelés</h2><p>Foglalja össze a nyomozás eredményét. A beküldés után már nem módosíthat.</p></div>'
+  +'<div class="card"><h3>1. Ki a gyilkos?</h3>'+radioGroup('killer',killers,a.killer,'killer')+'</div>'
+  +'<div class="card"><h3>2. Mi volt az indíték?</h3>'+radioGroup('motive',MOTIVES,a.motive,'motive')+'</div>'
+  +'<div class="card"><h3>3. Válasszon ki pontosan négy bizonyítékot a Bizonyíték raktárból ('+a.ev.length+'/4)</h3>'+ev+'</div>'
+  +'<div class="card"><h3>4. Melyik bíróság tárgyalná az ügyet, és ki emelhet vádat?</h3><p class="muted">A gyilkosság áldozata athéni polgár, a gyilkosság szándékos volt.</p>'+radioGroup('court',COURTS,a.court,'court')+'</div>'
+  +(S.accErr?'<div class="fb bad">'+S.accErr+'</div>':'')
+  +'<div class="row"><button data-act="submit"'+(ready?'':' disabled')+'>Vád beküldése</button><button class="ghost" data-act="backacc">◀ Nyomok áttekintése</button></div>';
+}
+
+function viewResult(){
+  const r=S.result;
+  const rows=r.lines.map(l=>'<div class="res-row"><span>'+l[0]+'</span><span>'+l[1]+'</span></div>').join('');
+  app.innerHTML=
+  '<div class="card"><h2>Az ítélet</h2>'
+  +(S.scoring?'<div class="big">'+S.score+' / 100</div><p><b>Rang: '+r.rank+'</b></p>':'<p><b>Tanári mód: a pontozás ki van kapcsolva.</b></p>')
+  +rows+'</div>'
+  +'<div class="card"><h2>Mi történt valójában?</h2>'
+  +'<p>A gyilkos <b>Menandrosz</b>, a korinthoszi metoikosz kereskedő. Nikiász a bulé tagjaként átnézte a hajóhad számláit, és rájött, hogy Menandrosz túlszámlázta a szállításokat. Az adósságát (kétezer drachma) nem akarta kifizetni, és azzal fenyegette, hogy a bulé elé viszi a számlákat. Menandroszt a lelepleződés és a büntetés fenyegette: kereskedői pályája véget ért volna.</p>'
+  +'<p>Ezért megölte Nikiászt, elvitte a pénzt és a számlákat, a falra pedig politikai üzenetet írt, hogy a gyanú a politikusokra terelődjön. <b>Amit Nikiász „túl sokat tudott”:</b> a túlszámlázott hajóhad-szállításokat. A „valakinek véget ér a pályafutása” mondat tehát Menandrosz kereskedői pályájára vonatkozott.</p>'
+  +'<p><b>A bíróság:</b> a szándékos emberölést az areopagosz tárgyalta, a vádat az áldozat rokonai emelték. A Palladion bírósága nem szándékos ölés, valamint rabszolga, metoikosz vagy idegen megölése esetén járt el (Arisztotelész, Athéni alkotmány 57.).</p></div>'
+  +'<div class="card"><h2>Amit megtanult</h2><ul class="tight">'
+  +'<li>A bulé tagjai és az esküdtek 30 év feletti athéni polgárok voltak, sorsolták őket.</li>'
+  +'<li>A sztratégoszokat választották, és korlátlanul újraválaszthatták őket.</li>'
+  +'<li>A cserépszavazás tíz évre száműzött, de nem volt bűnvádi eljárás.</li>'
+  +'<li>A metoikoszok adót fizettek és katonáskodtak, de nem szavazhattak.</li>'
+  +'<li>A szándékos emberölést az areopagosz tárgyalta.</li></ul>'
+  +'<div class="row"><button data-act="restart">Új játék</button></div></div>';
+}
+
+function viewReview(){
+  const st=STEPS[S.rev];
+  const ans=st.correct.map(c=>st.opts.find(o=>o[0]===c)[1]).join('; ');
+  app.innerHTML=
+  '<div class="card"><h2>Áttekintés: '+st.title+'</h2><p class="muted">Ez csak áttekintés, a pontszámot nem érinti.</p>'
+  +'<p>'+st.q+'</p>'
+  +'<div class="fb good"><b>Helyes válasz:</b> '+ans+'<br>'+st.expl+'</div>'
+  +'<div class="clue"><b>Nyom: '+st.clue.t+'</b>'+st.clue.x+'</div>'
+  +'<p>'+st.after+'</p>'
+  +'<div class="row"><button class="ghost" data-act="revprev"'+(S.rev>0?'':' disabled')+'>◀ Előző</button>'
+  +'<button class="ghost" data-act="revnext"'+(S.rev<S.clues.length-1?'':' disabled')+'>Következő ▶</button>'
+  +'<button data-act="revret">Vissza a játékhoz</button></div></div>'
+  +'<div class="card"><h2>Gyanúsítottak</h2>'+suspectsHtml()+'</div>';
+}
+function viewLog(){
+  const cl=S.clues.length?S.clues.map((c,i)=>'<div class="clue"><b>'+(i+1)+'. nyom: '+c.t+'</b>'+c.x
+    +'<div class="row"><button class="ghost small" data-act="revi" data-i="'+i+'">'+(i+1)+'. feladat áttekintése</button></div></div>').join('')
+    :'<p class="muted">Még nincs feloldott nyom.</p>';
+  const el=Object.entries(S.elim);
+  const ex=el.length?'<ul class="tight">'+el.map(e=>'<li><b>'+SN[e[0]]+':</b> '+e[1]+'</li>').join('')+'</ul>':'<p class="muted">Még senkit nem zártak ki.</p>';
+  app.innerHTML='<div class="card"><h2>Nyomnapló</h2><p class="muted">A nyomozás eseményei időrendben. A tárgyi bizonyítékok és iratok a Bizonyíték raktárban találhatók.</p>'+cl+'</div>'
+   +'<div class="card"><h2>Kizárt gyanúsítottak</h2>'+ex+'</div>'
+   +'<div class="card"><h2><label for="notes">Saját jegyzet</label></h2><textarea id="notes" class="notes" placeholder="Ide írhat saját megfigyeléseket.">'+S.notes.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</textarea></div>';
+}
+function viewStore(){
+  const items=wareAvail(), n=S.acc.ev.length;
+  app.innerHTML='<div class="card"><h2>Bizonyíték raktár</h2><p class="muted">Itt gyűlnek a tárgyi bizonyítékok, iratok, vallomások és alibik. Legfeljebb négyet jelölhet ki a vádemeléshez ('+n+'/4); a kijelölés a vádemelésnél is megjelenik. A raktárban nem minden tétel bizonyítja a gyilkos kilétét.</p>'
+   +(S.accErr?'<div class="fb bad">'+S.accErr+'</div>':'')+'</div>'
+   +'<div class="grid">'+items.map(w=>{
+      const on=S.acc.ev.includes(w.id);
+      return '<div class="sus"><span class="badge">'+w.type+'</span><h3>'+w.t+'</h3><p style="margin:4px 0 8px;font-size:.95rem">'+wareText(w)+'</p>'
+       +'<label class="opt'+(on?' sel':'')+'"><input type="checkbox" value="'+w.id+'" data-act="ev"'+(on?' checked':'')+'><span>Vádhoz kijelölöm</span></label></div>';
+   }).join('')+'</div>';
+}
+function renderTabs(){
+  const t=$("tabs");
+  t.hidden=(S.phase==="intro");
+  const tabs=[["game","Nyomozás"],["log","Nyomnapló ("+S.clues.length+")"],["store","Bizonyíték raktár ("+wareAvail().length+")"]];
+  t.innerHTML=tabs.map(x=>'<button class="tab" role="tab" aria-selected="'+(S.tab===x[0])+'" data-tab="'+x[0]+'">'+x[1]+'</button>').join('');
+}
+$("tabs").addEventListener("click",e=>{
+  const b=e.target.closest("[data-tab]"); if(!b) return;
+  S.tab=b.dataset.tab; render();
+});
+document.addEventListener("input",e=>{ if(e.target.id==="notes") S.notes=e.target.value; });
+
+function render(){
+  setScore(); renderTabs();
+  if(S.phase!=="intro" && S.tab==="log") viewLog();
+  else if(S.phase!=="intro" && S.tab==="store") viewStore();
+  else if(S.phase==="intro") viewIntro();
+  else if(S.phase==="case") viewCase();
+  else if(S.phase==="done") viewStepDone();
+  else if(S.phase==="accuse") viewAccuse();
+  else if(S.phase==="result") viewResult();
+  else if(S.phase==="review") viewReview();
+  window.scrollTo({top:0,behavior:"auto"});
+}
+function pen(n){ if(S.scoring) S.score=Math.max(0,S.score-n); }
+function rankOf(sc){ return sc>=90?"Areopagosz-tag":sc>=70?"Bulé-tag":sc>=50?"Népgyűlési polgár":"Tanuló nyomozó"; }
+
+/* ---------- ESEMÉNYEK ---------- */
+app.addEventListener("click",ev=>{
+  const t=ev.target.closest("[data-act]"); if(!t) return;
+  const act=t.dataset.act;
+  if(t.tagName==="INPUT") return; // change eseményre bízzuk
+  if(act==="start"){ S.scoring=!$("teach").checked; S.tab="game"; S.phase="case"; S.step=0; S.score=100; S.sel=[]; S.fb=null; S.hintShown=false; S.tries=0; render(); }
+  else if(act==="mark"){ S.marks[t.dataset.id]=t.dataset.v; const y=window.scrollY; renderKeep(y); }
+  else if(act==="hint"){ S.hintShown=true; pen(5); renderKeep(window.scrollY); }
+  else if(act==="check"){ check(); }
+  else if(act==="next"){
+    if(S.step===STEPS.length-1){ S.phase="accuse"; }
+    else { S.step++; S.phase="case"; S.sel=[]; S.fb=null; S.hintShown=false; S.tries=0; }
+    render();
+  }
+  else if(act==="submit"){ submit(); }
+  else if(act==="back"){ S.ret=S.phase; S.rev=S.clues.length-1; S.phase="review"; render(); }
+  else if(act==="backacc"){ S.ret="accuse"; S.rev=S.clues.length-1; S.phase="review"; render(); }
+  else if(act==="revprev"){ if(S.rev>0) S.rev--; render(); }
+  else if(act==="revnext"){ if(S.rev<S.clues.length-1) S.rev++; render(); }
+  else if(act==="revret"){ S.phase=S.ret; render(); }
+  else if(act==="revi"){ S.tab="game"; if(S.phase!=="review") S.ret=S.phase; S.rev=+t.dataset.i; S.phase="review"; render(); }
+  else if(act==="restart"){ Object.assign(S,{phase:"intro",step:0,score:100,tries:0,sel:[],fb:null,hintShown:false,clues:[],elim:{},marks:{},notes:"",rev:0,ret:"case",tab:"game",acc:{killer:null,motive:null,ev:[],court:null},accErr:null,result:null}); render(); }
+});
+app.addEventListener("change",ev=>{
+  const t=ev.target; if(!t.dataset||!t.dataset.act) return;
+  const act=t.dataset.act, y=window.scrollY;
+  if(act==="pick"){
+    const st=STEPS[S.step];
+    if(st.type==="multi"){ S.sel=[...app.querySelectorAll('input[name="ans"]:checked')].map(i=>i.value); }
+    else S.sel=[t.value];
+    S.fb=null; renderKeep(y);
+  } else if(act==="killer"){ S.acc.killer=t.value; renderKeep(y); }
+  else if(act==="motive"){ S.acc.motive=t.value; renderKeep(y); }
+  else if(act==="court"){ S.acc.court=t.value; renderKeep(y); }
+  else if(act==="ev"){
+    const cur=[...app.querySelectorAll('input[data-act="ev"]:checked')].map(i=>i.value);
+    if(cur.length>4){ t.checked=false; S.accErr="Legfeljebb négy bizonyítékot választhat."; }
+    else { S.acc.ev=cur; S.accErr=null; }
+    renderKeep(y);
+  }
+});
+function renderKeep(y){ setScore(); renderTabs();
+  if(S.phase!=="intro" && S.tab==="store") viewStore(); else if(S.phase!=="intro" && S.tab==="log") viewLog(); else
+  if(S.phase==="case") viewCase(); else if(S.phase==="accuse") viewAccuse(); else if(S.phase==="done") viewStepDone(); else render();
+  window.scrollTo(0,y);
+}
+
+function check(){
+  const st=STEPS[S.step];
+  if(arrEq(S.sel,st.correct)){
+    S.clues.push(st.clue);
+    if(st.elim) Object.assign(S.elim,st.elim);
+    S.phase="done"; S.fb=null; render();
+  } else {
+    S.tries++; pen(10);
+    let text="Nem egészen pontos a válasz"+(S.scoring?" (−10 pont)":"")+". Gondolja át újra.";
+    if(S.tries>=2 && !S.hintShown){ S.hintShown=true; }
+    if(S.tries>=3){
+      text="Három sikertelen próbálkozás után a helyes megoldás: <b>"+st.correct.map(c=>st.opts.find(o=>o[0]===c)[1]).join("; ")+"</b><br>"+st.expl;
+    }
+    S.fb={kind:"bad",text};
+    if(S.tries>=3){ S.sel=st.correct.slice(); }
+    renderKeep(window.scrollY);
+  }
+}
+
+function submit(){
+  const a=S.acc, lines=[]; let pts=0;
+  const kOK=a.killer==="mena"; if(!kOK) pts+=20;
+  lines.push(["Gyilkos: "+SN[a.killer], kOK?"helyes":"helytelen (helyes: Menandrosz)"]);
+  const mOK=a.motive==="b"; if(!mOK) pts+=10;
+  lines.push(["Indíték", mOK?"helyes":"helytelen (helyes: Menandrosz el akarta hallgattatni Nikiászt)"]);
+  const good=a.ev.filter(id=>WARE.find(w=>w.id===id).rel).length;
+  const bad=4-good; pts+=bad*5;
+  lines.push(["Bizonyítékok ("+good+"/4 releváns)", bad?("−"+bad*5+" pont"):"mind releváns"]);
+  const cOK=a.court==="c"; if(!cOK) pts+=10;
+  lines.push(["Bíróság", cOK?"helyes (areopagosz, a vádat a rokonok emelik)":"helytelen (helyes: areopagosz, a vádat a rokonok emelik)"]);
+  pen(pts);
+  S.result={lines,rank:rankOf(S.score)}; S.phase="result"; render();
+}
+
+render();
+</script>
+</body>
+</html>
