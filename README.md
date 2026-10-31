@@ -32,6 +32,8 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | Dominó – fogalomlánc | `games/domino.html` | 9–12. | Klasszikus dominó meghatározás–fogalom párokkal, évfolyam és korszak szerint, tanulórésszel; gép ellen vagy egyedül játszható. |
 | Rövid feladatok – hivatalos gyakorlógyűjtemény | `games/oh-rovid-feladatok.html` (+ `games/oh-rovid-feladatok/data`, `img`) | 9–12. | 195 rövid választ igénylő feladat 7 korszakban, hivatalos megoldásokkal (OH-TOR912GY); az oldalképek változatlan kivágatok. Önellenőrzés, vegyes gyakorlás, keresés, eredménymentés/-betöltés. |
 | A nagy gazdasági világválság – kattintható ábrák | `games/vilagvalsag.html` | 11–12. | Négy kattintható feladatrész (fénykép, hitelkörforgás-séma, okok láncolata, adatgrafikon), 30 ellenőrző kérdéssel a tankönyv 18. leckéje alapján; pontozás, összegzés, tanári szerkesztő mód. Önálló fájl, a kép beágyazva. |
+| Nagy Válság – kormányzati döntések (diákváltozat) | `games/nagy-valsag.html` | 11–12. | Csoportos gazdaságpolitikai szimuláció 1933–1938 (USA vagy Magyarország): éves események, szakértői becslés, pontozás, eredménykód. Telefonra optimalizált, önálló fájl. A számértékek illusztratívak. |
+| Nagy Válság – kormányzati döntések (tanári változat) | `games/nagy-valsag-tanari.html` | 11–12. | Ugyanaz, kiegészítve a tanári eredménytáblával (a csoportok eredménykódjainak rangsora). Nem diákoknak szánt fájl. |
 
 ## 3D szabadulószobák
 
@@ -86,6 +88,8 @@ tanari-jatektar/
 │   ├── eszperente.html
 │   ├── domino.html
 │   ├── oh-rovid-feladatok.html
+│   ├── nagy-valsag.html
+│   ├── nagy-valsag-tanari.html
 │   └── oh-rovid-feladatok/   (data/*.json, img/*.webp)
 ├── jatekok/                 (3D szabadulószobák)
 │   ├── _lib/three.min.js
@@ -104,6 +108,7 @@ tanari-jatektar/
 │   └── demo_legkor.html
 ├── docs/
 │   ├── DEVELOPMENT_RULES.md
+│   ├── NAGY_VALSAG_TARTALMI_MEGJEGYZESEK.md
 │   ├── NYOMOZOJATEKOK_TARTALMI_MEGJEGYZESEK.md
 │   ├── PEDAGOGICAL_RULES.md
 │   └── TESTING_CHECKLIST.md
