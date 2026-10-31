@@ -28,6 +28,7 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | Keresztrejtvény | `games/keresztrejtveny.html` | 9–12. | Generált keresztrejtvény évfolyam és téma szerint. |
 | Csak E! | `games/eszperente.html` | 9–12. | Eszperente nyelvi rejtvény — történelmi események és szereplők leírásában csak "e"/"é" magánhangzó szerepel, három nehézségi szinttel. |
 | Dominó – fogalomlánc | `games/domino.html` | 9–12. | Klasszikus dominó meghatározás–fogalom párokkal, évfolyam és korszak szerint, tanulórésszel; gép ellen vagy egyedül játszható. |
+| Rövid feladatok – hivatalos gyakorlógyűjtemény | `games/oh-rovid-feladatok.html` (+ `games/oh-rovid-feladatok/data`, `img`) | 9–12. | 195 rövid választ igénylő feladat 7 korszakban, hivatalos megoldásokkal (OH-TOR912GY); az oldalképek változatlan kivágatok. Önellenőrzés, vegyes gyakorlás, keresés, eredménymentés/-betöltés. |
 
 ## 3D szabadulószobák
 
@@ -69,7 +70,9 @@ tanari-jatektar/
 │   ├── ketforras.html
 │   ├── keresztrejtveny.html
 │   ├── eszperente.html
-│   └── domino.html
+│   ├── domino.html
+│   ├── oh-rovid-feladatok.html
+│   └── oh-rovid-feladatok/   (data/*.json, img/*.webp)
 ├── jatekok/                 (3D szabadulószobák)
 │   ├── _lib/three.min.js
 │   ├── jatekok.json
