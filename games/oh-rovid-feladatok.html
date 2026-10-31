@@ -1,0 +1,253 @@
+<title>Rövid feladatok gyakorló</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: sticky app bar, a home grid of module tiles, and a one-task-at-a-time practice view. */
+:root{--ink:#1e293b;--muted:#64748b;--line:#cbd5e1;--paper:#ffffff;--blue:#1e3a8a;--ok:#15803d;--okbg:#f0fdf4;--bad:#b91c1c;--badbg:#fef2f2;--accent:#1e3a8a;--soft:#eff6ff}
+*{box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;font-size:18px;line-height:1.6;background:linear-gradient(135deg,#e0f2fe 0%,#fce7f3 50%,#fef3c7 100%);background-attachment:fixed;color:var(--ink);margin:0;padding-block:16px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));min-height:100vh}
+.wrap{max-width:960px;margin:0 auto}
+.bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--paper);color:var(--ink);border:3px solid var(--accent);border-radius:16px;padding:14px 18px;box-shadow:0 10px 25px -5px rgba(0,0,0,.1);margin-bottom:22px}
+.bar h1{font-size:22px;margin:0;color:var(--blue);flex:1;min-width:200px}
+.bar .sub{font-size:14px;color:var(--muted);font-weight:600;width:100%;margin-top:-6px}
+.btn{font:inherit;font-size:16px;font-weight:700;padding:9px 16px;border:2px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);cursor:pointer;transition:all .15s}
+.btn:hover:not(:disabled){border-color:var(--accent);transform:translateY(-1px)}
+.btn:disabled{opacity:.4;cursor:default}
+.btn:focus-visible,select:focus-visible,input:focus-visible,.tile:focus-visible{outline:3px solid #f59e0b;outline-offset:2px}
+.btn.primary{background:#2563eb;border-color:#2563eb;color:#fff}
+.btn.good{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.badb{background:var(--bad);border-color:var(--bad);color:#fff}
+h2.sec{font-size:20px;margin:26px 4px 12px;color:var(--blue)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.tile{display:flex;flex-direction:column;gap:6px;text-align:left;font:inherit;color:var(--ink);background:var(--soft);border:0;border-top:8px solid var(--accent);border-radius:14px;padding:16px 18px;box-shadow:0 8px 18px -6px rgba(0,0,0,.15);cursor:pointer;transition:transform .15s}
+.tile:hover{transform:translateY(-3px)}
+.tile b{font-size:19px;color:var(--accent);line-height:1.25}
+.tile small{color:var(--muted);font-size:14px;line-height:1.4}
+.tile .num{font-size:14px;font-weight:700;color:var(--ink)}
+.meter{height:10px;border-radius:6px;background:#e2e8f0;overflow:hidden;display:flex;margin-top:4px}
+.meter i{display:block;height:100%}
+.meter .m-ok{background:var(--ok)}.meter .m-bad{background:var(--bad)}
+.panel{background:var(--paper);color:var(--ink);border-radius:14px;padding:16px 18px;box-shadow:0 6px 14px -6px rgba(0,0,0,.15)}
+.mix{display:grid;gap:12px}
+.mix .chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{display:inline-flex;gap:6px;align-items:center;font-size:15px;border:2px solid var(--line);border-radius:999px;padding:3px 12px;cursor:pointer;background:var(--paper)}
+.chip input{accent-color:#2563eb}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+textarea{width:100%;font:inherit;font-size:16px;padding:10px;border-radius:10px;border:2px solid var(--line);background:#fff;color:var(--ink);resize:vertical;margin-top:4px}
+select,input[type=search],input:not([type]),input[type=text]{font:inherit;font-size:16px;padding:8px 10px;border-radius:10px;border:2px solid var(--line);background:var(--paper);color:var(--ink);min-width:0}
+.ctl{display:flex;flex-direction:column;gap:10px;background:var(--paper);color:var(--ink);border-radius:14px;padding:14px 18px;box-shadow:0 6px 14px -6px rgba(0,0,0,.15);margin-bottom:18px}
+.ctl .row>select#jump{flex:1;min-width:160px}
+.ctl .row>input{flex:1;min-width:140px}
+.stat{font-size:15px;color:var(--muted);font-weight:600}
+.card{background:var(--soft);color:var(--ink);border-radius:16px;padding:28px;box-shadow:0 20px 25px -5px rgba(0,0,0,.1);border-top:8px solid var(--accent);animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:14px;margin-bottom:6px}
+.badge{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:2px 12px;color:#475569;font-weight:600}
+.state{font-weight:700}.state.ok{color:var(--ok)}.state.bad{color:var(--bad)}
+.card h2{font-size:22px;margin:0 0 12px;padding-bottom:10px;border-bottom:2px solid rgba(0,0,0,.1);color:var(--accent)}
+.q,.sol{overflow-x:auto;min-width:0}
+.q p,.sol p{margin:10px 0}
+.q img,.sol img{max-width:100%;height:auto;display:block;margin:12px auto;border-radius:6px;border:1px solid var(--line);background:#fff}
+.q table,.sol table{border-collapse:collapse;margin:12px 0;background:#fff;color:var(--ink);max-width:100%}
+.q td,.q th,.sol td,.sol th{border:1px solid #94a3b8;padding:6px 10px;vertical-align:top;font-size:16px}
+.q blockquote,.sol blockquote{margin:12px 0;padding:12px 18px;background:#fff;border-left:5px solid var(--accent);border-radius:0 8px 8px 0;font-style:italic}
+.q ol,.q ul,.sol ol,.sol ul{padding-left:1.6em}
+.q h1,.sol h1{font-size:18px;margin:14px 0 6px}
+.solbox{margin-top:20px;background:var(--okbg);color:var(--ink);border:2px solid #22c55e;border-radius:12px;padding:16px 18px}
+.solbox[hidden]{display:none}
+.soltitle{color:var(--ok);font-weight:700;font-size:19px;margin-bottom:6px}
+.acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.empty{text-align:center;padding:40px 10px;color:var(--muted)}
+.foot{margin:30px 4px 0;font-size:14px;color:var(--muted);text-align:center}
+.loading{text-align:center;padding:40px;color:var(--muted);font-weight:600}
+@media (max-width:520px){.card{padding:18px}.bar h1{font-size:19px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+#zoom{position:fixed;inset:0;background:rgba(15,23,42,.92);z-index:50;display:flex;flex-direction:column}#zoom[hidden]{display:none}#zoom .zb{display:flex;gap:8px;padding:10px;justify-content:center;flex-wrap:wrap}#zoom .zs{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}#zoom img{display:block;margin:0 auto;max-width:none;background:#fff;border:0;border-radius:0}.q img,.sol img{cursor:zoom-in}
+</style>
+<div class="wrap" id="app"></div>
+<div id="zoom" hidden role="dialog" aria-label="Nagyítás"><div class="zb"><button class="btn" id="zin">+ Nagyítás</button><button class="btn" id="zout">− Kicsinyítés</button><button class="btn" id="zfit">Illesztés</button><button class="btn primary" id="zclose">Bezárás</button></div><div class="zs"><img id="zimg" alt="Nagyított kép"></div></div>
+<script>
+const MANIFEST=[{"id": "oh_okor", "subj": "OH", "name": "Az ókor", "span": "", "color": "#92400e", "soft": "#fffbeb", "count": 6}, {"id": "oh_kozepkor", "subj": "OH", "name": "A középkor", "span": "", "color": "#1e3a8a", "soft": "#eff6ff", "count": 22}, {"id": "oh_kora_ujkor", "subj": "OH", "name": "A kora újkor", "span": "", "color": "#6b21a8", "soft": "#faf5ff", "count": 21}, {"id": "oh_ujkor", "subj": "OH", "name": "Az újkor", "span": "", "color": "#0f766e", "soft": "#f0fdfa", "count": 30}, {"id": "oh_vilaghaboruk", "subj": "OH", "name": "A világháborúk kora", "span": "", "color": "#b91c1c", "soft": "#fef2f2", "count": 55}, {"id": "oh_hidegharu", "subj": "OH", "name": "A hidegháború kora", "span": "", "color": "#334155", "soft": "#f1f5f9", "count": 43}, {"id": "oh_jelenkor", "subj": "OH", "name": "A jelenkor", "span": "", "color": "#166534", "soft": "#f0fdf4", "count": 18}];
+const GROUPS=[['OH','Korszakok (rövid választ igénylő feladatok)']];
+const LS='oh-rovid-feladatok-v1';
+let progress={},answers={},points={},person={name:'',className:''};   // progress: taskId -> 'ok' | 'bad'
+const FORMAT='oh-rovid-feladatok-eredmeny-v1';
+try{const o=JSON.parse(localStorage.getItem(LS)||'{}')||{};
+  if(o.v===2){progress=o.progress||{};answers=o.answers||{};points=o.points||{};person=o.person||person}else{progress=o}}catch(e){}
+let saveNote='';
+function save(){try{localStorage.setItem(LS,JSON.stringify({v:2,progress,answers,points,person}));saveNote=''}catch(e){saveNote='A böngésző nem engedi a helyi mentést – használja az „Eredmény mentése” gombot.'}}
+async function exportData(){
+  const data={format:FORMAT,savedAt:new Date().toISOString(),student:person,progress,answers,points};
+  const fname='oh_rovid_eredmeny_'+new Date().toISOString().slice(0,10)+'.json';
+  const text=JSON.stringify(data,null,2);
+  try{const dl=window.claude&&await window.claude.use('downloads');
+    if(dl){try{await dl.save({filename:fname,data:new Blob([text],{type:'application/json'})})}catch(e){}return}}catch(e){}
+  const blob=new Blob([text],{type:'application/json;charset=utf-8'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;
+  a.download='oh_rovid_eredmeny_'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function importData(file,done){
+  if(!file)return;
+  if(file.size>20_000_000){done('A mentés túl nagy.');return}
+  const fr=new FileReader();
+  fr.onload=()=>{try{
+    const o=JSON.parse(fr.result);if(o.format!==FORMAT)throw Error('Nem ehhez a rendszerhez tartozó mentés.');
+    const valid=new Set();MANIFEST.forEach(m=>{for(let i=0;i<m.count;i++)valid.add(m.id+'-'+i)});
+    const np={},na={},nq={};
+    for(const [k,v] of Object.entries(o.progress||{}))if(valid.has(k)&&(v==='ok'||v==='bad'))np[k]=v;
+    for(const [k,v] of Object.entries(o.answers||{}))if(valid.has(k)&&typeof v==='string')na[k]=v.slice(0,8000);
+    for(const [k,v] of Object.entries(o.points||{}))if(valid.has(k)&&Number.isFinite(Number(v))&&Number(v)>=0&&Number(v)<=20)nq[k]=Number(v);
+    progress=np;answers=na;points=nq;
+    person={name:String(o.student&&o.student.name||'').slice(0,100),className:String(o.student&&o.student.className||'').slice(0,60)};
+    save();done('A mentés betöltve.');
+  }catch(e){done('Sikertelen betöltés: '+e.message)}};
+  fr.readAsText(file);
+}
+const cache={};            // moduleId -> module
+const el=(h)=>{const d=document.createElement('div');d.innerHTML=h;return d.firstElementChild};
+const $app=document.getElementById('app');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const plain=h=>{const t=document.createElement('template');t.innerHTML=h;return t.content.textContent.toLowerCase()};
+
+async function loadModule(id){
+  if(cache[id]) return cache[id];
+  const inline=document.getElementById('data-'+id);
+  let data;
+  if(inline){data=JSON.parse(inline.textContent)}
+  else{const r=await fetch('oh-rovid-feladatok/data/'+id+'.json');if(!r.ok) throw new Error('Nem tölthető be: '+id);data=await r.json()}
+  data.tasks.forEach(t=>t.text=null);
+  cache[id]=data;return data;
+}
+function scoreOpts(max,val){max=Number(max)||0;let o='';for(let i=0;i<=Math.round(max*2);i++){const v=i/2;o+=`<option value="${v}"${val===v?' selected':''}>${v.toLocaleString('hu-HU')} / ${max.toLocaleString('hu-HU')} pont</option>`}return o}
+function stats(ids){let ok=0,bad=0;ids.forEach(i=>{if(progress[i]==='ok')ok++;else if(progress[i]==='bad')bad++});return{ok,bad}}
+function modStats(m){ // count without loading: ids are id-0..id-(count-1)
+  let ok=0,bad=0;for(let i=0;i<m.count;i++){const s=progress[m.id+'-'+i];if(s==='ok')ok++;else if(s==='bad')bad++}return{ok,bad}
+}
+
+/* ---------- HOME ---------- */
+function home(){
+  let total=0,okAll=0,badAll=0;
+  MANIFEST.forEach(m=>{total+=m.count;const s=modStats(m);okAll+=s.ok;badAll+=s.bad});
+  const ui=el(`<div></div>`);
+  ui.innerHTML=`<div class="bar"><h1>Történelem – rövid feladatok gyakorlórendszer</h1>
+    <span class="stat">Középszint · Oktatási Hivatal feladatgyűjtemény</span>
+    <div class="sub">${total} feladat hivatalos megoldásokkal · megoldva: ${okAll} · gyakorolandó: ${badAll}${Object.keys(points).length?' · önértékelt pontok: '+Object.values(points).reduce((a,b)=>a+b,0).toLocaleString('hu-HU'):''}</div></div>
+    <div class="panel mix" style="margin-bottom:16px"><b>Eredmények</b>
+      <div class="row"><input id="pname" maxlength="100" placeholder="Név (nem kötelező)" aria-label="Név" value="${esc(person.name)}"><input id="pclass" maxlength="60" placeholder="Osztály (nem kötelező)" aria-label="Osztály" value="${esc(person.className)}"></div>
+      <div class="row"><button class="btn" id="exp">Eredmény mentése</button><button class="btn" id="imp">Mentés betöltése</button><input type="file" id="impf" accept=".json,application/json" hidden></div>
+      <div class="stat" id="iomsg">${esc(saveNote||'A válaszok és a haladás ebben a böngészőben automatikusan mentődnek; JSON-fájlba külön is elmenthetők, és más eszközön visszatölthetők.')}</div></div>
+    <div class="panel mix" id="mix"><b>Vegyes gyakorló mód</b>
+      <div class="chips" id="mixchips">${MANIFEST.map(m=>`<label class="chip"><input type="checkbox" value="${m.id}" checked>${esc(m.name)}</label>`).join('')}</div>
+      <div class="row"><label>Feladatok száma <select id="mixn"><option>10</option><option selected>20</option><option>30</option><option>50</option></select></label>
+      <label>Csak <select id="mixf"><option value="all">minden feladat</option><option value="new">még nem megoldott</option><option value="bad">gyakorolandó (hibás)</option></select></label>
+      <button class="btn primary" id="mixgo">Indítás</button><button class="btn" id="resetp" title="A mentett haladás törlése">Haladás törlése</button></div>
+      <div class="stat" id="mixmsg"></div></div>`;
+  GROUPS.forEach(([key,title])=>{
+    const ms=MANIFEST.filter(m=>m.subj===key); if(!ms.length) return;
+    const sec=el(`<div><h2 class="sec">${title}</h2><div class="grid"></div></div>`);
+    ms.forEach(m=>{
+      const s=modStats(m);
+      const t=el(`<button class="tile" style="--accent:${m.color};--soft:${m.soft}"><b>${esc(m.name)}</b><small>${esc(m.span)}</small>
+        <span class="num">${m.count} feladat · ${s.ok} jó · ${s.bad} gyakorolandó</span>
+        <span class="meter"><i class="m-ok" style="width:${s.ok/m.count*100}%"></i><i class="m-bad" style="width:${s.bad/m.count*100}%"></i></span></button>`);
+      t.onclick=()=>practice({mod:m.id});
+      sec.querySelector('.grid').appendChild(t);
+    });
+    ui.appendChild(sec);
+  });
+  ui.appendChild(el(`<p class="foot">Forrás: Oktatási Hivatal: Érettségire felkészítő feladatgyűjtemény, Történelem – Középszint, 9–12. évfolyam, és megoldásai (OH-TOR912GY, OH-TOR912GY-M). A feladatok és a megoldások az eredeti oldalak kivágásaként, változatlanul jelennek meg; csak a rövid választ igénylő feladatok szerepelnek, az esszék nem. A pontozás önértékelés, a végső értékelés a tanár döntése. A haladás ebben a böngészőben tárolódik.</p>`));
+  $app.replaceChildren(...ui.childNodes);
+  document.getElementById('mixgo').onclick=startMix;
+  const pn=document.getElementById('pname'),pc=document.getElementById('pclass');
+  pn.oninput=()=>{person.name=pn.value;save()};pc.oninput=()=>{person.className=pc.value;save()};
+  document.getElementById('exp').onclick=()=>{exportData();document.getElementById('iomsg').textContent='Az eredmények mentése elindult.'};
+  document.getElementById('imp').onclick=()=>document.getElementById('impf').click();
+  document.getElementById('impf').onchange=e=>{importData(e.target.files[0],m=>{if(m==='A mentés betöltve.')home();else document.getElementById('iomsg').textContent=m});e.target.value=''};
+  document.getElementById('resetp').onclick=function(){
+    if(this.dataset.sure){progress={};save();home()}
+    else{this.dataset.sure='1';this.textContent='Biztosan? Kattintson újra';setTimeout(()=>{if(this.isConnected){delete this.dataset.sure;this.textContent='Haladás törlése'}},4000)}
+  };
+}
+async function startMix(){
+  const ids=[...document.querySelectorAll('#mixchips input:checked')].map(i=>i.value);
+  const n=parseInt(document.getElementById('mixn').value,10), f=document.getElementById('mixf').value;
+  const msg=document.getElementById('mixmsg');
+  if(!ids.length){msg.textContent='Válasszon legalább egy modult.';return}
+  msg.textContent='Feladatok betöltése…';
+  let pool=[];
+  for(const id of ids){const m=await loadModule(id);m.tasks.forEach(t=>pool.push({t,m}))}
+  pool=pool.filter(({t})=>f==='all'||(f==='new'&&!progress[t.id])||(f==='bad'&&progress[t.id]==='bad'));
+  if(!pool.length){msg.textContent='Nincs a feltételnek megfelelő feladat.';return}
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+  practice({mix:pool.slice(0,n)});
+}
+
+/* ---------- PRACTICE ---------- */
+async function practice(opts){
+  $app.innerHTML='<div class="loading">Betöltés…</div>';
+  let items,title,color='#1e3a8a',soft='#eff6ff',isMix=!!opts.mix;
+  try{
+    if(isMix){items=opts.mix;title='Vegyes gyakorlás'}
+    else{const m=await loadModule(opts.mod);const mm=MANIFEST.find(x=>x.id===opts.mod);title=m.name;color=m.color;soft=m.soft;items=m.tasks.map(t=>({t,m}));}
+  }catch(e){$app.innerHTML='<div class="panel empty">A modul nem tölthető be. Próbálja újra.<div class="acts" style="justify-content:center"><button class="btn" id="b">Főoldal</button></div></div>';document.getElementById('b').onclick=home;return}
+  let filter='all',query='',list=items.slice(),idx=0;
+  const ui=el(`<div style="--accent:${color};--soft:${soft}"></div>`);
+  ui.innerHTML=`<div class="bar"><button class="btn" id="homeb">← Főoldal</button><h1>${esc(title)}</h1><span class="stat" id="stat"></span></div>
+   <div class="ctl"><div class="row"><button class="btn" id="prev">←</button><select id="jump" aria-label="Ugrás feladatra"></select><button class="btn" id="next">→</button></div>
+   <div class="row"><select id="flt" aria-label="Szűrés"><option value="all">Minden feladat</option><option value="new">Még nem megoldott</option><option value="bad">Gyakorolandó</option><option value="ok">Megoldott</option></select>
+   <input type="search" id="q" placeholder="Keresés a feladatokban…" aria-label="Keresés">${isMix?'':'<button class="btn" id="shuf">Keverés</button>'}</div>
+   <div class="meter" id="meter"><i class="m-ok"></i><i class="m-bad"></i></div></div><div id="card"></div>`;
+  $app.replaceChildren(ui);
+  const $=id=>ui.querySelector('#'+id);
+  function apply(){
+    const qq=query.trim().toLowerCase();
+    list=items.filter(({t})=>(filter==='all'||(filter==='new'&&!progress[t.id])||(filter==='bad'&&progress[t.id]==='bad')||(filter==='ok'&&progress[t.id]==='ok'))
+      && (!qq||t.title.toLowerCase().includes(qq)||(t.text??(t.text=(t.txt||'').toLowerCase())).includes(qq)));
+    idx=Math.min(idx,Math.max(0,list.length-1));
+    $('jump').innerHTML=list.map(({t},i)=>{const s=progress[t.id];return `<option value="${i}">${s==='ok'?'✓ ':s==='bad'?'✗ ':''}${i+1}. ${esc(t.title.replace(/^A feladat\s+/,'').slice(0,70))}</option>`}).join('');
+    render();
+  }
+  function render(){
+    const st=stats(items.map(x=>x.t.id));const n=items.length;
+    $('stat').textContent=`${list.length} / ${n} feladat · ${st.ok} jó · ${st.bad} gyakorolandó`;
+    ui.querySelector('#meter .m-ok').style.width=st.ok/n*100+'%';ui.querySelector('#meter .m-bad').style.width=st.bad/n*100+'%';
+    $('prev').disabled=idx<=0;$('next').disabled=idx>=list.length-1;
+    const host=$('card');
+    if(!list.length){host.innerHTML='<div class="panel empty">Nincs a szűrésnek megfelelő feladat.</div>';return}
+    const {t,m}=list[idx];$('jump').value=String(idx);
+    const s=progress[t.id];
+    const c=el(`<div class="card" style="--accent:${m.color};--soft:${m.soft}"><div class="meta"><span class="badge">${isMix?esc(m.name)+' · ':''}${esc(t.src)}${t.n?' · '+t.n+'. feladat':''}</span><span><span class="state ${s||''}">${s==='ok'?'✓ megoldva':s==='bad'?'✗ gyakorolandó':''}</span>${t.pts?' · <b>'+t.pts+' pont</b>':''}</span></div>
+      <h2>${idx+1}. ${esc(t.title)}</h2><div class="q">${t.q}</div>
+      <label class="stat" for="ans" style="display:block;margin-top:16px">Válaszaid (a), b), c) … szerint)</label><textarea id="ans" rows="4" maxlength="8000" placeholder="a) ...&#10;b) ...">${esc(answers[t.id]||'')}</textarea>
+      <div class="acts"><button class="btn primary" id="show">Megoldás ellenőrzése</button></div>
+      <div class="solbox" id="solbox" hidden><div class="soltitle">✓ Hivatalos megoldás</div><div class="sol">${t.a}</div>
+        <div class="acts"><button class="btn good" id="gok">Jól oldottam meg</button><button class="btn badb" id="gbad">Gyakorolnom kell</button></div></div></div>`);
+    host.replaceChildren(c);
+    c.querySelector('#ans').oninput=e=>{answers[t.id]=e.target.value;save()};
+    c.querySelector('#show').onclick=()=>{const b=c.querySelector('#solbox');b.hidden=!b.hidden};
+    const mark=v=>{progress[t.id]=v;save();render(); if(idx<list.length-1&&filter==='all'){idx++;render()} };
+    c.querySelector('#gok').onclick=()=>mark('ok');
+    c.querySelector('#gbad').onclick=()=>mark('bad');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  $('homeb').onclick=home;
+  $('prev').onclick=()=>{if(idx>0){idx--;render()}};
+  $('next').onclick=()=>{if(idx<list.length-1){idx++;render()}};
+  $('jump').onchange=e=>{idx=parseInt(e.target.value,10);render()};
+  $('flt').onchange=e=>{filter=e.target.value;idx=0;apply()};
+  let tm;$('q').oninput=e=>{clearTimeout(tm);tm=setTimeout(()=>{query=e.target.value;idx=0;apply()},250)};
+  const sh=ui.querySelector('#shuf');if(sh)sh.onclick=()=>{for(let i=items.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[items[i],items[j]]=[items[j],items[i]]}idx=0;apply()};
+  ui.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;if(e.key==='ArrowRight')$('next').click();if(e.key==='ArrowLeft')$('prev').click()});
+  document.onkeydown=e=>{if(!document.body.contains(ui)||['INPUT','SELECT'].includes(e.target.tagName))return;if(e.key==='ArrowRight')$('next').click();if(e.key==='ArrowLeft')$('prev').click()};
+  apply();
+}
+let zs=1;const zimg=document.getElementById('zimg'),zoomEl=document.getElementById('zoom');
+function applyZ(){zimg.style.width=(zoomEl.clientWidth*zs)+'px'}
+function openZoom(u){zimg.src=u;zs=1;zoomEl.hidden=false;applyZ();document.getElementById('zclose').focus()}
+document.getElementById('zin').onclick=()=>{zs=Math.min(4,zs*1.3);applyZ()};
+document.getElementById('zout').onclick=()=>{zs=Math.max(.5,zs/1.3);applyZ()};
+document.getElementById('zfit').onclick=()=>{zs=1;applyZ()};
+document.getElementById('zclose').onclick=()=>{zoomEl.hidden=true};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')zoomEl.hidden=true});
+document.addEventListener('click',e=>{const im=e.target.closest&&e.target.closest('.q img, .sol img');if(im)openZoom(im.src)});
+home();
+</script>
