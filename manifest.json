@@ -148,5 +148,15 @@
     "path": "games/allampolgari-nyomozas.html",
     "bytes": 37993,
     "md5": "b38d6eeb78cb305c45b7b827fdadaf66"
+  },
+  "nagy-valsag": {
+    "path": "games/nagy-valsag.html",
+    "bytes": 424079,
+    "md5": "c2c2e78f2858effc06cf2f7524902a3f"
+  },
+  "nagy-valsag-tanari": {
+    "path": "games/nagy-valsag-tanari.html",
+    "bytes": 401410,
+    "md5": "55b8e3db613b27d859d310ee519af316"
   }
 }
