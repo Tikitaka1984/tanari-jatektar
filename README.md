@@ -20,6 +20,8 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | Játék | Fájl | Évfolyam | Rövid leírás |
 | --- | --- | --- | --- |
 | A korona nyomában | `games/korona.html` | 9–10. | Térképes nyomozójáték a középkori magyar államon át. |
+| Gyilkosság az athéni demokráciában | `games/athen-nyomozas.html` | 9. | Nyomozójáték: hat feladat, nyomnapló és bizonyítéktár; a tettes az athéni intézmények ismeretéből, kizárással azonosítható. |
+| Az eltűnt árvízvédelmi alap | `games/allampolgari-nyomozas.html` | 12. (állampolgári ismeretek) | Nyomozójáték a magyar állam szerveiről és eljárásairól (OH-ALP12TA, 4. lecke); kitalált település és szereplők. |
 | Ki vagyok én? | `games/kivagyok.html` | 9–12. | Portréjáték, 42 történelmi személy, fokozatosan könnyülő nyomokkal. |
 | A reformkor vitaterme | `games/reformkor.html` | 10. | Három vitatéma (Széchenyi–Kossuth, Dessewffy–Széchenyi, centralisták–Kossuth) témaválasztóval. |
 | A titkos levéltár | `games/leveltar.html` | 11–12. | Szabadulószoba évszám-, fogalom-, személy- és térképfeladatokkal. |
@@ -73,6 +75,8 @@ tanari-jatektar/
 ├── manifest.json            (fájlméret + MD5 leltár ellenőrzéshez)
 ├── games/
 │   ├── korona.html
+│   ├── athen-nyomozas.html
+│   ├── allampolgari-nyomozas.html
 │   ├── kivagyok.html
 │   ├── reformkor.html
 │   ├── leveltar.html
@@ -100,6 +104,7 @@ tanari-jatektar/
 │   └── demo_legkor.html
 ├── docs/
 │   ├── DEVELOPMENT_RULES.md
+│   ├── NYOMOZOJATEKOK_TARTALMI_MEGJEGYZESEK.md
 │   ├── PEDAGOGICAL_RULES.md
 │   └── TESTING_CHECKLIST.md
 ├── README.md

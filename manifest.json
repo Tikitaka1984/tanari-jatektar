@@ -138,5 +138,15 @@
     "path": "demos/bemutato_vallalkozas.html",
     "bytes": 1271543,
     "md5": "8393d464ac124a95c0e8099877852e45"
+  },
+  "athen-nyomozas": {
+    "path": "games/athen-nyomozas.html",
+    "bytes": 35339,
+    "md5": "e9bebac3abe170d0de8974895fa59468"
+  },
+  "allampolgari-nyomozas": {
+    "path": "games/allampolgari-nyomozas.html",
+    "bytes": 37993,
+    "md5": "b38d6eeb78cb305c45b7b827fdadaf66"
   }
 }
