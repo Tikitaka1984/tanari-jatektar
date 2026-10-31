@@ -29,6 +29,7 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | Csak E! | `games/eszperente.html` | 9–12. | Eszperente nyelvi rejtvény — történelmi események és szereplők leírásában csak "e"/"é" magánhangzó szerepel, három nehézségi szinttel. |
 | Dominó – fogalomlánc | `games/domino.html` | 9–12. | Klasszikus dominó meghatározás–fogalom párokkal, évfolyam és korszak szerint, tanulórésszel; gép ellen vagy egyedül játszható. |
 | Rövid feladatok – hivatalos gyakorlógyűjtemény | `games/oh-rovid-feladatok.html` (+ `games/oh-rovid-feladatok/data`, `img`) | 9–12. | 195 rövid választ igénylő feladat 7 korszakban, hivatalos megoldásokkal (OH-TOR912GY); az oldalképek változatlan kivágatok. Önellenőrzés, vegyes gyakorlás, keresés, eredménymentés/-betöltés. |
+| A nagy gazdasági világválság – kattintható ábrák | `games/vilagvalsag.html` | 11–12. | Négy kattintható feladatrész (fénykép, hitelkörforgás-séma, okok láncolata, adatgrafikon), 30 ellenőrző kérdéssel a tankönyv 18. leckéje alapján; pontozás, összegzés, tanári szerkesztő mód. Önálló fájl, a kép beágyazva. |
 
 ## 3D szabadulószobák
 
