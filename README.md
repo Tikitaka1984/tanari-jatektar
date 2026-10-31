@@ -44,6 +44,15 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 
 A tanári kísérőanyagok (Word) a `jatekok/<azonosító>/docs/` mappában vannak (a „Június tizenhatodika” játékhoz nincs).
 
+## Interaktív órai bemutatók
+
+Frontális órára készült, 20 diás, kattintható bemutatók (a tankönyv ábráival és forrásaival; „Részletesebben” panelekkel, tanári jegyzetekkel, záró kvízzel). Önálló, külső függőség nélküli HTML-fájlok a `demos/` mappában; a hub külön „Interaktív órai bemutatók” szekciójában jelennek meg. Navigáció: nyilak / szóköz, `N` = tanári jegyzet, `F` = teljes képernyő.
+
+| Bemutató | Fájl | Tantárgy | Évfolyam |
+| --- | --- | --- | --- |
+| Az athéni demokrácia | `demos/bemutato_athen_demokracia.html` | Történelem | 9. |
+| Vállalkozás és vállalat | `demos/bemutato_vallalkozas.html` | Állampolgári ismeretek | 12. |
+
 ## Szemléltető animációk
 
 | Anyag | Fájl | Téma |
@@ -82,6 +91,8 @@ tanari-jatektar/
 │   ├── junius-tizenhatodika/  (index.html)
 │   └── grof-dolgozoszobaja/ (index.html, docs/)
 ├── demos/
+│   ├── bemutato_athen_demokracia.html
+│   ├── bemutato_vallalkozas.html
 │   ├── demo_felfedezesek.html
 │   ├── demo_roma.html
 │   ├── demo_wwi.html
