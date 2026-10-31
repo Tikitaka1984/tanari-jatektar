@@ -270,7 +270,7 @@ h1,h2,h3{color:#fff8e9}
     <a href="#hub" class="brand" aria-label="Tanári Játéktár főoldal"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M4 13 20 4l16 9M7 16h26M8 32h24M5 36h30M11 18v12m9-12v12m9-12v12"/></svg>TANÁRI JÁTÉKTÁR</a>
     <button class="menu-toggle" id="menuToggle" aria-controls="siteNav" aria-expanded="false" aria-label="Navigáció megnyitása" onclick="toggleSiteNav()">☰</button>
     <nav class="site-nav" id="siteNav" aria-label="Fő navigáció">
-      <a href="#gamesSection" onclick="closeSiteNav()">Játékok</a><a href="#escapesSection" onclick="closeSiteNav()">Szabadulószobák</a><a href="#demosSection" onclick="closeSiteNav()">Szemléltetés</a><a href="#guideSection" onclick="closeSiteNav()">Tanári segítség</a>
+      <a href="#gamesSection" onclick="closeSiteNav()">Játékok</a><a href="#escapesSection" onclick="closeSiteNav()">Szabadulószobák</a><a href="#presSection" onclick="closeSiteNav()">Bemutatók</a><a href="#demosSection" onclick="closeSiteNav()">Szemléltetés</a><a href="#guideSection" onclick="closeSiteNav()">Tanári segítség</a>
     </nav>
   </header>
   <section class="hero" aria-labelledby="heroTitle">
@@ -309,6 +309,13 @@ h1,h2,h3{color:#fff8e9}
   <p class="section-note">3D szabadulószoba-játékok — ugyanazon a lapon nyílnak, tanári kivetítő nézettel.</p>
   <div class="grid" id="escapeGrid"></div>
   <div class="empty" id="escapeEmpty" style="display:none;">Ebben a tárgyban egyelőre nincs szabadulószoba.</div>
+
+  <div class="divider"><div class="line"></div><span>interaktív bemutatók</span><div class="line"></div></div>
+
+  <div id="presSection" class="section-head"><h2>Interaktív órai bemutatók</h2></div>
+  <p class="section-note">Frontális órára készült, kattintható bemutatók: forrásokkal, ábrákkal, szimulációkkal és záró kvízzel. Kivetítve vezeti a tanár, a diákok közben szavaznak, párosítanak, számolnak.</p>
+  <div class="grid" id="presGrid"></div>
+  <div class="empty" id="presEmpty" style="display:none;">Ebben a tárgyban egyelőre nincs interaktív bemutató.</div>
 
   <div class="divider"><div class="line"></div><span>szemléltető anyagok</span><div class="line"></div></div>
 
@@ -373,8 +380,9 @@ h1,h2,h3{color:#fff8e9}
 <script>
 /* Katalógus: önálló HTML-fájlok. */
 const GAMES = [{"id": "iranyitsd-romat", "title": "Irányítsd Rómát! – Császári stratégia", "accent": "#B68235", "kind": "Stratégiai szimuláció", "subject": "tortenelem", "grade": ["9"], "type": "strategia", "desc": "Nyolc császári tanácsülés: hadsereg, kincstár, tartományok és gabonaellátás. Indokold a döntéseidet, figyeld meg a hosszú távú következményeket! Beépített történelmi tudástárral."}, {"id": "korona", "title": "A korona nyomában", "accent": "#FFC24B", "kind": "Nyomozójáték", "subject": "tortenelem", "grade": ["9", "10"], "type": "kaland", "desc": "Térképes nyomozás a középkori magyar államon át — az államalapítástól Mohácsig. Topográfiai kapu, forráselemzés, hat állomás."}, {"id": "kivagyok", "title": "Ki vagyok én?", "accent": "#3DDC97", "kind": "Portréjáték", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "portre", "desc": "42 történelmi személy a hivatalos érettségi névsorból, évfolyamonkénti válogatással — szabad felidézés fokozatosan könnyülő nyomokkal, szabadon újrajátszható."}, {"id": "reformkor", "title": "A reformkor vitaterme", "accent": "#5FD3F0", "kind": "Álláspont-szortírozó", "subject": "tortenelem", "grade": ["10"], "type": "vita", "desc": "Három reformkori vita — Széchenyi–Kossuth, Dessewffy–Széchenyi, centralisták–Kossuth: melyik állítás kié, és mi az, amiben egyetértettek? Esszévázlattal zárul."}, {"id": "leveltar", "title": "A titkos levéltár", "accent": "#FF7A8A", "kind": "Szabadulószoba", "subject": "tortenelem", "grade": ["11", "12"], "type": "szabadulo", "desc": "Négy zár — évszám, fogalom, név, térkép —, majd egy hamisítvány leleplezése. Visszaszámlálóval és hibaprofillal."}, {"id": "szokereso", "title": "Szókereső", "accent": "#9E8BFF", "kind": "Lexikagyakorló", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "szokereso", "desc": "428 fogalom, név és helyszín az ókortól napjainkig. Klasszikus és körülírásos nehézség, rejtvénykóddal és nyomtatható feladatlappal."}, {"id": "ketforras", "title": "Két forrás, két igazság", "accent": "#5FD3F0", "kind": "Forráselemzés", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "forras", "desc": "21 esetpár mind a négy évfolyamról — két egymásnak ellentmondó forrás, három lépésben: közös alap, eltérés magyarázata, epistemikus besorolás."}, {"id": "keresztrejtveny", "title": "Keresztrejtvény", "accent": "#FF9A2E", "kind": "Keresztrejtvény", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "kereszt", "desc": "Klasszikus, kereszteződő szavas rejtvény — válaszd ki az évfolyamot és a témát, a gép generálja a rácsot. Szabadon újrasorsolható, megoldás- és nyomtatási funkcióval."}, {"id": "eszperente", "title": "Csak E!", "accent": "#FF6EA0", "kind": "Nyelvi rejtvény", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "eszperente", "desc": "Történelmi események és szereplők — de a leírásukban csak \"e\"/\"é\" magánhangzó szerepelhet. Feleletválasztós rejtvény, három nehézségi szinttel."}, {"id": "domino", "title": "Dominó – fogalomlánc", "accent": "#FFC24B", "kind": "Fogalomlánc", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "domino", "desc": "Klasszikus dominó történelmi fogalmakkal: a lapok két fele egy meghatározás és egy fogalom, a láncba csak az illeszkedő lap kerülhet. Évfolyam és korszak szerint választható, tanulórésszel, gép ellen vagy egyedül."}, {"id": "oh-rovid-feladatok", "title": "Rövid feladatok – hivatalos gyakorlógyűjtemény", "accent": "#5FD3F0", "kind": "Feladatgyakorló", "subject": "tortenelem", "grade": ["9", "10", "11", "12"], "type": "rovid", "desc": "195 egyszerű, rövid választ igénylő feladat hét korszakra bontva, hivatalos megoldásokkal (OH-TOR912GY). Önellenőrzéssel, vegyes gyakorlással, kereséssel, eredménymentéssel."}];
+const PRESENTATIONS = [{"id": "bemutato_athen_demokracia", "title": "Az athéni demokrácia", "accent": "#5FD3F0", "subject": "tortenelem", "grade": "9. évf.", "topic": "Ókor – az athéni demokrácia", "desc": "20 diás, interaktív bemutató a tankönyv ábráival és forrásaival: az athéni államberendezkedés kialakulása, a cserépszavazás, a vagyoni osztályok, időrend, igaz–hamis játék és kvíz. „Részletesebben” panelekkel."}, {"id": "bemutato_vallalkozas", "title": "Vállalkozás és vállalat", "accent": "#3DDC97", "subject": "allampolgari", "grade": "12. évf.", "topic": "Piacgazdaság, vállalkozási formák, üzleti terv", "desc": "20 diás, interaktív bemutató a tankönyv ábráival: gazdasági körforgás, kereslet–kínálat, verseny és monopólium, felelősség- és költségszimulátor, árdiszkrimináció, SWOT és PESTEL, záró kvíz."}];
 const DEMOS = [{"id": "demo_felfedezesek", "title": "A nagy földrajzi felfedezések", "accent": "#5FD3F0", "subject": "tortenelem", "topic": "Kora újkor", "desc": "Animált bemutató a felfedezések okairól és a legfontosabb utakról — óra közbeni magyarázathoz."}, {"id": "demo_roma", "title": "A Római Birodalom", "accent": "#FFC24B", "subject": "tortenelem", "topic": "Ókor", "desc": "Animált áttekintés a Római Birodalomról — kivetíthető szemléltetés az órai magyarázathoz."}, {"id": "demo_wwi", "title": "Az első világháború frontjai", "accent": "#FF7A8A", "subject": "tortenelem", "topic": "XX. század", "desc": "Interaktív térkép az első világháború frontvonalairól — a hadszínterek és a frontok bemutatásához."}, {"id": "demo_legkor", "title": "A légkör rétegei", "accent": "#60A5FA", "subject": "foldrajz", "topic": "Fizikai földrajz", "desc": "Animált bemutató a légkör szerkezetéről és rétegeiről — kivetíthető szemléltetés az órai magyarázathoz."}];
-const SUBJECTS = [["tortenelem", "Történelem"], ["foldrajz", "Földrajz"], ["turizmus", "Turizmus-vendéglátás"]];
+const SUBJECTS = [["tortenelem", "Történelem"], ["foldrajz", "Földrajz"], ["turizmus", "Turizmus-vendéglátás"], ["allampolgari", "Állampolgári ismeretek"]];
 /* 3D szabadulószobák: önálló oldalak (jatekok/<azonosító>/), ugyanazon a lapon nyílnak.
    Adatforrás: jatekok/jatekok.json (a mezők 1:1 átvéve). */
 const ESCAPES = [
@@ -402,7 +410,7 @@ function renderSubjectBar(){
     '<button class="schip '+(state.subject===null?'on':'')+'" onclick="setSubject(null)">Minden tantárgy</button>' +
     SUBJECTS.map(function(s){return '<button class="schip '+(state.subject===s[0]?'on':'')+'" onclick="setSubject(\''+s[0]+'\')">'+s[1]+'</button>';}).join('');
 }
-function setSubject(v){ const restore=rememberFilterFocus(); state.subject=v; renderSubjectBar(); renderGrid(); renderEscapes(); renderDemos(); renderFoot(); syncFilterStates(); restore(); }
+function setSubject(v){ const restore=rememberFilterFocus(); state.subject=v; renderSubjectBar(); renderGrid(); renderEscapes(); renderPres(); renderDemos(); renderFoot(); syncFilterStates(); restore(); }
 
 function renderFilters(){
   document.getElementById('fGrade').innerHTML =
@@ -444,6 +452,8 @@ const CARD_ARTWORK = {
   "junius-tizenhatodika": "junius",
   "grof-dolgozoszobaja": "grof",
   "cserepszavazas-napja": "cserepszavazas",
+  "bemutato_athen_demokracia": "bem-athen",
+  "bemutato_vallalkozas": "bem-vallalkozas",
   "demo_felfedezesek": "demo-felfedezesek",
   "demo_roma": "demo-roma",
   "demo_wwi": "demo-wwi",
@@ -487,6 +497,18 @@ function renderEscapes(){
       '</div></article>';
   }).join('');
 }
+function renderPres(){
+  const list=PRESENTATIONS.filter(function(d){ return state.subject===null || d.subject===state.subject; });
+  document.getElementById('presEmpty').style.display = list.length? 'none':'block';
+  document.getElementById('presGrid').innerHTML = list.map(function(d){
+    return '<button class="card demo" onclick="openItem(\''+d.id+'\',\'pres\',this)">'+
+      cardArtwork(d.id)+
+      '<div class="kind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Interaktív bemutató · 20 dia</div>'+
+      '<h3>'+d.title+'</h3><p>'+d.desc+'</p>'+
+      '<div class="tags"><span class="tag fill">'+subjectLabel(d.subject)+'</span><span class="tag outline">'+d.grade+'</span><span class="tag outline">'+d.topic+'</span></div>'+
+      '<div class="go">Megnyitás <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></button>';
+  }).join('');
+}
 function renderDemos(){
   const list=DEMOS.filter(function(d){ return state.subject===null || d.subject===state.subject; });
   document.getElementById('demoEmpty').style.display = list.length? 'none':'block';
@@ -502,24 +524,25 @@ function renderDemos(){
 function renderFoot(){
   const gc=GAMES.filter(function(g){return state.subject===null||g.subject===state.subject;}).length;
   const dc=DEMOS.filter(function(d){return state.subject===null||d.subject===state.subject;}).length;
+  const pc=PRESENTATIONS.filter(function(d){return state.subject===null||d.subject===state.subject;}).length;
   const ec=ESCAPES.filter(function(e){return state.subject===null||e.subject===state.subject;}).length;
   document.getElementById('footText').textContent =
-    gc+' gyakorlófeladat · '+ec+' szabadulószoba · '+dc+' szemléltető anyag — Tanári Játéktár';
+    gc+' gyakorlófeladat · '+ec+' szabadulószoba · '+pc+' interaktív bemutató · '+dc+' szemléltető anyag — Tanári Játéktár';
 }
 
 /* Relatív útvonalak a lejátszóhoz. */
 function resolvePath(id, kind){
-  return (kind==='demo' ? 'demos/' : 'games/') + id + '.html';
+  return (kind==='demo' || kind==='pres' ? 'demos/' : 'games/') + id + '.html';
 }
 function openItem(id, kind, triggerEl){
-  const src = kind==='demo' ? DEMOS : GAMES;
+  const src = kind==='demo' ? DEMOS : (kind==='pres' ? PRESENTATIONS : GAMES);
   const g = src.filter(function(x){return x.id===id;})[0];
   if(!g || state.open) return;
   state.open = g; state.openKind = kind;
   state.openTrigger = triggerEl || null;
   const p = document.getElementById('player');
   p.style.setProperty('--pacc', g.accent);
-  const label = kind==='demo' ? 'Szemléltetés' : g.kind;
+  const label = kind==='demo' ? 'Szemléltetés' : (kind==='pres' ? 'Interaktív bemutató' : g.kind);
   document.getElementById('ptitle').innerHTML = '<b>'+label+'</b> &middot; '+g.title;
   const hint = document.getElementById('phint');
   hint.classList.remove('on');
@@ -575,7 +598,7 @@ document.addEventListener('click',function(e){
 });
 window.matchMedia('(min-width:801px)').addEventListener('change',closeSiteNav);
 
-renderSubjectBar(); renderFilters(); renderGrid(); renderEscapes(); renderDemos(); renderFoot(); syncFilterStates();
+renderSubjectBar(); renderFilters(); renderGrid(); renderEscapes(); renderPres(); renderDemos(); renderFoot(); syncFilterStates();
 </script>
 </body>
 </html>

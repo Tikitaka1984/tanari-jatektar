@@ -128,5 +128,15 @@
     "path": "games/oh-rovid-feladatok.html",
     "bytes": 23071,
     "md5": "95ea6d88218b4cfdbadfeb413cbeb7a5"
+  },
+  "bemutato_athen_demokracia": {
+    "path": "demos/bemutato_athen_demokracia.html",
+    "bytes": 559643,
+    "md5": "2b514fd61f854834a336042c6404d1bf"
+  },
+  "bemutato_vallalkozas": {
+    "path": "demos/bemutato_vallalkozas.html",
+    "bytes": 1271543,
+    "md5": "8393d464ac124a95c0e8099877852e45"
   }
 }
