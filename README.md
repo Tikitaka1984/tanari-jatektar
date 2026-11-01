@@ -57,6 +57,7 @@ Frontális órára készült, 20 diás, kattintható bemutatók (a tankönyv áb
 | --- | --- | --- | --- |
 | Az athéni demokrácia | `demos/bemutato_athen_demokracia.html` | Történelem | 9. |
 | Vállalkozás és vállalat | `demos/bemutato_vallalkozas.html` | Állampolgári ismeretek | 12. |
+| A politika színterei és vitái – reformkor | `demos/bemutato_reformkor_politika.html` | Történelem | 10–11. |
 
 ## Szemléltető animációk
 
@@ -102,6 +103,7 @@ tanari-jatektar/
 ├── demos/
 │   ├── bemutato_athen_demokracia.html
 │   ├── bemutato_vallalkozas.html
+│   ├── bemutato_reformkor_politika.html
 │   ├── demo_felfedezesek.html
 │   ├── demo_roma.html
 │   ├── demo_wwi.html
