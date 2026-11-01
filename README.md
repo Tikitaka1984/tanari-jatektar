@@ -52,12 +52,15 @@ A tanári kísérőanyagok (Word) a `jatekok/<azonosító>/docs/` mappában vann
 
 ## Interaktív órai bemutatók
 
-Frontális órára készült, 20 diás, kattintható bemutatók (a tankönyv ábráival és forrásaival; „Részletesebben” panelekkel, tanári jegyzetekkel, záró kvízzel). Önálló, külső függőség nélküli HTML-fájlok a `demos/` mappában; a hub külön „Interaktív órai bemutatók” szekciójában jelennek meg. Navigáció: nyilak / szóköz, `N` = tanári jegyzet, `F` = teljes képernyő.
+Frontális órára készült, kattintható bemutatók (20–32 dia) (a tankönyv ábráival és forrásaival; „Részletesebben” panelekkel, tanári jegyzetekkel, záró kvízzel). Önálló, külső függőség nélküli HTML-fájlok a `demos/` mappában; a hub külön „Interaktív órai bemutatók” szekciójában jelennek meg. Navigáció: nyilak / szóköz, `N` = tanári jegyzet, `F` = teljes képernyő. A „Környezetformáló tevékenység” bemutatókban a kattintás/→ lépésenként fedi fel a dia részeit (a „Lépésenként” gombbal kikapcsolható); a források számozása az egyesített tankönyvével egyezik.
 
 | Bemutató | Fájl | Tantárgy | Évfolyam |
 | --- | --- | --- | --- |
 | Az athéni demokrácia | `demos/bemutato_athen_demokracia.html` | Történelem | 9. |
 | Vállalkozás és vállalat | `demos/bemutato_vallalkozas.html` | Állampolgári ismeretek | 12. |
+| Az ember környezetformáló tevékenysége – 1–4. lecke | `demos/bemutato_kornyezet_1_4.html` | Komplex természettudomány | 9. |
+| Az ember környezetformáló tevékenysége – 5–8. lecke | `demos/bemutato_kornyezet_5_8.html` | Komplex természettudomány | 9. |
+| Az ember környezetformáló tevékenysége – 9–12. lecke | `demos/bemutato_kornyezet_9_12.html` | Komplex természettudomány | 9. |
 
 ## Szemléltető animációk
 
@@ -104,6 +107,9 @@ tanari-jatektar/
 ├── demos/
 │   ├── bemutato_athen_demokracia.html
 │   ├── bemutato_vallalkozas.html
+│   ├── bemutato_kornyezet_1_4.html
+│   ├── bemutato_kornyezet_5_8.html
+│   ├── bemutato_kornyezet_9_12.html
 │   ├── demo_felfedezesek.html
 │   ├── demo_roma.html
 │   ├── demo_wwi.html

@@ -139,6 +139,21 @@
     "bytes": 1271543,
     "md5": "8393d464ac124a95c0e8099877852e45"
   },
+  "bemutato_kornyezet_1_4": {
+    "path": "demos/bemutato_kornyezet_1_4.html",
+    "bytes": 78641,
+    "md5": "ea3aaf558a6577917555e81bd23122af"
+  },
+  "bemutato_kornyezet_5_8": {
+    "path": "demos/bemutato_kornyezet_5_8.html",
+    "bytes": 78132,
+    "md5": "f500bbd5f039dd52382beb64f649aa87"
+  },
+  "bemutato_kornyezet_9_12": {
+    "path": "demos/bemutato_kornyezet_9_12.html",
+    "bytes": 80738,
+    "md5": "debb0e5968b0c56aa2cf7bb25a7628f6"
+  },
   "athen-nyomozas": {
     "path": "games/athen-nyomozas.html",
     "bytes": 35339,
