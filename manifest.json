@@ -158,5 +158,10 @@
     "path": "games/nagy-valsag-tanari.html",
     "bytes": 401410,
     "md5": "55b8e3db613b27d859d310ee519af316"
+  },
+  "hanza": {
+    "path": "games/hanza.html",
+    "bytes": 159179,
+    "md5": "61c23343e1b6d38ee684c15f54b38073"
   }
 }
