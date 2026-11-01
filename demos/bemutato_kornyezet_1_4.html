@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Környezetformálás 1–4. lecke</title>
+<style>
+[hidden]{display:none!important}
+:root{
+  --bg:#f2f3fb; --surface:#ffffff; --ink:#12172b; --ink2:#4a5170; --line:#dfe2f0; --card:#f6f7fd; --grid:#e6e9f4;
+  --s1:#2a78d6; --s2:#1baf7a; --s3:#eb6834; --s4:#eda100; --sm:#9aa6b3;
+  --good:#12805a; --good-soft:#dff3ea; --bad:#b83232; --bad-soft:#fbe6e6;
+  --tip:#12172b; --tip-ink:#f6f7fb; --shadow:rgba(30,40,100,.16);
+  --c1:#2f5bea; --c1b:#7a3fe0; --c2:#0a7c72; --c2b:#17a05f; --c3:#d6460f; --c3b:#c2255c; --c4:#7b2cbf; --c4b:#c026a8;
+  --display:"Bricolage Grotesque","Trebuchet MS","Segoe UI",system-ui,sans-serif; --body:"Lexend","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0a0e1d; --surface:#131a30; --ink:#eef1fb; --ink2:#b4bbd6; --line:#2a3354; --card:#1a2240; --grid:#273050;
+    --s1:#3987e5; --s2:#199e70; --s3:#d95926; --s4:#c98500; --sm:#6d7783;
+    --good:#4cc490; --good-soft:#15291f; --bad:#ee7676; --bad-soft:#321a1a;
+    --tip:#eef1fb; --tip-ink:#12172b; --shadow:rgba(0,0,0,.5); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0a0e1d; --surface:#131a30; --ink:#eef1fb; --ink2:#b4bbd6; --line:#2a3354; --card:#1a2240; --grid:#273050;
+  --s1:#3987e5; --s2:#199e70; --s3:#d95926; --s4:#c98500; --sm:#6d7783;
+  --good:#4cc490; --good-soft:#15291f; --bad:#ee7676; --bad-soft:#321a1a;
+  --tip:#eef1fb; --tip-ink:#12172b; --shadow:rgba(0,0,0,.5); color-scheme:dark;
+}
+#app,#app[data-c="1"]{--acc:var(--c1);--acc2:var(--c1b)}
+#app[data-c="2"]{--acc:var(--c2);--acc2:var(--c2b)}
+#app[data-c="3"]{--acc:var(--c3);--acc2:var(--c3b)}
+#app[data-c="4"]{--acc:var(--c4);--acc2:var(--c4b)}
+#app{--acc-ink:#2447c4;--acc-soft:#e6ecff;
+  --acc-ink:color-mix(in srgb,var(--acc) 72%,var(--ink));--acc-soft:color-mix(in srgb,var(--acc) 12%,var(--surface))}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:clamp(15px,.95vw + 10px,19px);line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#app{height:100%;display:flex;flex-direction:column;gap:12px;padding-block:12px;position:relative}
+#app::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(60vmax 40vmax at 8% -8%,color-mix(in srgb,var(--acc) 20%,transparent),transparent 70%),radial-gradient(50vmax 36vmax at 100% 105%,color-mix(in srgb,var(--acc2) 18%,transparent),transparent 70%)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px;border-radius:8px}
+
+.top{display:flex;align-items:center;gap:8px;min-width:0;position:relative}
+.top .name{font-family:var(--display);font-weight:800;font-size:1rem;color:var(--ink);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top .name::before{content:"";display:inline-block;width:.7em;height:.7em;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc2));margin-right:.5em;vertical-align:-1px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:.85rem;font-weight:600;line-height:1.1;white-space:nowrap}
+.btn:hover{border-color:var(--acc);color:var(--acc-ink)}
+.btn.ico{padding:7px 11px;font-size:1rem}
+.score{display:inline-flex;gap:6px;align-items:center;border-radius:999px;background:var(--acc-soft);color:var(--acc-ink);padding:6px 12px;font-weight:700;font-size:.85rem;font-variant-numeric:tabular-nums;white-space:nowrap}
+.score.bump{animation:bump .5s}
+@keyframes bump{40%{transform:scale(1.25)}}
+.count{font-variant-numeric:tabular-nums;font-size:.85rem;color:var(--ink2);min-width:3.8em;text-align:right}
+
+.stage{flex:1;min-height:0;position:relative}
+.slide{position:absolute;inset:0;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:clamp(18px,3.2vw,46px);box-shadow:0 18px 50px -24px var(--shadow)}
+.slide>.in{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:clamp(12px,min(2vw,2.4vh),24px);min-height:100%}
+.slide.hero{border:0;color:#fff;background:linear-gradient(135deg,var(--acc),var(--acc2));position:absolute}
+.slide.hero.ttl{background:linear-gradient(135deg,#2f5bea 0%,#7b2cbf 55%,#c026a8 100%)}
+.slide.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(40% 50% at 90% 10%,rgba(255,255,255,.2),transparent 70%),radial-gradient(35% 45% at 5% 100%,rgba(255,255,255,.14),transparent 70%)}
+.slide.hero>.in{position:relative;z-index:1}
+.slide.enter .in>*{animation:rise .45s cubic-bezier(.2,.8,.3,1) both}
+.slide.enter .in>*:nth-child(2){animation-delay:.05s}.slide.enter .in>*:nth-child(3){animation-delay:.1s}.slide.enter .in>*:nth-child(4){animation-delay:.15s}.slide.enter .in>*:nth-child(5){animation-delay:.2s}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes grow-w{from{width:0}}
+@keyframes grow-h{from{height:0}}
+@media (prefers-reduced-motion:reduce){.slide.enter .in>*,.slide.enter .card,.slide.enter .bar,.slide.enter .b{animation:none!important}}
+.eyebrow{font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc-ink);display:inline-flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";width:22px;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.1}
+h1{font-size:clamp(1.9rem,4.6vw,3.4rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(1.5rem,3vw,2.3rem);font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.05rem;font-weight:700}
+p{margin:0}
+.lead{font-size:1.1em;max-width:60ch;opacity:.92}
+.src{margin-top:auto;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.75rem;color:var(--ink2);padding-top:6px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:1px 9px;background:var(--card);font-variant-numeric:tabular-nums;cursor:help}
+
+.s-title,.s-lesson{justify-content:center}
+.kicker{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.85}
+.s-title .vol{font-family:var(--display);font-size:clamp(3.6rem,min(13vw,19vh),9rem);line-height:.85;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;text-shadow:0 6px 30px rgba(0,0,0,.2)}
+.lessonlist{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px;margin-top:4px}
+.lessonlist button{text-align:left;border:0;border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:3px;color:#fff;background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 10px 24px -12px rgba(0,0,0,.5);transition:transform .15s}
+.lessonlist button:hover{transform:translateY(-4px) rotate(-.6deg)}
+.lessonlist em{font-style:normal;font-size:1.5rem;line-height:1}
+.lessonlist b{font-family:var(--display);font-size:1.05rem}
+.lessonlist span{font-size:.82rem;opacity:.95;line-height:1.3}
+.start{align-self:flex-start;border:0;background:#fff;color:#2b1a6b;font-weight:700;border-radius:999px;padding:12px 24px;font-size:1rem;box-shadow:0 10px 24px -10px rgba(0,0,0,.5)}
+.start:hover{transform:scale(1.04)}
+.tiphint{font-size:.78rem;opacity:.85}
+.s-lesson .numrow{display:flex;align-items:center;gap:clamp(12px,3vw,32px)}
+.s-lesson .ico{font-size:clamp(2.6rem,min(8vw,12vh),5rem);line-height:1;filter:drop-shadow(0 8px 14px rgba(0,0,0,.25))}
+.s-lesson .num{font-family:var(--display);font-size:clamp(4rem,min(15vw,22vh),9.5rem);line-height:.85;font-weight:800;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:3px rgba(255,255,255,.9)}
+.qbub{position:relative;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(4px);border-radius:22px;padding:16px 20px;font-size:clamp(1.02rem,1.9vw,1.35rem);line-height:1.45;max-width:62ch}
+.qbub span{display:block;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;opacity:.85;margin-bottom:4px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:14px}
+.card{border-radius:20px;padding:16px 18px 18px;background:var(--card);border:1px solid var(--line);border-top:5px solid var(--acc);display:flex;flex-direction:column;gap:6px;min-width:0;transition:transform .15s,box-shadow .15s}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 28px -16px var(--shadow)}
+.slide.enter .card{animation:pop .5s cubic-bezier(.2,.8,.3,1) both;animation-delay:calc(var(--i)*70ms + 120ms)}
+.card .big{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,3vw,2.2rem);line-height:1.05;color:var(--acc-ink);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.card .tag{align-self:flex-start;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:999px;background:var(--acc-soft);color:var(--acc-ink)}
+.card .tag.pro{background:var(--good-soft);color:var(--good)}
+.card .tag.con{background:var(--bad-soft);color:var(--bad)}
+.card p{font-size:.92rem;color:var(--ink2)}
+.card strong{color:var(--ink)}
+.note{border-radius:16px;background:color-mix(in srgb,var(--s4) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--s4) 40%,var(--line));padding:12px 16px;font-size:.92rem;display:flex;gap:10px}
+.note::before{content:"💡";font-size:1.2rem;line-height:1.3}
+.note>div{min-width:0}
+.note b{color:var(--ink)}
+
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px}
+.chart{display:flex;flex-direction:column;gap:10px;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:14px 16px}
+.chart h3{font-size:.92rem;color:var(--ink2);font-family:var(--body);font-weight:600}
+.hb{display:flex;flex-direction:column;gap:7px}
+.hb .row{display:grid;grid-template-columns:minmax(5.5em,26%) 1fr auto;gap:10px;align-items:center;border-radius:10px;padding:2px 4px;cursor:default}
+.hb .lab{font-size:.85rem;line-height:1.2;color:var(--ink2)}
+.hb .track{position:relative;height:1.7em;background:var(--grid);border-radius:999px;overflow:hidden}
+.hb .bar{position:absolute;inset:0 auto 0 0;border-radius:999px}
+.slide.enter .hb .bar{animation:grow-w .8s cubic-bezier(.2,.8,.3,1) both}
+.hb .val{font-variant-numeric:tabular-nums;font-weight:700;font-size:.88rem;min-width:3.4em;text-align:right}
+.hb .ref{position:absolute;top:-2px;bottom:-2px;border-left:2px dashed var(--ink);opacity:.7}
+.hb .row:hover,.hb .row:focus-visible{background:var(--acc-soft)}
+.t-a{background:var(--s1)}.t-b{background:var(--s2)}.t-c{background:var(--s3)}.t-d{background:var(--s4)}.t-m{background:var(--sm)}
+.refnote{font-size:.78rem;color:var(--ink2);display:flex;gap:8px;align-items:center}
+.refnote i{display:inline-block;width:18px;border-top:2px dashed var(--ink);opacity:.7}
+.vb{display:flex;align-items:flex-end;gap:clamp(8px,3%,28px);height:230px;padding-top:26px;border-bottom:2px solid var(--line);position:relative}
+.vb .grp{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch}
+.vb .bars{display:flex;align-items:flex-end;gap:4px;height:100%}
+.vb .col{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;cursor:default}
+.vb .col .b{width:100%;border-radius:10px 10px 0 0}
+.slide.enter .vb .col .b{animation:grow-h .8s cubic-bezier(.2,.8,.3,1) both}
+.vb .col .v{font-size:.8rem;font-weight:700;font-variant-numeric:tabular-nums;margin-bottom:3px;white-space:nowrap}
+.vb .col:hover .b,.vb .col:focus-visible .b{filter:brightness(1.15)}
+.vlabels{display:flex;gap:clamp(8px,3%,28px)}
+.vlabels span{flex:1;min-width:0;text-align:center;font-size:.82rem;color:var(--ink2);padding-top:4px;line-height:1.2}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.8rem;color:var(--ink2)}
+.legend i{display:inline-block;width:.9em;height:.9em;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.stack{display:flex;flex-direction:column;gap:10px}
+.stack .srow{display:grid;grid-template-columns:3.4em 1fr;gap:10px;align-items:center}
+.stack .strack{display:flex;height:2.4em;gap:2px}
+.stack .seg{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.88rem;font-variant-numeric:tabular-nums;min-width:0;border-radius:8px;cursor:default}
+.stack .seg.t-d{color:#111}
+.line svg{width:100%;height:auto;display:block;touch-action:pan-y}
+.line text{fill:var(--ink2);font-family:var(--body);font-size:12px}
+.line .gl{stroke:var(--grid);stroke-width:1}
+.line path.ln{stroke-dasharray:1400;stroke-dashoffset:0}
+.slide.enter .line path.ln{animation:draw 1.4s ease-out both}
+@keyframes draw{from{stroke-dashoffset:1400}}
+.readout{min-height:2.4em;font-size:.92rem;color:var(--ink2)}
+.readout b{color:var(--ink);font-variant-numeric:tabular-nums}
+.tl{display:flex;flex-direction:column;gap:14px}
+.tl .axis{position:relative;height:46px;margin:0 10px}
+.tl .axis .ln{position:absolute;left:0;right:0;top:20px;border-top:4px solid var(--line);border-radius:2px}
+.tl .axis .fc{position:absolute;top:20px;border-top:4px dashed var(--sm)}
+.tl .dot{position:absolute;top:10px;width:22px;height:22px;margin-left:-11px;border-radius:50%;border:3px solid var(--card);cursor:pointer;padding:0;transition:transform .15s}
+.tl .dot:hover{transform:scale(1.25)}
+.tl .dot.on{outline:3px solid var(--ink);outline-offset:1px;transform:scale(1.2)}
+.tl .yr{position:absolute;top:34px;transform:translateX(-50%);font-size:.68rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink2);white-space:nowrap}
+.tl .ev{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:8px}
+.tl .ev button{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:8px 12px;display:flex;flex-direction:column;gap:2px;font-size:.88rem}
+.tl .ev button.on{border-color:var(--acc);background:var(--acc-soft)}
+.tl .ev b{font-variant-numeric:tabular-nums}
+.tl .ev span{color:var(--ink2);font-size:.9em}
+.tl .det{font-size:.92rem;color:var(--ink);min-height:2.6em;background:var(--surface);border-radius:12px;padding:10px 12px}
+
+.cc{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:14px;perspective:1000px}
+.fc3{border:0;background:transparent;padding:0;display:grid;text-align:left;min-height:7.5em}
+.fc3>div{grid-area:1/1;border-radius:20px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;justify-content:center;backface-visibility:hidden;transition:transform .55s cubic-bezier(.3,.7,.3,1);min-width:0}
+.fc3 .fr{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;box-shadow:0 10px 24px -14px var(--shadow)}
+.fc3 .fr b{font-family:var(--display);font-size:1.2rem;line-height:1.15}
+.fc3 .fr small{font-size:.72rem;opacity:.85}
+.fc3 .bk{background:var(--card);border:2px solid var(--acc);transform:rotateY(180deg);font-size:.9rem}
+.fc3.flip .fr{transform:rotateY(180deg)}
+.fc3.flip .bk{transform:none}
+.fc3:hover{transform:translateY(-3px)}
+.fc3 .bk b{color:var(--acc-ink);font-family:var(--display)}
+
+.qz{display:flex;flex-direction:column;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px 18px}
+.qz .qt{font-weight:600;font-size:1.02rem;display:flex;gap:12px}
+.qz .qn{flex:none;width:2em;height:2em;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.9rem}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:10px}
+.opts button{text-align:left;border:2px solid var(--line);background:var(--surface);border-radius:16px;padding:10px 12px;font-variant-numeric:tabular-nums;display:flex;gap:10px;align-items:center;transition:transform .12s,border-color .12s}
+.opts .l{flex:none;width:1.8em;height:1.8em;border-radius:8px;background:var(--acc-soft);color:var(--acc-ink);display:grid;place-items:center;font-weight:700;font-size:.82rem}
+.opts button:hover:not(:disabled){border-color:var(--acc);transform:translateY(-2px)}
+.opts button.ok{border-color:var(--good);background:var(--good-soft);color:var(--ink)}
+.opts button.ok .l{background:var(--good);color:#fff}
+.opts button.no{border-color:var(--bad);background:var(--bad-soft);color:var(--ink);animation:shake .4s}
+.opts button.no .l{background:var(--bad);color:#fff}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.opts button:disabled{cursor:default}
+.why{font-size:.9rem;color:var(--ink);border-radius:14px;padding:10px 14px;background:var(--surface);border:1px solid var(--line);animation:rise .3s both}
+
+.badge{align-self:flex-start;display:inline-flex;gap:8px;align-items:center;color:#fff;font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;padding:7px 14px;border-radius:999px;background:linear-gradient(135deg,var(--s3),#c2255c)}
+.badge.ikt{background:linear-gradient(135deg,#0a7c72,#17a05f)}
+.bubble{position:relative;font-size:clamp(1.05rem,2vw,1.35rem);line-height:1.45;max-width:64ch;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px 22px}
+.hints{display:flex;flex-direction:column;gap:10px;max-width:68ch;margin:0;padding:0;list-style:none;counter-reset:h}
+.hints li{counter-increment:h;display:flex;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:10px 14px;animation:pop .45s both;animation-delay:calc(var(--i)*120ms)}
+.hints li::before{content:counter(h);flex:none;width:1.9em;height:1.9em;border-radius:50%;background:linear-gradient(135deg,var(--s3),#c2255c);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.steps li::before{display:none}
+.steps li{cursor:pointer;align-items:flex-start;user-select:none}
+.steps .bx{flex:none;width:1.7em;height:1.7em;border-radius:8px;border:2px solid var(--acc);display:grid;place-items:center;color:transparent;font-weight:700;transition:all .15s}
+.steps li.done .bx{background:var(--good);border-color:var(--good);color:#fff}
+.steps li.done span{text-decoration:line-through;opacity:.65}
+.prog2{font-size:.85rem;color:var(--ink2)}
+.primary{align-self:flex-start;border:0;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border-radius:999px;padding:12px 22px;font-weight:700;box-shadow:0 10px 22px -12px var(--shadow)}
+.primary:hover{transform:translateY(-2px)}
+
+.sumwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,260px);gap:20px;align-items:start}
+@media (max-width:760px){.sumwrap{grid-template-columns:1fr}}
+.sum{display:flex;flex-direction:column;gap:10px;padding:0;margin:0;list-style:none;counter-reset:s}
+.sum li{counter-increment:s;display:flex;gap:12px;border:1px solid var(--line);background:var(--card);border-radius:18px;padding:12px 16px}
+.sum li::before{content:counter(s);flex:none;width:1.9em;height:1.9em;border-radius:50%;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.result{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px}
+.ring{position:relative;width:150px;height:150px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .t{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:1.9rem}
+.medal{font-family:var(--display);font-weight:800;font-size:1.15rem}
+.result small{color:var(--ink2)}
+.srclist{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:5px;font-size:.76rem;color:var(--ink2);overflow-wrap:anywhere}
+.srclist b{color:var(--acc-ink);font-variant-numeric:tabular-nums}
+
+.bottom{display:flex;align-items:center;gap:12px}
+.prog{flex:1;display:flex;gap:6px;min-width:0}
+.prog button{flex:1;min-width:0;height:28px;border:0;background:transparent;padding:0;display:flex;align-items:center}
+.prog button span{display:block;width:100%;height:8px;border-radius:4px;background:var(--line);position:relative;overflow:hidden;transition:height .2s}
+.prog button span i{position:absolute;inset:0 auto 0 0;background:var(--pc);transition:width .3s}
+.prog button.cur span{height:12px}
+.nav{border:0;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border-radius:50%;width:48px;height:48px;font-weight:700;font-size:1.2rem;display:grid;place-items:center;box-shadow:0 10px 20px -10px var(--shadow);transition:transform .12s}
+.nav:hover:not(:disabled){transform:scale(1.1)}
+.nav:disabled{opacity:.3;cursor:default;box-shadow:none}
+
+.menu{position:absolute;z-index:20;top:48px;left:0;width:min(440px,100%);max-height:70vh;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:8px;box-shadow:0 20px 40px -10px var(--shadow)}
+.menu button{display:flex;gap:10px;width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:6px 8px;font-size:.88rem}
+.menu button:hover,.menu button.cur{background:var(--acc-soft)}
+.menu .n{color:var(--ink2);min-width:2em;font-variant-numeric:tabular-nums}
+.menu .sec{font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--acc-ink);padding:8px 8px 2px}
+.tip{position:fixed;z-index:30;pointer-events:none;background:var(--tip);color:var(--tip-ink);border-radius:10px;padding:6px 10px;font-size:.82rem;max-width:260px;line-height:1.3;opacity:0;transition:opacity .1s}
+.tip.on{opacity:1}
+.fx{position:fixed;left:0;top:0;width:10px;height:10px;border-radius:2px;pointer-events:none;z-index:40}
+/* lépésenkénti megjelenítés */
+.rv:not(.on){display:none!important}
+.slide .rv.on.fresh{animation:pop .5s cubic-bezier(.2,.8,.3,1) both}
+.hints li.rv{animation:none}
+.stepinfo{font-size:.78rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--acc-ink);background:var(--acc-soft);border-radius:999px;padding:4px 11px;white-space:nowrap}
+.nav.more{animation:ping 1.8s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--acc) 55%,transparent)}70%,100%{box-shadow:0 0 0 14px transparent}}
+#abtn.off{opacity:.6}
+@media (prefers-reduced-motion:reduce){.slide .rv.on.fresh,.nav.more{animation:none!important}}
+@media (max-width:560px){#abtn .t{display:none}.top .name{display:none}.score{margin-left:auto}.btn.lbl{padding:7px 11px}}
+</style>
+</head>
+<body>
+
+<div id="app" data-c="1">
+  <div class="top">
+    <button class="btn lbl" id="mbtn" aria-expanded="false" aria-controls="menu">☰ Tartalom</button>
+    <div class="name" id="dname"></div>
+    <div class="score" id="score" title="Helyes kvízválaszok" aria-live="polite">⭐ 0</div>
+    <button class="btn lbl" id="abtn" aria-pressed="true" title="Lépésenkénti megjelenítés: minden kattintás egy újabb részt mutat">🎬 <span class="t">Lépésenként</span></button>
+    <button class="btn ico" id="tbtn" aria-label="Világos vagy sötét téma" title="Téma">🌓</button>
+    <button class="btn ico" id="fbtn" aria-label="Teljes képernyő" title="Teljes képernyő">⛶</button>
+    <div class="count" id="count" aria-live="polite"></div>
+    <div class="menu" id="menu" hidden></div>
+  </div>
+  <div class="stage"><div class="slide" id="slide" tabindex="-1"></div></div>
+  <div class="bottom">
+    <button class="nav" id="prev" aria-label="Előző dia">←</button>
+    <div class="prog" id="prog" role="navigation" aria-label="Leckék"></div>
+    <div class="stepinfo" id="stepinfo" hidden></div>
+    <button class="nav" id="next" aria-label="Következő dia">→</button>
+  </div>
+</div>
+<div class="tip" id="tip" role="tooltip"></div>
+
+<script>
+const DECK = {"name": "1–4. lecke", "slides": [{"k": "title", "vol": "1–4", "title": "Az ember környezetformáló tevékenysége", "sub": "Interaktív bemutató az 1–4. leckéhez: hatás, technológia, helyreállítás és letelepedés.", "menu": "Címoldal", "lessons": [{"n": "1", "t": "Az emberi tevékenység természeti környezetre gyakorolt hatása", "at": 1}, {"n": "2", "t": "A technológiai fejlődéssel növekvő környezetátalakító képesség", "at": 8}, {"n": "3", "t": "A környezeti károk helyreállítási lehetőségei", "at": 16}, {"n": "4", "t": "A letelepedéssel járó környezeti hatások", "at": 22}]}, {"k": "lesson", "n": "1", "sec": "1. lecke", "title": "Az emberi tevékenység természeti környezetre gyakorolt hatása", "q": "Egy szántás, egy kéményből felszálló füst és egy új út ugyanazt teszi: megváltoztatja a környezetet. Mekkora ez a változás, és hogyan lehet megmérni?", "menu": "Lecke nyitása"}, {"k": "facts", "lesson": "1. lecke", "title": "Közvetlen és közvetett hatások", "menu": "Tények", "items": [{"tag": "Négy szféra", "t": "kőzetburok (litoszféra), vízburok (hidroszféra), légkör (atmoszféra) és bioszféra. Az emberi hatás ezeken keresztül kapcsolódik össze."}, {"tag": "Közvetlen hatás", "t": "azonnal és helyben változtat valamit: ásvány kitermelése, erdő kivágása."}, {"tag": "Közvetett hatás", "t": "láncreakciót indít: az erdő eltűnése után a csapadék lemossa a talajt, a folyó több hordalékot szállít, a helyi éghajlat is módosulhat."}, {"big": "4,14 milliárd ha", "t": "a Föld erdeinek területe, a szárazföld 32%-a (FAO, 2025)."}, {"big": "17,6 → 10,9 millió ha/év", "t": "az erdőirtás éves üteme 1990–2000 és 2015–2025 között. A nettó erdőveszteség így is évi 4,12 millió ha."}], "src": [3]}, {"k": "chart", "lesson": "1. lecke", "title": "A légkör CO₂-tartalma 65 éve nő", "menu": "CO₂-diagram", "chart": {"type": "line", "title": "CO₂-koncentráció éves átlaga, Mauna Loa (Hawaii), ppm", "x": [1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023], "y": [315.98, 316.91, 317.64, 318.45, 318.99, 319.62, 320.04, 321.37, 322.18, 323.05, 324.62, 325.68, 326.32, 327.46, 329.68, 330.19, 331.13, 332.03, 333.84, 335.41, 336.84, 338.76, 340.12, 341.48, 343.15, 344.87, 346.35, 347.61, 349.31, 351.69, 353.2, 354.45, 355.7, 356.54, 357.21, 358.96, 360.97, 362.74, 363.88, 366.84, 368.54, 369.71, 371.32, 373.45, 375.98, 377.7, 379.98, 382.09, 384.02, 385.83, 387.64, 390.1, 391.85, 394.06, 396.74, 398.81, 401.01, 404.41, 406.76, 408.72, 411.65, 414.21, 416.41, 418.53, 421.08], "min": 260, "max": 440, "step": 40, "ref": 280, "refLabel": "iparosodás előtti szint: kb. 280 ppm", "hint": "Mozgasd az egeret (vagy a ← → billentyűket) a diagramon az évek leolvasásához."}, "note": "<b>2024:</b> 424,61 ppm; a +3,33 ppm-es növekedés a mérések története során a legnagyobb. A hely távol esik a nagy kibocsátóktól, ezért a sor a légkör háttérszintjét mutatja.", "src": [1, 2]}, {"k": "chart", "lesson": "1. lecke", "title": "Magyarország tíz legmelegebb éve", "menu": "Hőmérséklet-diagram", "chart": {"type": "hbar", "title": "Évi közepes hőmérséklet, °C", "min": 10, "max": 13.6, "d": 2, "unit": "°C", "ref": 10.78, "refLabel": "1991–2020 átlag: 10,78 °C", "items": [{"l": "2024", "v": 12.94, "t": "c"}, {"l": "2023", "v": 12.26}, {"l": "2019", "v": 12.08}, {"l": "2018", "v": 11.97}, {"l": "2022", "v": 11.86}, {"l": "2014", "v": 11.85}, {"l": "2025", "v": 11.78}, {"l": "2015", "v": 11.61}, {"l": "2007", "v": 11.54}, {"l": "2020", "v": 11.49}]}, "note": "<b>Mire jó a hosszú adatsor?</b> A tíz legmelegebb év mindegyike 2007 után volt. Egyetlen év azonban még nem éghajlati trend; ehhez évtizedes adatsor kell.", "src": [4]}, {"k": "concepts", "lesson": "1. lecke", "menu": "Fogalmak", "cards": [["szféra", "a Föld környezeti rendszerének egy része: kőzetburok, vízburok, légkör, bioszféra."], ["ppm (millió részecske)", "koncentráció mértékegysége: 1 ppm = 1 részecske egymillió részecskére vetítve."], ["üvegházhatású gáz", "a Föld hőkisugárzását részben visszatartó légköri gáz (például CO₂, metán, vízgőz)."], ["erdőirtás", "az erdő más földhasználattá (például szántóvá, településsé) alakítása."], ["közvetett hatás", "egy tevékenység láncreakción keresztül kialakuló, nem azonnal látható következménye."]]}, {"k": "quiz", "lesson": "1. lecke", "menu": "Kvíz", "q": [{"t": "Hány ppm-mel nőtt a CO₂-koncentráció 1959 és 2023 között (315,98 → 421,08 ppm)?", "o": ["95,10 ppm", "105,10 ppm", "115,10 ppm", "141,08 ppm"], "a": 1, "w": "421,08 − 315,98 = 105,10 ppm."}, {"t": "Hány százalékkal haladta meg a 2023-as érték az iparosodás előtti, kb. 280 ppm-es szintet?", "o": ["kb. 25%", "kb. 50%", "kb. 75%", "kb. 150%"], "a": 1, "w": "(421,08 − 280) / 280 ≈ 0,504, azaz kb. 50%."}]}, {"k": "think", "lesson": "1. lecke", "menu": "Gondolkodj kritikusan!", "title": "Rekordhideg tél, tehát nincs felmelegedés?", "prompt": "Egy hozzászólás szerint „a városunkban rekordhideg volt a tél, tehát nincs felmelegedés”. Mi a hiba az érvelésben? Milyen adatokra lenne szükség a megalapozott állításhoz?", "hints": ["Az időjárás (egy tél, egy hely) és az éghajlat (évtizedes átlag) nem ugyanaz.", "Egy helyi adatból nem következik a globális átlag változása.", "Hosszú, összehasonlítható adatsor kell: például az 1991–2020-as átlaghoz viszonyított évi értékek, vagy a globális átlaghőmérséklet idősora.", "A HungaroMet adatai szerint Magyarországon a tíz legmelegebb év mind 2007 után volt."], "src": [4]}, {"k": "lesson", "n": "2", "sec": "2. lecke", "title": "A technológiai fejlődéssel növekvő környezetátalakító képesség", "q": "Az ember hatása a környezetre nemcsak a létszámtól függ, hanem attól is, milyen eszközökkel és mennyi energiával dolgozik. Hogyan változtatta meg a technológia azt, hogy mekkora területet és anyagmennyiséget tud átalakítani?", "menu": "Lecke nyitása"}, {"k": "facts", "lesson": "2. lecke", "title": "Az energia és a gépek szerepe", "menu": "Tények", "items": [{"tag": "1. lépcső", "t": "izomerő (ember, háziállat), majd a víz és a szél energiája: vízikerék, szélmalom."}, {"tag": "2. lépcső", "t": "a 18. század végétől a gőzgép: a fosszilis energiahordozókra (szén, kőolaj, földgáz) épülő gépek."}, {"tag": "3. lépcső", "t": "belső égésű motor és villamos energia: egy beavatkozás sebessége és mérete nagyságrendekkel nőtt."}, {"big": "30 → 106 milliárd t/év", "t": "a világ éves anyagkitermelése 1970 és 2020 között (érc, fosszilis energiahordozó, építőanyag, biomassza)."}], "src": [5]}, {"k": "facts", "lesson": "2. lecke", "title": "Példa: a Tisza szabályozása", "menu": "Tisza", "items": [{"big": "1846. augusztus 27.", "t": "az első kapavágás Tiszadobnál, Széchenyi István kezdeményezésére; a terveket Vásárhelyi Pál készítette."}, {"big": "112 kanyarulat", "t": "átvágása után a Tisza hossza 1419 km-ről kb. 962–966 km-re rövidült (a források eltérő értéket adnak)."}, {"tag": "Előny", "cls": "pro", "t": "Az Alföld jelentős része árvízmentessé vált, és szántóként használhatóvá."}, {"tag": "Hátrány", "cls": "con", "t": "A folyó korábbi halbősége eltűnt, sok helyen belvíz és szikesedő talaj jelent meg."}], "note": "A technológia képessége (földmunka, töltésépítés) nagyobb lett annál, mint amennyit a kor ismeretei a hosszú távú következményekről megmondtak.", "src": [6, 7]}, {"k": "chart", "lesson": "2. lecke", "title": "Két mérhető változás", "menu": "Diagramok", "charts": [{"type": "vbar", "title": "A magyarországi Tisza hossza, km", "max": 1600, "unit": "km", "series": [{"t": "a"}], "groups": [{"l": "Szabályozás előtt", "vals": [1419]}, {"l": "Szabályozás után (kb.)", "vals": [966]}]}, {"type": "vbar", "title": "A világ éves anyagkitermelése, milliárd tonna", "max": 125, "unit": "milliárd tonna / év", "series": [{"t": "b"}], "groups": [{"l": "1970", "vals": [30]}, {"l": "2020", "vals": [106]}]}], "note": "A szabályozás utáni értéket a források 962 és 966 km között adják meg; a diagram a magasabb értéket mutatja.", "src": [5, 6, 7]}, {"k": "ikt", "lesson": "2. lecke", "title": "Légköri CO₂ adatok kiolvasása", "menu": "IKT-feladat", "prompt": "Töltsd le a NOAA Mauna Loa éves CO₂-átlagait tartalmazó szövegfájlt, és dolgozz az adatsorral.", "steps": ["Olvasd ki az 1990. és a 2020. évi értéket.", "Számítsd ki a változást ppm-ben és százalékban.", "Keress a HungaroMet adatportálján (odp.met.hu) egy hazai éghajlati adatsort, és írd le, mit mutat.", "Jelöld meg az adatforrást és az elérés napját."], "src": [1, 4]}, {"k": "concepts", "lesson": "2. lecke", "menu": "Fogalmak", "cards": [["fosszilis energiahordozó", "régen élt szervezetek maradványaiból keletkezett éghető anyag: szén, kőolaj, földgáz."], ["folyószabályozás", "a folyó medrének és vízjárásának tervszerű átalakítása (átvágás, töltésépítés)."], ["ármentesítés", "a terület védelme az árvíztől töltésekkel, tározókkal, a víz elvezetésével."], ["belvíz", "a talajban vagy a felszínen megrekedő, el nem vezetett víz."], ["szikesedés", "a talaj felső rétegében a sók feldúsulása, ami a növénytermesztést nehezíti."]]}, {"k": "quiz", "lesson": "2. lecke", "menu": "Kvíz", "q": [{"t": "Hányszorosára nőtt a világ anyagkitermelése 1970 és 2020 között (30 → 106 milliárd tonna)?", "o": ["kb. 1,5-szeresére", "kb. 2-szeresére", "kb. 3,5-szeresére", "kb. 10-szeresére"], "a": 2, "w": "106 / 30 ≈ 3,53."}, {"t": "Mennyit rövidült a Tisza hossza a szabályozás következtében (1419 km → 966 km)?", "o": ["kb. 453 km (kb. 32%)", "kb. 150 km (kb. 10%)", "kb. 960 km (kb. 68%)", "kb. 250 km (kb. 18%)"], "a": 0, "w": "1419 − 966 = 453 km; 453 / 1419 ≈ 0,319."}]}, {"k": "think", "lesson": "2. lecke", "menu": "Gondolkodj kritikusan!", "title": "962 vagy 966 kilométer?", "prompt": "A Tisza szabályozás utáni hosszát a források 962 és 966 km-nek adják meg. Milyen okai lehetnek az eltérésnek? Hogyan hivatkoznál az adatra egy dolgozatban?", "hints": ["Eltérő lehet a mérési év, a mért szakasz meghatározása (csak a magyarországi folyószakasz vagy más) és a forrás típusa.", "Hivatkozáskor mindkét értéket vagy az értéktartományt (kb. 962–966 km) kell megadni, a forrásokkal együtt.", "A forrásonként eltérő adatot nem szabad csendben egyik értékre „kerekíteni”."], "src": [6, 7]}, {"k": "lesson", "n": "3", "sec": "3. lecke", "title": "A környezeti károk helyreállítási lehetőségei", "q": "Ha egy folyót elszennyeznek, vagy egy területet súlyos kár ér, vissza lehet-e állítani az eredeti állapotot? Mennyi időbe telik, és mit lehet egyáltalán visszacsinálni?", "menu": "Lecke nyitása"}, {"k": "facts", "lesson": "3. lecke", "title": "A kárelhárítás szintjei és két hazai példa", "menu": "Tények", "items": [{"tag": "Megelőzés", "t": "megakadályozza a kár keletkezését."}, {"tag": "Helyreállítás", "t": "(restauráció) az eredeti állapot megközelítésére törekszik."}, {"tag": "Rehabilitáció", "t": "a terület használhatóságát állítja vissza, de nem feltétlenül ugyanolyan állapotba."}, {"tag": "Kompenzáció", "t": "máshol pótolja az elveszett értéket."}, {"h": "Kis-Balaton:", "big": "51 km² · 92 nap", "t": "a vízfelület és az átlagos tartózkodási idő. A tározóban a hordalék leülepedhet, a tápanyagot a növényzet megköti. Döntés az újjáépítésről: 1979."}, {"h": "Ajkai vörösiszap:", "big": "2010. október 4.", "t": "átszakadt az X. számú tározó gátja; tíz ember meghalt, kb. 1017 hektár mezőgazdasági terület szennyeződött."}], "src": [8, 9]}, {"k": "chart", "lesson": "3. lecke", "title": "Három példa időpontjai", "menu": "Idővonal", "chart": {"type": "timeline", "title": "Kattints egy pontra vagy kártyára a részletekért", "x0": 1970, "x1": 2070, "fc": 2026, "ev": [{"x": 1979, "y": "1979", "l": "Döntés a Kis-Balaton Vízvédelmi Rendszerről", "t": "a", "d": "A Zala szennyezőanyagainak felfogása, árvízvédelmi tározó és természetvédelem volt a cél."}, {"x": 1987, "y": "1987", "l": "Montreali Jegyzőkönyv", "t": "a", "d": "Az ózonréteget lebontó anyagok (például freonok) kibocsátását szabályozta."}, {"x": 2010, "y": "2010", "l": "Ajkai vörösiszap-katasztrófa", "t": "c", "d": "Október 4-én átszakadt az ajkai timföldgyár X. számú tározójának gátja; a kiömlő erősen lúgos iszap elöntötte Kolontár, Devecser és Somlóvásárhely területét."}, {"x": 2040, "y": "kb. 2040", "l": "Ózon: 1980-as szint (majdnem globálisan)", "t": "b", "d": "Előrejelzés: az ózonréteg majdnem mindenhol visszaállhat az 1980-as szintre."}, {"x": 2045, "y": "kb. 2045", "l": "Ózon: 1980-as szint (Északi-sark)", "t": "b", "d": "Előrejelzés az Északi-sarkra."}, {"x": 2066, "y": "kb. 2066", "l": "Ózon: 1980-as szint (Antarktisz)", "t": "b", "d": "Előrejelzés az Antarktisz fölé. A szaggatott vonal az előrejelzett szakaszt jelzi."}]}, "note": "<b>A megelőzés ideje:</b> a döntés 1987-ben született, a teljes visszaállást mégis csak kb. 2040 és 2066 közé teszik. A WMO/UNEP szerint a szabályozott anyagok kb. 99%-át kivonták a használatból.", "src": [8, 9, 10]}, {"k": "concepts", "lesson": "3. lecke", "menu": "Fogalmak", "cards": [["helyreállítás (restauráció)", "az eredeti állapot megközelítésére irányuló beavatkozás."], ["rehabilitáció", "a terület használhatóságának visszaállítása az eredetitől eltérő állapotban is."], ["tározó", "víz összegyűjtésére és visszatartására épített vagy kialakított terület."], ["tartózkodási idő", "az az átlagos idő, amíg a víz egy tározóban marad."], ["vörösiszap", "a timföldgyártás erősen lúgos melléktermékeként keletkező iszap."]]}, {"k": "quiz", "lesson": "3. lecke", "menu": "Kvíz", "q": [{"t": "Hány év telik el a Montreali Jegyzőkönyv (1987) és az ózonréteg előrejelzett antarktiszi helyreállása (kb. 2066) között?", "o": ["29 év", "49 év", "79 év", "99 év"], "a": 2, "w": "2066 − 1987 = 79 év. Ez mutatja, mennyi időt vesz igénybe a helyreállás."}, {"t": "Melyik szint állítja vissza a terület használhatóságát, de nem feltétlenül az eredeti állapotot?", "o": ["megelőzés", "restauráció", "rehabilitáció", "kompenzáció"], "a": 2, "w": "A rehabilitáció a használhatóságot állítja vissza; a restauráció az eredeti állapotot közelíti meg."}]}, {"k": "think", "lesson": "3. lecke", "menu": "Gondolkodj kritikusan!", "title": "Mennyi vörösiszap ömlött ki?", "prompt": "A kiömlött vörösiszap mennyiségére a források kb. 1 és 1,7 millió m³ közötti értéket adnak meg. Mi okozhatja az eltérést? Melyik forrást tartanád megbízhatóbbnak, és miért?", "hints": ["Eltérhet, mit mér a szám: az iszap, vagy az iszap-lúg keverék térfogatát.", "Eltérhet a becslés ideje és módszere.", "Megbízhatóbb a hivatalos vagy szakmailag lektorált forrás, amely megadja a módszert; az eltérést értéktartományként kell jelezni."], "src": [9]}, {"k": "lesson", "n": "4", "sec": "4. lecke", "title": "A letelepedéssel járó környezeti hatások", "q": "Az első földművesek falvai és a mai milliós városok ugyanazt a kérdést vetik fel: mit változtat meg a környezetben az, hogy egy közösség egy helyen telepszik le, és hogyan változott ez a hatás az idők során?", "menu": "Lecke nyitása"}, {"k": "facts", "lesson": "4. lecke", "title": "A letelepedés kezdetei: a neolitikum", "menu": "Tények", "items": [{"tag": "Honnan?", "t": "A földművelés és az állattartás Nyugat-Anatóliából terjedt el Délkelet-Európába, majd a Kárpát-medencébe."}, {"big": "Körös-kultúra", "t": "a Kárpát-medence legkorábbi földműves közössége, a Magyar Nemzeti Múzeum szerint Kr. e. 6. évezred elejétől a közepéig."}, {"tag": "Állatok", "t": "Kezdetben kecske és juh, az Alföld nedvesebb, hűvösebb éghajlatán a Körös-kultúra végére a szarvasmarha és a sertés lett a fő haszonállat."}, {"tag": "Következmény", "t": "A termelő életmód helyhez köti az embert: tartósabb települések jöttek létre, a környezetükben a növényzet, a talaj és a vízháztartás is megváltozott."}], "src": [11]}, {"k": "chart", "lesson": "4. lecke", "title": "A világ lakosságának megoszlása települési típus szerint", "menu": "Urbanizáció", "chart": {"type": "stack", "title": "A Föld lakosságának aránya, %", "series": [{"n": "Városok", "t": "a"}, {"n": "Kisebb városok, települések", "t": "b"}, {"n": "Vidéki területek", "t": "c"}], "rows": [{"l": "2025", "parts": [45, 36, 19]}, {"l": "1950", "parts": [20, 40, 40], "pre": true}]}, "note": "<b>Hány ember él városban?</b> 45% vagy 58% – attól függ, honnan nézzük. Az ENSZ 2025-ös, egységes városiasodási fok módszere szerint 45%, az országok saját városdefiníciói alapján 58%. A „város” fogalmát más-más országban másként határozzák meg.", "src": [12]}, {"k": "facts", "lesson": "4. lecke", "title": "Magyarország és a városi környezet hatásai", "menu": "Hazai adatok", "items": [{"big": "9 603 634 fő", "t": "Magyarország lakossága a 2022-es népszámlálás szerint; Budapesté 1,682 millió. A lakosság kb. 70%-a él városban."}, {"tag": "Szuburbanizáció", "t": "A nagyvárosok népessége csökken, környékük viszont gyarapszik."}, {"big": "3–7 °C", "t": "Budapesten a Pest oldali belvárosban a felszín hőmérséklete ennyivel lehet magasabb a környező területeknél (városi hősziget). Ez felszíni, nem levegő-hőmérséklet."}, {"big": "3581 km²", "t": "ennyivel nőtt a beépített terület 2012 és 2018 között 662 uniós és brit funkcionális városi térségben (EEA); a lezárt talajfelület 1467 km²-rel."}], "note": "A városok a gazdaság, az oktatás és a szolgáltatások központjai is; a kérdés a hasznok és a környezeti költségek mérlegelése.", "src": [13, 14, 15, 16]}, {"k": "concepts", "lesson": "4. lecke", "menu": "Fogalmak", "cards": [["neolitikum (újkőkorszak)", "a földművelés és állattartás megjelenésével járó őskori korszak."], ["urbanizáció", "a városi népesség és a városi életmód arányának növekedése."], ["szuburbanizáció", "a lakosság kiköltözése a nagyvárosból a környező településekre."], ["talajlezárás", "a talaj felszínének burkolattal (aszfalt, beton) való lefedése."], ["városi hősziget", "a beépített terület tartósan melegebb hőmérséklete a környezetéhez képest."]]}, {"k": "quiz", "lesson": "4. lecke", "menu": "Kvíz", "q": [{"t": "Hány százalékponttal nőtt a városok aránya 1950 és 2025 között (20% → 45%)?", "o": ["25 százalékpont", "45 százalékpont", "kb. 55 százalékpont", "125 százalékpont"], "a": 0, "w": "45 − 20 = 25 százalékpont. (Relatíve ez 125%-os növekedés, de a százalékpont a két arány különbsége.)"}, {"t": "A lakosság hány százaléka él Budapesten (1,682 millió a 9 603 634 főből)?", "o": ["kb. 7,5%", "kb. 17,5%", "kb. 27,5%", "kb. 53%"], "a": 1, "w": "1,682 / 9,603634 ≈ 0,175, azaz kb. 17,5%."}]}, {"k": "think", "lesson": "4. lecke", "menu": "Gondolkodj kritikusan!", "title": "Felszíni hőmérséklet és levegő hőmérséklete", "prompt": "A Budapestre közölt 3–7 °C a felszíni hőmérséklet különbsége. Miért nem azonos ez a levegő hőmérsékletének különbségével, és miért fontos ezt a közlés során jelezni?", "hints": ["A felszín (aszfalt, tető) napsütésben jobban felmelegszik, mint a fölötte lévő levegő.", "A két adatot más módszerrel mérik (például műholdas termikus kép és mérőállomás).", "Ha a közlés nem jelzi a különbséget, az olvasó hibásan a levegő hőmérsékletére következtet."], "src": [15]}, {"k": "sum", "sec": "Összefoglalás", "title": "Összefoglalás", "menu": "Összefoglalás", "items": ["Az emberi hatás közvetlen és közvetett is lehet, és mérhető: a légköri CO₂ 1959 és 2023 között 315,98 ppm-ről 421,08 ppm-re nőtt.", "A technológia és az energia fejlődésével nőtt az átalakítható terület és anyagmennyiség; a Tisza szabályozása előnyökkel és ökológiai hátrányokkal is járt.", "A kárelhárítás szintjei: megelőzés, helyreállítás, rehabilitáció, kompenzáció. A megelőzés időben is előnyösebb.", "A letelepedés a neolitikumban kezdődött; ma a világ lakosságának 45%-a él városban, Magyarországon kb. 70%."]}, {"k": "sources", "title": "Források", "menu": "Források", "list": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]}], "sections": [{"label": "1. lecke", "from": 0, "to": 7}, {"label": "2. lecke", "from": 8, "to": 15}, {"label": "3. lecke", "from": 16, "to": 21}, {"label": "4. lecke", "from": 22, "to": 28}, {"label": "Összefoglalás", "from": 29, "to": 30}]};
+const SOURCES = ["NOAA Global Monitoring Laboratory: Mauna Loa éves CO₂-átlagok, https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_annmean_mlo.txt; 2024: NOAA Climate.gov, https://www.climate.gov/news-features/feed/during-year-extremes-carbon-dioxide-levels-surge-faster-ever", "IPCC AR6 WGI, Summary for Policymakers, https://ipcc.ch/report/ar6/wg1/chapter/summary-for-policymakers", "FAO: Global Forest Resources Assessment 2025 (2025. okt.), https://www.fao.org/newsroom/detail/global-deforestation-slows--but-forests-remain-under-pressure--fao-report-shows/en", "HungaroMet: Megfigyelt hazai éghajlati változások (2026), https://eghajlat.met.hu/wp-content/uploads/2026/05/Megfigyelt-hazai-eghajlati-valtozasok_FINAL_TELJES.pdf", "UNEP International Resource Panel: Global Resources Outlook 2024, https://resourcepanel.org/news-events/global-resources-outlook-2024-press-release", "Magyar Környezetvédelmi és Vízügyi Múzeum – Duna Múzeum: Szerződvény a Tiszavölgy szabályozásáról (DM_OIGY_21.22), https://ke.hu.museum-digital.org/pdf/object/611988.pdf?lang=hu", "Babinszki E.: A Tisza szabályozása. Élet és Tudomány, 2017/29.", "Látrányi-Lovász Zs.: A Kis-Balaton Vízvédelmi Rendszer (előadás), HUN-REN BLKI, https://www.blki.hun-ren.hu/sites/default/files/Latranyi_Lovasz_Zsofia_eloadasa.pdf", "Ambrusz J. – Muhoray Á.: A vörösiszap-katasztrófa. Bolyai Szemle, 2015/4, https://real.mtak.hu/193228/1/2015_IV_06_ambrusz_muhoray.pdf", "WMO/UNEP: Scientific Assessment of Ozone Depletion 2022, https://www.unep.org/resources/publication/scientific-assessment-ozone-layer-depletion-2022", "Magyar Nemzeti Múzeum: Kora neolitikus bikaidolok rejtélye, https://mnm.hu/hu/cikk/kora-neolitikus-bikaidolok-rejtelye", "UN DESA: World Urbanization Prospects 2025 (2025. nov.), https://www.un.org/sustainabledevelopment/blog/2025/11/press-release-wup2025/", "KSH: Népszámlálás 2022, végleges adatok, https://nepszamlalas2022.ksh.hu/eredmenyek/vegleges-adatok/kiadvany/assets/nepszamlalas2022-vegleges-adatok.pdf", "Eurydice (Európai Bizottság): Magyarország – népesség, demográfiai helyzet, https://eurydice.eacea.ec.europa.eu/hu/eurypedia/hungary/nepesseg-demografiai-helyzet-nyelvek-vallasok", "Budapest Környezeti Állapotértékelése 2020 – Klíma, https://archiv.budapest.hu/Documents/BKAE/2019-2020/15_BK%C3%81%C3%89-2020_I-5-Kl%C3%ADma.pdf", "EEA Report 17/2021: Land take and land degradation in functional urban areas, https://www.eea.europa.eu/en/analysis/publications/land-take-and-land-degradation", "Global Footprint Network: How the Date of Earth Overshoot Day 2026 Was Calculated, https://overshoot.footprintnetwork.org/2026-calculation/", "Global Footprint Network: GFN Country Overshoot Day 2026, https://overshoot.footprintnetwork.org/content/uploads/2025/12/GFN-Country-Overshoot-Day-2026.pdf", "Stockholm Resilience Centre / PIK: Planetary Health Check 2025 (2025. szept. 24.), https://www.stockholmresilience.org/news--events/general-news/2025-09-24-seven-of-nine-planetary-boundaries-now-breached", "UNESCO World Heritage Centre: Tokaj Wine Region Historic Cultural Landscape, https://whc.unesco.org/en/list/1063", "Magyar Környezetvédelmi és Vízügyi Múzeum – Duna Múzeum: A Franz I gőzhajó menetrendje (DM_SZI_28.17.230.1), https://ke.hu.museum-digital.org/pdf/object/625903.pdf?lang=hu", "Tömegközlekedési Egyesület (TTE): A budapesti tömegközlekedés története, https://tte.hu/a-budapesti-toemegkoezlekedes-toertenete", "MÁV Csoport: Bemutatkozott a 180 éves magyar vasút jubileumi Vectron mozdonya, https://www.mavcsoport.hu/node/196422", "Európai Környezetvédelmi Ügynökség (EEA): Greenhouse gas emissions from transport in Europe, https://www.eea.europa.eu/en/analysis/indicators/greenhouse-gas-emissions-from-transport", "UN DESA: World Population Prospects 2024 – Key Messages és Summary of Results, https://population.un.org/WPP/Publications/Files/WPP2024_Key-Messages.pdf; https://population.un.org/wpp/assets/Files/WPP2024_Summary-of-Results.pdf", "United Nations: The Global Population Will Soon Reach 8 Billion – Then What? (UN Chronicle), https://www.un.org/en/un-chronicle/global-population-will-soon-reach-8-billion-then-what", "KSH: Népmozgalom, 2025. december (gyorstájékoztató), https://www.ksh.hu/gyorstajekoztatok/nep/nep2512.html", "KSH: Fiatalok és idősek, https://www.ksh.hu/fiatalok-es-idosek", "KSH STADAT 22.1.2.6: Születéskor várható átlagos élettartam, https://www.ksh.hu/stadat_files/nep/hu/nep0039.html", "KSH: Népszámlálás 2022, https://www.ksh.hu/nepszamlalasok", "KSH STADAT 22.1.1.3: Népesség korév és nem szerint, január 1., https://www.ksh.hu/stadat_files/nep/hu/nep0003.html", "Budapest Főváros Önkormányzata: BKÁÉ 2023, II-5 Vizek (a Vigadó téri mérce adatai), https://archiv.budapest.hu/Documents/BKAE/2023/25_BK%C3%81%C3%89-2023_II-5-Vizek.pdf", "Economx (sajtóforrás, 2026. 08. 04.): a Duna budapesti rekordalacsony vízállásáról, https://www.economx.hu/belfold/2026/08/04/duna-vizallas-budapest-tortenelmi-rekord-kisviz/", "UNDRR–CRED: The human cost of disasters 2000–2019 (2020), https://www.undrr.org/publication/human-cost-disasters-2000-2019 ; összefoglaló: https://indiaenvironmentportal.org.in/reports-and-documents/the-human-cost-of-disasters-an-overview-of-the-last-20-years-2000-2019", "Világgazdaság (sajtóforrás, 2026. 07.): rekordmély Duna és az ivóvíz, https://www.vg.hu/vilaggazdasag-magyar-gazdasag/2026/07/ivoviz-rekordmelyen-a-duna-veszelyben-vizkeszletek", "EEA: Municipal waste management country profile – Hungary (2025), https://www.eea.europa.eu/en/topics/in-depth/waste-and-recycling/municipal-and-packaging-waste-management-country-profiles-2025/hu-municipal-waste-factsheet.pdf/@@download/file", "Eurostat: Municipal waste down by second consecutive year (2025. 02. 13.), https://ec.europa.eu/eurostat/de/web/products-eurostat-news/w/ddn-20250213-1", "EEA: Europe's environment 2025 – Hungary, https://www.eea.europa.eu/en/europe-environment-2025/countries/hungary", "UNITAR–ITU: Global E-waste Monitor 2024, https://www.unitar.org/about/news-stories/press/global-e-waste-monitor-2024-electronic-waste-rising-five-times-faster-documented-e-waste-recycling", "UN World Commission on Environment and Development: Our Common Future (1987), https://sdgs.un.org/sites/default/files/documents/5987our-common-future.pdf", "ENSZ: Transforming our world: the 2030 Agenda for Sustainable Development, https://sdgs.un.org/2030agenda ; UN News (2015. 09.): https://news.un.org/en/story/2015/09/509732-un-adopts-new-global-goals-charting-sustainable-development-people-and-planet", "UN DESA Statistics Division: The Sustainable Development Goals Report 2025 – Key Messages, https://unstats.un.org/sdgs/files/report/2025/SDGs_Report_Key_Messages_2025.pdf", "EEA: Europe's environment 2025 – Hungary: Renewable energy sources, https://www.eea.europa.eu/en/europe-environment-2025/countries/hungary/renewable-energy-sources", "KSH STADAT 6.1.1.12: Share of electricity produced from renewable energy sources (forrás: MEKH), https://www.ksh.gov.hu/stadat_files/ene/en/ene0012.html"];
+const CO2 = null;
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fmt = (n, d = 0) => Number(n).toLocaleString("hu-HU", { minimumFractionDigits: d, maximumFractionDigits: d });
+const slides = DECK.slides;
+const state = { i: 0, quiz: {}, opened: {}, tl: {}, rev: {}, chk: {}, step: {}, anim: true };
+const ICON = { 1: "🌲", 2: "⛏️", 3: "🌿", 4: "🏙️", 5: "👣", 6: "🚂", 7: "🌍", 8: "📊", 9: "🌊", 10: "♻️", 11: "⚖️", 12: "🎯" };
+const lessonNo = (s) => parseInt(s.n || s.lesson || "0", 10) || 0;
+const colorOf = (n) => (n ? ((n - 1) % 4) + 1 : 1);
+
+function srcChips(list) {
+  if (!list || !list.length) return "";
+  return '<div class="src"><span>Forrás:</span>' + list.map((n) => {
+    const full = SOURCES[n - 1] || ""; const short = full.split(", http")[0].split("; ")[0];
+    return '<span class="chip" title="' + esc(short) + '">[' + n + ']</span>';
+  }).join("") + "</div>";
+}
+const tone = (t) => "t-" + (t || "a");
+const noteBox = (n) => (n ? '<div class="note rv"><div>' + n + "</div></div>" : "");
+
+/* ---------- diagramok ---------- */
+function hbar(c) {
+  const min = c.min ?? 0, max = c.max;
+  const pct = (v) => Math.max(0, Math.min(100, ((v - min) / (max - min)) * 100));
+  const rows = c.items.map((it, k) => {
+    const ref = c.ref != null ? '<div class="ref" style="left:' + pct(c.ref) + '%"></div>' : "";
+    const label = it.vt || (fmt(it.v, c.d || 0) + (c.unit ? " " + c.unit : ""));
+    return '<div class="row" tabindex="0" data-tip="' + esc(it.tip || (it.l + ": " + label)) + '">' +
+      '<div class="lab">' + esc(it.l) + '</div><div class="track"><div class="bar ' + tone(it.t) + '" style="width:' + pct(it.v) + '%"></div>' + ref + '</div>' +
+      '<div class="val">' + esc(label) + '</div></div>';
+  }).join("");
+  const rn = c.ref != null ? '<div class="refnote"><i></i>' + esc(c.refLabel) + '</div>' : "";
+  const mn = min > 0 ? '<div class="refnote">A tengely ' + fmt(min, c.d || 0) + (c.unit ? " " + c.unit : "") + "-nál kezdődik.</div>" : "";
+  return '<div class="chart">' + (c.title ? "<h3>" + esc(c.title) + "</h3>" : "") + '<div class="hb">' + rows + "</div>" + rn + mn + "</div>";
+}
+function vbar(c) {
+  const max = c.max;
+  const groups = c.groups.map((g) => {
+    const cols = g.vals.map((v, s) => {
+      const ser = c.series[s]; const label = fmt(v, c.d || 0);
+      return '<div class="col" tabindex="0" data-tip="' + esc(g.l + (ser.n ? " – " + ser.n : "") + ": " + label + (c.unit ? " " + c.unit : "")) + '">' +
+        '<div class="v">' + label + '</div><div class="b ' + tone(ser.t) + '" style="height:' + (v / max * 100) + '%"></div></div>';
+    }).join("");
+    return '<div class="grp"><div class="bars">' + cols + "</div></div>";
+  }).join("");
+  const labs = c.groups.map((g) => "<span>" + esc(g.l) + "</span>").join("");
+  const leg = c.series.length > 1 || c.series[0].n ? '<div class="legend">' + c.series.map((s) => '<span><i class="' + tone(s.t) + '"></i>' + esc(s.n || "") + "</span>").join("") + "</div>" : "";
+  return '<div class="chart">' + (c.title ? "<h3>" + esc(c.title) + "</h3>" : "") + '<div class="vb">' + groups + '</div><div class="vlabels">' + labs + "</div>" + leg +
+    (c.unit ? '<div class="refnote">' + esc(c.unit) + "</div>" : "") + "</div>";
+}
+function stack(c) {
+  const rows = c.rows.map((r) => '<div class="srow"><b>' + esc(r.l) + '</b><div class="strack">' + r.parts.map((p, k) =>
+    '<div class="seg ' + tone(c.series[k].t) + '" style="flex:' + p + ' 1 0" tabindex="0" data-tip="' + esc(r.l + " – " + c.series[k].n + ": " + (r.pre && k === 2 ? "kb. " : "") + p + "%") + '">' + (r.pre && k === 2 ? "kb. " : "") + p + "%</div>").join("") + "</div></div>").join("");
+  const leg = '<div class="legend">' + c.series.map((s) => '<span><i class="' + tone(s.t) + '"></i>' + esc(s.n) + "</span>").join("") + "</div>";
+  return '<div class="chart">' + (c.title ? "<h3>" + esc(c.title) + "</h3>" : "") + '<div class="stack">' + rows + "</div>" + leg + "</div>";
+}
+function lineChart(c, uid) {
+  const W = 640, H = 300, L = 46, R = 16, T = 14, B = 34;
+  const xs = c.x, ys = c.y; const x0 = xs[0], x1 = xs[xs.length - 1];
+  const px = (x) => L + (x - x0) / (x1 - x0) * (W - L - R);
+  const py = (y) => T + (1 - (y - c.min) / (c.max - c.min)) * (H - T - B);
+  let g = "";
+  for (let v = c.min; v <= c.max; v += c.step) g += '<line class="gl" x1="' + L + '" x2="' + (W - R) + '" y1="' + py(v) + '" y2="' + py(v) + '"/><text x="' + (L - 6) + '" y="' + (py(v) + 4) + '" text-anchor="end">' + v + "</text>";
+  for (let x = Math.ceil(x0 / 10) * 10; x <= x1; x += 10) g += '<text x="' + px(x) + '" y="' + (H - 12) + '" text-anchor="middle">' + x + "</text>";
+  const d = ys.map((y, k) => (k ? "L" : "M") + px(xs[k]).toFixed(1) + " " + py(y).toFixed(1)).join(" ");
+  const ref = c.ref ? '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + py(c.ref) + '" y2="' + py(c.ref) + '" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="5 4" opacity=".7"/><text x="' + (L + 6) + '" y="' + (py(c.ref) - 6) + '">' + esc(c.refLabel) + "</text>" : "";
+  return '<div class="chart line"><h3>' + esc(c.title) + '</h3><svg viewBox="0 0 ' + W + " " + H + '" id="lc' + uid + '" tabindex="0" role="img" aria-label="' + esc(c.title) + '">' +
+    g + ref + '<path class="ln" d="' + d + '" fill="none" stroke="var(--s1)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>' +
+    '<line id="lcv' + uid + '" y1="' + T + '" y2="' + (H - B) + '" stroke="var(--ink)" stroke-width="1" opacity="0"/><circle id="lcd' + uid + '" r="6" fill="var(--s1)" stroke="var(--surface)" stroke-width="2" opacity="0"/></svg>' +
+    '<div class="readout" id="lcr' + uid + '">' + esc(c.hint) + "</div></div>";
+}
+function bindLine(c, uid) {
+  const svg = $("#lc" + uid); if (!svg) return;
+  const W = 640, L = 46, R = 16, H = 300, T = 14, B = 34, xs = c.x, ys = c.y;
+  const px = (x) => L + (x - xs[0]) / (xs[xs.length - 1] - xs[0]) * (W - L - R);
+  const py = (y) => T + (1 - (y - c.min) / (c.max - c.min)) * (H - T - B);
+  const vl = $("#lcv" + uid), dot = $("#lcd" + uid), ro = $("#lcr" + uid);
+  let cur = -1;
+  const show = (k) => {
+    k = Math.max(0, Math.min(xs.length - 1, k)); cur = k;
+    vl.setAttribute("x1", px(xs[k])); vl.setAttribute("x2", px(xs[k])); vl.setAttribute("opacity", ".5");
+    dot.setAttribute("cx", px(xs[k])); dot.setAttribute("cy", py(ys[k])); dot.setAttribute("opacity", "1");
+    const diff = c.ref ? " – " + fmt(ys[k] - c.ref, 1) + " ppm az iparosodás előtti szint felett" : "";
+    ro.innerHTML = "<b>" + xs[k] + "</b>: <b>" + fmt(ys[k], 2) + " ppm</b>" + diff;
+  };
+  const at = (e) => { const r = svg.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width * W; return Math.round((x - L) / (W - L - R) * (xs.length - 1)); };
+  svg.addEventListener("pointermove", (e) => show(at(e)));
+  svg.addEventListener("pointerdown", (e) => show(at(e)));
+  svg.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") { show((cur < 0 ? xs.length : cur) - 1); e.stopPropagation(); e.preventDefault(); }
+    if (e.key === "ArrowRight") { show(cur + 1); e.stopPropagation(); e.preventDefault(); }
+  });
+  svg.addEventListener("focus", () => { if (cur < 0) show(xs.length - 1); });
+}
+function timeline(c, uid) {
+  const x0 = c.x0, x1 = c.x1; const p = (x) => ((x - x0) / (x1 - x0) * 100);
+  const sel = state.tl[uid] ?? 0;
+  const dots = c.ev.map((e, k) => '<button class="dot ' + tone(e.t) + (k === sel ? " on" : "") + '" style="left:' + p(e.x) + '%" data-k="' + k + '" aria-label="' + esc(e.y + ": " + e.l) + '"></button>').join("");
+  let lastP = -99; const yrs = c.ev.map((e) => { const pp = p(e.x); if (pp - lastP < 7) return ""; lastP = pp; return '<span class="yr" style="left:' + p(e.x) + '%">' + esc(e.y) + "</span>"; }).join("");
+  const fc = c.fc ? '<div class="fc" style="left:' + p(c.fc) + '%;right:0"></div>' : "";
+  const evs = c.ev.map((e, k) => '<button data-k="' + k + '" class="' + (k === sel ? "on" : "") + '"><b>' + esc(e.y) + "</b><span>" + esc(e.l) + "</span></button>").join("");
+  return '<div class="chart tl" data-uid="' + uid + '"><h3>' + esc(c.title) + '</h3><div class="axis"><div class="ln"></div>' + fc + dots + yrs + '</div><div class="ev">' + evs + '</div><div class="det">' + esc(c.ev[sel].d || "") + "</div></div>";
+}
+function renderChart(c, uid) {
+  if (c.type === "hbar") return hbar(c);
+  if (c.type === "vbar") return vbar(c);
+  if (c.type === "stack") return stack(c);
+  if (c.type === "line") return lineChart(c, uid);
+  if (c.type === "timeline") return timeline(c, uid);
+  return "";
+}
+
+/* ---------- diatípusok ---------- */
+function renderSlide(s, idx) {
+  const ey = s.lesson ? '<div class="eyebrow">' + esc(s.lesson) + "</div>" : "";
+  if (s.k === "title") {
+    const tiles = s.lessons.map((l) => '<button data-go="' + l.at + '" style="--a:var(--c' + colorOf(+l.n) + ");--b:var(--c" + colorOf(+l.n) + 'b)"><em>' + (ICON[l.n] || "") + "</em><b>" + esc(l.n) + ". lecke</b><span>" + esc(l.t) + "</span></button>").join("");
+    return '<div class="in s-title"><div class="kicker">Komplex természettudomány · 9. évfolyam · technikum</div><div class="vol">' + esc(s.vol) + "</div><h1>" + esc(s.title) + '</h1><p class="lead rv">' + esc(s.sub) + '</p><button class="start" data-go="1">Kezdjük ▶</button><div class="lessonlist rv">' + tiles + '</div><div class="tiphint">Kattints a dián, vagy használd a → billentyűt: minden lépés egy újabb részt mutat meg. Válassz leckét, vagy kezdd az elejéről.</div></div>';
+  }
+  if (s.k === "lesson") {
+    return '<div class="in s-lesson"><div class="kicker">Lecke</div><div class="numrow"><div class="num">' + esc(s.n) + '</div><div class="ico">' + (ICON[s.n] || "") + "</div></div><h1>" + esc(s.title) + '</h1><div class="qbub rv"><span>' + (s.n === "12" ? "Bevezető" : "Gondolkodj el!") + "</span>" + esc(s.q) + "</div></div>";
+  }
+  if (s.k === "facts") {
+    const cards = s.items.map((it, k) => '<div class="card rv" style="--i:' + k + '">' + (it.tag ? '<span class="tag ' + (it.cls || "") + '">' + esc(it.tag) + "</span>" : "") + (it.big ? '<div class="big">' + esc(it.big) + "</div>" : "") + "<p>" + (it.h ? "<strong>" + esc(it.h) + "</strong> " : "") + esc(it.t) + "</p></div>").join("");
+    return '<div class="in">' + ey + "<h2>" + esc(s.title) + '</h2><div class="cards">' + cards + "</div>" + noteBox(s.note) + srcChips(s.src) + "</div>";
+  }
+  if (s.k === "chart") {
+    const cs = (s.charts || [s.chart]).map((c, k) => renderChart(c, idx + "_" + k).replace('class="chart', 'class="rv chart')).join("");
+    return '<div class="in">' + ey + "<h2>" + esc(s.title) + '</h2><div class="charts">' + cs + "</div>" + noteBox(s.note) + srcChips(s.src) + "</div>";
+  }
+  if (s.k === "concepts") {
+    const op = state.opened[idx] || {};
+    const cards = s.cards.map((c, k) => '<button class="rv fc3' + (op[k] ? " flip" : "") + '" data-k="' + k + '" aria-pressed="' + (op[k] ? "true" : "false") + '"><div class="fr"><b>' + esc(c[0]) + "</b><small>Kattints, és fordítsd meg a kártyát</small></div><div class=\"bk\"><b>" + esc(c[0]) + "</b>" + esc(c[1]) + "</div></button>").join("");
+    return '<div class="in">' + ey + '<h2>Fontos fogalmak</h2><div class="cc">' + cards + '</div><button class="primary" id="showall">Mind megfordítása</button></div>';
+  }
+  if (s.k === "quiz") {
+    const qs = s.q.map((q, qi) => {
+      const key = idx + "_" + qi; const ch = state.quiz[key];
+      const opts = q.o.map((o, oi) => {
+        let cls = ""; if (ch != null) { if (oi === q.a) cls = "ok"; else if (oi === ch) cls = "no"; }
+        return '<button class="' + cls + '" data-q="' + qi + '" data-o="' + oi + '"' + (ch != null ? " disabled" : "") + '><span class="l">' + "ABCD"[oi] + "</span><span>" + esc(o) + "</span></button>";
+      }).join("");
+      const why = ch != null ? '<div class="why"><b>' + (ch === q.a ? "🎉 Helyes! " : "Nem egészen. ") + "</b>" + esc(q.w) + "</div>" : "";
+      return '<div class="rv qz"><div class="qt"><span class="qn">' + (qi + 1) + "</span><span>" + esc(q.t) + '</span></div><div class="opts">' + opts + "</div>" + why + "</div>";
+    }).join("");
+    return '<div class="in">' + ey + "<h2>Teszteld magad!</h2>" + qs + "</div>";
+  }
+  if (s.k === "think") {
+    const rv = state.rev[idx];
+    return '<div class="in think">' + ey + '<span class="badge">🧠 Gondolkodj kritikusan!</span><h2>' + esc(s.title) + '</h2><div class="bubble rv">' + esc(s.prompt) + "</div>" +
+      '<ol class="hints">' + s.hints.map((h, k) => '<li class="rv" style="--i:' + k + '"><span>' + esc(h) + "</span></li>").join("") + "</ol>" + srcChips(s.src) + "</div>";
+  }
+  if (s.k === "ikt") {
+    const done = s.steps.filter((_, k) => state.chk[idx + "_" + k]).length;
+    return '<div class="in think">' + ey + '<span class="badge ikt">' + (s.eb ? "✍️ " + esc(s.eb) : "💻 IKT-feladat") + "</span><h2>" + esc(s.title) + '</h2><div class="bubble rv">' + esc(s.prompt) + '</div><ul class="hints steps">' + s.steps.map((h, k) => '<li data-k="' + k + '" class="rv ' + (state.chk[idx + "_" + k] ? "done" : "") + '" style="--i:' + k + '"><span class="bx">✓</span><span>' + esc(h) + "</span></li>").join("") + '</ul><div class="prog2 rv" id="chkc">' + done + " / " + s.steps.length + " lépés kész – kattints a lépésekre a pipáláshoz.</div>" + srcChips(s.src) + "</div>";
+  }
+  if (s.k === "sum") {
+    const r = quizStats(); const frac = r.tot ? r.ok / r.tot : 0; const C = 2 * Math.PI * 52;
+    const medal = !r.answered ? "🧭 Kezdő felfedező" : frac >= 0.85 ? "🏆 Környezetvédelmi szakértő" : frac >= 0.6 ? "🌿 Haladó kutató" : "🌱 Kezdő kutató";
+    const msg = r.answered < r.tot ? (r.tot - r.answered) + " kérdés még megválaszolatlan: lapozz vissza a kvízekhez." : frac >= 0.85 ? "Kiváló munka!" : frac >= 0.6 ? "Jó eredmény, még néhány fogalmat érdemes átnézni." : "Nézd át újra a leckéket, és próbáld meg még egyszer.";
+    return '<div class="in">' + ey + "<h2>" + esc(s.title) + '</h2><div class="sumwrap"><ul class="sum">' + s.items.map((t) => '<li class="rv"><span>' + esc(t) + "</span></li>").join("") + '</ul><div class="result rv"><div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--line)" stroke-width="10"/><circle cx="60" cy="60" r="52" fill="none" stroke="var(--acc)" stroke-width="10" stroke-linecap="round" stroke-dasharray="' + (C * frac).toFixed(1) + " " + C.toFixed(1) + '"/></svg><div class="t">' + r.ok + " / " + r.tot + '</div></div><div class="medal">' + medal + "</div><small>" + msg + '</small><button class="btn" id="reset">Kvíz újraindítása</button></div></div></div>';
+  }
+  if (s.k === "sources") {
+    return '<div class="in"><h2>Források</h2><ul class="srclist">' + s.list.map((n) => "<li><b>[" + n + "]</b> " + esc(SOURCES[n - 1]) + "</li>").join("") + '</ul><p class="src">A hivatkozott oldalak elérése: 2026. 11. 01. A számozás megegyezik az egyesített tankönyv forrásjegyzékével.</p></div>';
+  }
+  return "";
+}
+function quizStats() {
+  let tot = 0, ok = 0, answered = 0;
+  slides.forEach((sl, i) => { if (sl.k === "quiz") sl.q.forEach((q, qi) => { tot++; const c = state.quiz[i + "_" + qi]; if (c != null) { answered++; if (c === q.a) ok++; } }); });
+  return { tot, ok, answered };
+}
+function burst(x, y) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cols = ["#2f5bea", "#17a05f", "#eb6834", "#eda100", "#c026a8"];
+  for (let k = 0; k < 22; k++) {
+    const d = document.createElement("div"); d.className = "fx"; d.style.background = cols[k % cols.length]; document.body.appendChild(d);
+    const a = Math.random() * Math.PI * 2, v = 60 + Math.random() * 120;
+    d.animate([{ transform: "translate(" + x + "px," + y + "px) scale(1)", opacity: 1 }, { transform: "translate(" + (x + Math.cos(a) * v) + "px," + (y + Math.sin(a) * v + 60) + "px) rotate(" + (Math.random() * 540) + "deg) scale(.4)", opacity: 0 }], { duration: 800 + Math.random() * 400, easing: "cubic-bezier(.2,.7,.3,1)" }).onfinish = () => d.remove();
+  }
+}
+
+/* ---------- vezérlés ---------- */
+const slideEl = $("#slide"), tip = $("#tip"), app = $("#app");
+function bindSlide(s, idx) {
+  slideEl.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => go(+b.dataset.go)));
+  if (s.k === "concepts") {
+    const btns = slideEl.querySelectorAll(".fc3");
+    btns.forEach((b) => b.addEventListener("click", () => {
+      const o = (state.opened[idx] = state.opened[idx] || {}); const k = b.dataset.k; o[k] = !o[k];
+      b.classList.toggle("flip", !!o[k]); b.setAttribute("aria-pressed", String(!!o[k]));
+    }));
+    $("#showall").addEventListener("click", () => { const o = (state.opened[idx] = state.opened[idx] || {}); const all = s.cards.every((_, k) => o[k]); btns.forEach((b) => { o[b.dataset.k] = !all; b.classList.toggle("flip", !all); b.setAttribute("aria-pressed", String(!all)); }); });
+  }
+  if (s.k === "quiz") slideEl.querySelectorAll(".opts button").forEach((b) => b.addEventListener("click", (e) => {
+    const r = b.getBoundingClientRect(); const x = r.left + r.width / 2, y = r.top + r.height / 2;
+    const qi = +b.dataset.q, oi = +b.dataset.o; state.quiz[idx + "_" + qi] = oi; draw(false);
+    if (oi === s.q[qi].a) burst(x, y);
+  }));
+  if (s.k === "think") { const r = $("#rev"); if (r) r.addEventListener("click", () => { state.rev[idx] = true; draw(false); }); }
+  if (s.k === "ikt") slideEl.querySelectorAll(".steps li").forEach((li) => li.addEventListener("click", () => {
+    const key = idx + "_" + li.dataset.k; state.chk[key] = !state.chk[key]; li.classList.toggle("done", !!state.chk[key]);
+    const n = s.steps.filter((_, k) => state.chk[idx + "_" + k]).length; $("#chkc").textContent = n + " / " + s.steps.length + " lépés kész – kattints a lépésekre a pipáláshoz.";
+    if (n === s.steps.length) { const r = li.getBoundingClientRect(); burst(r.left + 20, r.top + 10); }
+  }));
+  if (s.k === "sum") { const r = $("#reset"); if (r) r.addEventListener("click", () => { state.quiz = {}; draw(false); }); }
+  if (s.k === "chart") (s.charts || [s.chart]).forEach((c, k) => {
+    const uid = idx + "_" + k;
+    if (c.type === "line") bindLine(c, uid);
+    if (c.type === "timeline") {
+      const root = slideEl.querySelector('.tl[data-uid="' + uid + '"]');
+      root.querySelectorAll("[data-k]").forEach((b) => b.addEventListener("click", () => { state.tl[uid] = +b.dataset.k; draw(false); }));
+    }
+  });
+  slideEl.querySelectorAll("[data-tip]").forEach((el) => {
+    const on = (e) => { tip.textContent = el.dataset.tip; tip.classList.add("on"); const r = el.getBoundingClientRect(); const x = e.clientX ?? r.left + r.width / 2, y = e.clientY ?? r.top; place(x, y); };
+    el.addEventListener("pointermove", on); el.addEventListener("pointerenter", on); el.addEventListener("pointerleave", () => tip.classList.remove("on"));
+    el.addEventListener("focus", on); el.addEventListener("blur", () => tip.classList.remove("on"));
+  });
+}
+function place(x, y) { const w = tip.offsetWidth, h = tip.offsetHeight; tip.style.left = Math.max(8, Math.min(innerWidth - w - 8, x - w / 2)) + "px"; tip.style.top = Math.max(8, y - h - 14) + "px"; }
+let lastScore = 0;
+function draw(anim = true) {
+  const s = slides[state.i]; const sc = slideEl.scrollTop;
+  app.dataset.c = String(colorOf(lessonNo(s)));
+  slideEl.className = "slide" + (s.k === "title" ? " hero ttl" : s.k === "lesson" ? " hero" : "");
+  slideEl.innerHTML = renderSlide(s, state.i);
+  if (anim) { void slideEl.offsetWidth; slideEl.classList.add("enter"); slideEl.scrollTop = 0; } else slideEl.scrollTop = sc;
+  bindSlide(s, state.i); tip.classList.remove("on");
+  $("#count").textContent = state.i + 1 + " / " + slides.length;
+  applySteps(false);
+  const st = quizStats(); const se = $("#score"); se.textContent = "⭐ " + st.ok + (st.answered ? " / " + st.tot : "");
+  if (st.ok > lastScore) { se.classList.remove("bump"); void se.offsetWidth; se.classList.add("bump"); } lastScore = st.ok;
+  document.querySelectorAll(".prog button").forEach((b, k) => {
+    const sec = DECK.sections[k]; const cur = state.i >= sec.from && state.i <= sec.to;
+    b.classList.toggle("cur", cur); const f = state.i < sec.from ? 0 : state.i > sec.to ? 100 : ((state.i - sec.from + 1) / (sec.to - sec.from + 1)) * 100;
+    b.querySelector("i").style.width = f + "%";
+  });
+  document.querySelectorAll(".menu button").forEach((b) => b.classList.toggle("cur", +b.dataset.go === state.i));
+  try { history.replaceState(null, "", "#dia-" + (state.i + 1)); } catch (e) {}
+}
+function rvList() { return [...slideEl.querySelectorAll(".rv")]; }
+function applySteps(fresh) {
+  const L = rvList(); const n = state.anim ? Math.min(state.step[state.i] || 0, L.length) : L.length;
+  L.forEach((el, k) => { if (k < n) { if (!el.classList.contains("on")) { el.classList.add("on"); if (fresh) el.classList.add("fresh"); } } else el.classList.remove("on", "fresh"); });
+  const si = $("#stepinfo"); si.hidden = !(state.anim && L.length); si.textContent = n + " / " + L.length + " rész";
+  const last = state.i === slides.length - 1;
+  $("#prev").disabled = state.i === 0 && (!state.anim || n === 0);
+  $("#next").disabled = last && (!state.anim || n >= L.length);
+  $("#next").classList.toggle("more", state.anim && n < L.length);
+}
+function advance() { const L = rvList().length; const n = state.step[state.i] || 0; if (state.anim && n < L) { state.step[state.i] = n + 1; applySteps(true); } else if (state.i < slides.length - 1) go(state.i + 1, "start"); }
+function back() { const n = Math.min(state.step[state.i] || 0, rvList().length); if (state.anim && n > 0) { state.step[state.i] = n - 1; applySteps(false); } else if (state.i > 0) go(state.i - 1, "full"); }
+function go(i, mode) { const j = Math.max(0, Math.min(slides.length - 1, i)); state.i = j; state.step[j] = mode === "full" ? 1e9 : 0; draw(true); closeMenu(); }
+function closeMenu() { $("#menu").hidden = true; $("#mbtn").setAttribute("aria-expanded", "false"); }
+
+$("#dname").textContent = "Környezetformálás · " + DECK.name;
+$("#prog").innerHTML = DECK.sections.map((s, k) => '<button data-go="' + s.from + '" aria-label="' + esc(s.label) + '" title="' + esc(s.label) + '" style="--pc:' + (k < 4 ? "var(--c" + (k + 1) + ")" : "var(--ink2)") + '"><span><i style="width:0"></i></span></button>').join("");
+$("#prog").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => go(+b.dataset.go)));
+let mh = "";
+DECK.sections.forEach((s) => { mh += '<div class="sec">' + esc(s.label) + "</div>"; for (let i = s.from; i <= s.to; i++) mh += '<button data-go="' + i + '"><span class="n">' + (i + 1) + "</span><span>" + esc(slides[i].menu || slides[i].title || "") + "</span></button>"; });
+$("#menu").innerHTML = mh;
+$("#menu").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => go(+b.dataset.go)));
+$("#mbtn").addEventListener("click", () => { const m = $("#menu"); m.hidden = !m.hidden; $("#mbtn").setAttribute("aria-expanded", String(!m.hidden)); });
+$("#prev").addEventListener("click", () => back());
+$("#next").addEventListener("click", () => advance());
+$("#tbtn").addEventListener("click", () => {
+  const root = document.documentElement; const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  root.dataset.theme = dark ? "light" : "dark";
+});
+$("#fbtn").addEventListener("click", () => { try { (document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen()).catch(() => {}); } catch (e) {} });
+document.addEventListener("keydown", (e) => {
+  if (e.target.closest && e.target.closest("input,textarea")) return;
+  const onBtn = e.target.closest && e.target.closest("button");
+  if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === "ArrowDown" || (e.key === " " && !onBtn)) { advance(); e.preventDefault(); }
+  else if (e.key === "ArrowLeft" || e.key === "PageUp" || e.key === "ArrowUp") { back(); e.preventDefault(); }
+  else if (e.key === "Home") { go(0, "start"); e.preventDefault(); }
+  else if (e.key === "End") { go(slides.length - 1, "full"); e.preventDefault(); }
+  else if (e.key === "Escape") closeMenu();
+});
+$("#abtn").addEventListener("click", () => {
+  state.anim = !state.anim; if (state.anim) state.step[state.i] = 1e9;
+  $("#abtn").setAttribute("aria-pressed", String(state.anim)); $("#abtn").classList.toggle("off", !state.anim); $("#abtn .t").textContent = state.anim ? "Lépésenként" : "Egyben"; applySteps(false);
+});
+slideEl.addEventListener("click", (e) => {
+  if (e.button || e.target.closest("button,a,svg,[data-tip],.steps li,.chip,.tl,.opts")) return;
+  if (window.getSelection && String(getSelection())) return;
+  advance();
+});
+document.addEventListener("click", (e) => { if (!e.target.closest(".menu") && e.target.id !== "mbtn") closeMenu(); });
+let sx = null;
+slideEl.addEventListener("touchstart", (e) => { sx = e.touches[0].clientX; }, { passive: true });
+slideEl.addEventListener("touchend", (e) => { if (sx == null) return; const dx = e.changedTouches[0].clientX - sx; sx = null; if (Math.abs(dx) > 70 && !e.target.closest("svg")) (dx < 0 ? advance() : back()); }, { passive: true });
+const hm = /^#dia-(\d+)$/.exec(location.hash); if (hm) { state.i = Math.max(0, Math.min(slides.length - 1, +hm[1] - 1)); state.step[state.i] = 1e9; }
+addEventListener("hashchange", () => { const m = /^#dia-(\d+)$/.exec(location.hash); if (m && +m[1] - 1 !== state.i) go(+m[1] - 1); });
+draw(true);
+</script>
+
+</body>
+</html>
