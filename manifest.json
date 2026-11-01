@@ -158,5 +158,10 @@
     "path": "games/nagy-valsag-tanari.html",
     "bytes": 401410,
     "md5": "55b8e3db613b27d859d310ee519af316"
+  },
+  "agora": {
+    "path": "games/agora.html",
+    "bytes": 166624,
+    "md5": "a4124d2d8eb7d36c25cfa0cf94c7197f"
   }
 }
