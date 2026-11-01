@@ -34,6 +34,7 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | A nagy gazdasági világválság – kattintható ábrák | `games/vilagvalsag.html` | 11–12. | Négy kattintható feladatrész (fénykép, hitelkörforgás-séma, okok láncolata, adatgrafikon), 30 ellenőrző kérdéssel a tankönyv 18. leckéje alapján; pontozás, összegzés, tanári szerkesztő mód. Önálló fájl, a kép beágyazva. |
 | Nagy Válság – kormányzati döntések (diákváltozat) | `games/nagy-valsag.html` | 11–12. | Csoportos gazdaságpolitikai szimuláció 1933–1938 (USA vagy Magyarország): éves események, szakértői becslés, pontozás, eredménykód. Telefonra optimalizált, önálló fájl. A számértékek illusztratívak. |
 | Nagy Válság – kormányzati döntések (tanári változat) | `games/nagy-valsag-tanari.html` | 11–12. | Ugyanaz, kiegészítve a tanári eredménytáblával (a csoportok eredménykódjainak rangsora). Nem diákoknak szánt fájl. |
+| Az Agóra urai – A demokrácia próbája | `games/agora.html` | 9. | Hot-seat stratégiai társasjáték 2–4 játékosnak egy eszközön az athéni demokrácia témájában: tábla, kártyakérdések papíron, népgyűlési szavazás. Teljes szabályleírás a játékban; billentyűzettel is játszható. Tartalmi megjegyzések: `docs/AGORA_TARTALMI_MEGJEGYZESEK.md`. |
 | A Hanza kereskedői – Hálózat és hatalom | `games/hanza.html` | 11–12. | Hot-seat stratégiai társasjáték 2–4 játékosnak egy eszközön: szállítás hanzavárosok között, megbízások, kereskedőtelepek, Hansetag-kártya kérdésekkel. Teljes szabályleírás a játékban; billentyűzettel is játszható. Tartalmi megjegyzések: `docs/HANZA_TARTALMI_MEGJEGYZESEK.md`. |
 
 ## 3D szabadulószobák
@@ -91,6 +92,7 @@ tanari-jatektar/
 │   ├── oh-rovid-feladatok.html
 │   ├── nagy-valsag.html
 │   ├── nagy-valsag-tanari.html
+│   ├── agora.html
 │   ├── hanza.html
 │   └── oh-rovid-feladatok/   (data/*.json, img/*.webp)
 ├── jatekok/                 (3D szabadulószobák)
