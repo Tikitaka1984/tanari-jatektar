@@ -35,6 +35,7 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | Nagy Válság – kormányzati döntések (diákváltozat) | `games/nagy-valsag.html` | 11–12. | Csoportos gazdaságpolitikai szimuláció 1933–1938 (USA vagy Magyarország): éves események, szakértői becslés, pontozás, eredménykód. Telefonra optimalizált, önálló fájl. A számértékek illusztratívak. |
 | Nagy Válság – kormányzati döntések (tanári változat) | `games/nagy-valsag-tanari.html` | 11–12. | Ugyanaz, kiegészítve a tanári eredménytáblával (a csoportok eredménykódjainak rangsora). Nem diákoknak szánt fájl. |
 | Az Agóra urai – A demokrácia próbája | `games/agora.html` | 9. | Hot-seat stratégiai társasjáték 2–4 játékosnak egy eszközön az athéni demokrácia témájában: tábla, kártyakérdések papíron, népgyűlési szavazás. Teljes szabályleírás a játékban; billentyűzettel is játszható. Tartalmi megjegyzések: `docs/AGORA_TARTALMI_MEGJEGYZESEK.md`. |
+| A nemzetiszocialista Németország – érettségi felkészítő | `games/nemet-nacizmus.html` | 11–12. | Idővonal-rendezés, fogalomkártyák, csoportosítás, forráselemzési gyakorlat, 26 kérdéses kvíz és kifejtési vázlatok az OH-TOR11TB 19. leckéje alapján. Tartalmi megjegyzések: `docs/NEMET_NACIZMUS_TARTALMI_MEGJEGYZESEK.md`. |
 
 ## 3D szabadulószobák
 
@@ -52,7 +53,7 @@ A tanári kísérőanyagok (Word) a `jatekok/<azonosító>/docs/` mappában vann
 
 ## Interaktív órai bemutatók
 
-Frontális órára készült, kattintható bemutatók (20–32 dia) (a tankönyv ábráival és forrásaival; „Részletesebben” panelekkel, tanári jegyzetekkel, záró kvízzel). Önálló, külső függőség nélküli HTML-fájlok a `demos/` mappában; a hub külön „Interaktív órai bemutatók” szekciójában jelennek meg. Navigáció: nyilak / szóköz, `N` = tanári jegyzet, `F` = teljes képernyő. A „Környezetformáló tevékenység” bemutatókban a kattintás/→ lépésenként fedi fel a dia részeit (a „Lépésenként” gombbal kikapcsolható); a források számozása az egyesített tankönyvével egyezik.
+Frontális órára készült, kattintható bemutatók (17–32 dia) (a tankönyv ábráival és forrásaival; „Részletesebben” panelekkel, tanári jegyzetekkel, záró kvízzel). Önálló, külső függőség nélküli HTML-fájlok a `demos/` mappában; a hub külön „Interaktív órai bemutatók” szekciójában jelennek meg. Navigáció: nyilak / szóköz, `N` = tanári jegyzet, `F` = teljes képernyő. A „Környezetformáló tevékenység” bemutatókban a kattintás/→ lépésenként fedi fel a dia részeit (a „Lépésenként” gombbal kikapcsolható); a források számozása az egyesített tankönyvével egyezik.
 
 | Bemutató | Fájl | Tantárgy | Évfolyam |
 | --- | --- | --- | --- |
@@ -61,6 +62,7 @@ Frontális órára készült, kattintható bemutatók (20–32 dia) (a tankönyv
 | Az ember környezetformáló tevékenysége – 1–4. lecke | `demos/bemutato_kornyezet_1_4.html` | Komplex természettudomány | 9. |
 | Az ember környezetformáló tevékenysége – 5–8. lecke | `demos/bemutato_kornyezet_5_8.html` | Komplex természettudomány | 9. |
 | Az ember környezetformáló tevékenysége – 9–12. lecke | `demos/bemutato_kornyezet_9_12.html` | Komplex természettudomány | 9. |
+| A nemzetiszocialista Németország | `demos/bemutato_nemet_nacizmus.html` | Történelem | 11. |
 
 ## Szemléltető animációk
 
@@ -95,6 +97,7 @@ tanari-jatektar/
 │   ├── nagy-valsag.html
 │   ├── nagy-valsag-tanari.html
 │   ├── agora.html
+│   ├── nemet-nacizmus.html
 │   └── oh-rovid-feladatok/   (data/*.json, img/*.webp)
 ├── jatekok/                 (3D szabadulószobák)
 │   ├── _lib/three.min.js
@@ -110,6 +113,7 @@ tanari-jatektar/
 │   ├── bemutato_kornyezet_1_4.html
 │   ├── bemutato_kornyezet_5_8.html
 │   ├── bemutato_kornyezet_9_12.html
+│   ├── bemutato_nemet_nacizmus.html
 │   ├── demo_felfedezesek.html
 │   ├── demo_roma.html
 │   ├── demo_wwi.html
@@ -117,6 +121,7 @@ tanari-jatektar/
 ├── docs/
 │   ├── DEVELOPMENT_RULES.md
 │   ├── NAGY_VALSAG_TARTALMI_MEGJEGYZESEK.md
+│   ├── NEMET_NACIZMUS_TARTALMI_MEGJEGYZESEK.md
 │   ├── NYOMOZOJATEKOK_TARTALMI_MEGJEGYZESEK.md
 │   ├── PEDAGOGICAL_RULES.md
 │   └── TESTING_CHECKLIST.md
