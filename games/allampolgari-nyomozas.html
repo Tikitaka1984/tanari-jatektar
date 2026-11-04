@@ -379,8 +379,8 @@ function viewRules(){
 }
 function renderTabs(){
   const t=$("tabs");
-  t.hidden=(S.phase==="intro");
-  const tabs=[["game","Nyomozás"],["log","Nyomnapló ("+S.clues.length+")"],["store","Bizonyíték raktár ("+wareAvail().length+")"],["rules","Szabályok"]];
+  t.hidden=false;
+  const tabs=S.phase==="intro"?[["game","Kezdőlap"],["rules","Szabályok"]]:[["game","Nyomozás"],["log","Nyomnapló ("+S.clues.length+")"],["store","Bizonyíték raktár ("+wareAvail().length+")"],["rules","Szabályok"]];
   t.innerHTML=tabs.map(x=>'<button class="tab" role="tab" aria-selected="'+(S.tab===x[0])+'" data-tab="'+x[0]+'">'+x[1]+'</button>').join('');
 }
 $("tabs").addEventListener("click",e=>{
@@ -391,9 +391,9 @@ document.addEventListener("input",e=>{ if(e.target.id==="notes") S.notes=e.targe
 
 function render(){
   setScore(); renderTabs();
-  if(S.phase!=="intro" && S.tab==="log") viewLog();
+  if(S.tab==="rules") viewRules();
+  else if(S.phase!=="intro" && S.tab==="log") viewLog();
   else if(S.phase!=="intro" && S.tab==="store") viewStore();
-  else if(S.phase!=="intro" && S.tab==="rules") viewRules();
   else if(S.phase==="intro") viewIntro();
   else if(S.phase==="case") viewCase();
   else if(S.phase==="done") viewStepDone();
@@ -448,7 +448,7 @@ app.addEventListener("change",ev=>{
   }
 });
 function renderKeep(y){ setScore(); renderTabs();
-  if(S.phase!=="intro" && S.tab==="rules") viewRules(); else if(S.phase!=="intro" && S.tab==="store") viewStore(); else if(S.phase!=="intro" && S.tab==="log") viewLog(); else
+  if(S.tab==="rules") viewRules(); else if(S.phase!=="intro" && S.tab==="store") viewStore(); else if(S.phase!=="intro" && S.tab==="log") viewLog(); else
   if(S.phase==="case") viewCase(); else if(S.phase==="accuse") viewAccuse(); else if(S.phase==="done") viewStepDone(); else render();
   window.scrollTo(0,y);
 }
