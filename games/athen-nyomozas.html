@@ -349,10 +349,28 @@ function viewStore(){
        +'<label class="opt'+(on?' sel':'')+'"><input type="checkbox" value="'+w.id+'" data-act="ev"'+(on?' checked':'')+'><span>Vádhoz kijelölöm</span></label></div>';
    }).join('')+'</div>';
 }
+function viewRules(){
+  app.innerHTML='<div class="card"><h2>Szabályok</h2><p>Athéni gyilkossági ügyet derítesz fel. A feladatok megoldásával nyomokat szerzel, a végén vádat emelsz: megnevezed az elkövetőt és az indítékot, kiválasztasz négy bizonyítékot, és megmondod, melyik bíróság tárgyalná az ügyet. A megoldás az athéni intézményekről tanultakból kikövetkeztethető.</p></div>'
+  +'<div class="card"><h3>Menete</h3><ul class="tight">'
+  +'<li>Hat feladatot kell megoldanod. Minden helyes válasz egy új nyomot old fel.</li>'
+  +'<li><b>Nyomnapló:</b> a feloldott nyomok időrendben. <b>Bizonyíték raktár:</b> tárgyi bizonyítékok, iratok, vallomások és alibik; nem mindegyik hasznos, a vádhoz pontosan négyet kell kijelölnöd.</li>'
+  +'<li>A korábbi feladatokat és nyomokat áttekintheted; ez a pontszámot nem érinti.</li>'
+  +'<li>A vád beküldése után már nem módosíthatsz.</li></ul></div>'
+  +'<div class="card"><h3>Pontozás</h3><p class="muted">Kezdőpontszám: 100. A pontszám nem csökken 0 alá.</p>'
+  +'<div class="res-row"><span>Rossz válasz egy feladatnál (minden rossz próbálkozás)</span><span>−10</span></div>'
+  +'<div class="res-row"><span>Tipp kérése</span><span>−5</span></div>'
+  +'<div class="res-row"><span>Vádemelés: téves elkövető</span><span>−20</span></div>'
+  +'<div class="res-row"><span>Vádemelés: téves indíték</span><span>−10</span></div>'
+  +'<div class="res-row"><span>Vádemelés: nem releváns bizonyíték (darabonként)</span><span>−5</span></div>'
+  +''
+  +'<div class="res-row"><span>Vádemelés: téves bíróság</span><span>−10</span></div>'
+  +'<p class="muted" style="margin-top:10px">A második rossz próbálkozás után a tipp ingyen megjelenik. A harmadik rossz próbálkozás után a program megmutatja a helyes megoldást, és továbbléphetsz. Tanári módban nincs pontozás.</p></div>'
+  +'<div class="card"><h3>Rangok</h3><p>Areopagosz-tag (90–100), Bulé-tag (70–89), Népgyűlési polgár (50–69), Tanuló nyomozó (0–49)</p></div>';
+}
 function renderTabs(){
   const t=$("tabs");
   t.hidden=(S.phase==="intro");
-  const tabs=[["game","Nyomozás"],["log","Nyomnapló ("+S.clues.length+")"],["store","Bizonyíték raktár ("+wareAvail().length+")"]];
+  const tabs=[["game","Nyomozás"],["log","Nyomnapló ("+S.clues.length+")"],["store","Bizonyíték raktár ("+wareAvail().length+")"],["rules","Szabályok"]];
   t.innerHTML=tabs.map(x=>'<button class="tab" role="tab" aria-selected="'+(S.tab===x[0])+'" data-tab="'+x[0]+'">'+x[1]+'</button>').join('');
 }
 $("tabs").addEventListener("click",e=>{
@@ -365,6 +383,7 @@ function render(){
   setScore(); renderTabs();
   if(S.phase!=="intro" && S.tab==="log") viewLog();
   else if(S.phase!=="intro" && S.tab==="store") viewStore();
+  else if(S.phase!=="intro" && S.tab==="rules") viewRules();
   else if(S.phase==="intro") viewIntro();
   else if(S.phase==="case") viewCase();
   else if(S.phase==="done") viewStepDone();
@@ -418,7 +437,7 @@ app.addEventListener("change",ev=>{
   }
 });
 function renderKeep(y){ setScore(); renderTabs();
-  if(S.phase!=="intro" && S.tab==="store") viewStore(); else if(S.phase!=="intro" && S.tab==="log") viewLog(); else
+  if(S.phase!=="intro" && S.tab==="rules") viewRules(); else if(S.phase!=="intro" && S.tab==="store") viewStore(); else if(S.phase!=="intro" && S.tab==="log") viewLog(); else
   if(S.phase==="case") viewCase(); else if(S.phase==="accuse") viewAccuse(); else if(S.phase==="done") viewStepDone(); else render();
   window.scrollTo(0,y);
 }
