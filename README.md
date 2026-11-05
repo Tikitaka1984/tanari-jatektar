@@ -36,6 +36,7 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | Nagy Válság – kormányzati döntések (diákváltozat) | `games/nagy-valsag.html` | 11–12. | Csoportos gazdaságpolitikai szimuláció 1933–1938 (USA vagy Magyarország): éves események, szakértői becslés, pontozás, eredménykód. Telefonra optimalizált, önálló fájl. A számértékek illusztratívak. |
 | Nagy Válság – kormányzati döntések (tanári változat) | `games/nagy-valsag-tanari.html` | 11–12. | Ugyanaz, kiegészítve a tanári eredménytáblával (a csoportok eredménykódjainak rangsora). Nem diákoknak szánt fájl. |
 | Az Agóra urai – A demokrácia próbája | `games/agora.html` | 9. | Hot-seat stratégiai társasjáték 2–4 játékosnak egy eszközön az athéni demokrácia témájában: tábla, kártyakérdések papíron, népgyűlési szavazás. Teljes szabályleírás a játékban; billentyűzettel is játszható. Tartalmi megjegyzések: `docs/AGORA_TARTALMI_MEGJEGYZESEK.md`. |
+| A Hanza kereskedői – Hálózat és hatalom | `games/hanza.html` | 11–12. | Hot-seat stratégiai társasjáték 2–4 játékosnak egy eszközön: szállítás hanzavárosok között, megbízások, kereskedőtelepek, Hansetag-kártya kérdésekkel. Teljes szabályleírás a játékban; billentyűzettel is játszható. Tartalmi megjegyzések: `docs/HANZA_TARTALMI_MEGJEGYZESEK.md`. |
 | A nemzetiszocialista Németország – érettségi felkészítő | `games/nemet-nacizmus.html` | 11–12. | Idővonal-rendezés, fogalomkártyák, csoportosítás, forráselemzési gyakorlat, 26 kérdéses kvíz és kifejtési vázlatok az OH-TOR11TB 19. leckéje alapján. Tartalmi megjegyzések: `docs/NEMET_NACIZMUS_TARTALMI_MEGJEGYZESEK.md`. |
 
 ## 3D szabadulószobák
@@ -99,6 +100,7 @@ tanari-jatektar/
 │   ├── nagy-valsag.html
 │   ├── nagy-valsag-tanari.html
 │   ├── agora.html
+│   ├── hanza.html
 │   ├── nemet-nacizmus.html
 │   └── oh-rovid-feladatok/   (data/*.json, img/*.webp)
 ├── jatekok/                 (3D szabadulószobák)
