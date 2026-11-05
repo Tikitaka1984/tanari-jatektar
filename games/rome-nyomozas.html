@@ -6,18 +6,24 @@
 <title>Gyilkosság a Forumon</title>
 <style>
 :root{
-  --bg:#f4ecdd; --card:#fffaf0; --ink:#2b1f14; --muted:#6b5a47; --line:#d9c7a6;
-  --accent:#8c3a17; --accent-ink:#fff; --ok:#2f6b3a; --bad:#a32a2a; --warn:#8a6100; --chip:#efe2c8;
+  --bg:#f4efe4; --card:#fffdf7; --ink:#2b1f14; --muted:#645544; --line:#d6c8a8;
+  --accent:#8e1f1f; --accent-ink:#fff; --ok:#2f6b3a; --bad:#a32a2a; --warn:#8a6100; --chip:#f0e6d0;
 }
 @media (prefers-color-scheme: dark){
-  :root{ --bg:#1d1812; --card:#2a2219; --ink:#f1e7d3; --muted:#c1b295; --line:#4a3d2b; --accent:#d6733f; --accent-ink:#1d1812; --ok:#7fc58b; --bad:#f08a8a; --warn:#e6bd5a; --chip:#3a2f21; }
+  :root{ --bg:#1b1412; --card:#2a1f1b; --ink:#f3e8d2; --muted:#c7b698; --line:#4d3b30; --accent:#e0675a; --accent-ink:#1b1412; --ok:#7fc58b; --bad:#f08a8a; --warn:#e6bd5a; --chip:#3a2f21; }
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.55;font-size:17px}
 .wrap{max-width:900px;margin:0 auto;padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--line);padding-bottom:10px;margin-bottom:14px}
 h1{font-size:1.45rem;margin:0;color:var(--accent);letter-spacing:.2px}
+header.top{position:relative;overflow:hidden;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:20px 18px 46px;min-height:165px;margin-bottom:14px;border-radius:12px;border:2px solid #c9a24b;background:linear-gradient(135deg,#3f0c0c,#8e1f1f 70%);color:#f6ecd2}
+header.top .bn{position:absolute;left:0;right:0;bottom:0;width:100%;height:100%;pointer-events:none}
+header.top>*:not(.bn){position:relative;z-index:1}
+header.top h1{color:#f6ecd2;font-size:1.6rem;letter-spacing:.06em;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+header.top .sub{font-size:.85rem;letter-spacing:.18em;color:#e8c46a;margin-top:2px;font-family:system-ui,sans-serif}
+header.top .score{position:absolute;left:18px;bottom:10px;z-index:2;background:rgba(40,8,8,.55);border-color:#c9a24b;color:#f6ecd2}
+body{background-image:radial-gradient(circle at 15% 0,rgba(201,162,75,.12),transparent 40%),radial-gradient(circle at 90% 100%,rgba(142,31,31,.07),transparent 45%);background-attachment:fixed}
 h2{font-size:1.2rem;margin:0 0 8px;color:var(--accent)}
 h3{font-size:1.02rem;margin:0 0 4px}
 .score{font-family:system-ui,sans-serif;font-size:.9rem;background:var(--chip);border:1px solid var(--line);padding:4px 10px;border-radius:999px}
@@ -67,8 +73,8 @@ textarea.notes{width:100%;min-height:110px;font:inherit;padding:8px;border:1px s
 </head>
 <body>
 <div class="wrap">
-  <header class="top">
-    <h1>Gyilkosság a Forumon</h1>
+  <header class="top"><svg class="bn" viewBox="0 0 900 170" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e0b04a" stop-opacity=".0"/><stop offset="1" stop-color="#e0b04a" stop-opacity=".35"/></linearGradient></defs><rect width="900" height="170" fill="url(#sky)"/><circle cx="700" cy="70" r="46" fill="#e8c46a" opacity=".28"/><g fill="#2a0a0a" opacity=".55"><path d="M0 170V122h900v48z"/><g id="ar"><path d="M0 122h60v48H0z"/></g></g><g fill="#8e1f1f" opacity=".95"><path d="M20 170v-28a20 20 0 0 1 40 0v28zM100 170v-28a20 20 0 0 1 40 0v28zM180 170v-28a20 20 0 0 1 40 0v28zM260 170v-28a20 20 0 0 1 40 0v28zM340 170v-28a20 20 0 0 1 40 0v28zM420 170v-28a20 20 0 0 1 40 0v28zM500 170v-28a20 20 0 0 1 40 0v28zM580 170v-28a20 20 0 0 1 40 0v28zM660 170v-28a20 20 0 0 1 40 0v28zM740 170v-28a20 20 0 0 1 40 0v28zM820 170v-28a20 20 0 0 1 40 0v28z"/></g><g fill="#c9a24b" opacity=".8"><rect x="610" y="46" width="10" height="76"/><rect x="640" y="46" width="10" height="76"/><rect x="670" y="46" width="10" height="76"/><rect x="700" y="46" width="10" height="76"/><rect x="730" y="46" width="10" height="76"/><rect x="600" y="38" width="150" height="10"/><path d="M600 38l75-26 75 26z"/></g><g stroke="#e8c46a" stroke-width="5" opacity=".9"><path d="M820 20v100M806 40l28 0M806 54l28 0M806 68l28 0"/></g><path d="M792 20l28-10 28 10-12 12h-32z" fill="#e8c46a" opacity=".9"/></svg>
+    <div><h1>Gyilkosság a Forumon</h1><div class="sub">RÓMA · KR. E. 100 KÖRÜL · SPQR</div></div>
     <div class="score" id="score" aria-live="polite"></div>
   </header>
   <nav id="tabs" class="tabs" role="tablist" aria-label="Nyomozás nézetei" hidden></nav>
