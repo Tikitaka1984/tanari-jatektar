@@ -24,7 +24,18 @@ Dátum: 2026-10-31. Érintett játékok: `games/athen-nyomozas.html`, `games/all
 | Pártsemlegesség | Település, szereplők és esemény fiktívek, valós pártot, politikust nem említ. A tankönyv 2022-es választási esettanulmánya szándékosan kimaradt. | Új tartalomnál megtartandó. |
 | Hatályosság | A tankönyvi szabályok változhatnak. | Tanév előtt egyeztetni az aktuális szabályozással. |
 
-## 3. Közös technikai megjegyzések
+## 3. Gyilkosság a Forumon (9. évfolyam, ókori Róma)
+
+**Forrás:** OH-TOR09TB 4. lecke („A római köztársaság”) és a katolikus tankönyv 7. leckéje („A római köztársaság”). Más forrással nem történt ellenőrzés.
+
+| Kérdés | Probléma | Ellenőrizendő |
+| --- | --- | --- |
+| Büntetőeljárás | A tankönyvek nem tárgyalják a római büntetőeljárást; a játék ezért a hatáskört kérdezi (praetor: igazságszolgáltatás). | Tanári megjegyzés; ne tekintsék a valós római eljárás leírásának. |
+| Kitalált szereplők | Az ügy és a szereplők fiktívek; a hatodik consulság Marius esetét idézi (a tankönyv Plutarkhosz alapján írja le). | Jelezni a diákoknak, hogy kitalált esetről van szó. |
+| Lictorok | A tankönyv szerint a lictorok a tisztségviselőket kísérték; az éjszakai kíséret a játékban fikció. | A „lictor = hivatalban lévő tisztségviselő” következtetés tanári jóváhagyása. |
+| Tankönyvi eltérés | A senatus létszámát az OH-TOR09TB kezdetben 100, majd 300 főnek, a katolikus tankönyv kezdetben 300 főnek írja. | A játék csak a 300 fős, köztársaság kori létszámot használja (1. feladat); ellenőrizendő a tanári anyaggal. |
+
+## 4. Közös technikai megjegyzések
 
 - Mindkét játék önálló HTML, külső függőség nélkül; pontozás: rossz válasz −10, nyom/irreleváns bizonyíték −5, tanári mód pontozás nélkül.
 - A Word-forgatókönyvek (megoldókulccsal) nem kerültek a repóba; a megoldás a játékfájl JavaScript-adataiban olvasható.
