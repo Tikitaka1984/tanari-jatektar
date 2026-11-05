@@ -33,6 +33,7 @@ Dátum: 2026-10-31. Érintett játékok: `games/athen-nyomozas.html`, `games/all
 | Büntetőeljárás | A tankönyvek nem tárgyalják a római büntetőeljárást; a játék ezért a hatáskört kérdezi (praetor: igazságszolgáltatás). | Tanári megjegyzés; ne tekintsék a valós római eljárás leírásának. |
 | Kitalált szereplők | Az ügy és a szereplők fiktívek; a hatodik consulság Marius esetét idézi (a tankönyv Plutarkhosz alapján írja le). | Jelezni a diákoknak, hogy kitalált esetről van szó. |
 | Lictorok | A tankönyv szerint a lictorok a tisztségviselőket kísérték; az éjszakai kíséret a játékban fikció. | A „lictor = hivatalban lévő tisztségviselő” következtetés tanári jóváhagyása. |
+| Nehézség | A feladatok alkalmazási jellegűek, a helyes válaszok helye kevert, a válaszlehetőségek hossza kiegyenlített; tanulókkal még nem próbálták ki. | Az athéni játékkal összevetett megoldási idők és hibaarányok megfigyelése. |
 | Tankönyvi eltérés | A senatus létszámát az OH-TOR09TB kezdetben 100, majd 300 főnek, a katolikus tankönyv kezdetben 300 főnek írja. | A játék csak a 300 fős, köztársaság kori létszámot használja (1. feladat); ellenőrizendő a tanári anyaggal. |
 
 ## 4. Közös technikai megjegyzések
