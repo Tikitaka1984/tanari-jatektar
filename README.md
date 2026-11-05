@@ -22,6 +22,7 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | A korona nyomában | `games/korona.html` | 9–10. | Térképes nyomozójáték a középkori magyar államon át. |
 | Gyilkosság az athéni demokráciában | `games/athen-nyomozas.html` | 9. | Nyomozójáték: hat feladat, nyomnapló és bizonyítéktár; a tettes az athéni intézmények ismeretéből, kizárással azonosítható. |
 | Az eltűnt árvízvédelmi alap | `games/allampolgari-nyomozas.html` | 12. (állampolgári ismeretek) | Nyomozójáték a magyar állam szerveiről és eljárásairól (OH-ALP12TA, 4. lecke); kitalált település és szereplők. |
+| Gyilkosság a Forumon | `games/rome-nyomozas.html` | 9. | Nyomozójáték a római köztársaságról: hat feladat, nyomnapló és bizonyíték raktár; a tettes a tankönyvi intézmények (OH-TOR09TB, katolikus tankönyv) ismeretéből, kizárással azonosítható. |
 | Ki vagyok én? | `games/kivagyok.html` | 9–12. | Portréjáték, 42 történelmi személy, fokozatosan könnyülő nyomokkal. |
 | A reformkor vitaterme | `games/reformkor.html` | 10. | Három vitatéma (Széchenyi–Kossuth, Dessewffy–Széchenyi, centralisták–Kossuth) témaválasztóval. |
 | A titkos levéltár | `games/leveltar.html` | 11–12. | Szabadulószoba évszám-, fogalom-, személy- és térképfeladatokkal. |
@@ -34,6 +35,7 @@ A projekt nem igényel telepítést, csomagkezelőt, buildfolyamatot vagy fronte
 | A nagy gazdasági világválság – kattintható ábrák | `games/vilagvalsag.html` | 11–12. | Négy kattintható feladatrész (fénykép, hitelkörforgás-séma, okok láncolata, adatgrafikon), 30 ellenőrző kérdéssel a tankönyv 18. leckéje alapján; pontozás, összegzés, tanári szerkesztő mód. Önálló fájl, a kép beágyazva. |
 | Nagy Válság – kormányzati döntések (diákváltozat) | `games/nagy-valsag.html` | 11–12. | Csoportos gazdaságpolitikai szimuláció 1933–1938 (USA vagy Magyarország): éves események, szakértői becslés, pontozás, eredménykód. Telefonra optimalizált, önálló fájl. A számértékek illusztratívak. |
 | Nagy Válság – kormányzati döntések (tanári változat) | `games/nagy-valsag-tanari.html` | 11–12. | Ugyanaz, kiegészítve a tanári eredménytáblával (a csoportok eredménykódjainak rangsora). Nem diákoknak szánt fájl. |
+| Az Agóra urai – A demokrácia próbája | `games/agora.html` | 9. | Hot-seat stratégiai társasjáték 2–4 játékosnak egy eszközön az athéni demokrácia témájában: tábla, kártyakérdések papíron, népgyűlési szavazás. Teljes szabályleírás a játékban; billentyűzettel is játszható. Tartalmi megjegyzések: `docs/AGORA_TARTALMI_MEGJEGYZESEK.md`. |
 
 ## 3D szabadulószobák
 
@@ -51,13 +53,16 @@ A tanári kísérőanyagok (Word) a `jatekok/<azonosító>/docs/` mappában vann
 
 ## Interaktív órai bemutatók
 
-Frontális órára készült, 20 diás, kattintható bemutatók (a tankönyv ábráival és forrásaival; „Részletesebben” panelekkel, tanári jegyzetekkel, záró kvízzel). Önálló, külső függőség nélküli HTML-fájlok a `demos/` mappában; a hub külön „Interaktív órai bemutatók” szekciójában jelennek meg. Navigáció: nyilak / szóköz, `N` = tanári jegyzet, `F` = teljes képernyő.
+Frontális órára készült, kattintható bemutatók (20–32 dia) (a tankönyv ábráival és forrásaival; „Részletesebben” panelekkel, tanári jegyzetekkel, záró kvízzel). Önálló, külső függőség nélküli HTML-fájlok a `demos/` mappában; a hub külön „Interaktív órai bemutatók” szekciójában jelennek meg. Navigáció: nyilak / szóköz, `N` = tanári jegyzet, `F` = teljes képernyő. A „Környezetformáló tevékenység” bemutatókban a kattintás/→ lépésenként fedi fel a dia részeit (a „Lépésenként” gombbal kikapcsolható); a források számozása az egyesített tankönyvével egyezik.
 
 | Bemutató | Fájl | Tantárgy | Évfolyam |
 | --- | --- | --- | --- |
 | Az athéni demokrácia | `demos/bemutato_athen_demokracia.html` | Történelem | 9. |
 | Vállalkozás és vállalat | `demos/bemutato_vallalkozas.html` | Állampolgári ismeretek | 12. |
 | A politika színterei és vitái – reformkor | `demos/bemutato_reformkor_politika.html` | Történelem | 10–11. |
+| Az ember környezetformáló tevékenysége – 1–4. lecke | `demos/bemutato_kornyezet_1_4.html` | Komplex természettudomány | 9. |
+| Az ember környezetformáló tevékenysége – 5–8. lecke | `demos/bemutato_kornyezet_5_8.html` | Komplex természettudomány | 9. |
+| Az ember környezetformáló tevékenysége – 9–12. lecke | `demos/bemutato_kornyezet_9_12.html` | Komplex természettudomány | 9. |
 
 ## Szemléltető animációk
 
@@ -80,6 +85,7 @@ tanari-jatektar/
 │   ├── korona.html
 │   ├── athen-nyomozas.html
 │   ├── allampolgari-nyomozas.html
+│   ├── rome-nyomozas.html
 │   ├── kivagyok.html
 │   ├── reformkor.html
 │   ├── leveltar.html
@@ -91,6 +97,7 @@ tanari-jatektar/
 │   ├── oh-rovid-feladatok.html
 │   ├── nagy-valsag.html
 │   ├── nagy-valsag-tanari.html
+│   ├── agora.html
 │   └── oh-rovid-feladatok/   (data/*.json, img/*.webp)
 ├── jatekok/                 (3D szabadulószobák)
 │   ├── _lib/three.min.js
@@ -104,6 +111,9 @@ tanari-jatektar/
 │   ├── bemutato_athen_demokracia.html
 │   ├── bemutato_vallalkozas.html
 │   ├── bemutato_reformkor_politika.html
+│   ├── bemutato_kornyezet_1_4.html
+│   ├── bemutato_kornyezet_5_8.html
+│   ├── bemutato_kornyezet_9_12.html
 │   ├── demo_felfedezesek.html
 │   ├── demo_roma.html
 │   ├── demo_wwi.html
