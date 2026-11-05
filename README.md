@@ -61,6 +61,7 @@ Frontális órára készült, kattintható bemutatók (17–32 dia) (a tankönyv
 | --- | --- | --- | --- |
 | Az athéni demokrácia | `demos/bemutato_athen_demokracia.html` | Történelem | 9. |
 | Vállalkozás és vállalat | `demos/bemutato_vallalkozas.html` | Állampolgári ismeretek | 12. |
+| A politika színterei és vitái – reformkor | `demos/bemutato_reformkor_politika.html` | Történelem | 10–11. |
 | Az ember környezetformáló tevékenysége – 1–4. lecke | `demos/bemutato_kornyezet_1_4.html` | Komplex természettudomány | 9. |
 | Az ember környezetformáló tevékenysége – 5–8. lecke | `demos/bemutato_kornyezet_5_8.html` | Komplex természettudomány | 9. |
 | Az ember környezetformáló tevékenysége – 9–12. lecke | `demos/bemutato_kornyezet_9_12.html` | Komplex természettudomány | 9. |
@@ -114,6 +115,7 @@ tanari-jatektar/
 ├── demos/
 │   ├── bemutato_athen_demokracia.html
 │   ├── bemutato_vallalkozas.html
+│   ├── bemutato_reformkor_politika.html
 │   ├── bemutato_kornyezet_1_4.html
 │   ├── bemutato_kornyezet_5_8.html
 │   ├── bemutato_kornyezet_9_12.html
