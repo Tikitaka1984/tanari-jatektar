@@ -183,5 +183,15 @@
     "path": "games/agora.html",
     "bytes": 166624,
     "md5": "a4124d2d8eb7d36c25cfa0cf94c7197f"
+  },
+  "nemet-nacizmus": {
+    "path": "games/nemet-nacizmus.html",
+    "bytes": 60878,
+    "md5": "9c369b0f2c106f93894c53eb8469d5bd"
+  },
+  "bemutato_nemet_nacizmus": {
+    "path": "demos/bemutato_nemet_nacizmus.html",
+    "bytes": 1910364,
+    "md5": "5602f21e44cf82b6a7dd31331e0cd87f"
   }
 }
