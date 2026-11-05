@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>A nemzetiszocialista Németország – érettségi felkészítő</title>
+<style>
+/* Elrendezés: sticky fejléc + lapfülek, egy oszlopos, olvasásra és gyakorlásra optimalizált tartalom (max. ~52rem). Hangnem: visszafogott, levéltári; a téma súlya miatt nincs díszítő piros-fekete színvilág. */
+:root{
+  --bg:#eceff3; --surface:#ffffff; --surface2:#e3e8ee; --fg:#1b2129; --muted:#566170; --line:#cfd6df;
+  --accent:#2a4a72; --accent-fg:#ffffff; --mark:#a86f0c; --markbg:#f6e8c8;
+  --ok:#25704a; --okbg:#dcefe3; --bad:#a3342b; --badbg:#f6dcd8;
+  --f-disp:'Spectral',Georgia,'Times New Roman',serif;
+  --f-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12171d; --surface:#1a212a; --surface2:#232c37; --fg:#e5e9ee; --muted:#9aa5b2; --line:#2e3946;
+  --accent:#8fb4e0; --accent-fg:#0e1620; --mark:#e2a940; --markbg:#3a2f16;
+  --ok:#6fc293; --okbg:#173325; --bad:#ec8b81; --badbg:#3d1d1a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12171d; --surface:#1a212a; --surface2:#232c37; --fg:#e5e9ee; --muted:#9aa5b2; --line:#2e3946;
+  --accent:#8fb4e0; --accent-fg:#0e1620; --mark:#e2a940; --markbg:#3a2f16;
+  --ok:#6fc293; --okbg:#173325; --bad:#ec8b81; --badbg:#3d1d1a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--f-body);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:30}
+h1,h2,h3{font-family:var(--f-disp);line-height:1.2;text-wrap:balance;margin:0}
+h1{font-size:clamp(1.7rem,4.6vw,2.4rem);font-weight:700}
+h2{font-size:1.4rem;font-weight:700}
+h3{font-size:1.1rem;font-weight:700}
+p{margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--mark);outline-offset:2px;border-radius:4px}
+.wrap{max-width:52rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:baseline;gap:.75rem;padding-block:.6rem .2rem;flex-wrap:wrap}
+.brand b{font-family:var(--f-disp);font-size:1.15rem}
+.brand span{color:var(--muted);font-size:.85rem}
+nav.tabs{display:flex;gap:.25rem;overflow-x:auto;padding-bottom:.5rem;scrollbar-width:thin}
+nav.tabs a{white-space:nowrap;text-decoration:none;color:var(--fg);padding:.45rem .8rem;border-radius:999px;font-size:.92rem;font-weight:500;border:1px solid transparent}
+nav.tabs a:hover{background:var(--surface2)}
+nav.tabs a[aria-current="page"]{background:var(--accent);color:var(--accent-fg)}
+main{padding-block:1.5rem 3rem;display:flex;flex-direction:column;gap:1.75rem;outline:none}
+main>section,main>header{display:flex;flex-direction:column;gap:.8rem;min-width:0}
+.lead{color:var(--muted);max-width:44rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1rem 1.1rem;min-width:0}
+.grid{display:grid;gap:.75rem;grid-template-columns:repeat(auto-fit,minmax(13rem,1fr))}
+.stat{display:flex;flex-direction:column;gap:.15rem}
+.stat .n{font-family:var(--f-disp);font-size:1.9rem;font-weight:700;font-variant-numeric:tabular-nums}
+.stat .l{color:var(--muted);font-size:.85rem}
+.bar{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--mark)}
+.btn{font:inherit;font-weight:500;background:var(--accent);color:var(--accent-fg);border:1px solid var(--accent);border-radius:8px;padding:.55rem 1rem;cursor:pointer;min-height:2.5rem}
+.btn:hover{filter:brightness(1.08)}
+.btn.sec{background:transparent;color:var(--accent);border-color:var(--accent)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:center}
+.muted{color:var(--muted)}
+.small{font-size:.88rem}
+.tag{display:inline-block;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--mark);}
+.status{min-height:1.4em;font-weight:500}
+.steps{list-style:none;padding:0;margin:0;display:grid;gap:.6rem}
+.steps li{display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;align-items:center}
+.steps .pg{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.85rem;white-space:nowrap}
+.steps .k{font-family:var(--f-disp);font-weight:700;color:var(--mark);font-size:1.15rem;min-width:1.2rem}
+/* idővonal-rendezés */
+.sortlist{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+.sortlist li{display:grid;grid-template-columns:2rem 1fr auto;gap:.6rem;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.55rem .7rem}
+.sortlist li.ok{background:var(--okbg);border-color:var(--ok)}
+.sortlist li.no{background:var(--badbg);border-color:var(--bad)}
+.sortlist .pos{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600}
+.sortlist .yr{display:block;font-size:.82rem;font-weight:600;color:var(--muted)}
+.mv{display:flex;gap:.3rem}
+.mv button{font:inherit;width:2.4rem;height:2.4rem;border-radius:8px;border:1px solid var(--line);background:var(--surface2);color:var(--fg);cursor:pointer}
+.mv button:disabled{opacity:.35;cursor:default}
+.tl{list-style:none;margin:0;padding:0 0 0 1rem;border-left:2px solid var(--line);display:grid;gap:1rem}
+.tl>li{position:relative;display:grid;gap:.2rem}
+.tl>li::before{content:"";position:absolute;left:calc(-1rem - 6px);top:.5rem;width:10px;height:10px;border-radius:50%;background:var(--mark)}
+.tl .y{font-family:var(--f-disp);font-weight:700;font-size:1.05rem}
+.tl ul{margin:.2rem 0 0;padding-left:1.1rem}
+/* kártyák */
+.flash{min-height:13rem;display:flex;flex-direction:column;gap:.6rem;justify-content:center}
+.flash .term{font-family:var(--f-disp);font-size:1.7rem;font-weight:700}
+.flash .def{font-size:1.05rem}
+/* csoportosítás */
+.assign{display:grid;gap:.5rem}
+.assign .it{display:grid;gap:.4rem;grid-template-columns:1fr minmax(11rem,15rem);align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.6rem .7rem}
+.assign .it.ok{background:var(--okbg);border-color:var(--ok)}
+.assign .it.no{background:var(--badbg);border-color:var(--bad)}
+.assign .fb{grid-column:1/-1;font-size:.88rem}
+select,textarea{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.5rem .6rem;width:100%;min-width:0}
+textarea{min-height:6rem;resize:vertical}
+@media (max-width:560px){.assign .it{grid-template-columns:1fr}}
+/* források, kifejtés */
+details.dt{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+details.dt>summary{cursor:pointer;padding:.85rem 1.1rem;font-family:var(--f-disp);font-weight:700;font-size:1.1rem;list-style:none;display:flex;justify-content:space-between;gap:1rem;align-items:center}
+details.dt>summary::-webkit-details-marker{display:none}
+details.dt>summary::after{content:"+";font-family:var(--f-body);color:var(--accent);font-size:1.3rem}
+details.dt[open]>summary::after{content:"–"}
+.dbody{padding:0 1.1rem 1.1rem;display:grid;gap:.9rem}
+.srcbox{background:var(--surface2);border-radius:8px;padding:.8rem .9rem;display:grid;gap:.4rem;font-size:.95rem}
+.srcbox ul{margin:.2rem 0 0;padding-left:1.1rem;display:grid;gap:.25rem}
+.qa{display:grid;gap:.5rem;border-top:1px solid var(--line);padding-top:.8rem}
+.qa .q{font-weight:600}
+.model{background:var(--markbg);border-radius:8px;padding:.7rem .9rem;font-size:.95rem;display:grid;gap:.3rem}
+.model ul{margin:0;padding-left:1.1rem}
+.chk{display:grid;gap:.4rem}
+.chk label{display:flex;gap:.6rem;align-items:flex-start;cursor:pointer}
+.chk input{margin-top:.3rem;width:1.1rem;height:1.1rem;flex:none}
+/* kvíz */
+.opts{display:grid;gap:.5rem}
+.opt{font:inherit;text-align:left;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:.7rem .9rem;cursor:pointer;min-height:2.75rem}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.ok{background:var(--okbg);border-color:var(--ok)}
+.opt.no{background:var(--badbg);border-color:var(--bad)}
+.opt:disabled{cursor:default;color:var(--fg)}
+.expl{background:var(--surface2);border-radius:8px;padding:.75rem .9rem;font-size:.95rem}
+.prog{display:flex;justify-content:space-between;color:var(--muted);font-size:.9rem;font-variant-numeric:tabular-nums}
+.res td,.res th{padding:.35rem .6rem;text-align:left;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.res{border-collapse:collapse;width:100%}
+.tblwrap{overflow-x:auto}
+footer.note{border-top:1px solid var(--line);padding-top:1rem;color:var(--muted);font-size:.85rem;display:grid;gap:.4rem}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><b>Náci Németország</b><span>érettségi felkészítő · Történelem 11., 19. lecke</span></div>
+    <nav class="tabs" id="nav" aria-label="Gyakorlási módok"></nav>
+  </div>
+</header>
+<div class="wrap"><main id="view" tabindex="-1"></main></div>
+
+<script>
+(function(){
+'use strict';
+/* ====== TÁROLÁS (csak kényelmi: haladás) ====== */
+var store={
+  get:function(k,d){try{var v=localStorage.getItem('nn_'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+  set:function(k,v){try{localStorage.setItem('nn_'+k,JSON.stringify(v))}catch(e){}}
+};
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+var view=document.getElementById('view');
+
+/* ====== ADATOK (a tankönyv 19. leckéje, 168–174. o. alapján) ====== */
+var SRC='Forrás: Történelem 11. tankönyv (OH-TOR11TB), 19. lecke: A nemzetiszocialista Németország, 168–174. oldal. A feladatok és a mintaszempontok a tankönyvi szöveg alapján készültek; a tanári értékelést nem helyettesítik.';
+
+var TIMELINE_SORT=[
+ {y:'1923',t:'Sörpuccs Münchenben: a nácik megkísérlik a hatalom megszerzését'},
+ {y:'1932',t:'Az NSDAP a választásokon 37,8%-ot ér el, a kommunisták 14,3%-ot'},
+ {y:'1933. január 30.',t:'Hindenburg kancellárrá nevezi ki Hitlert'},
+ {y:'1933, a márciusi választás előtt',t:'Felgyújtják a Reichstag épületét'},
+ {y:'1933. március',t:'Választási győzelem (43,9%), majd a felhatalmazási törvény megszavaztatása'},
+ {y:'1934. június 30.',t:'A „hosszú kések éjszakája”: leszámolás az SA vezetőivel'},
+ {y:'1935',t:'A nürnbergi (faji) törvények'},
+ {y:'1938. november 9–10.',t:'Kristályéjszaka: országos méretű pogrom'}
+];
+var TIMELINE_FULL=[
+ {y:'1920-as évek',l:['Az NSDAP nem válik jelentős párttá, de kiépíti pártapparátusát, fegyveres osztagát (SA) és propagandaszervezetét.']},
+ {y:'1923',l:['Sörpuccs Münchenben; a puccs, a per és a börtön ismertséget szerez Hitlernek.','Hitler a börtönben megírja a Mein Kampfot.']},
+ {y:'1932',l:['A válság idején a szavazók többsége szélsőséges pártra szavaz (NSDAP 37,8%, KPD 14,3%).']},
+ {y:'1933',l:['Január 30.: Hitler kancellár, alkotmányosan, koalíciós kormány élén.','A Reichstag felgyújtása; a kommunisták kizárása a választásokból.','Márciusi választás (NSDAP 43,9%), felhatalmazási törvény: rendeletekkel kormányozhat.','Kilépés a Népszövetségből.']},
+ {y:'1934',l:['Június 30.: a hosszú kések éjszakája; az SS és a Gestapo végrehajtja a leszámolást az SA vezetésével.','Hindenburg halála után egyesítik az elnöki és a kancellári hatalmat: Hitler „vezér és kancellár”.']},
+ {y:'1935',l:['Nürnbergi törvények.','Az általános hadkötelezettség újbóli bevezetése és a modern fegyvernemek fejlesztése.','Saar-vidéki népszavazás: a lakosság a Németországhoz csatlakozás mellett dönt.']},
+ {y:'1938',l:['November 9–10.: kristályéjszaka, állami kezdeményezésű országos pogrom.']}
+];
+
+var TERMS=[
+ ['NSDAP','Nemzetiszocialista Német Munkáspárt. A húszas években nem vált jelentős párttá, de kiépítette pártapparátusát, fegyveres osztagát és propagandaszervezetét.'],
+ ['Sörpuccs (1923)','Münchenben egy sörcsarnokban elfogták a bajor kormány tagjait, hogy megszerezzék a hatalmat. Az akciót gyorsan felszámolták; a puccs és az azt követő per ismertté tette Hitlert.'],
+ ['Mein Kampf','„Harcom”. Hitler a börtönben írt könyve, amelyben gondolatait és programját összefoglalta (revízió, keleti élettér, fajelmélet).'],
+ ['Fajelmélet','A németséget (árja) felsőbbrendűnek, a legtöbb népet (zsidók, szlávok, feketék) alsóbbrendűnek tartotta. Elsősorban a zsidóság ellen irányult.'],
+ ['Antiszemitizmus (náci)','Faji alapú zsidóellenesség, amely egyszerre volt antikapitalista, antiliberális és antibolsevista. Leegyszerűsített ellenségképet adott, és alkalmas volt a tömeg mozgósítására.'],
+ ['Élettér','Keleti irányú terjeszkedés tervezett gondolata; a parasztoknak és a földet nem örökölő fiúknak a megszerzendő keleti területeken ígértek földet.'],
+ ['Führer','A vezér. A nácik az erős akaratú vezető egyszemélyi hatalmára épülő államot hirdették a demokrácia helyett.'],
+ ['SA (Sturmabteilung)','Rohamosztag, a párt fegyveres osztaga. Az ellenfelek megverésével, olykor meggyilkolásával megfélemlített; később „második forradalmat” követelt, ezért Hitler leszámolt vele.'],
+ ['SS és Gestapo','SS: Schutzstaffel, védőosztag. Gestapo: Geheime Staatspolizei, titkos államrendőrség. Ők hajtották végre az SA vezetőinek likvidálását.'],
+ ['Kancellár','Kormányfő. Hindenburg elnök 1933. január 30-án nevezte ki Hitlert; így alkotmányosan, koalíciós kormány vezetőjeként került hatalomra.'],
+ ['Reichstag felgyújtása','1933-ban, a márciusi választás előtt történt Berlinben. Lehetőséget adott a kommunisták kizárására a választásokból.'],
+ ['Felhatalmazási törvény','A márciusi (43,9%-os) választás után az új törvényhozással megszavaztatott törvény: lehetővé tette, hogy Hitler a törvényhozás nélkül, rendeletekkel kormányozzon.'],
+ ['Vezér és kancellár','1934-ben, Hindenburg halála után egyesítették az elnöki és a kancellári hatalmat Hitler kezében.'],
+ ['Hosszú kések éjszakája (1934)','Az SA vezetőinek tőrbe csalása és lemészárlása. Hitler így megszabadult a „második forradalmat” követelő SA-tól, és megnyerte a katonai vezetőket.'],
+ ['Nürnbergi törvények (1935)','Faji törvények: a zsidókat (legalább két izraelita vallású nagyszülő esetén) megfosztották állampolgárságuktól, így az állam nem védte őket az ellenük irányuló erőszaktól.'],
+ ['Kristályéjszaka (1938)','1938. november 9–10-én állami kezdeményezésre lezajlott, országos méretű pogrom.'],
+ ['Neuer Plan („Új terv”)','A náci gazdaságpolitika: korlátozták a devizagazdálkodást, a kivitelt és a behozatalt állami ellenőrzés alá vonták; nőtt az aranytartalék.'],
+ ['Népszövetség','A győztes béke felett őrködő szervezet. Hitler 1933-ban kilépett belőle, hogy megerősíthesse a haderőt.'],
+ ['Saar-vidék (1935)','A versailles-i béke értelmében a franciák tizenöt évig birtokolták; a rendelkezésnek megfelelő népszavazáson a lakosság a Németországhoz csatlakozás mellett döntött.']
+];
+
+var CATS=['A nemzetiszocializmus','A hatalom megragadása','A náci hatalom','Gazdaságpolitika','Kihívás és engedmények politikája'];
+var ASSIGN=[
+ ['A németség (árja) felsőbbrendűségének hirdetése',0],
+ ['A keleti „élettér” megszerzésének terve',0],
+ ['Az erős akaratú vezető egyszemélyi hatalmára épülő állam eszménye',0],
+ ['Az antiszemitizmus mint antikapitalista, antiliberális és antibolsevista ellenségkép',0],
+ ['Az SA akciói: az ellenfelek megverése, megfélemlítése',1],
+ ['A rádió és a film bevetése a propagandában',1],
+ ['A munkanélküliség és nyomor miatt nő a párt taglétszáma és szavazatainak aránya',1],
+ ['Hindenburg kinevezi Hitlert kancellárrá (1933. január 30.)',1],
+ ['A Reichstag felgyújtása és a kommunisták kizárása a választásokból',1],
+ ['A felhatalmazási törvény megszavaztatása',1],
+ ['A pártok, szakszervezetek és egyletek megszüntetése',2],
+ ['A hosszú kések éjszakája (1934)',2],
+ ['Az elnöki és a kancellári hatalom egyesítése',2],
+ ['A nürnbergi törvények (1935)',2],
+ ['A kristályéjszaka (1938)',2],
+ ['Autópálya-építés és közmunkaprogram',3],
+ ['A Neuer Plan: a devizagazdálkodás és a külkereskedelem állami ellenőrzése',3],
+ ['Az elsőszülött fiú örökli a gazdaságot a paraszti birtokok védelmében',3],
+ ['Kilépés a Népszövetségből (1933)',4],
+ ['Az általános hadkötelezettség újbóli bevezetése (1935)',4],
+ ['A saar-vidéki népszavazás (1935)',4]
+];
+
+var SOURCES=[
+ {t:'1. Választási plakát, 1932: „Utolsó reményünk: Hitler”',pg:'170. o., 6. ábra',
+  d:['<p>A plakát (a tankönyvben az 170. oldalon) sötét tónusú, rajzolt arcokat mutat: megviselt férfiak, egy nő és egy gyermek néznek a nézőre. Fent: <em>„Unsere letzte Hoffnung:”</em>, alul hatalmas betűkkel: <em>„HITLER”</em>.</p>'],
+  q:[
+   ['Kiket kívánt megszólítani a plakát?',['A válság sújtotta, munkanélküli, nyomorgó, kilátástalannak érző emberek, családok.','Nem egy rétegre céloz: a „kisemberekre”, akik az állam és a polgári pártok kudarcát élték meg.']],
+   ['Hogyan jelenik meg rajta a válság?',['Soványodott, megfáradt, kétségbeesett arcok; a tömeg és az egyén szenvedése.','A szöveg („utolsó remény”) azt sugallja, hogy más megoldás már nincs.']],
+   ['Milyen propagandaeszközöket használ?',['Egyszerű, rövid felirat, hatalmas betűk, egyetlen név: a leegyszerűsítés és ismétlés eszköze.','Érzelmekre épít (nyomor, remény), Hitlert megmentőként állítja be.']]
+  ]},
+ {t:'2. Az NSDAP programja, 1922 (részletek)',pg:'169. o.',
+  d:['<p>A tankönyv a program több pontját közli. Tartalmi kivonat:</p>',
+     '<ul><li>1–2. A népek önrendelkezési jogára hivatkozva Nagy-Németország; a németeknek más nemzetekkel azonos jogok; a versailles-i és a saint-germain-i béke hatályon kívül helyezése.</li><li>3. Terület és föld a nép ellátására és a népfelesleg letelepítésére.</li><li>4. Csak a „néptárs” lehet állampolgár, vagyis akinek ereiben német vér folyik; zsidó nem lehet néptárs.</li><li>7. Az állam gondoskodjon az állampolgárok megélhetéséről.</li><li>11. A munka és fáradság nélküli jövedelem megszüntetése.</li><li>12. A háborús nyereségek beszolgáltatása.</li><li>13. A társaságok tulajdonában lévő üzemek államosítása.</li><li>15. Az öregekről való gondoskodás kiépítése.</li><li>16. Egészséges polgári középosztály; a nagy áruházak köztulajdonba vétele és olcsó bérbeadása kisiparosoknak.</li><li>23. A sajtóban csak német nyelvű, német tulajdonú, németek által szerkesztett lapok.</li></ul>'],
+  q:[
+   ['Csoportosítsd a témákat! Mely területeket érint a program?',['Nemzeti-területi (önrendelkezés, Nagy-Németország, a békék felülvizsgálata, föld).','Faji (állampolgárság, a zsidók kizárása, a sajtó német jellege).','Szociális-gazdasági (megélhetés, jövedelem, államosítás, öregek ellátása, háborús nyereségek).','Középosztály-védelem (kisiparosok, nagy áruházak).']],
+   ['Milyen sérelmekre és indulatokra épít?',['A versailles-i béke igazságtalansága és a határon túli németek helyzete.','A háború utáni nélkülözés, a „meggazdagodók” és a nagytőke elleni harag.','Az ellenségkép: a zsidóság felelőssé tétele.']],
+   ['Mely társadalmi rétegeket célozza meg, és milyen ideológiák hatása ismerhető fel?',['Munkások, kisiparosok és kiskereskedők, idősek, a „németség” egésze.','Nacionalizmus, fajelmélet és antiszemitizmus; szociális és antikapitalista elemek (államosítás, jövedelemkorlátozás); kispolgári érdekvédelem.','Az egyes ígéretek részben ellentmondanak egymásnak (pl. államosítás és a kisvállalkozók védelme); a program a hatalomszerzést szolgáló demagógia.']]
+  ]},
+ {t:'3. Hitler a tömegről és a propagandáról (Mein Kampf, 1925)',pg:'170. o., 4–5. ábra',
+  d:['<p>Tartalmi kivonat (nem szó szerinti idézet): a propaganda szellemi szintje annál alacsonyabb legyen, minél nagyobb tömegre kell hatnia. A tömeg befogadóképessége korlátozott, értelme kicsiny, felejtő; ezért a propagandának néhány pontra kell szorítkoznia, és ezeket addig kell ismételni, amíg az utolsó ember is megérti. A szónok a hallgatók arcáról azonnal leolvashatja, hat-e a mondanivalója.</p>','<p>A hozzá tartozó képeken: katonás rendben álló, hatalmas tömegek előtt szónokló Hitler; egy másik felvételen a feléje nyúló, lelkes tömeg.</p>'],
+  q:[
+   ['Milyen szerepet szánt a tömeggyűléseknek Hitler?',['A tömeg érzelmi befolyásolása és mozgósítása, a vezér és a követők egységének látványos megjelenítése.']],
+   ['Mi volt a véleménye a tömegről?',['Lenéző: szerinte a tömeg értelme kicsiny, felejt, és érzelmekre hat.','Ebből következett, hogy az embereket nem érvekkel, hanem leegyszerűsítéssel és érzelmi hatással kell megnyerni.']],
+   ['Hogyan igazodtak ehhez a szónoklatok eszközei?',['Rövid, egyszerű jelmondatok és állandó ismétlés.','Gesztusok, a hallgatóság reakciójához igazodó szónoklat, tömeglélektani módszerek.','Látványos, szervezett környezet (egyenruhák, sorok, zászlók).']]
+  ]},
+ {t:'4. A németországi pártok erőviszonyai, 1919–1933 (ábra)',pg:'171. o., 7. ábra',
+  d:['<p>Az ábra évenként mutatja a pártcsoportok arányát: a baloldali kommunisták, a kormánypártok és az „alkotmányosság”, valamint a jobboldali polgári pártok és az NSDAP sávját.</p>'],
+  q:[
+   ['Mely pártok tömegbefolyása nőtt?',['Az ábra szerint a két szélsőséges erőé: az NSDAP-é és a kommunistáké; az alkotmányos pártok sávja a válság idején szűkül.']],
+   ['Milyen tényezők játszottak szerepet ebben?',['A gazdasági világválság: munkanélküliség, nyomor, kilátástalanság.','A polgári pártok és a szociáldemokraták nem tudtak egységesen fellépni a szélsőségekkel szemben.','1932-ben a szavazók többsége valamelyik szélsőséges pártra szavazott (NSDAP 37,8%, KPD 14,3%).']],
+   ['Hogyan lehetett volna megakadályozni az NSDAP hatalomra kerülését, és mit tehetett volna az elnök?',['A tankönyv ezt a kérdést a weimari alkotmány alapján (18. téma, 160. o.) kéri megválaszolni. Ez az anyag nem része a feltöltött fejezetnek; ezt a leckét ott kell áttekintened.','A 19. lecke alapján annyi látszik: Hindenburg eleinte elzárkózott Hitler kancellárrá nevezésétől, később mégis kinevezte.']]
+  ]},
+ {t:'5. Leni Riefenstahl visszaemlékezései Hitlerről',pg:'172. o., háttérolvasmány',
+  d:['<p>Riefenstahl (1902–2003) filmrendező, a nemzetiszocialista propagandafilmek egyik alkotója (például <em>Az akarat diadala</em>; a berlini olimpiáról is forgatott). A tankönyv három részletet közöl. Tartalmi kivonat:</p>',
+     '<ul><li><strong>1932, a sportpalotai gyűlés:</strong> Hitler beszéde, szónoki ereje, a tömeg átélése; a szerző megrendült, magával ragadta a hatás.</li><li><strong>1935, karácsonyi magánbeszélgetés:</strong> Hitler civilben, szerénynek és barátságosnak mutatja magát; a könyvekről, az olvasásról beszél.</li><li><strong>1944, az utolsó találkozás:</strong> a szerző ellentmondásos érzései; Hitler viselkedése és megjelenése megváltozik; a szerzőben a varázs elmúlik, mintha transzból ébredne.</li></ul>'],
+  q:[
+   ['Hogyan jellemzi a szerző Hitler beszédeinek eszközrendszerét, és milyen hatást váltott ki?',['Szuggesztív, szenvedélyes előadásmód, a tömeggel való szoros kapcsolat; a hallgatóság, köztük a szerző is, mély hatás alá került.']],
+   ['Milyen benyomást akart tenni magáról Hitler? Hol érezhető a mesterkéltség?',['Műveltnek, szerénynek, „civil” embernek akart látszani (könyvek, olvasmányok).','A szerep a magánbeszélgetésben is tudatosan alakított; a szereplés a gyűlések látványosságával ellentétben csendes, de ugyanúgy a hatáskeltést szolgálja.']],
+   ['Mennyiben változott a szerző véleménye Hitlerről? Milyen forráskritikai megjegyzés tehető?',['Kezdeti lenyűgözöttség, majd a fokozatos kiábrándulás; 1944-re a varázs megszűnik.','A szöveg visszaemlékezés, utólag keletkezett, a szerző a rendszer propagandistája volt: önigazolás lehetősége miatt kritikával kell olvasni.']]
+  ]}
+];
+
+var QUIZ=[
+ {tag:'Hatalomra jutás',q:'Miért csatlakoztak tömegek a háború után szélsőjobboldali szervezetekhez Németországban?',o:['Nem találták helyüket a társadalomban, kilátástalannak érezték helyzetüket, a szervezetek pedig nemzeti és szociális ígéretekkel helyet kínáltak nekik','A gazdasági fellendülés miatt fogékonyak lettek a katonai hagyományokra','A szakszervezetek szervezték be őket a szélsőjobboldali pártokba','Mert a versailles-i békét igazságosnak tartották'],a:0,why:'A hazatért fiatalok nem találták helyüket, a békefeltételek miatt szinte minden réteg kilátástalannak érezte a helyzetet; a szélsőjobboldali szervezetek nemzeti és szociális ígéretekkel helyet kínáltak.'},
+ {tag:'Hatalomra jutás',q:'Mi volt a „sörpuccs”?',o:['1923-ban Münchenben a nácik sikertelen hatalomszerzési kísérlete','1933-ban a Reichstag felgyújtása','1934-ben az SA vezetőinek meggyilkolása','A bajor kormány 1923-as lemondása a nácik nyomására'],a:0,why:'A nácik 1923-ban Münchenben elfogták a bajor kormány tagjait egy sörcsarnokban; az akciót gyorsan felszámolták, de a puccs és a per ismertté tette Hitlert.'},
+ {tag:'Ideológia',q:'Hol írta meg Hitler a Mein Kampfot, és mi áll benne?',o:['A börtönben írta; gondolatait és programját foglalta össze benne','Kancellárként írta 1933-ban, a hatalom igazolására','A sörpuccs előtt írta pártprogramként','Emigrációban írta, a weimari köztársaság bírálatául'],a:0,why:'A Mein Kampf a börtönben íródott, és Hitler gondolatait, programját összegezte (munka, tőke megfékezése, háborús sérelmek orvoslása, keleti élettér, fajelmélet).'},
+ {tag:'Ideológia',q:'Kik ellen irányult elsősorban a náci fajelmélet?',o:['A zsidóság ellen','A szlávok ellen','A keresztény egyházak ellen','A parasztság ellen'],a:0,why:'A fajelmélet a legtöbb népet alsóbbrendűnek tartotta, de elsősorban a zsidóság ellen irányult, akiket Hitler a németek minden problémájáért felelőssé tett.'},
+ {tag:'Ideológia',q:'Melyik NEM volt összetevője a náci antiszemitizmusnak?',o:['Antikapitalizmus („a zsidó nagytőke elleni harc”)','Antiliberalizmus','Antibolsevizmus','Antikolonializmus'],a:3,why:'A tankönyv három összetevőt nevez meg: antikapitalista, antiliberális és antibolsevista.'},
+ {tag:'Hatalomra jutás',q:'Mely két tényező növelte a náci szociális és nemzeti demagógia hatékonyságát?',o:['A technika vívmányainak alkalmazása és az erőszak','A külföldi támogatás és a hadsereg','Az egyház támogatása és a választási csalás','A parlamenti többség és a köztársasági elnök támogatása'],a:0,why:'Hitler a plakátok és a sajtó mellett a rádiót és a filmet is bevetette, a „meggyőzést” pedig az SA erőszakos akcióival egészítették ki.'},
+ {tag:'Hatalomra jutás',q:'Mi teremtette meg az NSDAP számára a hatalomszerzés lehetőségét?',o:['A gazdasági világválság','A húszas évek gazdasági talpra állása','A Népszövetségből való kilépés','Hindenburg halála'],a:0,why:'A húszas években a párt a gazdasági talpra állás idején nem vált jelentős párttá; a világválság nyomora, munkanélkülisége adta a lehetőséget.'},
+ {tag:'Hatalomra jutás',q:'Hány százalékot ért el az NSDAP az 1932-es választáson (a kommunisták 14,3%-a mellett)?',o:['27,8%','37,8%','43,9%','51,2%'],a:1,why:'1932-ben az NSDAP 37,8%-ot kapott; a 43,9% az 1933. márciusi választás eredménye.'},
+ {tag:'Hatalomra jutás',q:'Hogyan került hatalomra Hitler 1933. január 30-án?',o:['Hindenburg kinevezte kancellárrá, alkotmányosan, koalíciós kormány vezetőjeként','Fegyveres puccsal megdöntötte a köztársaságot','Népszavazás döntött a kancellárságáról','A Reichstag köztársasági elnökké választotta'],a:0,why:'Hindenburg eleinte elzárkózott, de hosszas egyezkedés után kinevezte; Hitler a demokrácia játékszabályait kihasználva jutott hatalomra.'},
+ {tag:'Hatalomra jutás',q:'Miért hajlottak a jobboldal egyes csoportjai a Hitlerrel való együttműködésre?',o:['Megijedtek a kommunista veszélytől, és úgy gondolták, féken tudják tartani a nemzetiszocialistákat','Hitler lemondott a fajelméletről','A nácik vállalták a versailles-i béke teljesítését','A szociáldemokraták is Hitlert támogatták'],a:0,why:'A kommunista veszélytől megrémült jobboldal tévesen azt hitte, kézben tudja tartani Hitlert.'},
+ {tag:'Diktatúra',q:'Mi volt a Reichstag felgyújtásának politikai következménye?',o:['Lehetőséget adott a kommunisták kizárására a választásokból','Hindenburg lemondott','Hitlert köztársasági elnökké választották','Az SA-t feloszlatták'],a:0,why:'A tűz a márciusi választás előtt történt; a kommunisták kizárása a választásokból is segítette a náci győzelmet (43,9%).'},
+ {tag:'Diktatúra',q:'Mit tett lehetővé a felhatalmazási törvény?',o:['Hogy Hitler a törvényhozás nélkül, rendeletekkel kormányozzon','Hogy Hitler köztársasági elnök legyen','Az SA feloszlatását','A Népszövetségből való kilépést'],a:0,why:'A 43,9%-os győzelem után az új törvényhozással megszavaztatott törvény megszüntette az alkotmányos hatalommegosztást.'},
+ {tag:'Diktatúra',q:'Mi történt 1934-ben Hindenburg halála után?',o:['Egyesítették az elnöki és a kancellári hatalmat: Hitler „vezér és kancellár” lett','Hitler lemondott a kancellárságról','Új választásokat tartottak, amelyeket a szociáldemokraták nyertek meg','Visszaállították a monarchiát'],a:0,why:'A hatalom a náci párt és a Führer kezében összpontosult.'},
+ {tag:'Diktatúra',q:'Miért számolt le Hitler az SA vezetőivel 1934-ben?',o:['Az SA a „második forradalmat”, a nagytőke korlátozását követelte, és veszélyeztette Hitler hatalmát; a leszámolással a katonai vezetők támogatását is megnyerte','Az SA a monarchia visszaállítását követelte','Az SA a kommunistákkal szövetkezett','Az SA megtagadta a propagandában való részvételt'],a:0,why:'Az SA legénysége komolyan vette a náci demagógiát; a hadsereg vezetői tartottak az SA térnyerésétől.'},
+ {tag:'Diktatúra',q:'Kik hajtották végre a hosszú kések éjszakáját?',o:['Az SS és a Gestapo','Az SA és a hadsereg','A hadsereg és a Reichstag őrsége','A Népszövetség egységei'],a:0,why:'Az akciót az SS (védőosztag) és a Gestapo (titkos államrendőrség) hajtotta végre.'},
+ {tag:'Diktatúra',q:'Mit mondtak ki az 1935-ös nürnbergi törvények?',o:['Faji alapon megfosztották a zsidókat az állampolgárságtól, így az állam nem védte őket az erőszaktól','Betiltották a kommunista pártot','Visszaállították az általános hadkötelezettséget','Kitiltották a zsidókat a Saar-vidékről'],a:0,why:'A tankönyv szerint legalább két izraelita vallású nagyszülő esetén fosztották meg állampolgárságuktól a zsidókat.'},
+ {tag:'Diktatúra',q:'Mi volt a kristályéjszaka (1938. november 9–10.)?',o:['Állami kezdeményezésre végrehajtott, országos méretű pogrom','A Reichstag felgyújtása','Az SA vezetőinek lemészárlása','Népszavazás a zsidók jogállásáról'],a:0,why:'A kristályéjszaka a náci antiszemita politika napirenden tartásának része volt.'},
+ {tag:'Diktatúra',q:'Melyik szervezetek élték túl (korlátok közé szorítva) a totális pártállam kiépítését?',o:['Az egyházak','A szakszervezetek','A diákszervezetek','A többi párt'],a:0,why:'A pártokat, a szakszervezeteket, a diákszervezeteket és még az egyleteket is megszüntették; egyedül az egyházak maradtak fenn.'},
+ {tag:'Gazdaság',q:'Melyik állítás igaz a náci gazdaságpolitikára?',o:['A magántulajdont nem szüntették meg, de nőtt az állam gazdasági irányító szerepe','Államosították az összes nagyvállalatot','Teljesen szabaddá tették a külkereskedelmet','Leállították a közmunkaprogramokat'],a:0,why:'Az állam megrendelőként lépett fel (pl. autópályák), közmunkaprogramot indítottak, és szociális engedményekre kényszerítették a tőkét.'},
+ {tag:'Gazdaság',q:'Mit jelentett a Neuer Plan?',o:['A devizagazdálkodás korlátozását, a ki- és behozatal állami ellenőrzését','A szabad piacgazdaság visszaállítását','A parasztbirtokok felosztását','A hadkötelezettség megszüntetését'],a:0,why:'A rendelkezések nyomán nőtt a német aranytartalék.'},
+ {tag:'Gazdaság',q:'Mi volt a fegyverkezés újraindításának gazdasági jelentősége és következménye?',o:['Állami megrendelést jelentett túltermelés nélkül; az államadósság azonban kezelhetetlenebbé vált, így a háború lett a kiút','Csökkentette a hadsereg létszámát és a munkanélküliséget','Külföldi hitelből fedezték, ezért adósság nem keletkezett','A Népszövetség finanszírozta'],a:0,why:'A hadsereg növelése százezreket vont ki a munkaerőpiacról is; a gazdasági fellendülés növelte Hitler népszerűségét.'},
+ {tag:'Gazdaság',q:'Mit jelentett a mezőgazdaságban a régi német öröklési rend megerősítése?',o:['Csak az elsőszülött fiú örökölte a gazdaságot; a többieknek munkát és a jövőbeli „keleti élettérben” földet ígértek','Minden gyermek egyenlő arányban örökölt','Az állam kisajátította az örökséget','A földet a nők örökölték'],a:0,why:'A paraszti birtokok védelmét szolgálta, és a keleti terjeszkedés gondolatát is erősítette.'},
+ {tag:'Külpolitika',q:'Mikor lépett ki Németország a Népszövetségből, és mikor vezették be újra az általános hadkötelezettséget?',o:['1933-ban, illetve 1935-ben','1923-ban, illetve 1933-ban','1935-ben, illetve 1938-ban','1930-ban, illetve 1934-ben'],a:0,why:'Hitler azonnal a haderő megerősítéséhez látott, amelyet a versailles-i béke tiltott. A nyugati hatalmak nem léptek fel ellene.'},
+ {tag:'Külpolitika',q:'Hogyan szavaztak a saar-vidékiek 1935-ben, és körülbelül milyen arányban?',o:['A Németországhoz csatlakozás mellett, kb. 90%','Franciaország mellett, kb. 90%','A népszövetségi státusz mellett, kb. 50%','Németország mellett, kb. 55%'],a:0,why:'Az ábra közelítő értékei: ~477 ezer fő Németország mellett, ~48 ezer a népszövetségi státusz mellett, ~2 ezer Franciaország mellett. Ez ~527 ezer szavazatból kb. 90,5%. A béke által előírt népszavazás alkalmat adott a nácik számára a nemzeti sérelmek hangoztatására.'},
+ {tag:'Források',q:'Mit gondolt a tömegről Hitler az 1925-ös szöveg alapján, és mi következett ebből a propagandára?',o:['A tömeg befogadóképessége korlátozott, ezért néhány pontra kell szorítkozni, és ezeket sokat ismételni','A tömeg kritikus és művelt, ezért hosszas érvelés szükséges','A tömeg passzív, ezért a propaganda felesleges','A tömeget tudományos érvekkel kell meggyőzni'],a:0,why:'A propaganda színvonala igazodjon a legkevésbé művelt hallgatóhoz; az ismétlés a hatás eszköze.'},
+ {tag:'Források',q:'Mire kell figyelni Leni Riefenstahl Hitlerről szóló visszaemlékezéseinek értékelésekor?',o:['Utólag keletkezett szöveg, és szerzője a rendszer propagandistája volt, ezért forráskritikával kell olvasni','Korabeli hivatalos irat, ezért teljesen hiteles','Hindenburg naplója, ezért elfogulatlan','Külföldi diplomata jelentése'],a:0,why:'A visszaemlékezés a szerző utólagos önértelmezése lehet; a tankönyv is a szerző véleményének változását vizsgálja.'}
+];
+
+var ESSAYS=[
+ {t:'Mutasd be, milyen okok vezettek az NSDAP hatalomra jutásához!',pts:[
+  'A háború utáni kilátástalanság és a versailles-i béke igazságtalansága (a hazatért fiatalok, minden társadalmi réteg)',
+  'Nemzeti és szociális ígéretek (demagógia), egyszerű ellenségkép (fajelmélet, antiszemitizmus)',
+  'Az SA erőszaka, megfélemlítés',
+  'A propaganda modern eszközei: plakát, sajtó, rádió, film; tömeglélektan',
+  'A gazdasági világválság: munkanélküliség, nyomor; nő a taglétszám és a szavazatok aránya (1932: 37,8%)',
+  'A polgári pártok és a szociáldemokraták nem tudtak egységesen fellépni; a kommunisták erősödtek',
+  'A kommunista veszélytől megrémült jobboldal együttműködött; Hindenburg 1933. január 30-án kinevezte kancellárrá, alkotmányosan, koalíciós kormány élén']},
+ {t:'Hogyan építette ki Hitler a totális pártállamot 1933–1938 között?',pts:[
+  'A Reichstag felgyújtása, a kommunisták kizárása a választásokból',
+  'A márciusi választás (43,9%) és a felhatalmazási törvény: rendeleti kormányzás',
+  'A pártok, a szakszervezetek, a diákszervezetek és az egyletek megszüntetése; koncentrációs táborok',
+  'Az elnöki és a kancellári hatalom egyesítése (1934, „vezér és kancellár”)',
+  'A hosszú kések éjszakája: leszámolás az SA vezetőivel az SS és a Gestapo által; a hadsereg vezetőinek megnyerése',
+  'Az egyházak korlátok közé szorítása',
+  'Tömegszervezetek, tömeggyűlések, a sajtó és a művészetek propagandaszolgálatba állítása',
+  'Faji törvények (1935) és a kristályéjszaka (1938)']},
+ {t:'Milyen gazdaságpolitikával szilárdította meg Hitler a hatalmát?',pts:[
+  'A magántulajdon megmaradt, de nőtt az állam irányító szerepe',
+  'Állami megrendelések, autópálya-építés, közmunkaprogram; szociális engedmények a tőkével szemben (társadalombiztosítás, fizetett szabadság)',
+  'Neuer Plan: devizagazdálkodás korlátozása, ki- és behozatal állami ellenőrzése, nőtt az aranytartalék',
+  'Mezőgazdaság: az elsőszülött fiú örökli a birtokot; a többieknek munka és a keleti élettér ígérete',
+  'A fegyverkezés újraindítása: állami megrendelés, túltermelés nélkül; a hadsereg létszámának növelése',
+  'A munkanélküliség gyors csökkenése, Hitler népszerűségének növekedése',
+  'Következmény: az államadósság növekedése, a háború mint kiút']},
+ {t:'Mi volt az antiszemitizmus szerepe a náci ideológiában és politikában?',pts:[
+  'A fajelmélet: az árja németség felsőbbrendű, a legtöbb nép alsóbbrendű; elsősorban a zsidóság ellen irányult',
+  'Ellenségkép: a zsidókat tette felelőssé a németek minden problémájáért; egyszerű magyarázat és mozgósítás',
+  'Három irány: antikapitalista, antiliberális, antibolsevista',
+  'A program 4. pontja: zsidó nem lehet „néptárs”, állampolgár',
+  'A nürnbergi törvények (1935): állampolgárság elvétele',
+  'A kristályéjszaka (1938): állami kezdeményezésű, országos pogrom',
+  'A rendszer napirenden tartotta az antiszemitizmust']},
+ {t:'Hogyan bontotta le Hitler 1933–1935 között a versailles-i rendszert, és miért nem léptek fel ellene?',pts:[
+  'Kilépés a Népszövetségből (1933)',
+  'Az általános hadkötelezettség újbóli bevezetése, a modern fegyvernemek fejlesztése (1935)',
+  'A Saar-vidéki népszavazás (1935): Németországhoz csatlakozás',
+  'A nemzeti sérelmek hangoztatása a hatalmi törekvések igazolására',
+  'A németek nem érzékelték az agresszív külpolitikát, a nyugati hatalmak nem léptek fel ellene']}
+];
+
+/* ====== NAVIGÁCIÓ ====== */
+var ROUTES={
+ attekintes:{t:'Áttekintés',f:vOverview},
+ idovonal:{t:'Idővonal',f:vTimeline},
+ fogalmak:{t:'Fogalmak',f:vTerms},
+ csoportositas:{t:'Csoportosítás',f:vSort},
+ forrasok:{t:'Források',f:vSources},
+ kviz:{t:'Kvíz',f:vQuiz},
+ kifejtes:{t:'Kifejtés',f:vEssay}
+};
+var nav=document.getElementById('nav');
+function buildNav(cur){
+  nav.innerHTML=Object.keys(ROUTES).map(function(k){return '<a href="#'+k+'"'+(k===cur?' aria-current="page"':'')+'>'+ROUTES[k].t+'</a>'}).join('');
+}
+function route(){
+  var k=(location.hash||'').replace('#','');
+  if(!ROUTES[k])k='attekintes';
+  buildNav(k);
+  view.innerHTML='';
+  ROUTES[k].f();
+  view.insertAdjacentHTML('beforeend','<footer class="note"><p>'+esc(SRC)+'</p></footer>');
+  var h=view.querySelector('h1');
+  if(h){h.setAttribute('tabindex','-1');}
+  window.scrollTo(0,0);
+  document.title='Náci Németország felkészítő';
+}
+window.addEventListener('hashchange',function(){route();var h=view.querySelector('h1');if(h)h.focus({preventScroll:true})});
+
+/* ====== ÁTTEKINTÉS ====== */
+function vOverview(){
+  var known=store.get('known',{});var kn=0;Object.keys(known).forEach(function(k){if(known[k]===1)kn++});
+  var qb=store.get('quizBest',null);var so=store.get('sortOk',false);var ab=store.get('assignBest',null);
+  var ess=store.get('essayChecks',{});var en=0;Object.keys(ess).forEach(function(k){if(ess[k])en++});
+  var etot=ESSAYS.reduce(function(a,e){return a+e.pts.length},0);
+  view.innerHTML=
+  '<header><span class="tag">Történelem 11. · 19. lecke · 168–174. oldal</span><h1>A nemzetiszocialista Németország</h1>'+
+  '<p class="lead">Gyakorló felület az érettségi előtt álló osztálynak: a tankönyv leckéjének fogalmait, időrendjét, forrásait és összefüggéseit ismételheted át önállóan. A haladásod ezen az eszközön, a böngészőben marad meg.</p></header>'+
+  '<section aria-labelledby="h-prog"><h2 id="h-prog">Haladásod</h2><div class="grid">'+
+  stat(kn+' / '+TERMS.length,'fogalom megjelölve „tudom”-ként',kn/TERMS.length)+
+  stat(qb?qb.score+' / '+qb.total:'–','legjobb kvíz-eredmény'+(qb?' ('+Math.round(100*qb.score/qb.total)+'%)':''),qb?qb.score/qb.total:0)+
+  stat(so?'kész':'–','idővonal helyes sorrendben',so?1:0)+
+  stat(ab?ab.score+' / '+ab.total:'–','legjobb csoportosítás',ab?ab.score/ab.total:0)+
+  stat(en+' / '+etot,'kifejtési szempont megjelölve',en/etot)+
+  '</div></section>'+
+  '<section aria-labelledby="h-str"><h2 id="h-str">A lecke szerkezete</h2><div class="card"><ul class="steps">'+
+  [['A nemzetiszocializmus','168–169','eszmerendszer, program, ellenségkép'],
+   ['A hatalom megragadása','169–171','propaganda, SA, világválság, 1933'],
+   ['Háttérolvasmány','172','Leni Riefenstahl visszaemlékezései'],
+   ['A náci hatalom','173','pártállam, SA, antiszemita intézkedések'],
+   ['Gazdaságpolitika','174','közmunka, Neuer Plan, fegyverkezés'],
+   ['A kihívás és az engedmények politikája','174','Népszövetség, hadkötelezettség, Saar-vidék']
+  ].map(function(r,i){return '<li><span class="k">'+(i+1)+'</span><span><strong>'+r[0]+'</strong><br><span class="muted small">'+r[2]+'</span></span><span class="pg">'+r[1]+'. o.</span></li>'}).join('')+
+  '</ul></div></section>'+
+  '<section aria-labelledby="h-mod"><h2 id="h-mod">Hol kezdjem?</h2><div class="grid">'+
+  [['idovonal','Idővonal','Rendezd időrendbe a nyolc kulcsesemény!'],
+   ['fogalmak','Fogalmak','Kártyák: ' +TERMS.length+' fogalom, saját értékeléssel.'],
+   ['csoportositas','Csoportosítás','Melyik szakaszhoz tartozik az esemény?'],
+   ['forrasok','Források','Plakát, pártprogram, Hitler és Riefenstahl szövegei.'],
+   ['kviz','Kvíz',QUIZ.length+' kérdés magyarázattal.'],
+   ['kifejtes','Kifejtés','Felelet-vázlat és önellenőrző szempontlista.']
+  ].map(function(m){return '<a class="card" style="text-decoration:none;color:inherit" href="#'+m[0]+'"><h3>'+m[1]+'</h3><p class="muted small">'+m[2]+'</p></a>'}).join('')+
+  '</div></section>';
+}
+function stat(n,l,p){return '<div class="card stat"><span class="n">'+n+'</span><span class="l">'+l+'</span><div class="bar" aria-hidden="true"><i style="width:'+Math.round(100*p)+'%"></i></div></div>'}
+
+/* ====== IDŐVONAL ====== */
+function vTimeline(){
+  view.innerHTML=
+  '<header><h1>Idővonal</h1><p class="lead">A hatalomra jutás és a diktatúra kiépítésének legfontosabb eseményei. Előbb rendezd sorba a kártyákat, utána nézd át a teljes idővonalat.</p></header>'+
+  '<section aria-labelledby="h-sort"><h2 id="h-sort">Rendezd időrendbe!</h2>'+
+  '<p class="muted small">A ▲ és ▼ gombokkal mozgathatod az eseményeket. Az ellenőrzés után az évszámok is megjelennek.</p>'+
+  '<ol class="sortlist" id="sl"></ol><div class="row"><button class="btn" id="chk">Ellenőrzés</button><button class="btn sec" id="shf">Újrakeverés</button></div>'+
+  '<p class="status" id="sst" role="status" aria-live="polite"></p></section>'+
+  '<section aria-labelledby="h-tl"><h2 id="h-tl">A teljes idővonal</h2><ol class="tl">'+
+  TIMELINE_FULL.map(function(e){return '<li><span class="y">'+e.y+'</span><ul>'+e.l.map(function(x){return '<li style="position:static">'+x+'</li>'}).join('')+'</ul></li>'}).join('')+
+  '</ol></section>';
+  var n=TIMELINE_SORT.length,order,checked=false;
+  function init(){
+    do{order=shuffle(TIMELINE_SORT.map(function(_,i){return i}))}while(order.every(function(v,i){return v===i}));
+    checked=false;draw();document.getElementById('sst').textContent='';
+  }
+  function draw(focusId){
+    var sl=document.getElementById('sl');
+    sl.innerHTML=order.map(function(v,p){
+      var e=TIMELINE_SORT[v];var cls='';
+      if(checked)cls=(v===p)?'ok':'no';
+      return '<li class="'+cls+'"><span class="pos">'+(p+1)+'.</span><span>'+esc(e.t)+(checked?'<span class="yr">'+esc(e.y)+'</span>':'')+'</span>'+
+      '<span class="mv"><button data-p="'+p+'" data-d="-1" aria-label="Feljebb: '+esc(e.t)+'"'+(p===0?' disabled':'')+'>▲</button><button data-p="'+p+'" data-d="1" aria-label="Lejjebb: '+esc(e.t)+'"'+(p===n-1?' disabled':'')+'>▼</button></span></li>';
+    }).join('');
+    if(focusId){var b=sl.querySelector('button[data-p="'+focusId[0]+'"][data-d="'+focusId[1]+'"]');if(b&&!b.disabled)b.focus();else{var any=sl.querySelector('button[data-p="'+focusId[0]+'"]:not(:disabled)');if(any)any.focus()}}
+  }
+  document.getElementById('sl').addEventListener('click',function(ev){
+    var b=ev.target.closest('button');if(!b||b.disabled)return;
+    var p=+b.dataset.p,d=+b.dataset.d,q=p+d;if(q<0||q>=n)return;
+    var t=order[p];order[p]=order[q];order[q]=t;checked=false;
+    document.getElementById('sst').textContent='';
+    draw([q,d]);
+  });
+  document.getElementById('chk').addEventListener('click',function(){
+    checked=true;draw();
+    var ok=order.filter(function(v,p){return v===p}).length;
+    var st=document.getElementById('sst');
+    if(ok===n){st.textContent='Hibátlan: mind a '+n+' esemény a helyén van.';store.set('sortOk',true)}
+    else st.textContent=ok+' / '+n+' esemény van a helyén. A pirosan jelölteket mozgasd át, majd ellenőrizz újra.';
+  });
+  document.getElementById('shf').addEventListener('click',init);
+  init();
+}
+
+/* ====== FOGALMAK ====== */
+function vTerms(){
+  view.innerHTML='<header><h1>Fogalmak</h1><p class="lead">Olvasd el a fogalmat, mondd el a meghatározását, majd fordítsd meg a kártyát, és értékeld magad.</p></header>'+
+  '<section><div class="row"><label class="row" style="gap:.5rem"><input type="checkbox" id="only"> Csak a még nem „tudom” fogalmak</label></div>'+
+  '<div class="prog"><span id="cnt"></span><span id="kn"></span></div><div class="card flash" id="fc" aria-live="polite"></div>'+
+  '<div class="row" id="ctl"></div><div class="row"><button class="btn sec" id="rst">Haladás törlése</button></div></section>';
+  var known=store.get('known',{});var cur=0,flipped=false;
+  function list(){var only=document.getElementById('only').checked;return TERMS.map(function(_,i){return i}).filter(function(i){return !only||known[i]!==1})}
+  function draw(focusSel){
+    var L=list();var fc=document.getElementById('fc'),ctl=document.getElementById('ctl');
+    var kn=0;Object.keys(known).forEach(function(k){if(known[k]===1)kn++});
+    document.getElementById('kn').textContent='„Tudom”: '+kn+' / '+TERMS.length;
+    if(!L.length){fc.innerHTML='<span class="term">Minden fogalmat tudsz.</span><p class="muted">Vedd ki a jelölést a szűrőből, ha át szeretnéd nézni az egész készletet.</p>';ctl.innerHTML='';document.getElementById('cnt').textContent='';return}
+    if(cur>=L.length)cur=0;
+    var i=L[cur];var t=TERMS[i];
+    document.getElementById('cnt').textContent=(cur+1)+' / '+L.length+' kártya';
+    fc.innerHTML='<span class="tag">Fogalom</span><span class="term">'+esc(t[0])+'</span>'+(flipped?'<p class="def">'+esc(t[1])+'</p>':'<p class="muted">Mondd el a meghatározást, majd fordítsd meg.</p>');
+    ctl.innerHTML=(flipped?
+      '<button class="btn" data-a="know" id="b1">Tudom</button><button class="btn sec" data-a="again" id="b2">Gyakorolnom kell</button>':
+      '<button class="btn" data-a="flip" id="b0">Kártya megfordítása</button>')+
+      '<button class="btn sec" data-a="prev" aria-label="Előző kártya">◀</button><button class="btn sec" data-a="next" aria-label="Következő kártya">▶</button>';
+    if(focusSel){var f=ctl.querySelector(focusSel);if(f)f.focus()}
+  }
+  document.getElementById('ctl').addEventListener('click',function(ev){
+    var b=ev.target.closest('button');if(!b)return;var a=b.dataset.a;var L=list();
+    if(a==='flip'){flipped=true;draw('#b1')}
+    else if(a==='know'||a==='again'){known[L[cur]]=(a==='know'?1:0);store.set('known',known);flipped=false;
+      if(document.getElementById('only').checked&&a==='know'){}else cur++;
+      draw('#b0')}
+    else if(a==='next'){cur=(cur+1)%L.length;flipped=false;draw('#b0')}
+    else if(a==='prev'){cur=(cur-1+L.length)%L.length;flipped=false;draw('#b0')}
+  });
+  document.getElementById('only').addEventListener('change',function(){cur=0;flipped=false;draw()});
+  document.getElementById('rst').addEventListener('click',function(){known={};store.set('known',known);cur=0;flipped=false;draw()});
+  draw();
+}
+
+/* ====== CSOPORTOSÍTÁS ====== */
+function vSort(){
+  view.innerHTML='<header><h1>Csoportosítás</h1><p class="lead">A tankönyv a leckét öt részre bontja. Válaszd ki mindegyik tényezőnél, hogy a tankönyv melyik rész alatt tárgyalja. Az ellenőrzés után látod a helyes választ.</p></header>'+
+  '<section><div class="assign" id="as"></div><div class="row"><button class="btn" id="ac">Ellenőrzés</button><button class="btn sec" id="ar">Újrakezdés</button></div><p class="status" id="ast" role="status" aria-live="polite"></p></section>';
+  var items;
+  function init(){items=shuffle(ASSIGN.map(function(_,i){return i}));draw(false);document.getElementById('ast').textContent=''}
+  function draw(chk,sel){
+    sel=sel||{};
+    document.getElementById('as').innerHTML=items.map(function(i,p){
+      var a=ASSIGN[i];var cls='',fb='';
+      if(chk){var v=sel[i];if(v===a[1])cls='ok';else{cls='no';fb='<span class="fb">Helyes válasz: <strong>'+CATS[a[1]]+'</strong>.'+(i===9?' A felhatalmazási törvényt a tankönyv a hatalom megragadásánál tárgyalja.':'')+'</span>'}}
+      return '<div class="it '+cls+'"><label for="s'+i+'">'+esc(a[0])+'</label><select id="s'+i+'" data-i="'+i+'"><option value="">Válassz…</option>'+
+      CATS.map(function(c,k){return '<option value="'+k+'"'+(sel[i]===k?' selected':'')+'>'+c+'</option>'}).join('')+'</select>'+fb+'</div>';
+    }).join('');
+  }
+  function read(){var s={};view.querySelectorAll('select').forEach(function(el){if(el.value!=='')s[+el.dataset.i]=+el.value});return s}
+  document.getElementById('ac').addEventListener('click',function(){
+    var s=read();var score=0;items.forEach(function(i){if(s[i]===ASSIGN[i][1])score++});
+    draw(true,s);
+    var tot=ASSIGN.length;var best=store.get('assignBest',null);
+    if(!best||score>best.score)store.set('assignBest',{score:score,total:tot});
+    document.getElementById('ast').textContent=score+' / '+tot+' helyes besorolás.'+(score===tot?' Hibátlan.':' A pirossal jelölt sorok alatt látod a helyes választ.');
+  });
+  document.getElementById('ar').addEventListener('click',init);
+  init();
+}
+
+/* ====== FORRÁSOK ====== */
+function vSources(){
+  var drafts=store.get('drafts',{});
+  view.innerHTML='<header><h1>Források</h1><p class="lead">Az érettségi forráselemzéséhez hasonló gyakorlás: olvasd el a forrásleírást, írd le a saját válaszod, és csak utána nyisd meg a mintaszempontokat. A szövegek tartalmi kivonatok, a teljes szöveg a tankönyvben található.</p></header><section id="srcs" style="gap:.7rem"></section>';
+  document.getElementById('srcs').innerHTML=SOURCES.map(function(s,si){
+    return '<details class="dt"><summary><span>'+esc(s.t)+'<br><span class="muted small" style="font-family:var(--f-body);font-weight:400">'+s.pg+'</span></span></summary><div class="dbody"><div class="srcbox">'+s.d.join('')+'</div>'+
+    s.q.map(function(q,qi){var id='d'+si+'_'+qi;
+      return '<div class="qa"><label class="q" for="'+id+'">'+esc(q[0])+'</label><textarea id="'+id+'" data-k="'+id+'" placeholder="Írd ide a válaszodat…"></textarea>'+
+      '<div><button class="btn sec" data-m="'+id+'" aria-expanded="false">Mintaszempontok megmutatása</button></div>'+
+      '<div class="model" id="m_'+id+'" hidden><strong>Lehetséges szempontok a tankönyvi szöveg alapján</strong><ul>'+q[1].map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></div></div>'}).join('')+
+    '</div></details>';
+  }).join('');
+  var sec=document.getElementById('srcs');
+  sec.querySelectorAll('textarea').forEach(function(t){if(drafts[t.dataset.k])t.value=drafts[t.dataset.k]});
+  sec.addEventListener('input',function(ev){var t=ev.target;if(t.tagName==='TEXTAREA'&&t.dataset.k){drafts[t.dataset.k]=t.value;store.set('drafts',drafts)}});
+  sec.addEventListener('click',function(ev){var b=ev.target.closest('button[data-m]');if(!b)return;var m=document.getElementById('m_'+b.dataset.m);var open=m.hidden;m.hidden=!open;b.setAttribute('aria-expanded',String(open));b.textContent=open?'Mintaszempontok elrejtése':'Mintaszempontok megmutatása'});
+}
+
+/* ====== KVÍZ ====== */
+function vQuiz(){
+  view.innerHTML='<header><h1>Kvíz</h1><p class="lead">Feleletválasztós kérdések a teljes leckéből. Minden válasz után megkapod az indoklást.</p></header><section id="qz"></section>';
+  var box=document.getElementById('qz');
+  function start(){
+    box.innerHTML='<div class="card" style="display:grid;gap:.8rem"><h2>Válassz módot</h2><div class="row"><button class="btn" data-n="10">Gyors kör: 10 véletlen kérdés</button><button class="btn sec" data-n="'+QUIZ.length+'">Teljes kvíz: '+QUIZ.length+' kérdés</button></div></div>';
+    box.querySelector('.card').addEventListener('click',function(ev){var b=ev.target.closest('button');if(b)run(shuffle(QUIZ.map(function(_,i){return i})).slice(0,+b.dataset.n))});
+  }
+  function run(ids){
+    var pos=0,score=0,wrong=[],tagStat={};
+    function show(){
+      var q=QUIZ[ids[pos]];var idx=shuffle(q.o.map(function(_,i){return i}));var answered=false;
+      box.innerHTML='<div style="display:grid;gap:.9rem"><div class="prog"><span>'+(pos+1)+' / '+ids.length+'. kérdés</span><span>Pontszám: '+score+'</span></div><div class="bar" aria-hidden="true"><i style="width:'+Math.round(100*pos/ids.length)+'%"></i></div>'+
+      '<span class="tag">'+q.tag+'</span><h2 id="qq" tabindex="-1">'+esc(q.q)+'</h2><div class="opts" id="op">'+
+      idx.map(function(i){return '<button class="opt" data-i="'+i+'">'+esc(q.o[i])+'</button>'}).join('')+'</div><div id="fb" role="status" aria-live="polite"></div></div>';
+      document.getElementById('qq').focus({preventScroll:true});
+      document.getElementById('op').addEventListener('click',function(ev){
+        var b=ev.target.closest('.opt');if(!b||answered)return;answered=true;
+        var pick=+b.dataset.i;var ok=pick===q.a;
+        tagStat[q.tag]=tagStat[q.tag]||{c:0,n:0};tagStat[q.tag].n++;
+        if(ok){score++;tagStat[q.tag].c++}else wrong.push(ids[pos]);
+        box.querySelectorAll('.opt').forEach(function(o){o.disabled=true;var i=+o.dataset.i;if(i===q.a)o.classList.add('ok');else if(i===pick)o.classList.add('no')});
+        var last=pos===ids.length-1;
+        document.getElementById('fb').innerHTML='<div class="expl"><strong>'+(ok?'Helyes.':'Nem ez a helyes válasz.')+'</strong> '+esc(q.why)+'</div><div class="row" style="margin-top:.7rem"><button class="btn" id="nx">'+(last?'Eredmény':'Következő kérdés')+'</button></div>';
+        document.getElementById('nx').focus();
+        document.getElementById('nx').addEventListener('click',function(){pos++;if(pos<ids.length)show();else done()});
+      });
+    }
+    function done(){
+      var tot=ids.length;var best=store.get('quizBest',null);
+      var pct=score/tot;if(!best||pct>best.score/best.total)store.set('quizBest',{score:score,total:tot});
+      var rows=Object.keys(tagStat).map(function(k){var s=tagStat[k];return '<tr><td>'+k+'</td><td>'+s.c+' / '+s.n+'</td></tr>'}).join('');
+      box.innerHTML='<div style="display:grid;gap:1rem"><h2 id="qq" tabindex="-1">Eredmény: '+score+' / '+tot+' ('+Math.round(100*pct)+'%)</h2>'+
+      '<div class="card tblwrap"><table class="res"><thead><tr><th>Témakör</th><th>Helyes</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+      '<p class="muted">'+(wrong.length?'A tévesen megválaszolt témakörök ismétléséhez használd a Fogalmak és a Kifejtés fület.':'Hibátlan eredmény.')+'</p>'+
+      '<div class="row">'+(wrong.length?'<button class="btn" id="rw">Hibás kérdések újra ('+wrong.length+')</button>':'')+'<button class="btn sec" id="nw">Új kvíz</button></div></div>';
+      document.getElementById('qq').focus({preventScroll:true});
+      var rw=document.getElementById('rw');if(rw)rw.addEventListener('click',function(){run(shuffle(wrong))});
+      document.getElementById('nw').addEventListener('click',start);
+    }
+    show();
+  }
+  start();
+}
+
+/* ====== KIFEJTÉS ====== */
+function vEssay(){
+  var drafts=store.get('drafts',{});var checks=store.get('essayChecks',{});
+  view.innerHTML='<header><h1>Kifejtés</h1><p class="lead">Fogalmazd meg a feleletet saját szavaiddal (vagy vázlatban), majd jelöld meg az ellenőrző listán, mely szempontok szerepeltek benne. A lista a tankönyvi leckéből készült.</p></header><section id="es" style="gap:.7rem"></section>';
+  document.getElementById('es').innerHTML=ESSAYS.map(function(e,ei){
+    return '<details class="dt"><summary><span>'+esc(e.t)+'</span></summary><div class="dbody"><label class="q" for="e'+ei+'" style="font-weight:600">Vázlat / felelet</label><textarea id="e'+ei+'" data-k="e'+ei+'" style="min-height:9rem" placeholder="Írd ide a feleletedet…"></textarea>'+
+    '<div class="chk" role="group" aria-label="Ellenőrző szempontok">'+e.pts.map(function(p,pi){var id='c'+ei+'_'+pi;return '<label><input type="checkbox" id="'+id+'" data-c="'+id+'"><span>'+esc(p)+'</span></label>'}).join('')+'</div>'+
+    '<p class="status" id="r'+ei+'" aria-live="polite"></p></div></details>';
+  }).join('');
+  function upd(ei){var n=0;ESSAYS[ei].pts.forEach(function(_,pi){if(checks['c'+ei+'_'+pi])n++});document.getElementById('r'+ei).textContent='Megjelölt szempontok: '+n+' / '+ESSAYS[ei].pts.length}
+  ESSAYS.forEach(function(e,ei){e.pts.forEach(function(_,pi){var id='c'+ei+'_'+pi;var el=document.getElementById(id);if(checks[id])el.checked=true});var t=document.getElementById('e'+ei);if(drafts['e'+ei])t.value=drafts['e'+ei];upd(ei)});
+  var esec=document.getElementById('es');
+  esec.addEventListener('input',function(ev){var t=ev.target;if(t.tagName==='TEXTAREA'&&t.dataset.k){drafts[t.dataset.k]=t.value;store.set('drafts',drafts)}});
+  esec.addEventListener('change',function(ev){var t=ev.target;if(t.dataset&&t.dataset.c){checks[t.dataset.c]=t.checked;store.set('essayChecks',checks);upd(+t.dataset.c.slice(1).split('_')[0])}});
+}
+
+route();
+})();
+</script>
+</body>
+</html>

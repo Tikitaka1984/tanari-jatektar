@@ -188,5 +188,15 @@
     "path": "games/hanza.html",
     "bytes": 159179,
     "md5": "61c23343e1b6d38ee684c15f54b38073"
+  },
+  "nemet-nacizmus": {
+    "path": "games/nemet-nacizmus.html",
+    "bytes": 60878,
+    "md5": "9c369b0f2c106f93894c53eb8469d5bd"
+  },
+  "bemutato_nemet_nacizmus": {
+    "path": "demos/bemutato_nemet_nacizmus.html",
+    "bytes": 1910364,
+    "md5": "5602f21e44cf82b6a7dd31331e0cd87f"
   }
 }
