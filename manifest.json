@@ -1,8 +1,8 @@
 {
   "korona": {
     "path": "games/korona.html",
-    "bytes": 88760,
-    "md5": "7603a3ffcd7aec62b851378849020f66"
+    "bytes": 93506,
+    "md5": "a74c30b40674c69d4f3395a03bd1fd77"
   },
   "kivagyok": {
     "path": "games/kivagyok.html",
@@ -139,15 +139,35 @@
     "bytes": 1271543,
     "md5": "8393d464ac124a95c0e8099877852e45"
   },
+  "bemutato_kornyezet_1_4": {
+    "path": "demos/bemutato_kornyezet_1_4.html",
+    "bytes": 78641,
+    "md5": "ea3aaf558a6577917555e81bd23122af"
+  },
+  "bemutato_kornyezet_5_8": {
+    "path": "demos/bemutato_kornyezet_5_8.html",
+    "bytes": 78132,
+    "md5": "f500bbd5f039dd52382beb64f649aa87"
+  },
+  "bemutato_kornyezet_9_12": {
+    "path": "demos/bemutato_kornyezet_9_12.html",
+    "bytes": 80738,
+    "md5": "debb0e5968b0c56aa2cf7bb25a7628f6"
+  },
   "athen-nyomozas": {
     "path": "games/athen-nyomozas.html",
-    "bytes": 35339,
-    "md5": "e9bebac3abe170d0de8974895fa59468"
+    "bytes": 37580,
+    "md5": "f1316f8bb2f720afba2da8f360e394b9"
   },
   "allampolgari-nyomozas": {
     "path": "games/allampolgari-nyomozas.html",
-    "bytes": 37993,
-    "md5": "b38d6eeb78cb305c45b7b827fdadaf66"
+    "bytes": 40422,
+    "md5": "1aeb99da2515e1f8c02766e82cb2499e"
+  },
+  "rome-nyomozas": {
+    "path": "games/rome-nyomozas.html",
+    "bytes": 42819,
+    "md5": "9fd64dbe6a412dbbb0269036d6d76b24"
   },
   "nagy-valsag": {
     "path": "games/nagy-valsag.html",

@@ -179,6 +179,11 @@
   .stat-box b{color:var(--gold-light);}
   .scroll-shelf{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;max-width:820px;margin:26px auto 0;text-align:left;}
   footer.tiny{text-align:center;opacity:.5;font-size:.78rem;margin-top:50px;font-family:'Space Mono',monospace;position:relative;z-index:1;}
+  .panel:focus,h1:focus,h2:focus{outline:none;}
+  .map-cta{text-align:center;margin:16px 0 4px;}
+  .map-cta p{margin:0 0 10px;font-size:.9rem;opacity:.9;}
+  .year-seg:focus-visible .seg-bg{stroke:var(--gold-light);stroke-width:4;}
+  .spot:focus-visible circle{stroke:var(--gold-light);stroke-width:5;}
 </style>
 </head>
 <body>
@@ -289,6 +294,7 @@
       <span><span class="dot" style="background:var(--forest)"></span> teljesítve</span>
       <span><span class="dot" style="background:#8a8a8a"></span> zárva</span>
     </div>
+    <div class="map-cta" id="mapCta"></div>
   </section>
 
   <!-- ENDING -->
@@ -308,7 +314,7 @@
 </div>
 
 <div class="overlay" id="overlay">
-  <div class="panel" id="panel">
+  <div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panel-title" tabindex="-1">
     <button class="panel-close" onclick="closePanel()" aria-label="Bezárás">&#10005;</button>
     <div class="eyebrow" id="panel-eyebrow"></div>
     <h2 id="panel-title"></h2>
@@ -337,6 +343,37 @@
 function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
 function sample(arr,n){return shuffle(arr).slice(0,n);}
+function actKey(e){return e.key==='Enter'||e.key===' '||e.key==='Spacebar';}
+
+/* ============ időzítők: megszakíthatók, a „végső” lépés panelzáráskor is érvényesül ============ */
+const timers=[];
+function later(fn,ms,final){
+  const t={fn,final:!!final};
+  t.id=setTimeout(()=>{const i=timers.indexOf(t); if(i>-1) timers.splice(i,1); fn();},ms);
+  timers.push(t);
+}
+function cancelTimers(runFinal){
+  timers.splice(0).forEach(t=>{clearTimeout(t.id); if(runFinal&&t.final) t.fn();});
+}
+
+/* ============ fókuszkezelés ============ */
+let returnFocus=null;
+function rememberFocus(){
+  const el=document.activeElement;
+  if(!el||el===document.body){returnFocus=null;return;}
+  const m=el.closest?el.closest('[data-loc]'):null;
+  returnFocus={el,loc:m?m.dataset.loc:null};
+}
+function restoreFocus(){
+  const r=returnFocus; returnFocus=null;
+  let t=null;
+  if(r){
+    if(r.loc) t=document.querySelector('#markers [data-loc="'+r.loc+'"]');
+    if(!t&&r.el&&r.el.isConnected) t=r.el;
+  }
+  if(!t) t=document.querySelector('.screen.active h1, .screen.active h2');
+  if(t){ if(!t.hasAttribute('tabindex')) t.setAttribute('tabindex','-1'); t.focus({preventScroll:true}); }
+}
 
 /* ============ jelek — KORONA ============ */
 const GLYPHS = {
@@ -437,6 +474,8 @@ function goTo(screen){
   document.getElementById('hud').style.display = screen==='cover' ? 'none' : 'flex';
   if(screen==='map') renderMap();
   if(screen==='ending'){renderFinalCartouche(); renderShelf(); renderStats();}
+  const h=document.querySelector('#screen-'+screen+' h1, #screen-'+screen+' h2');
+  if(h){ h.setAttribute('tabindex','-1'); h.focus({preventScroll:true}); }
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function renderCartouche(){
@@ -458,7 +497,10 @@ function renderMap(){
     const color = done ? 'var(--forest)' : (locked ? '#8a8a8a' : 'var(--crimson)');
     const cls = 'marker'+(done?' done':'')+(locked?' locked':'');
     const label = known ? loc.title : '?';
-    return `<g class="${cls}" transform="translate(${loc.x},${loc.y})" onclick="${locked?'':`openLocation('${loc.id}')`}" onkeydown="if(!${locked}&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openLocation('${loc.id}');}" role="button" tabindex="${locked?-1:0}" aria-label="${known?loc.title:'Azonosítatlan helyszín, '+loc.num+'. próba'}">
+    const base = known ? loc.title : 'Azonosítatlan helyszín, '+loc.num+'. próba';
+    const aria = base + (done ? ', teljesítve' : (locked ? ', zárolva: előbb teljesítsd az első öt próbát' : ''));
+    return `<g class="${cls}" data-loc="${loc.id}" transform="translate(${loc.x},${loc.y})" onclick="${locked?'':`openLocation('${loc.id}')`}" onkeydown="if(!${locked}&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openLocation('${loc.id}');}" role="button" tabindex="${locked?-1:0}" aria-disabled="${locked}" aria-label="${aria}">
+      <circle class="hit" r="34" fill="transparent"/>
       <circle class="ring" r="19" fill="none" stroke="${color}" stroke-width="2"/>
       <circle r="18" fill="${color}" stroke="#fff" stroke-width="2.5"/>
       ${done?'<path d="M-7 0 L-2 5 L8 -6" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>':MARKER_ICONS[loc.icon]}
@@ -466,17 +508,32 @@ function renderMap(){
       <text x="${loc.lx}" y="${loc.ly}" text-anchor="${loc.anchor}" font-size="15" fill="#241811" stroke="#dcc48f" stroke-width="4" paint-order="stroke">${label}</text>
     </g>`;
   }).join('');
+  const all = Object.values(state.completed).every(v=>v);
+  document.getElementById('mapCta').innerHTML = all
+    ? '<p>Mind a hat próbát teljesítetted.</p><button class="btn" onclick="startReview()">Záró ismétlő próba &rarr;</button>'
+    : '';
 }
 function openPanel(eyebrow,title,bodyHtml,actionsHtml=''){
+  const ov=document.getElementById('overlay');
+  if(!ov.classList.contains('active')) rememberFocus();
   document.getElementById('panel-eyebrow').innerHTML = eyebrow;
   document.getElementById('panel-title').textContent = title;
   document.getElementById('panel-body').innerHTML = bodyHtml;
   document.getElementById('panel-actions').innerHTML = actionsHtml;
   const fb=document.getElementById('panel-feedback');
   fb.className='feedback'; fb.textContent='';
-  document.getElementById('overlay').classList.add('active');
+  ov.classList.add('active');
+  document.getElementById('app').inert = true;
+  ov.scrollTop = 0;
+  document.getElementById('panel').focus({preventScroll:true});
 }
-function closePanel(){document.getElementById('overlay').classList.remove('active');}
+function closePanel(){
+  document.getElementById('overlay').classList.remove('active');
+  document.getElementById('app').inert = false;
+  cancelTimers(true);   /* a függő átmenetek elmaradnak, de a már kiérdemelt teljesítés érvényesül */
+  if(document.getElementById('screen-map').classList.contains('active')) renderMap();
+  restoreFocus();
+}
 function feedback(msg,ok){
   const fb=document.getElementById('panel-feedback');
   fb.className='feedback '+(ok?'ok':'bad');
@@ -492,13 +549,14 @@ function finishLocation(locId){
   if(!state.glyphsWon.includes(loc.glyph)) state.glyphsWon.push(loc.glyph);
   if(!state.scrolls.includes(locId)) state.scrolls.push(locId);
   renderCartouche();
-  document.getElementById('panel-body').insertAdjacentHTML('beforeend', scrollHtml(locId));
+  const body=document.getElementById('panel-body');
+  if(!body.querySelector('.kscroll')) body.insertAdjacentHTML('beforeend', scrollHtml(locId));
   feedback('&#10003; Megszerezted a(z) <b>'+GLYPHS[loc.glyph].name+'</b> jelet és egy tudástekercset!',true);
   const allDone=Object.values(state.completed).every(v=>v);
   document.getElementById('panel-actions').innerHTML =
     allDone
       ? `<button class="btn" onclick="startReview()">Záró ismétlő próba &rarr;</button>`
-      : `<button class="btn" onclick="closePanel(); renderMap();">Vissza a térképre &rarr;</button>`;
+      : `<button class="btn" onclick="closePanel()">Vissza a térképre &rarr;</button>`;
 }
 function renderFinalCartouche(){
   document.getElementById('cartouche-final').innerHTML = NAME_ORDER.map((k,i)=>
@@ -527,9 +585,12 @@ function showScrolls(){
   openPanel('Tudástekercsek','Amit eddig átismételtél', state.scrolls.map(scrollHtml).join(''));
 }
 function restartGame(){
+  cancelTimers(false);
   Object.keys(state.completed).forEach(k=>state.completed[k]=false);
   state.topoDone={}; state.glyphsWon=[]; state.scrolls=[];
   state.errors=0; state.reviewScore=null;
+  review.active=false; review.base=0; mcCurrent=null; pendingLoc=null;
+  renderCartouche();
   goTo('cover');
 }
 
@@ -543,14 +604,16 @@ function mcHtml(q){
     `<button class="opt" data-ok="${o.ok?1:0}" data-fb="${(o.fb||'').replace(/"/g,'&quot;')}" onclick="mcAnswer(this)">${o.t}</button>`).join('')+'</div>';
 }
 function mcAnswer(btn){
+  if(!mcCurrent||mcCurrent.solved||btn.disabled) return;
   const ok=btn.dataset.ok==='1';
-  document.querySelectorAll('#panel-body .opt').forEach(b=>b.classList.remove('correct','incorrect'));
   if(ok){
+    mcCurrent.solved=true;
     btn.classList.add('correct');
     document.querySelectorAll('#panel-body .opt').forEach(b=>b.disabled=true);
     feedback(mcCurrent.okFb,true);
-    if(mcCurrent.onOk) setTimeout(mcCurrent.onOk, mcCurrent.delay||2000);
+    if(mcCurrent.onOk) later(mcCurrent.onOk, mcCurrent.delay||2000, mcCurrent.final);
   }else{
+    btn.disabled=true;
     addErr();
     btn.classList.add('incorrect');
     feedback(btn.dataset.fb||mcCurrent.wrongFb,false);
@@ -558,9 +621,9 @@ function mcAnswer(btn){
 }
 
 /* ============ fogalompárosító ============ */
-const matchState={pairs:[],doneCount:0,sel:null,onComplete:null,prefix:''};
+const matchState={pairs:[],doneCount:0,sel:null,onComplete:null,prefix:'',tried:new Set()};
 function initMatch(pairs,onComplete,prefix){
-  matchState.pairs=pairs; matchState.doneCount=0; matchState.sel=null;
+  matchState.pairs=pairs; matchState.doneCount=0; matchState.sel=null; matchState.tried=new Set();
   matchState.onComplete=onComplete; matchState.prefix=prefix;
 }
 function matchHtml(){
@@ -588,11 +651,14 @@ function pickDef(i){
     matchState.doneCount++; matchState.sel=null;
     if(matchState.doneCount===matchState.pairs.length){
       feedback('Minden fogalmat helyesen párosítottál!',true);
-      setTimeout(matchState.onComplete,900);
+      later(matchState.onComplete,900,true);
     }else{
       feedback('Helyes párosítás! ('+matchState.doneCount+'/'+matchState.pairs.length+')',true);
     }
   }else{
+    const key=matchState.sel+'-'+i;
+    if(matchState.tried.has(key)){ feedback('Ezt a párosítást már kipróbáltad — gondold át újra!',false); return; }
+    matchState.tried.add(key);
     addErr();
     dEl.classList.add('flash');
     setTimeout(()=>dEl.classList.remove('flash'),600);
@@ -612,9 +678,9 @@ function openLocation(id){
      <div>${opts.map(o=>`<button class="opt" data-ok="${o.ok?1:0}" onclick="topoAnswer(this)">${o.t}</button>`).join('')}</div>`);
 }
 function topoAnswer(btn){
+  if(btn.disabled) return;
   const loc=LOCS.find(l=>l.id===pendingLoc);
   const ok=btn.dataset.ok==='1';
-  document.querySelectorAll('#panel-body .opt').forEach(b=>b.classList.remove('correct','incorrect'));
   if(ok){
     btn.classList.add('correct');
     document.querySelectorAll('#panel-body .opt').forEach(b=>b.disabled=true);
@@ -623,6 +689,7 @@ function topoAnswer(btn){
     document.getElementById('panel-actions').innerHTML=
       `<button class="btn" onclick="startStation('${pendingLoc}')">Tovább a próbához &rarr;</button>`;
   }else{
+    btn.disabled=true;
     addErr();
     btn.classList.add('incorrect');
     feedback(loc.topoHint,false);
@@ -641,11 +708,13 @@ const WHEEL_TARGETS=[
   {key:'istvanhal',ask:'István halálát',reveal:'<b>1038</b>: István halála, amelyet trónviszályok követtek.'},
 ];
 let wheelTarget=null;
+let wheelState={tried:new Set(),solved:false};
 function openEsztergom(){
   wheelTarget=pick(WHEEL_TARGETS);
+  wheelState={tried:new Set(),solved:false};
   openPanel('01 &middot; Esztergom &middot; államalapítás &mdash; szint: felidézés','Az évek kereke',
     `<p>Az esztergomi várhegyen egy krónikás fogad: <i>„Három évszámot vések eléd — mindhárom fordulópont István életútjában. Melyikhez kötjük <b>${wheelTarget.ask}</b>?”</i></p>
-     <div class="year-wheel"><svg viewBox="0 0 300 300" role="img" aria-label="Évszám-kerék: 997, 1000, 1038">
+     <div class="year-wheel"><svg viewBox="0 0 300 300" role="group" aria-label="Évszám-kerék: 997, 1000, 1038">
        <circle cx="150" cy="150" r="145" fill="#fff" stroke="#cdb480" stroke-width="2"/>
        ${yearSeg('geza',0,'997','#8fa8c9')}
        ${yearSeg('koronazas',1,'1000','#9dc08a')}
@@ -661,19 +730,23 @@ function yearSeg(id,i,name,color){
   const x1=cx+r*Math.cos(a1*Math.PI/180), y1=cy+r*Math.sin(a1*Math.PI/180);
   const mid=(a0+a1)/2, tr=95;
   const tx=cx+tr*Math.cos(mid*Math.PI/180), ty=cy+tr*Math.sin(mid*Math.PI/180);
-  return `<g class="year-seg" id="seg-${id}" onclick="pickYear('${id}')">
+  return `<g class="year-seg" id="seg-${id}" onclick="pickYear('${id}')" onkeydown="if(actKey(event)){event.preventDefault();pickYear('${id}');}" tabindex="0" role="button" aria-label="Év: ${name}">
     <path class="seg-bg" d="M${cx} ${cy} L${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1} Z" fill="${color}" stroke="#fff" stroke-width="2"/>
     <text x="${tx}" y="${ty+6}" text-anchor="middle" font-size="19" font-weight="700" fill="#2b1b12">${name}</text>
   </g>`;
 }
 function pickYear(id){
-  document.querySelectorAll('.year-seg').forEach(s=>s.classList.remove('correct','incorrect'));
+  if(wheelState.solved||wheelState.tried.has(id)) return;
   const seg=document.getElementById('seg-'+id);
   if(id===wheelTarget.key){
+    wheelState.solved=true;
+    document.querySelectorAll('.year-seg').forEach(g=>g.setAttribute('aria-disabled','true'));
     seg.classList.add('correct');
     feedback('Pontosan! '+wheelTarget.reveal+' A három fordulópont együtt: 997 — Géza halála; 1000/1001 — koronázás; 1038 — István halála.',true);
-    setTimeout(renderIstvanMatch,2200);
+    later(renderIstvanMatch,2200);
   }else{
+    wheelState.tried.add(id);
+    seg.setAttribute('aria-disabled','true');
     addErr();
     seg.classList.add('incorrect');
     feedback('Ehhez az évhez az életút egy <b>másik</b> fordulópontja kötődik. Gondold végig: István 997–1038 között állt az ország élén — a keresett esemény ennek melyik szakaszára eshetett?',false);
@@ -803,6 +876,7 @@ function answerCity(btn){
   const npc=NPCS[city.idx];
   const ok=btn.dataset.ok==='1';
   const btns=document.querySelectorAll('#npcCard .opt');
+  if(btn.disabled) return;
   if(ok){
     btn.classList.add('correct');
     btns.forEach(b=>b.disabled=true);
@@ -812,14 +886,14 @@ function answerCity(btn){
     document.getElementById('tier-'+npc.tier)?.classList.add('lit');
     if(city.done.size===NPCS.length){
       feedback('Mind a négy szereplőt meghallgattad — így vált az Aranybulla a rendi fejlődés kiindulópontjává.',true);
-      setTimeout(()=>finishLocation('aranybulla'),1600);
+      later(()=>finishLocation('aranybulla'),1600,true);
     }else{
       feedback('Helyes! Figyeld meg, hova került '+npc.name.split(',')[0]+' a rendi tagozódásban.',true);
-      setTimeout(()=>{city.idx++; renderCity();},1900);
+      later(()=>{city.idx++; renderCity();},1900);
     }
   }else{
     addErr();
-    btn.classList.add('incorrect');
+    btn.classList.add('incorrect'); btn.disabled=true;
     feedback('Ezt '+npc.name.split(',')[0]+' fejcsóválva hallgatja — kinek az érdekét, milyen sérelmét rendezheti az oklevél? Gondold át újra!',false);
   }
 }
@@ -850,10 +924,12 @@ function openMuhi(){
     mcHtml({opts:v.opts,okFb:v.okFb,wrongFb:v.wrongFb,onOk:renderCastleDecision,delay:2400}));
 }
 /* várhely-döntés: történelmi döntéshelyzet */
+let spotState={tried:new Set(),solved:false};
 function renderCastleDecision(){
+  spotState={tried:new Set(),solved:false};
   openPanel('03 &middot; Muhi &middot; az újjáépítés &mdash; szint: alkalmazás','Hová építenéd a várat?',
     `<p><i>„Most gondolkodj úgy, mint a király várépítő mestere! Három helyszín közül választhatsz — döntsd el a terep alapján, hová érdemes kővárat emelni.”</i></p>
-     <div class="decision-scene"><svg viewBox="0 0 500 300" role="img" aria-label="Terepszelvény három lehetséges várhellyel">
+     <div class="decision-scene"><svg viewBox="0 0 500 300" role="group" aria-label="Terepszelvény három lehetséges várhellyel">
        <rect width="500" height="300" fill="#d9c48c" rx="10"/>
        <!-- folyó átkelővel -->
        <path d="M0 200 C 120 190 220 210 320 200 C 400 192 460 198 500 195" fill="none" stroke="#2e5f80" stroke-width="26"/>
@@ -873,19 +949,23 @@ function renderCastleDecision(){
        </g>
        <text x="412" y="290" text-anchor="middle" font-size="10" fill="#3d2a14" font-family="Cinzel,serif">ártéri mocsár</text>
        <!-- választható pontok -->
-       <g class="spot" id="spot-a" onclick="pickSpot('a')"><circle cx="80" cy="110" r="16" fill="#8b1a1a" stroke="#fff" stroke-width="2.5"/><text x="80" y="116" text-anchor="middle" font-size="14" fill="#fff" font-family="Cinzel,serif" font-weight="700">A</text></g>
-       <g class="spot" id="spot-b" onclick="pickSpot('b')"><circle cx="258" cy="105" r="16" fill="#8b1a1a" stroke="#fff" stroke-width="2.5"/><text x="258" y="111" text-anchor="middle" font-size="14" fill="#fff" font-family="Cinzel,serif" font-weight="700">B</text></g>
-       <g class="spot" id="spot-c" onclick="pickSpot('c')"><circle cx="412" cy="250" r="16" fill="#8b1a1a" stroke="#fff" stroke-width="2.5"/><text x="412" y="256" text-anchor="middle" font-size="14" fill="#fff" font-family="Cinzel,serif" font-weight="700">C</text></g>
+       <g class="spot" id="spot-a" onclick="pickSpot('a')" onkeydown="if(actKey(event)){event.preventDefault();pickSpot('a');}" tabindex="0" role="button" aria-label="Várhely A"><circle cx="80" cy="110" r="16" fill="#8b1a1a" stroke="#fff" stroke-width="2.5"/><text x="80" y="116" text-anchor="middle" font-size="14" fill="#fff" font-family="Cinzel,serif" font-weight="700">A</text></g>
+       <g class="spot" id="spot-b" onclick="pickSpot('b')" onkeydown="if(actKey(event)){event.preventDefault();pickSpot('b');}" tabindex="0" role="button" aria-label="Várhely B"><circle cx="258" cy="105" r="16" fill="#8b1a1a" stroke="#fff" stroke-width="2.5"/><text x="258" y="111" text-anchor="middle" font-size="14" fill="#fff" font-family="Cinzel,serif" font-weight="700">B</text></g>
+       <g class="spot" id="spot-c" onclick="pickSpot('c')" onkeydown="if(actKey(event)){event.preventDefault();pickSpot('c');}" tabindex="0" role="button" aria-label="Várhely C"><circle cx="412" cy="250" r="16" fill="#8b1a1a" stroke="#fff" stroke-width="2.5"/><text x="412" y="256" text-anchor="middle" font-size="14" fill="#fff" font-family="Cinzel,serif" font-weight="700">C</text></g>
      </svg></div>`);
 }
 function pickSpot(s){
+  if(spotState.solved||spotState.tried.has(s)) return;
   const el=document.getElementById('spot-'+s);
-  document.querySelectorAll('.spot').forEach(e=>e.classList.remove('picked-ok','picked-bad'));
   if(s==='b'){
+    spotState.solved=true;
+    document.querySelectorAll('.spot').forEach(e=>e.setAttribute('aria-disabled','true'));
     el.classList.add('picked-ok');
     feedback('Jó döntés: a <b>sziklás magaslat az átkelő fölött</b> egyszerre védhető (meredek oldalak, szilárd alap) és stratégiai (ellenőrzi a folyón átkelő forgalmat). A 13. század második felének magyar várépítése pontosan ilyen magaslati várakat emelt.',true);
-    setTimeout(renderCastleWhy,2400);
+    later(renderCastleWhy,2400);
   }else{
+    spotState.tried.add(s);
+    el.setAttribute('aria-disabled','true');
     addErr();
     el.classList.add('picked-bad');
     feedback(s==='a'
@@ -904,7 +984,7 @@ function renderCastleWhy(){
       ],
       okFb:'Pontosan! A mongol hadviselés a gyorsaságra és a mezei csatára épült; egy jól épített kővár hosszú ostromra kényszerítette, ami időt, embert és utánpótlást emésztett. 1285-ben, a második mongol betöréskor az új várrendszer már bizonyított.',
       wrongFb:'Gondold végig: mi volt a mongol haderő legfőbb előnye, és milyen harci helyzet veszi el ezt az előnyt?',
-      onOk:()=>finishLocation('muhi'),delay:2400}));
+      onOk:()=>finishLocation('muhi'),final:true,delay:2400}));
 }
 
 /* =========================================================
@@ -939,7 +1019,9 @@ const PHASES=[
   {ico:'&#127984;',txt:'Bécs elfoglalása — Mátyás nyugati hódításainak csúcspontja'},
 ];
 let phaseOrder=[];
+let pyr={solved:false,seen:new Set()};
 function openBuda(){
+  pyr={solved:false,seen:new Set()};
   do{ phaseOrder=shuffle(PHASES.map((_,i)=>i)); }while(phaseOrder.every((v,i)=>v===i));
   renderPyramid(countCorrectPrefix());
 }
@@ -975,6 +1057,7 @@ function renderPyramid(built){
     `<button class="btn" onclick="checkPyramid()">Sorrend ellenőrzése</button>`);
 }
 function movePhase(i,dir){
+  if(pyr.solved) return;
   const j=i+dir; if(j<0||j>=phaseOrder.length)return;
   [phaseOrder[i],phaseOrder[j]]=[phaseOrder[j],phaseOrder[i]];
   renderPyramid(countCorrectPrefix());
@@ -983,13 +1066,16 @@ function countCorrectPrefix(){
   let n=0; while(n<phaseOrder.length && phaseOrder[n]===n) n++; return n;
 }
 function checkPyramid(){
+  if(pyr.solved) return;
   const correct=countCorrectPrefix();
   document.getElementById('pyrVisual').innerHTML=pyrVisual(correct);
   if(correct===phaseOrder.length){
     feedback('Tökéletes! A helyes sor: Nikápoly (<b>1396</b>) &rarr; Nándorfehérvár (<b>1456</b>) &rarr; Mátyás megválasztása (<b>1458</b>) &rarr; fekete sereg és adóreform &rarr; Bécs elfoglalása (<b>1485</b>).',true);
-    setTimeout(()=>finishLocation('buda'),1400);
+    pyr.solved=true;
+    later(()=>finishLocation('buda'),1400,true);
   }else{
-    addErr();
+    const key=phaseOrder.join(',');
+    if(!pyr.seen.has(key)){ pyr.seen.add(key); addErr(); }
     feedback('Az első <b>'+correct+'</b> esemény már a helyén van. Módszertani fogás: előbb kösd mindegyik eseményt egy-egy személyhez (Zsigmond, Hunyadi János, Mátyás), majd a személyeket állítsd időrendbe — az események sorrendje ebből következik.',false);
   }
 }
@@ -1090,7 +1176,7 @@ function renderSourceStep(){
        <p class="src-text">${s.text}</p>
        <p class="src-q">${q.q}</p>
      </div>`+
-    mcHtml({opts:q.opts,okFb:q.okFb,wrongFb:q.wrongFb,delay:2600,onOk:()=>{
+    mcHtml({opts:q.opts,okFb:q.okFb,wrongFb:q.wrongFb,delay:2600,final:isLast,onOk:()=>{
       if(srcState.qIdx < s.questions.length-1){ srcState.qIdx++; renderSourceStep(); }
       else if(srcState.srcIdx < SOURCES.length-1){ srcState.srcIdx++; srcState.qIdx=0; renderSourceStep(); }
       else finishLocation('mohacs');
@@ -1132,8 +1218,10 @@ const REVIEW_POOL=[
    opts:[{t:'Werbőczy István, 1514',ok:true},{t:'Anonymus, 1200 körül',ok:false},{t:'Hunyadi Mátyás, 1485',ok:false}],
    okFb:'Werbőczy Tripartituma (1514) a nemesi jog összefoglalása; a Szent Korona-tan szerint a hatalom a koronát illeti, amelynek a nemesi rendek is tagjai.'},
 ];
-const review={qs:[],idx:0,good:0,results:[]};
+const review={qs:[],idx:0,good:0,results:[],active:false,base:0};
 function startReview(){
+  if(review.active){ state.errors=review.base; }   /* megszakított próba hibái nem duplázódnak */
+  review.base=state.errors; review.active=true; renderErr();
   review.qs=sample(REVIEW_POOL,8);
   review.idx=0; review.good=0; review.results=[];
   renderReviewQ();
@@ -1170,9 +1258,14 @@ function reviewAnswer(btn){
   document.getElementById('panel-actions').innerHTML =
     review.idx < review.qs.length-1
       ? `<button class="btn" onclick="review.idx++; renderReviewQ();">Következő kérdés &rarr;</button>`
-      : `<button class="btn" onclick="state.reviewScore={good:review.good,total:review.qs.length}; closePanel(); goTo('ending');">Eredmény és zárás &rarr;</button>`;
+      : `<button class="btn" onclick="state.reviewScore={good:review.good,total:review.qs.length}; review.active=false; closePanel(); goTo('ending');">Eredmény és zárás &rarr;</button>`;
 }
 
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape' && document.getElementById('overlay').classList.contains('active')){
+    e.preventDefault(); closePanel();
+  }
+});
 renderCartouche();
 </script>
 </body>
