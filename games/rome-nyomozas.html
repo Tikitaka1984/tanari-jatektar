@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gyilkosság a Forumon</title>
+<style>
+:root{
+  --bg:#f4ecdd; --card:#fffaf0; --ink:#2b1f14; --muted:#6b5a47; --line:#d9c7a6;
+  --accent:#8c3a17; --accent-ink:#fff; --ok:#2f6b3a; --bad:#a32a2a; --warn:#8a6100; --chip:#efe2c8;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#1d1812; --card:#2a2219; --ink:#f1e7d3; --muted:#c1b295; --line:#4a3d2b; --accent:#d6733f; --accent-ink:#1d1812; --ok:#7fc58b; --bad:#f08a8a; --warn:#e6bd5a; --chip:#3a2f21; }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif;line-height:1.55;font-size:17px}
+.wrap{max-width:900px;margin:0 auto;padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--line);padding-bottom:10px;margin-bottom:14px}
+h1{font-size:1.45rem;margin:0;color:var(--accent);letter-spacing:.2px}
+h2{font-size:1.2rem;margin:0 0 8px;color:var(--accent)}
+h3{font-size:1.02rem;margin:0 0 4px}
+.score{font-family:system-ui,sans-serif;font-size:.9rem;background:var(--chip);border:1px solid var(--line);padding:4px 10px;border-radius:999px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.muted{color:var(--muted);font-size:.93rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.sus{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--card);position:relative}
+.sus .role{font-family:system-ui,sans-serif;font-size:.8rem;color:var(--muted);margin-bottom:6px}
+.sus blockquote{margin:6px 0;padding-left:10px;border-left:3px solid var(--line);font-style:italic;font-size:.95rem}
+.sus.out{opacity:.62}
+.badge{display:inline-block;font-family:system-ui,sans-serif;font-size:.75rem;padding:2px 8px;border-radius:999px;margin:2px 4px 2px 0;border:1px solid var(--line);background:var(--chip)}
+.badge.ok{color:var(--ok);border-color:var(--ok)}
+.badge.no{color:var(--bad);border-color:var(--bad)}
+.badge.sus-m{color:var(--warn);border-color:var(--warn)}
+.secret{font-size:.9rem;margin-top:6px;border-top:1px dashed var(--line);padding-top:6px}
+button,.btn{font-family:system-ui,sans-serif;font-size:.95rem;cursor:pointer;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:9px 16px;min-height:44px}
+button.ghost{background:transparent;color:var(--accent)}
+button.small{min-height:36px;padding:5px 10px;font-size:.82rem}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,label:focus-within{outline:3px solid var(--warn);outline-offset:2px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin:6px 0;cursor:pointer;background:var(--card)}
+.opt input{margin-top:5px;width:18px;height:18px;flex:none}
+.opt.sel{border-color:var(--accent);background:var(--chip)}
+.progress{display:flex;gap:6px;margin:6px 0 14px}
+.progress span{flex:1;height:8px;border-radius:4px;background:var(--line)}
+.progress span.done{background:var(--ok)}
+.progress span.cur{background:var(--accent)}
+.fb{padding:10px 12px;border-radius:8px;margin:10px 0;font-size:.97rem}
+.fb.bad{border:1px solid var(--bad);color:var(--ink);background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.fb.good{border:1px solid var(--ok);background:color-mix(in srgb,var(--ok) 12%,transparent)}
+.fb.hint{border:1px dashed var(--warn)}
+.clue{border-left:4px solid var(--accent);padding:6px 12px;margin:8px 0;background:var(--chip);border-radius:0 8px 8px 0}
+.clue b{font-family:system-ui,sans-serif;font-size:.8rem;color:var(--muted);display:block}
+ul.tight{margin:6px 0 6px 18px;padding:0}
+ul.tight li{margin:3px 0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.sr{position:absolute;left:-9999px}
+.res-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.big{font-size:2rem;font-weight:bold;color:var(--accent)}
+[hidden]{display:none!important}
+.tabs{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap}
+.tab{background:transparent;color:var(--accent);border:1px solid var(--line);border-radius:8px;padding:8px 14px;min-height:44px}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+textarea.notes{width:100%;min-height:110px;font:inherit;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);resize:vertical}
+@media (max-width:520px){body{font-size:16px}h1{font-size:1.25rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Gyilkosság a Forumon</h1>
+    <div class="score" id="score" aria-live="polite"></div>
+  </header>
+  <nav id="tabs" class="tabs" role="tablist" aria-label="Nyomozás nézetei" hidden></nav>
+  <main id="app"></main>
+  <p class="muted" style="margin-top:24px">Történelmi nyomozójáték 9. évfolyamnak. Szereplői kitalált alakok; a római köztársaság intézményei az OH-TOR09TB és a katolikus tankönyv vonatkozó leckéi alapján szerepelnek.</p>
+</div>
+
+<script>
+"use strict";
+/* ---------- ADATOK ---------- */
+const SUSPECTS=[
+ {id:"val",name:"Lucius Valerius Nepos",role:"szenátor, patrícius",
+  say:"Aznap éjjel a senatus ülésén voltam. Marcus Aemilius a plebejusok oldalán állt, de az ellenségem nem volt.",
+  secret:"Nyilvánosan szembeszállt a közföldek (ager publicus) újraosztásával, ezért sokan haragudtak rá."},
+ {id:"ses",name:"Aulus Sestius",role:"néptribunus, Marcus kollégája",
+  say:"Tribunus vagyok, a plebejusok jogait védem. Marcus Aemilius a kollégám volt, nem ölhettem meg.",
+  secret:"Évek óta vetélytársak voltak a plebejusok körében, és a tribunusi tisztségért is egymás ellen indultak."},
+ {id:"cor",name:"Gnaeus Cornelius Rufus",role:"imperator, hadvezér",
+  say:"A légióimmal a campaniai táborban állomásozom, a senatus megbízásából. Kevés időm jut Rómára.",
+  secret:"Zsoldosai inkább hozzá, mint a senatushoz hűek, és szeretné meghosszabbíttatni a parancsnoki megbízását."},
+ {id:"fab",name:"Quintus Fabricius Ligur",role:"volt dictator",
+  say:"Hat hónappal ezelőtt lejárt a dictatori megbízásom. Azóta magánember vagyok.",
+  secret:"Dictatorként sok ellenfelét száműzte, ezért sokan félnek tőle."},
+ {id:"sem",name:"Gaius Sempronius Varro",role:"consul",
+  say:"A köztársaságot szolgálom, és a nép akarata, hogy tovább vezessem. A tribunus halála szerencsétlenség.",
+  secret:"Már ötödik éve egymás után viseli a consuli tisztet, és a hatodikra készül."}
+];
+const SN=Object.fromEntries(SUSPECTS.map(s=>[s.id,s.name]));
+
+const STEPS=[
+ {title:"1. feladat (a köztársaság rendje): A senatus",type:"single",
+  q:"Valerius szenátor azt állítja, hogy aznap éjjel a senatus ülésén volt. Mi igaz a senatusra a köztársaság korában?",
+  opts:[["a","A kezdetben 300 tagú senatus törvényeket kezdeményezhetett, döntött a külügyekben, és ellenőrizte a hivatalnokokat."],["b","A senatus tagjait évente sorsolták a plebejusok közül."],["c","A senatusnak nem volt beleszólása a külügyekbe."],["d","A senatus tagjait a népgyűlés választotta a plebejusok képviseletére."]],
+  correct:["a"],
+  hint:"A senatus a nemzetségfők tanácsa volt, nem a nép képviselete.",
+  expl:"A köztársaság korában a senatus (kezdetben 300 fő) kezdeményezhetett törvényeket, döntött a külügyekben, és ellenőrizte a hivatalnokokat. Tagjai a nemzetségfők és a volt főhivatalnokok közül kerültek ki.",
+  clue:{t:"A senatus jegyzőkönyve",x:"A senatus aznap késő estig ülésezett. Lucius Valerius az utolsó szónok volt, a jegyzőkönyvet több szenátor hitelesítette."},
+  elim:{val:"Alibije igazolt: a senatus jegyzőkönyve szerint az ülésen volt."},
+  after:"Valerius alibije igazolt, így kikerül a gyanúsítottak közül."},
+ {title:"2. feladat (a köztársaság rendje): A tisztségviselők",type:"multi",
+  q:"Egy szomszéd különös dolgot látott az éjszakában. Mi igaz a római tisztségviselőkre (magistratusokra)? (Több válasz is lehet.)",
+  opts:[["1","Semmilyen tisztséget sem töltött be egy hivatalnok egyedül, mert egyik a másik döntését érvényteleníthette (kollegialitás)."],["2","A tisztségeket többnyire egy évre töltötték be, és a viselők nem kaptak fizetést."],["3","A tisztviselők a népnek tartoztak felelősséggel."],["4","Hatalmuk jelképe a lictorok által vitt, bárddal ékesített vesszőnyaláb (fasces) volt."],["5","A consul önmagát is kinevezhette dictatorrá."]],
+  correct:["1","2","4"],
+  hint:"A hatalmat megosztották, és kordában tartották, hogy ne térjen vissza a királyság. A tisztviselők nem a népnek, hanem a senatusnak tartoztak felelősséggel.",
+  expl:"A kollegialitás elve szerint a hivatalnokok egymást ellenőrizték. A tisztségek többnyire egyévesek voltak, fizetés nélküliek. A hatalom jelképe a fasces volt, amelyet a lictorok vittek a magistratus előtt. A tisztviselők a senatusnak tartoztak felelősséggel, a dictatort pedig a consul nevezte ki, önmagát nem.",
+  clue:{t:"A szomszéd vallomása",x:"„Késő éjjel lictorokat láttam bárdos vesszőnyalábokkal Marcus Aemilius háza felé menni. Valaki hivatalos kísérettel érkezett.”"},
+  after:"Lictorok csak a hivatalban lévő tisztségviselőt kísérték. A tettes tehát valaki, aki akkor tisztséget viselt."},
+ {title:"3. feladat (a köztársaság rendje): A néptribunus",type:"multi",
+  q:"A meggyilkolt Marcus Aemilius néptribunus volt. Mi igaz a néptribunusokra? (Több válasz is lehet.)",
+  opts:[["1","Személyük és házuk sérthetetlen volt."],["2","Megvétózhatták (érvényteleníthették) a plebejusokat sértő törvényeket és intézkedéseket, a senatus döntéseit is."],["3","A senatus nevezte ki őket élethosszig."],["4","A plebejusok népgyűlése választotta őket."],["5","Fizetést kaptak a hivatalukért."]],
+  correct:["1","2","4"],
+  hint:"A néptribunus a plebejusok védelmére jött létre (Kr. e. 494), a Szent-hegyi kivonulás eredményeként.",
+  expl:"A néptribunusokat a plebejusok népgyűlése választotta évente. Személyük és házuk sérthetetlen volt, vétójoggal rendelkeztek. Fizetést nem kaptak, a senatus nem nevezte ki őket.",
+  clue:{t:"Marcus Aemilius viasztáblája",x:"„Holnap vétót emelek a hadvezér-consul javaslata ellen. Ha átmegy, a köztársaságnak vége.”"},
+  elim:{ses:"Alibije igazolt: három másik néptribunus tanúsítja, hogy az éjszakát együtt töltötték a plebejus népgyűlés előkészítésén."},
+  after:"A viasztábla a consulra utal, de a gyanú még nem elég. Sestius alibije igazolt, így ő is kikerül."},
+ {title:"4. feladat (a válság kora): A hadsereg",type:"single",
+  q:"Cornelius Rufus imperator a légióival állomásozott. Mi tette szükségessé a zsoldoshadsereg bevezetését?",
+  opts:[["a","A folyamatos háborúzás miatt a földdel rendelkező parasztok tönkrementek, így nem sorozhatták be őket; a földnélküliek zsoldért is szolgálhattak."],["b","A senatus megtiltotta a polgárok katonáskodását."],["c","A plebejusok megtagadták a katonai szolgálatot a patríciusok ellen."],["d","A zsoldoshadsereget a király vezette be Kr. e. 510 körül."]],
+  correct:["a"],
+  hint:"Ki tudott gondozni a földjét, ha a háborúban kellett lennie?",
+  expl:"A földdel rendelkező katonaköteles parasztok a folyamatos katonáskodás miatt nem tudták birtokaikat megművelni, tönkrementek, és nem sorozhatták be őket. A problémát a földnélkülieket is alkalmazó zsoldoshadsereg oldotta meg.",
+  clue:{t:"A tábori napló",x:"A campaniai tábor naplója szerint Cornelius Rufus aznap éjjel a táborban volt, a légió tisztjei látták, hogy a tábort nem hagyta el."},
+  elim:{cor:"Alibije igazolt: a táborban volt, légiói látták."},
+  after:"A hadvezér a táborban volt, így nem járhatott Rómában. Két gyanúsított maradt."},
+ {title:"5. feladat (a válság kora): A dictator",type:"single",
+  q:"Fabricius volt dictator. Mi igaz a dictatorra a köztársaság korában?",
+  opts:[["a","Végveszély esetén a senatus javaslatára a consul nevezte ki, legfeljebb hat hónapra, és ez idő alatt a többi hivatal nem működött."],["b","A népgyűlés választotta egy évre, és kollégájával együtt gyakorolta a hatalmat."],["c","A consul önmagát is kinevezhette, és élethosszig dictator maradhatott."],["d","A dictatori tisztséget a censorok töltötték be."]],
+  correct:["a"],
+  hint:"A dictator rendkívüli, de időben szigorúan korlátozott tisztség volt.",
+  expl:"A dictatort nagy veszély esetén a senatus javaslatára a consul nevezte ki, legfeljebb hat hónapra; önmagát a consul nem nevezhette ki. Ez idő alatt a többi hivatal nem működött, és a dictatort hivatali tetteiért később nem vonhatták felelősségre.",
+  clue:{t:"A dictatori megbízás lejárta",x:"Fabricius megbízása hat hónappal ezelőtt lejárt. Azóta magánember, nincs hivatala, így lictorok sem kísérik."},
+  elim:{fab:"A dictatori hatalma lejárt, magánemberként nincs lictora; a szomszéd viszont hivatalos kísérettel érkezőt látott."},
+  after:"Fabricius már nem tisztségviselő. Egyetlen gyanúsított marad, de az indítékot még ellenőrizni kell."},
+ {title:"6. feladat (a válság kora): Az egyéves hivatal",type:"single",
+  q:"Sempronius Varro ötödik éve egymás után consul, és a hatodikra készül. (A szereplő Marius Kr. e. 2–1. század fordulóján zajló consulságainak mintájára készült.) Mit mondhatunk erről?",
+  opts:[["a","Törvényes, mert a nép akarata felülírja a törvényeket."],["b","Törvénytelen: a hivatalokat többnyire egy évre töltötték be, a viselők a következő évre nem voltak újraválaszthatók, hogy ne térjen vissza a királyság."],["c","Törvényes, mert a consul élethosszig választható."],["d","Törvényes, ha a senatus nevezi ki, a népgyűlés megkerülésével."]],
+  correct:["b"],
+  hint:"Miért korlátozták egy évre a hivatalokat, és mitől féltek a rómaiak?",
+  expl:"A hivatalok betöltésének idejét többnyire egy évre korlátozták, és viselőik a következő évre nem voltak újraválaszthatók. Ezzel az állam vezetőinek túlhatalmát, tulajdonképpen a királyok visszatérését akarták megakadályozni. A tartós consuli hatalom ellentmond ennek.",
+  clue:{t:"A megvesztegetési főkönyv",x:"Varro házában főkönyvet találtak: a hatodik consulságért szavazatokat vásároltak. A kampány utcai erőszakkal is járt. Marcus Aemilius vétója ezt a jelöltséget akadályozta volna meg."},
+  elim:null,
+  after:"Nincs más gyanúsított, Varro motívuma pedig kiderült. Ideje vádat emelni."}
+];
+
+const MOTIVES=[
+ ["a","Varro el akarta hallgattatni Marcus Aemiliust, mert a néptribunus vétója megakadályozta volna a hatodik consulságát és a hatalma meghosszabbítását."],
+ ["b","Régi személyes sérelem miatt akart bosszút állni Marcus Aemiliuson."],
+ ["c","A senatus megbízásából tette, hogy megakadályozza a plebejusok felkelését."],
+ ["d","Marcus Aemilius vagyonát akarta megszerezni."]
+];
+const WARE=[
+ {id:"w1",type:"Tárgyi bizonyíték",t:"Bíborszegélyű tógadarab",from:0,rel:true,
+  x:"A házban bíborszegélyű tógadarabot találtak a földön.",
+  o:[[2,"A házban bíborszegélyű tógadarabot találtak. A bíborszegély a hivatalos tisztség jelvénye volt, így a tettes valószínűleg tisztségviselő (2. feladat)."]]},
+ {id:"w2",type:"Tárgyi bizonyíték",t:"Vérfoltos tőr",from:0,rel:false,
+  x:"Vérfoltos tőr a földön. Bárkié lehetett, a fegyvert bárki használhatta."},
+ {id:"w3",type:"Helyszíni lelet",t:"Falfelirat",from:0,rel:false,
+  x:"„A tribunus a nép ellensége volt.” A feliratot bárki odaírhatta, hogy a gyanút a plebejusok ellenfeleire terelje."},
+ {id:"w4",type:"Hír",t:"Pletyka a szenátorokról",from:0,rel:false,
+  x:"A piacon azt suttogják, hogy a patrícius szenátorok szabadultak meg a tribunustól. Bizonyíték nincs rá."},
+ {id:"w5",type:"Alibi",t:"A senatus jegyzőkönyve",from:1,rel:false,
+  x:"Lucius Valerius végig a senatus ülésén volt. Kizárja Valeriust, de a tettest nem azonosítja."},
+ {id:"w6",type:"Tanúvallomás",t:"A szomszéd vallomása",from:2,rel:true,
+  x:"Késő éjjel lictorokat látott bárdos vesszőnyalábokkal Marcus Aemilius háza felé menni. Aki hivatalos kísérettel érkezett, az akkor hivatalt viselt."},
+ {id:"w7",type:"Irat",t:"Marcus Aemilius viasztáblája",from:3,rel:true,
+  x:"„Holnap vétót emelek a hadvezér-consul javaslata ellen. Ha átmegy, a köztársaságnak vége.” A tribunus a consul ellen készült fellépni."},
+ {id:"w8",type:"Alibi",t:"A néptribunusok és a tábori napló",from:4,rel:false,
+  x:"Sestiust három néptribunus, Cornelius Rufust a campaniai tábor naplója igazolja. Kizáró tények, a tettest nem azonosítják."},
+ {id:"w11",type:"Alibi",t:"Fabricius megbízásának lejárta",from:5,rel:false,
+  x:"Fabricius dictatori megbízása hat hónapja lejárt, azóta magánember. Kizáró tény, a tettest nem azonosítja."},
+ {id:"w9",type:"Irat",t:"A megvesztegetési főkönyv",from:6,rel:true,
+  x:"Varro házában főkönyvet találtak: a hatodik consulságért szavazatokat vásároltak."},
+ {id:"w10",type:"Állítás",t:"Varro hatodik consulságra készülése",from:6,rel:true,
+  x:"Varro ötödik éve consul egymás után. A tartós consuli hatalom ellentmondott az egyéves hivatal elvének, ez adott indítékot, hogy elhallgattassa a vétójogú tribunust."}
+];
+function wareAvail(){ return WARE.filter(w=>S.clues.length>=w.from); }
+function wareText(w){ let t=w.x; (w.o||[]).forEach(o=>{ if(S.clues.length>=o[0]) t=o[1]; }); return t; }
+const COURTS=[
+ ["a","A néptribunus, mert ő védi a plebejusok jogait."],
+ ["b","A censor, mert ő állítja össze a senatus névjegyzékét."],
+ ["c","A praetor, mert a praetorok az igazságszolgáltatás ügyeivel foglalkoztak."],
+ ["d","A quaestor, mert ők a pénzügyekkel foglalkoztak."]
+];
+
+/* ---------- ÁLLAPOT ---------- */
+const S={phase:"intro",step:0,score:100,tries:0,sel:[],fb:null,hintShown:false,
+  clues:[],elim:{},marks:{},notes:"",rev:0,ret:"case",tab:"game",scoring:true,acc:{killer:null,motive:null,ev:[],court:null},accErr:null,result:null};
+const $=id=>document.getElementById(id);
+const app=$("app");
+
+function setScore(){ $("score").textContent=S.scoring?("Pontszám: "+S.score):"Tanári mód (pontozás nélkül)"; }
+function arrEq(a,b){return a.length===b.length&&a.every(x=>b.includes(x));}
+
+/* ---------- NÉZETEK ---------- */
+function suspectsHtml(){
+  return '<div class="grid">'+SUSPECTS.map(s=>{
+    const out=S.elim[s.id];
+    const m=S.marks[s.id]||"";
+    const showSecret=S.phase!=="intro" && S.clues.length>=({val:1,ses:3,cor:4,fab:5,sem:6})[s.id];
+    return '<div class="sus'+(out?' out':'')+'">'
+      +'<h3>'+s.name+'</h3><div class="role">'+s.role+'</div>'
+      +'<blockquote>„'+s.say+'”</blockquote>'
+      +(out?'<span class="badge no">Kizárva</span><div class="muted">'+out+'</div>':'')
+      +(m==="gyanus"?'<span class="badge sus-m">Gyanús (saját jelölés)</span>':'')
+      +(m==="artatlan"?'<span class="badge ok">Ártatlan (saját jelölés)</span>':'')
+      +(showSecret?'<div class="secret"><b>Kiderült:</b> '+s.secret+'</div>':'')
+      +(S.phase==="case"?'<div class="row"><button class="ghost small" data-act="mark" data-id="'+s.id+'" data-v="gyanus">Gyanús</button><button class="ghost small" data-act="mark" data-id="'+s.id+'" data-v="artatlan">Ártatlan</button><button class="ghost small" data-act="mark" data-id="'+s.id+'" data-v="">Töröl</button></div>':'')
+      +'</div>';
+  }).join('')+'</div>';
+}
+function cluesHtml(){
+  if(!S.clues.length) return '<p class="muted">Még nincs feloldott nyom. Oldja meg az első feladatot!</p>';
+  return S.clues.map((c,i)=>'<div class="clue"><b>'+(i+1)+'. nyom: '+c.t+'</b>'+c.x+'</div>').join('');
+}
+function progressHtml(){
+  return '<div class="progress" aria-label="Haladás">'+STEPS.map((_,i)=>'<span class="'+(i<S.step?'done':(i===S.step&&S.phase==='case'?'cur':''))+'"></span>').join('')+'</div>';
+}
+
+function viewIntro(){
+  app.innerHTML=
+  '<div class="card"><h2>A történet</h2>'
+  +'<p><b>Kr. e. 100 körül, Róma.</b> A köztársaság válságban van: a hódítások megnőtt birodalmat teremtettek, a hadvezérek egyre nagyobb hatalomra törnek, a plebejusok és a patríciusok vitája régóta tart. Egy hadvezér-consul újabb és újabb évekre szeretné megtartani a hatalmát.</p>'
+  +'<p>Egy reggel holtan találják Marcus Aemiliust, a néptribunust, akinek a személye szent és sérthetetlen volt. A halál éjszaka történt a háza előtt. A helyszínen a következőket találják:</p>'
+  +'<ul class="tight"><li>egy bíborszegélyű tógadarabot,</li><li>egy vérfoltos tőrt,</li><li>a falon egy feliratot: <em>„A tribunus a nép ellensége volt.”</em></li><li>és a piacon suttognak a patrícius szenátorokról.</li></ul>'
+  +'<p>A feladatok az Alapok (1–3. feladat: a köztársaság rendje) és a válság kora (4–6. feladat) tananyagából építkeznek. <b>Az Ön feladata:</b> kiderítse, ki ölte meg a tribunust, miért tette, és kinek a hatáskörébe tartozik az ügy.</p></div>'
+  +'<div class="card"><h2>Gyanúsítottak</h2>'+suspectsHtml()+'</div>'
+  +'<div class="card"><h2>Játékszabályok</h2><ul class="tight"><li>Hat feladatot kell megoldania. Minden helyes válasz feloldja a következő nyomot.</li><li>Kezdőpontszám: 100. Rossz válasz: −10 pont. Tipp kérése: −5 pont.</li><li>A feladatok után vádat emelhet, és megtudja, helyesen nyomozott-e.</li></ul>'
+  +'<label class="opt" style="max-width:420px"><input type="checkbox" id="teach"> <span>Tanári mód: pontozás nélkül</span></label>'
+  +'<div class="row"><button data-act="start">Nyomozás megkezdése</button></div></div>';
+}
+
+function viewCase(){
+  const st=STEPS[S.step];
+  const multi=st.type==="multi";
+  const opts=st.opts.map(o=>{
+    const on=S.sel.includes(o[0]);
+    return '<label class="opt'+(on?' sel':'')+'"><input type="'+(multi?'checkbox':'radio')+'" name="ans" value="'+o[0]+'"'+(on?' checked':'')+' data-act="pick"><span>'+o[1]+'</span></label>';
+  }).join('');
+  const fb=S.fb?'<div class="fb '+S.fb.kind+'" role="status">'+S.fb.text+'</div>':'';
+  const hint=S.hintShown?'<div class="fb hint"><b>Tipp:</b> '+st.hint+'</div>':'';
+  app.innerHTML=
+  progressHtml()
+  +'<div class="card"><h2>'+st.title+'</h2><p>'+st.q+'</p>'
+  +'<fieldset style="border:0;padding:0;margin:0"><legend class="sr">Válaszlehetőségek</legend>'+opts+'</fieldset>'
+  +hint+fb
+  +'<div class="row"><button data-act="check"'+(S.sel.length?'':' disabled')+'>Válasz ellenőrzése</button>'
+  +(S.hintShown?'':'<button class="ghost" data-act="hint">Tipp'+(S.scoring?' (−5 pont)':'')+'</button>')
+  +(S.step>0?'<button class="ghost" data-act="back">◀ Előző feladat áttekintése</button>':'')
+  +'</div></div>'
+  +'<div class="card"><h2>Nyomnapló</h2>'+cluesHtml()+'</div>'
+  +'<div class="card"><h2>Gyanúsítottak</h2><p class="muted">Saját jelöléseit bármikor módosíthatja; a „Kizárva” jelzést a játék a nyomok alapján adja.</p>'+suspectsHtml()+'</div>';
+}
+
+function viewStepDone(){
+  const st=STEPS[S.step];
+  app.innerHTML=
+  progressHtml()
+  +'<div class="card"><h2>'+st.title+'</h2><div class="fb good"><b>Helyes válasz.</b> '+st.expl+'</div>'
+  +'<div class="clue"><b>Új nyom: '+st.clue.t+'</b>'+st.clue.x+'</div>'
+  +'<p>'+st.after+'</p>'
+  +'<div class="row"><button data-act="next">'+(S.step===STEPS.length-1?'Tovább a vádemeléshez':'Következő feladat')+'</button></div></div>'
+  +'<div class="card"><h2>Nyomnapló</h2>'+cluesHtml()+'</div>'
+  +'<div class="card"><h2>Gyanúsítottak</h2>'+suspectsHtml()+'</div>';
+}
+
+function radioGroup(name,list,cur,act){
+  return list.map(o=>'<label class="opt'+(cur===o[0]?' sel':'')+'"><input type="radio" name="'+name+'" value="'+o[0]+'"'+(cur===o[0]?' checked':'')+' data-act="'+act+'"><span>'+o[1]+'</span></label>').join('');
+}
+function viewAccuse(){
+  const a=S.acc;
+  const killers=SUSPECTS.map(s=>[s.id,s.name+' ('+s.role+')']);
+  const ev=wareAvail().map(w=>'<label class="opt'+(a.ev.includes(w.id)?' sel':'')+'"><input type="checkbox" value="'+w.id+'"'+(a.ev.includes(w.id)?' checked':'')+' data-act="ev"><span><b>'+w.type+': '+w.t+'</b><br><span class="muted">'+wareText(w)+'</span></span></label>').join('');
+  const ready=a.killer&&a.motive&&a.ev.length===4&&a.court;
+  app.innerHTML=
+  '<div class="card"><h2>Vádemelés</h2><p>Foglalja össze a nyomozás eredményét. A beküldés után már nem módosíthat.</p></div>'
+  +'<div class="card"><h3>1. Ki a gyilkos?</h3>'+radioGroup('killer',killers,a.killer,'killer')+'</div>'
+  +'<div class="card"><h3>2. Mi volt az indíték?</h3>'+radioGroup('motive',MOTIVES,a.motive,'motive')+'</div>'
+  +'<div class="card"><h3>3. Válasszon ki pontosan négy bizonyítékot a Bizonyíték raktárból ('+a.ev.length+'/4)</h3>'+ev+'</div>'
+  +'<div class="card"><h3>4. Melyik tisztségviselő foglalkozna az ügy igazságszolgáltatási oldalával?</h3><p class="muted">A köztársasági hivatalok közül a hatáskör alapján válasszon.</p>'+radioGroup('court',COURTS,a.court,'court')+'</div>'
+  +(S.accErr?'<div class="fb bad">'+S.accErr+'</div>':'')
+  +'<div class="row"><button data-act="submit"'+(ready?'':' disabled')+'>Vád beküldése</button><button class="ghost" data-act="backacc">◀ Nyomok áttekintése</button></div>';
+}
+
+function viewResult(){
+  const r=S.result;
+  const rows=r.lines.map(l=>'<div class="res-row"><span>'+l[0]+'</span><span>'+l[1]+'</span></div>').join('');
+  app.innerHTML=
+  '<div class="card"><h2>Az ítélet</h2>'
+  +(S.scoring?'<div class="big">'+S.score+' / 100</div><p><b>Rang: '+r.rank+'</b></p>':'<p><b>Tanári mód: a pontozás ki van kapcsolva.</b></p>')
+  +rows+'</div>'
+  +'<div class="card"><h2>Mi történt valójában?</h2>'
+  +'<p>A gyilkos <b>Gaius Sempronius Varro</b>, a hadvezér-consul. Már ötödik éve egymás után viselte a consuli tisztet, ami ellentmondott az egyéves hivatal elvének, és a hatodik consulságra szavazatokat vásárolt. Marcus Aemilius néptribunusként megvétózhatta volna a javaslatát, és ezzel megakadályozta volna a hatalma meghosszabbítását.</p>'
+  +'<p>Varro lictoraival, hivatalos kísérettel látogatta meg a tribunust éjszaka, és megölte. A bíborszegélyű tógadarab a tisztségviselői méltóságára, a viasztábla pedig a motívumára utalt. A falfelirat a gyanút a plebejusokra terelte.</p>'
+  +'<p><b>A hatáskör:</b> a tankönyv szerint a praetorok az igazságszolgáltatás ügyeivel foglalkoztak. A néptribunus a plebejusok védelmére, a censor a vagyonbecslésre és a senatus névjegyzékére, a quaestor a pénzügyekre volt hivatott. A római büntetőeljárás részleteit a tankönyvi leckék nem tárgyalják, ezért a játék ennél nem lép tovább.</p>'
+  +'<p class="muted">A játék szereplői és az ügy kitalált; a hatodik consulság Marius esetét idézi, amelyről a tankönyv Plutarkhosz alapján számol be.</p></div>'
+  +'<div class="card"><h2>Amit megtanult</h2><ul class="tight">'
+  +'<li>A senatus kezdetben 300 tagú volt; törvényeket kezdeményezett, döntött a külügyekben, és ellenőrizte a hivatalnokokat.</li>'
+  +'<li>A hivatalnokok kollegiális, többnyire egyéves, fizetés nélküli tisztséget viseltek; jelképük a lictorok vitte fasces volt.</li>'
+  +'<li>A néptribunus személye sérthetetlen volt, és vétójoggal rendelkezett.</li>'
+  +'<li>A tönkrement parasztok helyett a földnélküliekből álló zsoldoshadsereg lépett.</li>'
+  +'<li>A dictator legfeljebb hat hónapra, a senatus javaslatára, a consul kinevezésével töltötte be a tisztséget.</li>'
+  +'<li>A hivatalok egyéves korlátozása a királyság visszatérését akadályozta meg.</li></ul>'
+  +'<div class="row"><button data-act="restart">Új játék</button></div></div>';
+}
+
+function viewReview(){
+  const st=STEPS[S.rev];
+  const ans=st.correct.map(c=>st.opts.find(o=>o[0]===c)[1]).join('; ');
+  app.innerHTML=
+  '<div class="card"><h2>Áttekintés: '+st.title+'</h2><p class="muted">Ez csak áttekintés, a pontszámot nem érinti.</p>'
+  +'<p>'+st.q+'</p>'
+  +'<div class="fb good"><b>Helyes válasz:</b> '+ans+'<br>'+st.expl+'</div>'
+  +'<div class="clue"><b>Nyom: '+st.clue.t+'</b>'+st.clue.x+'</div>'
+  +'<p>'+st.after+'</p>'
+  +'<div class="row"><button class="ghost" data-act="revprev"'+(S.rev>0?'':' disabled')+'>◀ Előző</button>'
+  +'<button class="ghost" data-act="revnext"'+(S.rev<S.clues.length-1?'':' disabled')+'>Következő ▶</button>'
+  +'<button data-act="revret">Vissza a játékhoz</button></div></div>'
+  +'<div class="card"><h2>Gyanúsítottak</h2>'+suspectsHtml()+'</div>';
+}
+function viewLog(){
+  const cl=S.clues.length?S.clues.map((c,i)=>'<div class="clue"><b>'+(i+1)+'. nyom: '+c.t+'</b>'+c.x
+    +'<div class="row"><button class="ghost small" data-act="revi" data-i="'+i+'">'+(i+1)+'. feladat áttekintése</button></div></div>').join('')
+    :'<p class="muted">Még nincs feloldott nyom.</p>';
+  const el=Object.entries(S.elim);
+  const ex=el.length?'<ul class="tight">'+el.map(e=>'<li><b>'+SN[e[0]]+':</b> '+e[1]+'</li>').join('')+'</ul>':'<p class="muted">Még senkit nem zártak ki.</p>';
+  app.innerHTML='<div class="card"><h2>Nyomnapló</h2><p class="muted">A nyomozás eseményei időrendben. A tárgyi bizonyítékok és iratok a Bizonyíték raktárban találhatók.</p>'+cl+'</div>'
+   +'<div class="card"><h2>Kizárt gyanúsítottak</h2>'+ex+'</div>'
+   +'<div class="card"><h2><label for="notes">Saját jegyzet</label></h2><textarea id="notes" class="notes" placeholder="Ide írhat saját megfigyeléseket.">'+S.notes.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</textarea></div>';
+}
+function viewStore(){
+  const items=wareAvail(), n=S.acc.ev.length;
+  app.innerHTML='<div class="card"><h2>Bizonyíték raktár</h2><p class="muted">Itt gyűlnek a tárgyi bizonyítékok, iratok, vallomások és alibik. Legfeljebb négyet jelölhet ki a vádemeléshez ('+n+'/4); a kijelölés a vádemelésnél is megjelenik. A raktárban nem minden tétel bizonyítja a gyilkos kilétét.</p>'
+   +(S.accErr?'<div class="fb bad">'+S.accErr+'</div>':'')+'</div>'
+   +'<div class="grid">'+items.map(w=>{
+      const on=S.acc.ev.includes(w.id);
+      return '<div class="sus"><span class="badge">'+w.type+'</span><h3>'+w.t+'</h3><p style="margin:4px 0 8px;font-size:.95rem">'+wareText(w)+'</p>'
+       +'<label class="opt'+(on?' sel':'')+'"><input type="checkbox" value="'+w.id+'" data-act="ev"'+(on?' checked':'')+'><span>Vádhoz kijelölöm</span></label></div>';
+   }).join('')+'</div>';
+}
+function viewRules(){
+  app.innerHTML='<div class="card"><h2>Szabályok</h2><p>Egy római gyilkossági ügyet derítesz fel. A feladatok megoldásával nyomokat szerzel, a végén vádat emelsz: megnevezed az elkövetőt és az indítékot, kiválasztasz négy bizonyítékot, és megmondod, melyik tisztségviselő hatáskörébe tartozna az ügy. A megoldás a római köztársaságról tanultakból kikövetkeztethető.</p></div>'
+  +'<div class="card"><h3>Menete</h3><ul class="tight">'
+  +'<li>Hat feladatot kell megoldanod. Minden helyes válasz egy új nyomot old fel.</li>'
+  +'<li><b>Nyomnapló:</b> a feloldott nyomok időrendben. <b>Bizonyíték raktár:</b> tárgyi bizonyítékok, iratok, vallomások és alibik; nem mindegyik hasznos, a vádhoz pontosan négyet kell kijelölnöd.</li>'
+  +'<li>A korábbi feladatokat és nyomokat áttekintheted; ez a pontszámot nem érinti.</li>'
+  +'<li>A vád beküldése után már nem módosíthatsz.</li></ul></div>'
+  +'<div class="card"><h3>Pontozás</h3><p class="muted">Kezdőpontszám: 100. A pontszám nem csökken 0 alá.</p>'
+  +'<div class="res-row"><span>Rossz válasz egy feladatnál (minden rossz próbálkozás)</span><span>−10</span></div>'
+  +'<div class="res-row"><span>Tipp kérése</span><span>−5</span></div>'
+  +'<div class="res-row"><span>Vádemelés: téves elkövető</span><span>−20</span></div>'
+  +'<div class="res-row"><span>Vádemelés: téves indíték</span><span>−10</span></div>'
+  +'<div class="res-row"><span>Vádemelés: nem releváns bizonyíték (darabonként)</span><span>−5</span></div>'
+  +'<div class="res-row"><span>Vádemelés: téves hatáskör</span><span>−10</span></div>'
+  +'<p class="muted" style="margin-top:10px">A második rossz próbálkozás után a tipp ingyen megjelenik. A harmadik rossz próbálkozás után a program megmutatja a helyes megoldást, és továbbléphetsz. Tanári módban nincs pontozás.</p></div>'
+  +'<div class="card"><h3>Rangok</h3><p>Consul (90–100), Senator (70–89), Római polgár (50–69), Tanuló nyomozó (0–49)</p></div>';
+}
+function renderTabs(){
+  const t=$("tabs");
+  t.hidden=false;
+  const tabs=S.phase==="intro"?[["game","Kezdőlap"],["rules","Szabályok"]]:[["game","Nyomozás"],["log","Nyomnapló ("+S.clues.length+")"],["store","Bizonyíték raktár ("+wareAvail().length+")"],["rules","Szabályok"]];
+  t.innerHTML=tabs.map(x=>'<button class="tab" role="tab" aria-selected="'+(S.tab===x[0])+'" data-tab="'+x[0]+'">'+x[1]+'</button>').join('');
+}
+$("tabs").addEventListener("click",e=>{
+  const b=e.target.closest("[data-tab]"); if(!b) return;
+  S.tab=b.dataset.tab; render();
+});
+document.addEventListener("input",e=>{ if(e.target.id==="notes") S.notes=e.target.value; });
+
+function render(){
+  setScore(); renderTabs();
+  if(S.tab==="rules") viewRules();
+  else if(S.phase!=="intro" && S.tab==="log") viewLog();
+  else if(S.phase!=="intro" && S.tab==="store") viewStore();
+  else if(S.phase==="intro") viewIntro();
+  else if(S.phase==="case") viewCase();
+  else if(S.phase==="done") viewStepDone();
+  else if(S.phase==="accuse") viewAccuse();
+  else if(S.phase==="result") viewResult();
+  else if(S.phase==="review") viewReview();
+  window.scrollTo({top:0,behavior:"auto"});
+}
+function pen(n){ if(S.scoring) S.score=Math.max(0,S.score-n); }
+function rankOf(sc){ return sc>=90?"Consul":sc>=70?"Senator":sc>=50?"Római polgár":"Tanuló nyomozó"; }
+
+/* ---------- ESEMÉNYEK ---------- */
+app.addEventListener("click",ev=>{
+  const t=ev.target.closest("[data-act]"); if(!t) return;
+  const act=t.dataset.act;
+  if(t.tagName==="INPUT") return; // change eseményre bízzuk
+  if(act==="start"){ S.scoring=!$("teach").checked; S.tab="game"; S.phase="case"; S.step=0; S.score=100; S.sel=[]; S.fb=null; S.hintShown=false; S.tries=0; render(); }
+  else if(act==="mark"){ S.marks[t.dataset.id]=t.dataset.v; const y=window.scrollY; renderKeep(y); }
+  else if(act==="hint"){ S.hintShown=true; pen(5); renderKeep(window.scrollY); }
+  else if(act==="check"){ check(); }
+  else if(act==="next"){
+    if(S.step===STEPS.length-1){ S.phase="accuse"; }
+    else { S.step++; S.phase="case"; S.sel=[]; S.fb=null; S.hintShown=false; S.tries=0; }
+    render();
+  }
+  else if(act==="submit"){ submit(); }
+  else if(act==="back"){ S.ret=S.phase; S.rev=S.clues.length-1; S.phase="review"; render(); }
+  else if(act==="backacc"){ S.ret="accuse"; S.rev=S.clues.length-1; S.phase="review"; render(); }
+  else if(act==="revprev"){ if(S.rev>0) S.rev--; render(); }
+  else if(act==="revnext"){ if(S.rev<S.clues.length-1) S.rev++; render(); }
+  else if(act==="revret"){ S.phase=S.ret; render(); }
+  else if(act==="revi"){ S.tab="game"; if(S.phase!=="review") S.ret=S.phase; S.rev=+t.dataset.i; S.phase="review"; render(); }
+  else if(act==="restart"){ Object.assign(S,{phase:"intro",step:0,score:100,tries:0,sel:[],fb:null,hintShown:false,clues:[],elim:{},marks:{},notes:"",rev:0,ret:"case",tab:"game",acc:{killer:null,motive:null,ev:[],court:null},accErr:null,result:null}); render(); }
+});
+app.addEventListener("change",ev=>{
+  const t=ev.target; if(!t.dataset||!t.dataset.act) return;
+  const act=t.dataset.act, y=window.scrollY;
+  if(act==="pick"){
+    const st=STEPS[S.step];
+    if(st.type==="multi"){ S.sel=[...app.querySelectorAll('input[name="ans"]:checked')].map(i=>i.value); }
+    else S.sel=[t.value];
+    S.fb=null; renderKeep(y);
+  } else if(act==="killer"){ S.acc.killer=t.value; renderKeep(y); }
+  else if(act==="motive"){ S.acc.motive=t.value; renderKeep(y); }
+  else if(act==="court"){ S.acc.court=t.value; renderKeep(y); }
+  else if(act==="ev"){
+    const cur=[...app.querySelectorAll('input[data-act="ev"]:checked')].map(i=>i.value);
+    if(cur.length>4){ t.checked=false; S.accErr="Legfeljebb négy bizonyítékot választhat."; }
+    else { S.acc.ev=cur; S.accErr=null; }
+    renderKeep(y);
+  }
+});
+function renderKeep(y){ setScore(); renderTabs();
+  if(S.tab==="rules") viewRules(); else if(S.phase!=="intro" && S.tab==="store") viewStore(); else if(S.phase!=="intro" && S.tab==="log") viewLog(); else
+  if(S.phase==="case") viewCase(); else if(S.phase==="accuse") viewAccuse(); else if(S.phase==="done") viewStepDone(); else render();
+  window.scrollTo(0,y);
+}
+
+function check(){
+  const st=STEPS[S.step];
+  if(arrEq(S.sel,st.correct)){
+    S.clues.push(st.clue);
+    if(st.elim) Object.assign(S.elim,st.elim);
+    S.phase="done"; S.fb=null; render();
+  } else {
+    S.tries++; pen(10);
+    let text="Nem egészen pontos a válasz"+(S.scoring?" (−10 pont)":"")+". Gondolja át újra.";
+    if(S.tries>=2 && !S.hintShown){ S.hintShown=true; }
+    if(S.tries>=3){
+      text="Három sikertelen próbálkozás után a helyes megoldás: <b>"+st.correct.map(c=>st.opts.find(o=>o[0]===c)[1]).join("; ")+"</b><br>"+st.expl;
+    }
+    S.fb={kind:"bad",text};
+    if(S.tries>=3){ S.sel=st.correct.slice(); }
+    renderKeep(window.scrollY);
+  }
+}
+
+function submit(){
+  const a=S.acc, lines=[]; let pts=0;
+  const kOK=a.killer==="sem"; if(!kOK) pts+=20;
+  lines.push(["Gyilkos: "+SN[a.killer], kOK?"helyes":"helytelen (helyes: Gaius Sempronius Varro)"]);
+  const mOK=a.motive==="a"; if(!mOK) pts+=10;
+  lines.push(["Indíték", mOK?"helyes":"helytelen (helyes: Varro el akarta hallgattatni a vétójogú tribunust)"]);
+  const good=a.ev.filter(id=>WARE.find(w=>w.id===id).rel).length;
+  const bad=4-good; pts+=bad*5;
+  lines.push(["Bizonyítékok ("+good+"/4 releváns)", bad?("−"+bad*5+" pont"):"mind releváns"]);
+  const cOK=a.court==="c"; if(!cOK) pts+=10;
+  lines.push(["Hatáskör", cOK?"helyes (praetor)":"helytelen (helyes: praetor)"]);
+  pen(pts);
+  S.result={lines,rank:rankOf(S.score)}; S.phase="result"; render();
+}
+
+render();
+</script>
+</body>
+</html>
