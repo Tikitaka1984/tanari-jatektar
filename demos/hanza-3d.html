@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#162d32">
+<title>Hanza 3D – Kereskedőváros | Tanári Játéktár</title>
+<style>
+:root{color-scheme:dark;--bg:#10272b;--panel:#19373b;--panel2:#21464a;--line:#42666a;--text:#f5ecd7;--sub:#c9d5ce;--gold:#e8c47e;--blue:#a6d4d5}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+button,a,select{font:inherit}button{cursor:pointer}a{color:var(--gold)}
+:focus-visible{outline:3px solid #f7d978;outline-offset:3px}
+.skip{position:absolute;left:12px;top:-100px;z-index:30;background:white;color:#10272b;padding:10px}.skip:focus{top:10px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:17px clamp(16px,3vw,40px);border-bottom:1px solid var(--line);background:#10282d}
+.brand small{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:800}
+h1{font-family:Georgia,serif;font-size:clamp(22px,3vw,34px);margin:3px 0;line-height:1.15}.brand p{margin:3px 0 0;color:var(--sub);font-size:13px}
+.cta{background:var(--gold);color:#1e2926;text-decoration:none;padding:11px 15px;border-radius:10px;font-weight:800;display:inline-flex;align-items:center;min-height:44px;text-align:center}
+.page{max-width:1600px;margin:auto;padding:16px;display:grid;grid-template-columns:minmax(210px,250px) minmax(0,1fr) minmax(245px,320px);gap:14px;align-items:start}
+aside,.info{border:1px solid var(--line);background:var(--panel);border-radius:15px;padding:16px;box-shadow:0 7px 30px #0002}
+h2{font-family:Georgia,serif;font-size:23px;margin:0 0 7px}h3{font-size:16px;margin:0 0 8px;color:var(--gold)}p{line-height:1.5}
+.sub{font-size:13px;color:var(--sub);line-height:1.5;margin:4px 0 13px}
+.citylist{display:grid;gap:5px;max-height:58vh;overflow-y:auto;padding:2px}
+.city{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;background:#24464a;color:var(--text);border:1px solid transparent;border-radius:9px;text-align:left;padding:9px 10px;min-height:44px}
+.city span{color:#d5d0b9;font-size:11px;white-space:nowrap}.city:hover{background:#31555a}.city[aria-pressed=true]{background:#41645f;border-color:#e8c47e;color:#fff}
+.stage{min-width:0;border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#aec6b8;position:relative;min-height:570px;height:min(77vh,790px)}
+#view3d{position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y}#view3d canvas{display:block}
+.stage-top{position:absolute;z-index:3;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;pointer-events:none}
+.placard{background:#0c282ddb;border:1px solid #d7bd8e80;border-radius:10px;padding:10px 14px;max-width:350px;backdrop-filter:blur(5px)}
+.placard small{display:block;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:800}
+.placard strong{font-family:Georgia,serif;font-size:clamp(17px,2.1vw,24px);display:block;margin:4px 0}
+.placard span{color:#e1eae7;font-size:12px}
+.status{background:#17373bdd;border:1px solid #e4d0a855;border-radius:8px;padding:7px 9px;color:#f8edce;font-size:11px;max-width:145px;text-align:right}
+.scene-bottom{position:absolute;bottom:10px;left:12px;right:12px;z-index:3;display:flex;justify-content:space-between;align-items:end;gap:8px;pointer-events:none}
+.legend{max-width:350px;padding:7px 11px;border-radius:9px;background:#112c31db;font-size:12px;line-height:1.5}
+.reset{pointer-events:auto;background:#f4e8d0;color:#183138;border:0;border-radius:9px;padding:10px 13px;min-height:44px;font-weight:800}
+.placegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.place{background:#28484c;border:1px solid var(--line);border-radius:9px;color:var(--text);font-weight:650;text-align:left;padding:10px;min-height:52px}
+.place:hover,.place[aria-pressed=true]{border-color:var(--gold);background:#49645b}
+#selected-name{margin:18px 0 6px;font-size:21px}#selected-body{margin:0;color:var(--sub);font-size:14px;min-height:78px}
+.fact{border-left:3px solid var(--gold);background:#254348;padding:10px 12px;margin-top:16px;font-size:13px;line-height:1.55}
+.info .cta{margin-top:14px;width:100%;justify-content:center}
+.foot{max-width:1600px;margin:0 auto;padding:5px 18px 25px;font-size:12px;color:#bdcbc3;line-height:1.55}
+.fallback{position:absolute;inset:0;background:linear-gradient(145deg,#6ca6b2 0%,#b8c6b0 48%,#557a56 49%,#536e59 100%);display:grid;place-content:center;text-align:center;padding:28px;color:#14322a}
+.fallback strong{font-size:24px}.fallback p{max-width:370px;font-size:15px;margin:10px auto}
+@media(max-width:1120px){.page{grid-template-columns:minmax(0,1fr) 300px}.cities{grid-column:1/-1;grid-row:2}.citylist{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));max-height:none}.stage{height:620px}}
+@media(max-width:730px){header{padding:14px 16px}.page{display:flex;flex-direction:column;padding:10px;gap:10px}.stage{order:1;width:100%;height:57vh;min-height:350px}.info{order:2;width:100%}.cities{order:3;width:100%}.citylist{grid-template-columns:repeat(2,minmax(0,1fr))}.city span{font-size:10px}.stage-top{top:9px;left:9px;right:9px}.placard{padding:8px 10px}.placard span{display:none}.status{font-size:10px}.legend{font-size:10px;max-width:210px}.brand p{max-width:250px}.page h2{font-size:21px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.180.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.180.0/examples/jsm/"}}</script>
+</head>
+<body>
+<a class="skip" href="#places">Ugrás a helyszínekhez</a>
+<header>
+<div class="brand"><small>Tanári Játéktár · 3D tanulótér</small><h1>A Hanza kereskedővárosa</h1><p>Fedezd fel a piac, a kikötő és a kereskedőhálózat világát!</p></div>
+<a class="cta" href="../games/hanza.html">Az eredeti Hanza-játék indítása ↗</a>
+</header>
+<main class="page">
+<aside class="cities" aria-label="Hanzavárosok"><h2>12 hanzaváros</h2><p class="sub">Válassz várost! A 3D helyszín szemléltető modell; a város neve és kereskedelmi profilja változik.</p><nav id="citylist" class="citylist" aria-label="Város kiválasztása"></nav></aside>
+<section class="stage" aria-label="Interaktív 3D kereskedőváros">
+<div id="view3d" role="img" aria-label="Forgatható stilizált középkori város, piac, raktár, kikötő, városkapu és kereskedőház"></div>
+<div class="stage-top"><div class="placard"><small>Északi-tengeri és balti kereskedelem</small><strong id="city-title">Lübeck</strong><span>A Hanza egyik meghatározó városa · szemléltető városmodell</span></div><div class="status" id="load-status" role="status">A 3D-modellek betöltése…</div></div>
+<div class="scene-bottom"><div class="legend">🖱️ Húzás: forgatás · Görgő: közelítés<br>📱 Ujjal húzás: forgatás · Két ujjal: zoom<br>Az arany jelölések kattinthatók.</div><button type="button" class="reset" id="reset-camera">Kamera visszaállítása</button></div>
+</section>
+<aside class="info" id="places"><h2>Ismerd meg a várost!</h2><p class="sub">Válassz egy épületet vagy kattints az arany 3D-jelölésekre.</p>
+<div class="placegrid" id="placegrid">
+<button type="button" class="place" data-place="market">🧺 Piactér</button>
+<button type="button" class="place" data-place="harbor">⚓ Kikötő</button>
+<button type="button" class="place" data-place="warehouse">📦 Raktár</button>
+<button type="button" class="place" data-place="kontor">📜 Kereskedőház</button>
+<button type="button" class="place" data-place="gate">🏰 Városkapu</button>
+</div>
+<h3 id="selected-name" aria-live="polite">Piactér</h3><p id="selected-body">A piacon találkoznak a kereskedők és a vásárlók. A Hanza-játékban árukat szállítasz különböző városok között, és megbízásokat teljesítesz.</p>
+<div class="fact" id="city-fact">Lübeck fontos balti-tengeri kereskedelmi központ volt. A táblás játékban minden kereskedő Lübeckből indul.</div>
+<a class="cta" href="../games/hanza.html">Tovább a 2–4 fős stratégiai játékhoz</a>
+</aside>
+</main>
+<footer class="foot">Pedagógiai megjegyzés: ez stilizált, nem régészetileg hiteles rekonstrukció. A városokhoz a meglévő Hanza-játék adatain alapuló árumegnevezések tartoznak; ezek játékmechanikai egyszerűsítések. A 3D-modellek forrása: <a href="https://polyfork.dev/kit/medieval-village-kit-ca0b43" target="_blank" rel="noopener noreferrer">Polyfork – Medieval Village Kit</a>. A 3D-jelenet internetkapcsolatot és WebGL-képes böngészőt igényel, de a szöveges felfedezés anélkül is működik. <a href="../games/hanza.html">Eredeti játék</a>.</footer>
+<script type="module">
+const CITIES=[
+{id:"LUB",name:"Lübeck",good:"Központ",note:"Lübeck fontos balti-tengeri kereskedelmi központ volt. A meglévő társasjátékban minden játékos innen indul."},
+{id:"HAM",name:"Hamburg",good:"Sör",note:"Hamburg a játékban sörhöz kapcsolt város. A Hanza a tengeri és szárazföldi kereskedelmet is összekapcsolta."},
+{id:"BRU",name:"Brügge",good:"Posztó",note:"Brügge a Hanza egyik jelentős nyugati kereskedelmi találkozóhelye volt."},
+{id:"LON",name:"London",good:"Gyapjú",note:"Londonhoz a játék gyapjút rendel. A londoni Steelyard a Hanza jelentős külföldi kereskedőtelepe volt."},
+{id:"KOL",name:"Köln",good:"Bor",note:"A Köln–bor kapcsolat a játék által alkalmazott árutermelési egyszerűsítés, nem kizárólagos történelmi áruprofil."},
+{id:"LUN",name:"Lüneburg",good:"Só",note:"Lüneburg sótermelése fontos volt: a sóval a halat is tartósíthatták."},
+{id:"BER",name:"Bergen",good:"Szárított tőkehal",note:"Bergen a szárított tőkehal kereskedelmének egyik jelentős központja volt."},
+{id:"SKA",name:"Skanör",good:"Hering",note:"A Skåne térségében folytatott heringkereskedelem jelentős része volt a középkori balti kereskedelemnek."},
+{id:"VIS",name:"Visby",good:"Kereskedelmi csomópont",note:"Visby Gotland szigetén a balti-tengeri kereskedelem fontos állomása volt."},
+{id:"DAN",name:"Danzig (Gdańsk)",good:"Gabona",note:"Danzig a játékban gabonához rendelt kereskedőváros."},
+{id:"RIG",name:"Riga",good:"Fa és kátrány",note:"Riga a játékban fa- és kátránykereskedelmi központként jelenik meg."},
+{id:"NOV",name:"Novgorod",good:"Szőrme és viasz",note:"Novgorod a Hanza keleti kereskedelmi kapcsolatrendszerének fontos központja volt."}
+];
+const PLACES={
+market:{name:"🧺 Piactér",body:"A kereskedelem találkozóhelye. A Hanza-társasjátékban a nyilvános megbízások piacáról választasz teljesítendő szállításokat."},
+harbor:{name:"⚓ Kikötő és rakpart",body:"A hajók árukat szállítanak a tengerparti városok között. A társasjáték térképén a tengeri és szárazföldi útvonalak külön jelöltek, de költségeik játékegyensúlyi értékek."},
+warehouse:{name:"📦 Raktár",body:"Az áruk tárolása és rakodása nélkülözhetetlen a távolsági kereskedelemhez. A játékban figyelned kell a rakomány kapacitására."},
+kontor:{name:"📜 Kereskedőház és kontor",body:"A kontor külföldi kereskedőtelep volt. A játékban kereskedőtelepeket építhetsz; ezek a pontszerzés és a hálózatépítés részei."},
+gate:{name:"🏰 Városkapu",body:"A szárazföldi útvonalak és a városok közötti kapcsolatok fontosak voltak. A Hanza nem egységes állam, hanem kereskedővárosok és kereskedők változó szövetségi hálózata volt."}
+};
+const LOC=[
+{id:"market",x:-3,z:-3,width:4.6,asset:"market-stall-94937d",height:4.6},
+{id:"warehouse",x:-11,z:6,width:6.4,asset:"stilted-granary-3e7d7d",height:5.5},
+{id:"kontor",x:2,z:8,width:6.8,asset:"two-story-house-40f6dc",height:6.3},
+{id:"gate",x:-11,z:-11,width:6.3,asset:"village-gatehouse-181a9e",height:5.8},
+{id:"harbor",x:10,z:-2,width:6.8,asset:"wooden-cart-PLACEHOLDER",height:4}
+];
+const EXTRA=[
+{id:"watchtower-140f78",x:3,z:-11,w:5.2},
+{id:"thatched-cottage-0e63f5",x:-4,z:9,w:5},
+{id:"village-tavern-4e94e3",x:-13,z:-2,w:5},
+{id:"merchant-6f606b",x:1,z:-3,w:1.5},
+{id:"village-guard-5f0f6f",x:-9,z:-8,w:1.6},
+{id:"barrel-aadc94",x:9,z:5,w:1},
+{id:"windmill-3aad49",x:7,z:14,w:4.5}
+];
+let city=CITIES[0],activePlace="market",changeView=()=>{};
+const citylist=document.querySelector("#citylist");
+for(const c of CITIES){const b=document.createElement("button");b.type="button";b.className="city";b.dataset.city=c.id;b.setAttribute("aria-pressed",c.id===city.id?"true":"false");
+const nm=document.createElement("b");nm.textContent=c.name;const gd=document.createElement("span");gd.textContent=c.good;b.append(nm,gd);
+b.addEventListener("click",()=>{city=c;document.querySelector("#city-title").textContent=c.name;document.querySelector("#city-fact").textContent=c.note;for(const other of citylist.querySelectorAll("button"))other.setAttribute("aria-pressed",other===b?"true":"false");changeView();});citylist.append(b);}
+function selectPlace(id){if(!PLACES[id])return;activePlace=id;document.querySelector("#selected-name").textContent=PLACES[id].name;document.querySelector("#selected-body").textContent=PLACES[id].body;
+for(const b of document.querySelectorAll("[data-place]"))b.setAttribute("aria-pressed",b.dataset.place===id?"true":"false");changeView();}
+for(const b of document.querySelectorAll("[data-place]"))b.addEventListener("click",()=>selectPlace(b.dataset.place));
+selectPlace("market");
+const stage=document.querySelector("#view3d"),status=document.querySelector("#load-status");
+let renderer,controls,camera,scene,raf,markerObjects=[],THREE;
+function unavailable(msg){status.textContent="3D nézet nem elérhető";stage.innerHTML='<div class="fallback"><strong>🏰 Hanzaváros – szöveges felfedezés</strong><p>A 3D nézet most nem indítható. A városok és a helyszínek a gombokkal továbbra is megismerhetők.</p></div>';console.warn("Hanza 3D:",msg);}
+try{
+THREE=await import("three");
+const [{OrbitControls},{GLTFLoader}]=await Promise.all([import("three/addons/controls/OrbitControls.js"),import("three/addons/loaders/GLTFLoader.js")]);
+renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"low-power"});
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.6));renderer.setClearColor(0xb6cbd0);renderer.outputColorSpace=THREE.SRGBColorSpace;stage.append(renderer.domElement);
+scene=new THREE.Scene();scene.background=new THREE.Color("#b9ced0");scene.fog=new THREE.Fog("#b9ced0",65,120);
+camera=new THREE.PerspectiveCamera(43,1,0.1,150);const home=new THREE.Vector3(29,28,34);camera.position.copy(home);
+controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,1,0);controls.enableDamping=true;controls.dampingFactor=.075;controls.maxPolarAngle=1.48;controls.minDistance=15;controls.maxDistance=75;controls.enablePan=false;controls.update();
+scene.add(new THREE.HemisphereLight(0xfaf7de,0x5e746d,2.5));const sun=new THREE.DirectionalLight(0xffe6ae,2.6);sun.position.set(-15,35,15);scene.add(sun);
+const mat=(col)=>new THREE.MeshStandardMaterial({color:col,roughness:1,flatShading:true});
+const land=new THREE.Mesh(new THREE.PlaneGeometry(44,45),mat("#799674"));land.rotation.x=-Math.PI/2;land.position.set(-6,-.1,0);scene.add(land);
+const sea=new THREE.Mesh(new THREE.PlaneGeometry(31,50),new THREE.MeshStandardMaterial({color:"#417f99",roughness:.35,metalness:0,transparent:true,opacity:.96}));sea.rotation.x=-Math.PI/2;sea.position.set(24,-.15,0);scene.add(sea);
+for(let i=0;i<14;i++){const line=new THREE.Mesh(new THREE.PlaneGeometry(10,.065),new THREE.MeshBasicMaterial({color:i%2?"#b4d8d2":"#d2e5d9",transparent:true,opacity:.3}));line.rotation.x=-Math.PI/2;line.position.set(13+i%6*2,-.10,-22+Math.floor(i/3)*8);scene.add(line);}
+const roadMat=mat("#c7af89");const road=new THREE.Mesh(new THREE.PlaneGeometry(27,4),roadMat);road.rotation.x=-Math.PI/2;road.position.set(-5,-.065,-1);scene.add(road);
+const cross=new THREE.Mesh(new THREE.PlaneGeometry(3.6,27),roadMat);cross.rotation.x=-Math.PI/2;cross.position.set(-3,-.06,-1);scene.add(cross);
+const pierMat=mat("#8c6951");for(const z of [-13,-6,1,8]){const pier=new THREE.Mesh(new THREE.BoxGeometry(10,.4,3),pierMat);pier.position.set(13,.12,z);scene.add(pier);
+for(const x of [9,16])for(const dz of [-1,1]){const post=new THREE.Mesh(new THREE.CylinderGeometry(.18,.22,1.9,6),pierMat);post.position.set(x,-.6,z+dz);scene.add(post);}}
+function box(x,y,z,sx,sy,sz,color){const m=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),mat(color));m.position.set(x,y,z);scene.add(m);return m;}
+function fallbackAsset(x,z,w,kind){const g=new THREE.Group(),base=mat("#e6d0a9"),roof=mat("#874d38");
+const b=new THREE.Mesh(new THREE.BoxGeometry(w,w*.68,w*.7),base);b.position.y=w*.34;g.add(b);
+const r=new THREE.Mesh(new THREE.ConeGeometry(w*.64,w*.53,4),roof);r.rotation.y=Math.PI/4;r.position.y=w*.95;g.add(r);
+if(kind==="market"){b.scale.y=.35;b.position.y=.55;r.position.y=2.0;}
+g.position.set(x,.10,z);scene.add(g);return g;}
+function tree(x,z,s){const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.16*s,.23*s,1.5*s,6),mat("#71513c"));trunk.position.set(x,.75*s,z);scene.add(trunk);const top=new THREE.Mesh(new THREE.DodecahedronGeometry(1.05*s,0),mat("#49795a"));top.position.set(x,2*s,z);scene.add(top);}
+[[-17,-16,1.3],[-17,13,1.5],[-2,15,1.2],[6,-17,1.4],[-19,5,1.1],[2,16,1.5],[-16,-7,1]].forEach(p=>tree(...p));
+for(let i=0;i<7;i++){const z=-16+i*5;box(6,.28,z,1.7,.55,1.1,"#ad8a61");}
+function createMarker(p){const g=new THREE.Group();g.position.set(p.x,0,p.z);
+const stand=new THREE.Mesh(new THREE.CylinderGeometry(.12,.18,p.height,8),mat("#c4ac68"));stand.position.y=p.height/2;g.add(stand);
+const sphere=new THREE.Mesh(new THREE.SphereGeometry(.48,12,8),new THREE.MeshStandardMaterial({color:0xffd173,emissive:0x7c4b11,emissiveIntensity:.8,roughness:.5}));sphere.position.y=p.height+.26;sphere.userData.place=p.id;g.add(sphere);markerObjects.push(sphere);
+const labelCanvas=document.createElement("canvas");labelCanvas.width=256;labelCanvas.height=72;const ctx=labelCanvas.getContext("2d");ctx.fillStyle="#18383be8";ctx.fillRect(0,0,256,72);ctx.strokeStyle="#ecd292";ctx.lineWidth=3;ctx.strokeRect(2,2,252,68);ctx.fillStyle="#fff3d6";ctx.textAlign="center";ctx.font="bold 27px system-ui";ctx.fillText(PLACES[p.id].name.replace(/^[^ ]+ /,""),128,46);
+const label=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(labelCanvas),depthTest:false}));label.position.y=p.height+1.6;label.scale.set(4.4,1.25,1);g.add(label);scene.add(g);return {sphere,stand};}
+const nodes=LOC.map(createMarker);
+changeView=()=>{nodes.forEach((n,i)=>{const selected=LOC[i].id===activePlace;n.sphere.material.color.set(selected?"#ffeaa3":"#eac578");n.sphere.scale.setScalar(selected?1.35:1);});};
+changeView();
+const loader=new GLTFLoader();let loaded=0;const ASSETS=LOC.map(p=>({id:p.asset,x:p.x,z:p.z,w:p.width,kind:p.id})).filter(p=>!p.id.includes("PLACEHOLDER")).concat(EXTRA);
+await Promise.allSettled(ASSETS.map(async p=>{try{const gltf=await loader.loadAsync("https://polyfork.dev/cdn/"+p.id+".glb");const o=gltf.scene;const bound=new THREE.Box3().setFromObject(o),size=bound.getSize(new THREE.Vector3());const k=p.w/Math.max(size.x,size.z,.1);o.scale.multiplyScalar(k);bound.setFromObject(o);o.position.set(p.x,-bound.min.y+.08,p.z);scene.add(o);loaded++;}catch(e){fallbackAsset(p.x,p.z,p.w,p.kind);}}));
+fallbackAsset(10,-2,3,"harbor"); // Quayside storage: not a Polyfork model
+status.textContent=loaded+"/"+ASSETS.length+" Polyfork-modell betöltve";
+const raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let press=null;
+renderer.domElement.addEventListener("pointerdown",e=>{press={x:e.clientX,y:e.clientY};});
+renderer.domElement.addEventListener("pointerup",e=>{if(!press||Math.hypot(press.x-e.clientX,press.y-e.clientY)>9)return;press=null;const rect=renderer.domElement.getBoundingClientRect();pointer.x=((e.clientX-rect.left)/rect.width)*2-1;pointer.y=-((e.clientY-rect.top)/rect.height)*2+1;raycaster.setFromCamera(pointer,camera);const hit=raycaster.intersectObjects(markerObjects,false)[0];if(hit)selectPlace(hit.object.userData.place);});
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;if(!w||!h)return;camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);}
+new ResizeObserver(resize).observe(stage);resize();
+document.querySelector("#reset-camera").addEventListener("click",()=>{camera.position.copy(home);controls.target.set(0,1,0);controls.update();});
+let previous=0;function frame(t){raf=requestAnimationFrame(frame);if(document.hidden||t-previous<20)return;previous=t;controls.update();renderer.render(scene,camera);}
+raf=requestAnimationFrame(frame);
+window.addEventListener("pagehide",()=>{if(raf)cancelAnimationFrame(raf);controls.dispose();renderer.dispose();},{once:true});
+}catch(error){unavailable(error);}
+document.querySelector("#reset-camera").addEventListener("click",()=>{if(!camera)status.textContent="A 3D-nézet nem használható";});
+</script>
+</body></html>
