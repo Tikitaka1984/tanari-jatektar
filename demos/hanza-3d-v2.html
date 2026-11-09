@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hanza 3D v2 · interaktív kereskedelmi hálózat · TESZT</title>
+<meta name="theme-color" content="#132d38">
+<style>
+:root{color-scheme:dark;--bg:#132c36;--panel:#1d3c47;--panel2:#294b56;--border:#547582;--text:#fff2d5;--muted:#d8e1db;--accent:#f0cc7b;--sea:#7bcaef}
+*{box-sizing:border-box}[hidden]{display:none!important}html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:15px}
+button,a{font:inherit}button{cursor:pointer}button:disabled{opacity:.4;cursor:not-allowed}:focus-visible{outline:3px solid #ffda71;outline-offset:3px}
+.top{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;background:#102731;border-bottom:1px solid var(--border)}
+.top strong{font-family:Georgia,serif;font-size:20px}.tag{display:inline-block;padding:2px 6px;color:#102631;background:#f0cc7b;font-size:11px;font-weight:900;border-radius:5px;margin-right:8px}.top a{color:var(--accent);font-size:13px}
+.hud{display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:9px 12px;background:#1e3b44;border-bottom:1px solid var(--border);font-size:13px;min-height:42px}
+.pill{background:#304d55;padding:4px 9px;border-radius:20px}.pill strong{color:#fff5d8}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,300px);gap:9px;padding:9px;align-items:stretch}
+.stage{position:relative;min-height:460px;height:min(69vh,700px);background:#b2cfd1;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+#scene3d{position:absolute;inset:0;touch-action:pan-y}
+#scene3d canvas{width:100%;height:100%;display:block}
+.legend{position:absolute;top:9px;left:9px;max-width:235px;padding:9px 11px;border-radius:10px;color:#f9eed8;background:#102f36eb;pointer-events:none;font-size:11px;line-height:1.6}
+.legend b{color:var(--accent);font-size:13px}
+.load{position:absolute;right:8px;top:9px;max-width:180px;text-align:right;font-size:11px;color:#fff;background:#153843de;padding:6px 8px;border-radius:8px}
+.side{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:9px;min-width:0}
+.side h2{font-family:Georgia,serif;margin:0;color:#ffe7b4;font-size:23px}
+.side h3{margin:4px 0 0;color:#f6d18c;font-size:14px}
+.desc{font-size:12px;color:var(--muted);line-height:1.45;margin:0}
+.citylist{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:2px 0}
+.city{border:1px solid #597782;border-radius:7px;background:var(--panel2);color:var(--text);padding:6px 2px;min-height:38px;font-size:11px;overflow:hidden;text-overflow:ellipsis}
+.city[aria-pressed=true]{background:#caa85e;border-color:#fce0a0;color:#192a2b;font-weight:850}
+#actionlist{display:grid;gap:7px}.act{background:#e8c77f;color:#1a2a2b;border:0;border-radius:9px;padding:10px;text-align:left;font-weight:800;min-height:44px}.act.secondary{background:#365967;color:#fff;border:1px solid #78909a}.act:hover{filter:brightness(1.08)}
+#contracts{padding:8px 10px;border:1px solid #557783;background:#294854;border-radius:8px;font-size:12px;line-height:1.5;max-height:135px;overflow:auto}
+#history{font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:8px;min-height:20px}
+.note{font-size:11px;color:#dfd1ac;padding:8px 12px 12px;line-height:1.5}
+.fallback{height:100%;padding:35px;display:grid;place-items:center;text-align:center;background:#9ab7ab;color:#112e32;font-weight:bold}
+@media(max-width:800px){.wrap{display:block}.stage{height:52vh;min-height:330px}.side{margin-top:8px}.citylist{grid-template-columns:repeat(4,minmax(0,1fr))}.city{font-size:11px}.legend{max-width:180px;font-size:10px}.hud{font-size:11px}.top strong{font-size:17px}}
+@media(max-width:410px){.citylist{grid-template-columns:repeat(3,minmax(0,1fr))}.legend{max-width:170px}.load{max-width:115px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.180.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.180.0/examples/jsm/"}}</script>
+</head>
+<body>
+<header class="top"><div><span class="tag">TESZT · V2</span><strong>A Hanza 3D kereskedelmi hálózata</strong></div><a href="../games/hanza-3d-v2.html" target="_parent">Teljes társasjáték megnyitása</a></header>
+<div class="hud" aria-live="polite" id="hud"><span class="pill">3D hálózati térkép</span><span class="pill">Várakozás a játékállásra…</span></div>
+<main class="wrap">
+<div class="stage"><div id="scene3d" role="img" aria-label="Háromdimenziós, sematikus Hanza-kereskedelmi hálózat, 12 várossal, mozgó hajókkal és kereskedőtelepekkel"></div><div class="legend"><b>Válassz várost a térképen!</b><div>🔵 Kék: tengeri kereskedelmi út</div><div>🟤 Barna: szárazföldi út</div><div>🟡 Arany: kiválasztott város</div><div>Egér: forgatás, görgő: közelítés. Telefon: húzás és kétujjas nagyítás.</div></div><div class="load" id="load" role="status">3D modellek betöltése…</div></div>
+<aside class="side" aria-label="3D játékvezérlés">
+<h2 id="selected-title">Lübeck</h2><p class="desc" id="selected-description">Válassz várost a 3D térképen vagy az alábbi gombokkal.</p>
+<div id="cities" class="citylist" role="group" aria-label="Hanzaváros kiválasztása"></div>
+<h3>Elérhető műveletek</h3><div id="actionlist" aria-live="polite"><p class="desc">A teljes játékból megnyitva a műveletek itt is használhatók.</p></div>
+<h3>Megbízások</h3><div id="contracts">A megbízások a társasjáték indításával jelennek meg.</div><div id="history" role="status"></div>
+</aside></main>
+<footer class="note">Ez sematikus, nem méretarányos és nem hiteles történeti városrekonstrukció. Az útvonalak, akciók, termékek és pontozás a meglévő Hanza-játék állapotát követik. <a href="https://polyfork.dev/kit/medieval-village-kit-ca0b43" target="_blank" rel="noopener noreferrer" style="color:#f3d18a">3D modellek: Polyfork Medieval Village Kit</a>. A módosítások csak a külön V2 tesztjátékban érvényesek.</footer>
+<script type="module">
+const CITY={
+BER:{n:"Bergen",x:87.3,y:48,big:true,g:"Szárított tőkehal"},LON:{n:"London",x:24,y:159.8,big:true,g:"Gyapjú"},BRU:{n:"Brügge",x:51,y:169.5,big:true,g:"Posztó"},
+KOL:{n:"Köln",x:82.3,y:178,g:"Bor"},HAM:{n:"Hamburg",x:105.3,y:145,g:"Sör"},LUN:{n:"Lüneburg",x:113.4,y:157.4,g:"Só"},
+LUB:{n:"Lübeck",x:122.3,y:138,g:"Központ"},SKA:{n:"Skanör",x:135.4,y:120.8,g:"Hering"},VIS:{n:"Visby",x:176.6,y:90.3,g:"Csomópont"},
+DAN:{n:"Danzig",x:181.3,y:135.2,g:"Gabona"},RIG:{n:"Riga",x:220.3,y:96.2,g:"Fa és kátrány"},NOV:{n:"Novgorod",x:268,y:65.9,big:true,g:"Szőrme és viasz"}};
+const EDGES=[["BER","LON","S"],["BER","SKA","S"],["LON","BRU","S"],["LON","HAM","S"],["BRU","HAM","S"],["BRU","KOL","L"],["KOL","HAM","L"],["HAM","LUB","L"],["HAM","LUN","L"],["LUN","LUB","L"],["LUB","SKA","S"],["LUB","VIS","S"],["LUB","DAN","S"],["SKA","VIS","S"],["VIS","DAN","S"],["VIS","RIG","S"],["DAN","RIG","S"],["RIG","NOV","L"]];
+const GOODS={tokehal:"Szárított tőkehal",gyapju:"Gyapjú",posztó:"Posztó",bor:"Bor",sör:"Sör",só:"Só",hering:"Hering",gabona:"Gabona",fa:"Fa és kátrány",szőrme:"Szőrme és viasz"};
+const PALETTE=["#2C6894","#B04F2A","#5F6E30","#7A3E8E"];
+let state=null,chosen="LUB",canvas3d,scene,THREE,camera,renderer,orbit,select3D=()=>{},renderPieces=()=>{},syncHighlight=()=>{};
+const $=s=>document.querySelector(s);
+const town=(id)=>CITY[id]?.n||id||"–";
+function clean(s){return String(s==null?"":s)}
+function button(text,action,cls="act"){const b=document.createElement("button");b.type="button";b.className=cls;b.textContent=text;b.addEventListener("click",action);return b}
+function action(type,detail){if(window.parent===window){$("#history").textContent="A műveleteket a teljes Hanza-társasjátékban indíthatod el.";return;}
+window.parent.postMessage({type:"hanza3d:action",action:type,...detail},window.location.origin);}
+const cities=$("#cities");for(const [id,c] of Object.entries(CITY)){const b=button(c.n,()=>selectCity(id),"city");b.dataset.city=id;cities.append(b);}
+function selectCity(id){if(!CITY[id])return;chosen=id;refreshSelection();syncHighlight();select3D(id);}
+function refreshSelection(){
+const c=CITY[chosen];$("#selected-title").textContent=c.n+ (c.big?" ★":"");
+const list=state?.players||[],here=list.filter(p=>p.pos===chosen);
+const who=here.length?here.map(p=>p.name).join(", "):"nincs játékos";
+$("#selected-description").textContent="Áru: "+c.g+". Itt áll: "+who+". "+(c.big?"Kiemelt kereskedelmi központ.":"");
+for(const b of cities.querySelectorAll("button"))b.setAttribute("aria-pressed",b.dataset.city===chosen?"true":"false");
+const area=$("#actionlist");area.replaceChildren();
+if(!state||state.phase==="setup"){area.append(document.createElement("p")).textContent="Indítsd a játékot a Hanza-társasjátékban, majd végezd el a Hansetag-kártyát.";return;}
+if(state.phase==="know"){area.append(document.createElement("p")).textContent="Hansetag-fázis: előbb válaszoljatok a kártya kérdéseire az eredeti játékvezérlőn.";return;}
+if(state.phase==="end"){area.append(document.createElement("p")).textContent="A játék véget ért. Az eredmények a társasjátékban olvashatók.";return;}
+const actor=state.players[state.cur];if(!actor)return;
+const legal=state.legal||[];let count=0;
+function add(label,a,detail,secondary=false){area.append(button(label,()=>action(a,detail),secondary?"act secondary":"act"));count++;}
+if(chosen!==actor.pos){const move=legal.find(a=>a.a==="move"&&a.to===chosen);if(move)add("⛵ Utazás: "+town(chosen)+" ("+move.cost+" akció)", "move",{to:chosen});
+else add("🔒 Innen most nincs közvetlen, megengedett út", "noop",{},true),area.lastChild.disabled=true;}
+else{
+ const load=legal.find(a=>a.a==="load");if(load)add("📦 Rakodás: "+c.g+" ("+load.cost+" akció)","load",{});
+ const builds=legal.find(a=>a.a==="build");if(builds)add("🏠 Kereskedőtelep építése ("+builds.cost+" akció)","build",{});
+ for(const d of legal.filter(a=>a.a==="deliver")){const m=state.market[d.i];if(m)add("✅ Kiszállítás: "+(GOODS[m.good]||m.good)+" (+"+m.vp+" VP)","deliver",{i:d.i});}
+ for(const a of legal.filter(a=>a.a==="move"))add("⛵ Tovább: "+town(a.to)+" ("+a.cost+" akció)","move",{to:a.to},true);
+}
+if(!count)area.append(document.createElement("p")).textContent="Nincs most végrehajtható művelet ennél a városnál.";
+area.append(button("Kör vége – "+clean(actor.name),()=>action("endTurn",{}),"act secondary"));
+}
+function refresh(){
+const hud=$("#hud");hud.replaceChildren();
+function pill(txt){const s=document.createElement("span");s.className="pill";s.textContent=txt;hud.append(s)}
+pill("3D hálózati térkép · 12 város");
+if(state?.players?.length){pill((state.round+1)+"/"+state.rounds+". kör · "+({act:"Akciók",know:"Hansetag",end:"Befejeződött"}[state.phase]||state.phase));
+const p=state.players[state.cur];if(p)pill("Soron: "+p.name+" · "+(p.acts||0)+" akció · "+p.vp+" VP · "+p.cargo.length+" rakomány");
+for(const p of state.players)pill(p.name+": "+p.vp+" VP · "+town(p.pos));
+}else pill("Bemutató mód – indítsd a teljes játékot!");
+$("#contracts").replaceChildren();
+if(!state?.market?.length){$("#contracts").textContent="A társasjáték indításakor jelennek meg a megbízások.";}else{
+for(const m of state.market){const d=document.createElement("div");d.textContent=(GOODS[m.good]||m.good)+": "+town(m.from)+" → "+town(m.to)+" · "+m.vp+" VP";$("#contracts").append(d);}
+}
+$("#history").textContent=clean(state?.lastLog||"A 3D hálózat és az eredeti játéktábla ugyanazt a játékállást mutatja.");
+refreshSelection();renderPieces();syncHighlight();
+}
+window.addEventListener("message",e=>{
+if(e.origin!==location.origin||e.source!==window.parent)return;
+const d=e.data;if(!d||d.type!=="hanza3d:state"||!d.state)return;
+state=d.state;if(!CITY[chosen])chosen="LUB";refresh();
+});
+refresh();
+try{
+THREE=await import("three");
+const [{OrbitControls},{GLTFLoader}]=await Promise.all([import("three/addons/controls/OrbitControls.js"),import("three/addons/loaders/GLTFLoader.js")]);
+const canvas=$("#scene3d");
+renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"low-power"});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.setClearColor("#bed9dc");canvas.append(renderer.domElement);
+scene=new THREE.Scene();scene.background=new THREE.Color("#bed9dc");scene.fog=new THREE.Fog("#bed9dc",56,100);
+camera=new THREE.PerspectiveCamera(45,1,.1,160);camera.position.set(1,32,32);
+orbit=new OrbitControls(camera,renderer.domElement);orbit.target.set(0,0,0);orbit.enableDamping=true;orbit.enablePan=false;orbit.minDistance=15;orbit.maxDistance=72;orbit.maxPolarAngle=1.52;orbit.update();
+scene.add(new THREE.HemisphereLight(0xfaf2dc,0x5a7887,2.65));const sun=new THREE.DirectionalLight(0xffebc3,2.1);sun.position.set(-10,27,15);scene.add(sun);
+const material=(color,op=1)=>new THREE.MeshStandardMaterial({color,roughness:.9,transparent:op<1,opacity:op,flatShading:true});
+const sea=new THREE.Mesh(new THREE.PlaneGeometry(50,34),material("#79b0b9"));sea.rotation.x=-Math.PI/2;sea.position.y=-.2;scene.add(sea);
+const pos=id=>{const c=CITY[id];return new THREE.Vector3((c.x-147)/8.5,0,(c.y-112)/8.5)};
+const clickable=[],cities3d={};
+function modelFallback(group,i){
+const b=new THREE.Mesh(new THREE.BoxGeometry(.64,.72,.55),material(i%2?"#dbc8a2":"#d0b28c"));b.position.y=.65;group.add(b);
+const r=new THREE.Mesh(new THREE.ConeGeometry(.58,.56,4),material("#b46b4f"));r.rotation.y=Math.PI/4;r.position.y=1.32;group.add(r);
+}
+function textSprite(str,w=2.4,h=.6){
+const cv=document.createElement("canvas");cv.width=512;cv.height=132;const ctx=cv.getContext("2d");
+ctx.fillStyle="#17363eea";ctx.fillRect(0,0,512,132);ctx.strokeStyle="#edc878";ctx.lineWidth=6;ctx.strokeRect(4,4,504,124);ctx.fillStyle="#fff2d6";ctx.font="bold 47px system-ui";ctx.textAlign="center";ctx.fillText(str,256,84,475);
+const spr=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cv),depthTest:false}));spr.scale.set(w,h,1);return spr;
+}
+for(const [id,c] of Object.entries(CITY)){
+const p=pos(id),group=new THREE.Group();group.position.copy(p);
+const base=new THREE.Mesh(new THREE.CylinderGeometry(1.1,1.15,.34,10),material(c.big?"#c5a96a":"#7c9c74"));base.position.y=0;group.add(base);
+const houses=new THREE.Group();houses.position.set(0,.14,0);group.add(houses);modelFallback(houses,Object.keys(CITY).indexOf(id));
+const sign=textSprite(c.n,c.n.length>8?2.45:2.15,.58);sign.position.y=2.55;group.add(sign);
+const hit=new THREE.Mesh(new THREE.CylinderGeometry(1.16,1.16,3.7,10),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));hit.position.y=1.55;hit.userData.city=id;group.add(hit);clickable.push(hit);
+scene.add(group);cities3d[id]={group,base,houses,sign,p,hit,icon:[]};}
+for(const [a,b,type] of EDGES){
+const pa=pos(a),pb=pos(b),geometry=new THREE.BufferGeometry().setFromPoints([pa.clone().setY(.03),pb.clone().setY(.03)]);
+const m=type==="S"?new THREE.LineBasicMaterial({color:0x2478a7,transparent:true,opacity:.86}):new THREE.LineDashedMaterial({color:0x9a6341,dashSize:.26,gapSize:.15,transparent:true,opacity:.9});
+const line=new THREE.Line(geometry,m);if(type==="L")line.computeLineDistances();scene.add(line);
+}
+const playersGroup=new THREE.Group(),kontorsGroup=new THREE.Group(),hintsGroup=new THREE.Group();scene.add(playersGroup,kontorsGroup,hintsGroup);
+function ship(p,i){const g=new THREE.Group();const col=p.color||PALETTE[i]||"#2c6894";const hull=new THREE.Mesh(new THREE.CylinderGeometry(.23,.32,.9,6),material(col));hull.rotation.x=Math.PI/2;hull.position.y=.2;g.add(hull);
+const mast=new THREE.Mesh(new THREE.CylinderGeometry(.035,.04,.9,6),material("#684836"));mast.position.y=.85;g.add(mast);
+const sail=new THREE.Mesh(new THREE.PlaneGeometry(.53,.62),new THREE.MeshStandardMaterial({color:"#ffedd4",side:THREE.DoubleSide,roughness:1}));sail.position.set(.03,.84,0);g.add(sail);
+const dot=new THREE.Mesh(new THREE.SphereGeometry(.1,8,6),material(col));dot.position.y=1.45;g.add(dot);return g;}
+let ships=[];
+function clear(g){while(g.children.length){const c=g.children[0];g.remove(c);c.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){const mats=Array.isArray(o.material)?o.material:[o.material];for(const x of mats)if(x.dispose)x.dispose();}});}}
+function flag(id,color,idx,total){const q=pos(id).clone(),flag=new THREE.Group();flag.position.set(q.x+(-.42+idx*.5),.18,q.z+.5);
+const post=new THREE.Mesh(new THREE.CylinderGeometry(.025,.035,.97,5),material("#544b43"));post.position.y=.5;flag.add(post);
+const banner=new THREE.Mesh(new THREE.BoxGeometry(.43,.31,.05),material(color));banner.position.set(.23,.74,0);flag.add(banner);return flag;}
+renderPieces=()=>{
+clear(kontorsGroup);clear(hintsGroup);const pl=state?.players||[];
+for(const [i,p] of pl.entries())for(const k of p.kontors||[])if(CITY[k])kontorsGroup.add(flag(k,p.color||PALETTE[i],i,pl.length));
+if(ships.length!==pl.length){clear(playersGroup);ships=pl.map((p,i)=>{const g=ship(p,i);playersGroup.add(g);const q=pos(p.pos||"LUB");g.position.set(q.x,.4,q.z);return g;});}
+for(const [i,p] of pl.entries()){const q=pos(p.pos||"LUB"),offs=(i-(pl.length-1)/2)*.4;ships[i].userData.destination=new THREE.Vector3(q.x+offs,.5,q.z-.7);}
+if(state?.phase==="act"&&state.players[state.cur]){
+const p=state.players[state.cur];for(const move of state.legal||[])if(move.a==="move"&&CITY[move.to]){
+const q=pos(move.to),r=new THREE.Mesh(new THREE.RingGeometry(1.16,1.32,32),new THREE.MeshBasicMaterial({color:0xdcb14e,side:THREE.DoubleSide,transparent:true,opacity:.9}));r.rotation.x=-Math.PI/2;r.position.set(q.x,.25,q.z);hintsGroup.add(r);}}
+};
+syncHighlight=()=>{for(const [id,c] of Object.entries(cities3d)){c.base.material.color.set(id===chosen?"#f3cd69":CITY[id].big?"#c5a96a":"#7c9c74");}};
+select3D=(id)=>{};
+const loader=new GLTFLoader();
+const assetMap={LUB:"village-gatehouse-181a9e",BER:"stilted-granary-3e7d7d",LON:"market-stall-94937d",BRU:"two-story-house-40f6dc",KOL:"village-tavern-4e94e3",HAM:"thatched-cottage-0e63f5",LUN:"watchtower-140f78",SKA:"market-stall-94937d",VIS:"two-story-house-40f6dc",DAN:"stilted-granary-3e7d7d",RIG:"watchtower-140f78",NOV:"village-gatehouse-181a9e"};
+const ids=[...new Set(Object.values(assetMap))];const models={};let loaded=0;
+await Promise.allSettled(ids.map(async id=>{try{models[id]=(await loader.loadAsync("https://polyfork.dev/cdn/"+id+".glb")).scene;loaded++;}catch(err){console.warn("Polyfork-modell nem elérhető:",id,err?.message||err);}}));
+for(const [cityId,modelId] of Object.entries(assetMap)){const base=models[modelId];if(!base)continue;
+const root=base.clone(true),node=cities3d[cityId].houses;
+const bound=new THREE.Box3().setFromObject(root),size=bound.getSize(new THREE.Vector3());
+const factor=.95/Math.max(size.x,size.z,.1);root.scale.multiplyScalar(factor);
+const bb=new THREE.Box3().setFromObject(root);root.position.set(0,-bb.min.y,0);
+node.remove(node.children[0]);node.add(root);
+}
+$("#load").textContent=loaded+"/"+ids.length+" Polyfork 3D-modell betöltve";
+const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();let startPointer=null;
+renderer.domElement.addEventListener("pointerdown",e=>startPointer={x:e.clientX,y:e.clientY});
+renderer.domElement.addEventListener("pointerup",e=>{if(!startPointer)return;const length=Math.hypot(e.clientX-startPointer.x,e.clientY-startPointer.y);startPointer=null;if(length>8)return;
+const rc=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-rc.left)/rc.width*2-1,-(e.clientY-rc.top)/rc.height*2+1);ray.setFromCamera(pointer,camera);
+const hit=ray.intersectObjects(clickable,false)[0];if(hit&&CITY[hit.object.userData.city])selectCity(hit.object.userData.city);
+});
+new ResizeObserver(()=>{const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}).observe(canvas);
+const w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
+let handle,last=0;function animate(t){handle=requestAnimationFrame(animate);if(document.hidden||t-last<21)return;last=t;
+orbit.update();for(const s of ships)if(s.userData.destination){if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)s.position.copy(s.userData.destination);else s.position.lerp(s.userData.destination,.085);}
+renderer.render(scene,camera);}handle=requestAnimationFrame(animate);
+window.addEventListener("pagehide",()=>{cancelAnimationFrame(handle);orbit.dispose();renderer.dispose();},{once:true});
+renderPieces();syncHighlight();
+}catch(error){
+$("#load").textContent="3D nem elérhető – szöveges mód";
+$("#scene3d").innerHTML='<div class="fallback">A 3D megjelenítés nem érhető el. A városválasztás és a műveletek a jobb oldali gombokkal továbbra is használhatók.</div>';
+console.error("Hanza 3D hálózati nézet:",error);
+}
+if(window.parent!==window)window.parent.postMessage({type:"hanza3d:ready"},window.location.origin);
+</script></body></html>
