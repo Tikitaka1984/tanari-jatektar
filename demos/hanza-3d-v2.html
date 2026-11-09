@@ -14,7 +14,7 @@ button,a{font:inherit}button{cursor:pointer}button:disabled{opacity:.4;cursor:no
 .pill{background:#304d55;padding:4px 9px;border-radius:20px}.pill strong{color:#fff5d8}
 .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,300px);gap:9px;padding:9px;align-items:stretch}
 .stage{position:relative;min-height:460px;height:min(69vh,700px);background:#b2cfd1;border:1px solid var(--border);border-radius:12px;overflow:hidden}
-#scene3d{position:absolute;inset:0;touch-action:pan-y}
+#scene3d{position:absolute;inset:0;touch-action:none}
 #scene3d canvas{width:100%;height:100%;display:block}
 .legend{position:absolute;top:9px;left:9px;max-width:235px;padding:9px 11px;border-radius:10px;color:#f9eed8;background:#102f36eb;pointer-events:none;font-size:11px;line-height:1.6}
 .legend b{color:var(--accent);font-size:13px}
@@ -74,9 +74,9 @@ const who=here.length?here.map(p=>p.name).join(", "):"nincs játékos";
 $("#selected-description").textContent="Áru: "+c.g+". Itt áll: "+who+". "+(c.big?"Kiemelt kereskedelmi központ.":"");
 for(const b of cities.querySelectorAll("button"))b.setAttribute("aria-pressed",b.dataset.city===chosen?"true":"false");
 const area=$("#actionlist");area.replaceChildren();
-if(!state||state.phase==="setup"){area.append(document.createElement("p")).textContent="Indítsd a játékot a Hanza-társasjátékban, majd végezd el a Hansetag-kártyát.";return;}
-if(state.phase==="know"){area.append(document.createElement("p")).textContent="Hansetag-fázis: előbb válaszoljatok a kártya kérdéseire az eredeti játékvezérlőn.";return;}
-if(state.phase==="end"){area.append(document.createElement("p")).textContent="A játék véget ért. Az eredmények a társasjátékban olvashatók.";return;}
+if(!state||state.phase==="setup"){area.append(Object.assign(document.createElement("p"),{className:"desc",textContent:"Indítsd a játékot a Hanza-társasjátékban, majd végezd el a Hansetag-kártyát."}));return;}
+if(state.phase==="know"){area.append(Object.assign(document.createElement("p"),{className:"desc",textContent:"Hansetag-fázis: előbb válaszoljatok a kártya kérdéseire az eredeti játékvezérlőn."}));return;}
+if(state.phase==="end"){area.append(Object.assign(document.createElement("p"),{className:"desc",textContent:"A játék véget ért. Az eredmények a társasjátékban olvashatók."}));return;}
 const actor=state.players[state.cur];if(!actor)return;
 const legal=state.legal||[];let count=0;
 function add(label,a,detail,secondary=false){area.append(button(label,()=>action(a,detail),secondary?"act secondary":"act"));count++;}
@@ -88,7 +88,7 @@ else{
  for(const d of legal.filter(a=>a.a==="deliver")){const m=state.market[d.i];if(m)add("✅ Kiszállítás: "+(GOODS[m.good]||m.good)+" (+"+m.vp+" VP)","deliver",{i:d.i});}
  for(const a of legal.filter(a=>a.a==="move"))add("⛵ Tovább: "+town(a.to)+" ("+a.cost+" akció)","move",{to:a.to},true);
 }
-if(!count)area.append(document.createElement("p")).textContent="Nincs most végrehajtható művelet ennél a városnál.";
+if(!count)area.append(Object.assign(document.createElement("p"),{className:"desc",textContent:"Nincs most végrehajtható művelet ennél a városnál."}));
 area.append(button("Kör vége – "+clean(actor.name),()=>action("endTurn",{}),"act secondary"));
 }
 function refresh(){
@@ -172,13 +172,22 @@ select3D=(id)=>{};
 const loader=new GLTFLoader();
 const assetMap={LUB:"village-gatehouse-181a9e",BER:"stilted-granary-3e7d7d",LON:"market-stall-94937d",BRU:"two-story-house-40f6dc",KOL:"village-tavern-4e94e3",HAM:"thatched-cottage-0e63f5",LUN:"watchtower-140f78",SKA:"market-stall-94937d",VIS:"two-story-house-40f6dc",DAN:"stilted-granary-3e7d7d",RIG:"watchtower-140f78",NOV:"village-gatehouse-181a9e"};
 const ids=[...new Set(Object.values(assetMap))];const models={};let loaded=0;
+// A 3D tábla saját modellbetöltés közben is rajzolódjon, ne maradjon üres!
+const startW=Math.max(1,canvas.clientWidth),startH=Math.max(1,canvas.clientHeight);
+renderer.setSize(startW,startH,false);camera.aspect=startW/startH;camera.updateProjectionMatrix();
+let handle,last=0;function animate(t){handle=requestAnimationFrame(animate);if(document.hidden||t-last<21)return;last=t;
+orbit.update();for(const ship of ships)if(ship.userData.destination){
+if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)ship.position.copy(ship.userData.destination);
+else ship.position.lerp(ship.userData.destination,.085);
+}renderer.render(scene,camera);}
+handle=requestAnimationFrame(animate);
 await Promise.allSettled(ids.map(async id=>{try{models[id]=(await loader.loadAsync("https://polyfork.dev/cdn/"+id+".glb")).scene;loaded++;}catch(err){console.warn("Polyfork-modell nem elérhető:",id,err?.message||err);}}));
 for(const [cityId,modelId] of Object.entries(assetMap)){const base=models[modelId];if(!base)continue;
 const root=base.clone(true),node=cities3d[cityId].houses;
 const bound=new THREE.Box3().setFromObject(root),size=bound.getSize(new THREE.Vector3());
 const factor=.95/Math.max(size.x,size.z,.1);root.scale.multiplyScalar(factor);
 const bb=new THREE.Box3().setFromObject(root);root.position.set(0,-bb.min.y,0);
-node.remove(node.children[0]);node.add(root);
+node.clear();node.add(root);
 }
 $("#load").textContent=loaded+"/"+ids.length+" Polyfork 3D-modell betöltve";
 const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();let startPointer=null;
@@ -189,9 +198,7 @@ const hit=ray.intersectObjects(clickable,false)[0];if(hit&&CITY[hit.object.userD
 });
 new ResizeObserver(()=>{const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}).observe(canvas);
 const w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
-let handle,last=0;function animate(t){handle=requestAnimationFrame(animate);if(document.hidden||t-last<21)return;last=t;
-orbit.update();for(const s of ships)if(s.userData.destination){if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)s.position.copy(s.userData.destination);else s.position.lerp(s.userData.destination,.085);}
-renderer.render(scene,camera);}handle=requestAnimationFrame(animate);
+
 window.addEventListener("pagehide",()=>{cancelAnimationFrame(handle);orbit.dispose();renderer.dispose();},{once:true});
 renderPieces();syncHighlight();
 }catch(error){
