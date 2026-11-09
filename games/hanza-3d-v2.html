@@ -778,8 +778,9 @@ function stateFor3d(){
   if(!S)return {phase:'setup',round:0,rounds:0,cur:0,players:[],market:[],legal:[],lastLog:''};
   return {
     phase:S.phase,round:S.round,rounds:S.rounds,cur:S.cur,
-    players:S.players.map(p=>({name:p.name,color:p.color,pos:p.pos,cargo:p.cargo.slice(),kontors:p.kontors.slice(),vp:p.vp,acts:p.acts})),
+    players:S.players.map(p=>({name:p.name,color:p.color,pos:p.pos,cargo:p.cargo.slice(),kontors:p.kontors.slice(),vp:p.vp,final:E.finalVP(p),acts:p.acts})),
     market:S.market.map(m=>({good:m.good,from:m.from,to:m.to,vp:m.vp})),
+    eff:{closed:S.eff?.closed||null},
     legal:S.phase==='act'?E.legal(S,S.cur).map(a=>({a:a.a,to:a.to,cost:a.cost,i:a.i})):[],
     lastLog:plain(S.log?.[0]||'')
   };
