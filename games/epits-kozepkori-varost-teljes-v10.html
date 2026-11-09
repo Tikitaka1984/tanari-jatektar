@@ -441,15 +441,46 @@ const scl=targetSize/Math.max(.1,size.x,size.y,size.z);node.scale.setScalar(scl)
 node.position.set(-.5*(b2.min.x+b2.max.x),-.05-b2.min.y,-.5*(b2.min.z+b2.max.z));
 }
 function sync(s){
-if(!dynamic)return;while(dynamic.children.length){dynamic.remove(dynamic.children[0]);}
-for(const [id,m] of Object.entries(markers))m.cyl.material.color.set(s.site===id?"#ffe39b":"#d5a65b");
-if(!s.site)return;
-const [x,z]=terrain[s.site];const dx=s.site==="ford"?1:0;
-keepModel(dynamic,"thatched-cottage-0e63f5",x+1.7,z+1.2,1.85);
-keepModel(dynamic,"thatched-cottage-0e63f5",x-1.6,z+1.5,1.55);
-if(s.investment==="market")keepModel(dynamic,"market-stall-94937d",x+1,z-1.2,2.1);
-if(s.investment==="mill")keepModel(dynamic,"water-mill-b31972",s.site==="ford"?-8.0:x+.8,z-1.5,2.3);
-if(s.investment==="houses"){keepModel(dynamic,"thatched-cottage-0e63f5",x-1.4,z-1.6,1.7);keepModel(dynamic,"market-stall-94937d",x+1.5,z-1.4,1.5);}
+ if(!dynamic)return;
+ while(dynamic.children.length)dynamic.remove(dynamic.children[0]);
+ const count=Math.max(0,Math.min(6,Number(s.completed)||0));
+ const here=s.decisions?.[0]||null;
+ for(const [id,m] of Object.entries(markers))m.cyl.material.color.set(here===id?"#ffe39b":"#d5a65b");
+ if(!here)return;
+ const [x,z]=terrain[here];
+ keepModel(dynamic,"thatched-cottage-0e63f5",x+1.7,z+1.2,1.85);
+ keepModel(dynamic,"thatched-cottage-0e63f5",x-1.6,z+1.5,1.55);
+ if(count>=1){
+  keepModel(dynamic,"water-mill-b31972",-8.45,-5.85,1.6);
+  keepModel(dynamic,"thatched-cottage-0e63f5",-2.8,-4.8,1.6);
+ }
+ if(count>=2){
+  keepModel(dynamic,"village-gatehouse-181a9e",1.6,-6,2.45);
+  keepModel(dynamic,"thatched-cottage-0e63f5",3.2,-4.8,1.6);
+ }
+ if(count>=3){
+  keepModel(dynamic,"market-stall-94937d",-0.4,-2.2,2.4);
+  keepModel(dynamic,"market-stall-94937d",1.8,-1.8,2.0);
+  shape(new THREE.BoxGeometry(3.8,.055,2.75),"#d6bb8e",.8,.02,-2.4,dynamic);
+ }
+ if(count>=4){
+  keepModel(dynamic,"thatched-cottage-0e63f5",5,-1.2,2.0);
+  shape(new THREE.CylinderGeometry(.17,.22,1.6,8),"#98634c",4.8,1.18,-1.45,dynamic);
+  shape(new THREE.ConeGeometry(.5,.8,6),"#7d4e34",5,.9,-1.2,dynamic);
+ }
+ if(count>=5){
+  keepModel(dynamic,"thatched-cottage-0e63f5",-3.2,-1.2,1.9);
+  shape(new THREE.BoxGeometry(1.6,.48,1.0),"#b77b47",-.9,.52,-4.85,dynamic);
+  for(const a of [-.65,.65])for(const b of [-.45,.45]){
+   const wheel=shape(new THREE.CylinderGeometry(.25,.25,.13,12),"#65472e",-.9+a,.32,-4.85+b,dynamic);
+   wheel.rotation.z=Math.PI/2;
+  }
+ }
+ if(count>=6){
+  shape(new THREE.BoxGeometry(2.15,1.85,1.75),"#d2bd91",4.2,1.05,1.5,dynamic);
+  const roof=shape(new THREE.ConeGeometry(1.75,1.13,4),"#955b43",4.2,2.58,1.5,dynamic);roof.rotation.y=Math.PI/4;
+  shape(new THREE.BoxGeometry(.42,.64,.06),"#cc993f",4.2,3.55,1.5,dynamic);
+ }
 }
 window.medievalSceneUpdate=sync;
 let cameraAnimation=null;
