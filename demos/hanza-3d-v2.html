@@ -58,6 +58,7 @@ DAN:{n:"Danzig",x:181.3,y:135.2,g:"Gabona"},RIG:{n:"Riga",x:220.3,y:96.2,g:"Fa �
 const EDGES=[["BER","LON","S"],["BER","SKA","S"],["LON","BRU","S"],["LON","HAM","S"],["BRU","HAM","S"],["BRU","KOL","L"],["KOL","HAM","L"],["HAM","LUB","L"],["HAM","LUN","L"],["LUN","LUB","L"],["LUB","SKA","S"],["LUB","VIS","S"],["LUB","DAN","S"],["SKA","VIS","S"],["VIS","DAN","S"],["VIS","RIG","S"],["DAN","RIG","S"],["RIG","NOV","L"]];
 const GOODS={tokehal:"Szárított tőkehal",gyapju:"Gyapjú",posztó:"Posztó",bor:"Bor",sör:"Sör",só:"Só",hering:"Hering",gabona:"Gabona",fa:"Fa és kátrány",szőrme:"Szőrme és viasz"};
 const PALETTE=["#2C6894","#B04F2A","#5F6E30","#7A3E8E"];
+const CARGO_COLORS={tokehal:"#d8e3d9",gyapju:"#e5e2c7",posztó:"#c96458",bor:"#8e4c69",sör:"#dfb156",só:"#f6f2df",hering:"#8dc2c9",gabona:"#e3cb75",fa:"#865d37",szőrme:"#836d72"};
 let state=null,chosen="LUB",canvas3d,scene,THREE,camera,renderer,orbit,select3D=()=>{},renderPieces=()=>{},syncHighlight=()=>{};
 const $=s=>document.querySelector(s);
 const town=(id)=>CITY[id]?.n||id||"–";
@@ -97,7 +98,7 @@ function pill(txt){const s=document.createElement("span");s.className="pill";s.t
 pill("3D hálózati térkép · 12 város");
 if(state?.players?.length){pill((state.round+1)+"/"+state.rounds+". kör · "+({act:"Akciók",know:"Hansetag",end:"Befejeződött"}[state.phase]||state.phase));
 const p=state.players[state.cur];if(p)pill("Soron: "+p.name+" · "+(p.acts||0)+" akció · "+p.vp+" VP · "+p.cargo.length+" rakomány");
-for(const p of state.players)pill(p.name+": "+p.vp+" VP · "+town(p.pos));
+for(const p of state.players)pill(p.name+": "+(state.phase==="end"&&Number.isFinite(p.final)?p.final:p.vp)+" VP · "+town(p.pos));
 }else pill("Bemutató mód – indítsd a teljes játékot!");
 $("#contracts").replaceChildren();
 if(!state?.market?.length){$("#contracts").textContent="A társasjáték indításakor jelennek meg a megbízások.";}else{
@@ -152,7 +153,9 @@ const playersGroup=new THREE.Group(),kontorsGroup=new THREE.Group(),hintsGroup=n
 function ship(p,i){const g=new THREE.Group();const col=p.color||PALETTE[i]||"#2c6894";const hull=new THREE.Mesh(new THREE.CylinderGeometry(.23,.32,.9,6),material(col));hull.rotation.x=Math.PI/2;hull.position.y=.2;g.add(hull);
 const mast=new THREE.Mesh(new THREE.CylinderGeometry(.035,.04,.9,6),material("#684836"));mast.position.y=.85;g.add(mast);
 const sail=new THREE.Mesh(new THREE.PlaneGeometry(.53,.62),new THREE.MeshStandardMaterial({color:"#ffedd4",side:THREE.DoubleSide,roughness:1}));sail.position.set(.03,.84,0);g.add(sail);
-const dot=new THREE.Mesh(new THREE.SphereGeometry(.1,8,6),material(col));dot.position.y=1.45;g.add(dot);return g;}
+const dot=new THREE.Mesh(new THREE.SphereGeometry(.1,8,6),material(col));dot.position.y=1.45;g.add(dot);
+const cargoGroup=new THREE.Group();cargoGroup.name="visible-cargo";cargoGroup.position.y=.55;g.add(cargoGroup);g.userData.cargoGroup=cargoGroup;
+return g;}
 let ships=[];
 function clear(g){while(g.children.length){const c=g.children[0];g.remove(c);c.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material){const mats=Array.isArray(o.material)?o.material:[o.material];for(const x of mats)if(x.dispose)x.dispose();}});}}
 function flag(id,color,idx,total){const q=pos(id).clone(),flag=new THREE.Group();flag.position.set(q.x+(-.42+idx*.5),.18,q.z+.5);
@@ -162,10 +165,24 @@ renderPieces=()=>{
 clear(kontorsGroup);clear(hintsGroup);const pl=state?.players||[];
 for(const [i,p] of pl.entries())for(const k of p.kontors||[])if(CITY[k])kontorsGroup.add(flag(k,p.color||PALETTE[i],i,pl.length));
 if(ships.length!==pl.length){clear(playersGroup);ships=pl.map((p,i)=>{const g=ship(p,i);playersGroup.add(g);const q=pos(p.pos||"LUB");g.position.set(q.x,.4,q.z);return g;});}
-for(const [i,p] of pl.entries()){const q=pos(p.pos||"LUB"),offs=(i-(pl.length-1)/2)*.4;ships[i].userData.destination=new THREE.Vector3(q.x+offs,.5,q.z-.7);}
+for(const [i,p] of pl.entries()){
+const q=pos(p.pos||"LUB"),offs=(i-(pl.length-1)/2)*.4;
+ships[i].userData.destination=new THREE.Vector3(q.x+offs,.5,q.z-.7);
+// A tényleges hajórakományt kis, színezett ládák jelzik a 3D hajón.
+const cargoGroup=ships[i].userData.cargoGroup;clear(cargoGroup);
+for(const [j,good] of (p.cargo||[]).entries()){
+  const crate=new THREE.Mesh(new THREE.BoxGeometry(.22,.22,.20),material(CARGO_COLORS[good]||"#dbc897"));
+  crate.position.set((j-1)*.24,0,.05);cargoGroup.add(crate);
+}
+}
 if(state?.phase==="act"&&state.players[state.cur]){
 const p=state.players[state.cur];for(const move of state.legal||[])if(move.a==="move"&&CITY[move.to]){
 const q=pos(move.to),r=new THREE.Mesh(new THREE.RingGeometry(1.16,1.32,32),new THREE.MeshBasicMaterial({color:0xdcb14e,side:THREE.DoubleSide,transparent:true,opacity:.9}));r.rotation.x=-Math.PI/2;r.position.set(q.x,.25,q.z);hintsGroup.add(r);}}
+if(state?.eff?.closed&&CITY[state.eff.closed]){
+const q=pos(state.eff.closed);
+const red=new THREE.Mesh(new THREE.RingGeometry(1.16,1.42,32),new THREE.MeshBasicMaterial({color:0xc72d20,side:THREE.DoubleSide,transparent:true,opacity:.96}));
+red.rotation.x=-Math.PI/2;red.position.set(q.x,.26,q.z);hintsGroup.add(red);
+}
 };
 syncHighlight=()=>{for(const [id,c] of Object.entries(cities3d)){c.base.material.color.set(id===chosen?"#f3cd69":CITY[id].big?"#c5a96a":"#7c9c74");}};
 select3D=(id)=>{};
