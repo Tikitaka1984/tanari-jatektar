@@ -673,18 +673,28 @@ function decide(p,l){
  t.addEventListener("input",()=>{S.reasons[S.mission]=t.value;save();$("next").disabled=!isReady();});
  p.append(t);add(p,"p","Legalább 20 karakter. A rendszer a szöveg hosszát ellenőrzi, a történelmi indoklás minőségét a tanár értékeli.","small");
 }
+// A kérdésenkénti kevert válaszsorrend mentett; pontozás eredeti index alapján.
+function optionOrder(mission,question,size){
+ const key=mission+"_"+question;
+ const old=S.optionOrders[key];
+ if(Array.isArray(old)&&old.length===size&&new Set(old).size===size&&old.every(x=>Number.isInteger(x)&&x>=0&&x<size))return old;
+ const order=Array.from({length:size},(_,i)=>i);
+ for(let i=size-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+ S.optionOrders[key]=order;save();return order;
+}
 function test(p,l){
- add(p,"p","Az építési döntésedet elfogadtuk. Most válaszolj két, a fejezethez kapcsolódó ellenőrző kérdésre. Minden helyes válasz 5 pontot ér.");
+ add(p,"p","Az építési döntésedet elfogadtuk. Most válaszolj két, a fejezethez kapcsolódó ellenőrző kérdésre. A válaszok sorrendje keveredik, a pontozás a tartalmat követi. Minden helyes válasz 5 pontot ér.");
  const keys=S.answers[S.mission]||{};
  const form=node("div");form.id="quizList";
  l.questions.forEach((q,i)=>{
  const field=node("fieldset","quiz");add(field,"legend",(i+1)+". "+q.q);
- q.options.forEach((ans,j)=>{const lab=node("label");const inp=node("input");inp.type="radio";inp.name="test"+S.mission+"_"+i;inp.value=String(j);inp.checked=keys[i]===j;inp.disabled=!!S.checks[S.mission];inp.addEventListener("change",()=>{
+ optionOrder(S.mission,i,q.options.length).forEach(j=>{const ans=q.options[j];const lab=node("label");const inp=node("input");inp.type="radio";inp.name="test"+S.mission+"_"+i;inp.value=String(j);inp.checked=keys[i]===j;inp.disabled=!!S.checks[S.mission];inp.addEventListener("change",()=>{
  if(S.checks[S.mission])return;S.answers[S.mission]={...S.answers[S.mission],[i]:j};save();
  });lab.append(inp,node("span",null,ans));field.append(lab);});
  if(S.checks[S.mission])field.append(node("div","feedback",((S.checks[S.mission][i]===q.answer)?"✓ Helyes. ":"Még pontosítandó. ")+q.why));
  form.append(field);
  });p.append(form);
+ add(p,"p","A kérdésenként kevert sorrend mentés után is változatlan marad; ugyanazt a választ csak egyszer értékeli a rendszer.","small");
  if(!S.checks[S.mission]){
  const check=action("Válaszok ellenőrzése",()=>{
  const a=S.answers[S.mission]||{};if(!l.questions.every((q,i)=>Number.isInteger(a[i]))){$("quiz-alert")?.remove();const warn=node("div","feedback error","Mindkét kérdésre válaszolj az ellenőrzés előtt!");warn.id="quiz-alert";p.append(warn);return;}
