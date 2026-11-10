@@ -65,6 +65,8 @@ Az ehhez használt, korábban létrejött **Vercel előnézet** azonban a teszte
 
 Tesztfutam: `d683486c-77ba-4afe-806e-95bc0ace59c4`.
 
+**Frissítés a tesztkörnyezet állapotáról:** a QA-reset másolat hozzáadását követő újabb Vercel-build a GitHub szerint **sikeres** lett (QA-ág commit: `61c63583eb60973aba6601e1bdfb53dc12d957ea`). Ismételten megpróbáltuk az oldalt valódi böngészőben elindítani, de a böngészőautomatizálás külső futtatási kerete időközben kimerült, ezért **az új build utáni oldalbetöltés és az újrakezdés továbbra sem ellenőrzött**. Ne tekintsük az új build sikerét az alkalmazás működési bizonyítékának.
+
 ## 6. Kötelező következő lépések, javítási prioritások
 
 **P0 (stabil kiadás előtt feltétlenül):**
