@@ -1397,7 +1397,7 @@ orbit=new OrbitControls(camera,renderer.domElement);orbit.target.set(0,0,0);orbi
 scene.add(new THREE.HemisphereLight(0xf9f9dc,0x568573,3));
 const sun=new THREE.DirectionalLight(0xfff0bc,2.3);sun.position.set(-7,17,-5);scene.add(sun);
 const mat=c=>new THREE.MeshStandardMaterial({color:c,roughness:.95,flatShading:true});
-function shape(geometry,color,x,y,z,parent=scene){const o=new THREE.Mesh(geometry,mat(color));o.position.set(x,y,z);parent.add(o);return o;}
+function shape(geometry,color,x,y,z,parent=scene){const o=new THREE.Mesh(geometry,mat(color));o.position.set(x,y,z);if(parent===dynamic)o.userData.ownsResources=true;parent.add(o);return o;}
 shape(new THREE.BoxGeometry(29,.24,23),"#8eaf82",0,-.18,0);
 shape(new THREE.BoxGeometry(2.85,.05,25),"#4e9da6",-8,-.035,0);
 shape(new THREE.BoxGeometry(2.05,.05,25),"#7bc4c6",-8,.002,0);
@@ -1436,7 +1436,7 @@ function sync(s){
  if(!dynamic)return;
  while(dynamic.children.length){
   const old=dynamic.children[0];dynamic.remove(old);
-  old.traverse?.(child=>{if(child.isSprite){child.material.map?.dispose();child.material.dispose();}});
+  old.traverse?.(child=>{if(child.isSprite){child.material.map?.dispose();child.material.dispose();}else if(child.isMesh&&child.userData?.ownsResources){child.geometry?.dispose();child.material?.dispose();}});
  }
  const here=s?.decisions?.[0]||null;
  for(const [id,m] of Object.entries(markers))m.cyl.material.color.set(here===id?"#ffe39b":"#d5a65b");
