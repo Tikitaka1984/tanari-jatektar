@@ -137,6 +137,10 @@ textarea::placeholder{color:#9db0af}
 .source-activity a{color:#ffe3a5;display:inline-block;margin:5px 0 10px;min-height:30px}
 .source-activity .source-answer{background:#203c39;border-left:4px solid #8ec6a0;border-radius:7px;padding:12px;margin-top:12px}
 .source-activity textarea{min-height:104px}
+.study-hungarian{background:#e8e0ca;border-left:4px solid #ac8754;border-radius:9px;padding:15px 16px;margin:19px 0}
+.study-hungarian strong{color:#345252;display:block;margin-bottom:5px}
+.study-hungarian p{font-size:13px!important;margin:6px 0;color:#425753}
+.study-hungarian a{font-size:12px;color:#17606a;font-weight:800;display:inline-block;margin:7px 0 2px}
 </style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.180.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.180.0/examples/jsm/"}}</script>
 </head>
@@ -218,10 +222,10 @@ const lessons=[
   {
    "q": "A település környékén két egymást követő évben több gabona termett, mint amennyit a családok elfogyasztottak. Melyik következmény segíthette legközvetlenebbül a városiasodást?",
    "options": [
-    "A földművelők többsége azonnal polgárjogot szerzett.",
-    "A gabonát csak a földesúr fogyaszthatta el.",
+    "A földesúri birtokok megnövekedett fogyasztása önmagában biztosította a kézművesek szakosodását.",
+    "A többlet elsősorban az uradalmi készleteket növelhette, miközben a helyi árucsere nem változott.",
     "A felesleg egy részét piacon értékesíthették, így több kézműves szakosodhatott.",
-    "A város automatikusan királyi önkormányzatot kapott."
+    "A többlettermelés önmagában megteremtette a közösség önkormányzati jogait."
    ],
    "answer": 2,
    "why": "A terményfelesleg, az árutermelés és a munkamegosztás összefüggött, de jogi kiváltság nem következett belőle automatikusan."
@@ -230,9 +234,9 @@ const lessons=[
    "q": "Egy kereskedelmi út mellett fekvő nagy faluban piac működik. Mit kell még megvizsgálni, mielőtt középkori önkormányzatú városnak nevezzük?",
    "options": [
     "Milyen kiváltságokkal és önigazgatási jogokkal rendelkezett a közösség.",
-    "Volt-e minden lakóházon kőből épült torony.",
-    "A kereskedők kizárólag tengerentúlról érkeztek-e.",
-    "A lakosság mind egyetlen céhhez tartozott-e."
+    "Mekkora volt a házak száma és a település népessége.",
+    "Milyen távolságból érkeztek kereskedők a piacra.",
+    "Hány különféle mesterséget űztek a helyi műhelyekben."
    ],
    "answer": 0,
    "why": "A városi jelleg gazdasági és jogi feltételei nem azonosak; a városi kiváltságokat külön ellenőrizni kell."
@@ -273,10 +277,10 @@ const lessons=[
   {
    "q": "Az 1182-es beauvais-i kommunaszabályozás a város tanácsát és elöljáróit is említi. Melyik következtetés igazolható ebből?",
    "options": [
-    "Minden városnak pontosan tizenhárom tanácsosa volt.",
+    "A beauvais-i szervezeti modellt minden európai város változtatás nélkül átvette.",
     "A városi közösség szervezett testületei részt vehettek saját ügyeinek intézésében.",
-    "A városi lakók modern, általános választójoggal rendelkeztek.",
-    "Az uralkodók már nem adhattak több kiváltságot."
+    "A tanácsosok léte önmagában bizonyítja, hogy minden városlakó azonos politikai joggal rendelkezett.",
+    "A kommuna elismerése minden más, földesúrral kapcsolatos kötelezettséget megszüntetett."
    ],
    "answer": 1,
    "why": "A forrás a konkrét beauvais-i szervezetet mutatja be, amelyből általános önszerveződési szerepre következtethetünk, de részleteit nem általánosíthatjuk."
@@ -284,9 +288,9 @@ const lessons=[
   {
    "q": "Körmend IV. Bélától 1244-ben városi kiváltságokat kapott. Mit lehet ebből megalapozottan állítani?",
    "options": [
-    "Minden magyar város ugyanekkor ugyanazokat a jogokat kapta.",
-    "Körmend polgárai ettől modern értelemben vett egyenlő politikai jogokkal rendelkeztek.",
-    "A településnek kiváltságlevél nélkül nem lehetett piaca.",
+    "A körmendi kiváltságok automatikusan érvényesek voltak a környező települések lakóira is.",
+    "A város lakóinak vagyoni és jogi különbségei az oklevél kiadásával teljesen megszűntek.",
+    "A királyi rendelkezés biztosan megállapította a város valamennyi későbbi jogának végleges körét.",
     "A település sajátos jogállása királyi intézkedéssel fejlődött, a jogosultságok tartalmát külön kell megvizsgálni."
    ],
    "answer": 3,
@@ -329,9 +333,9 @@ const lessons=[
    "q": "A kapu és a piactér között egyetlen szűk, nehezen járható utca vezet. Melyik értelmezés a leginkább megalapozott?",
    "options": [
     "Az áruszállítás nehézsége akadályozhatja a piac működését, ezért a közlekedési kapcsolat fontos.",
-    "A városfalnak a középkorban csak díszítő szerepe volt.",
-    "A piacteret minden városban a folyó közepén építették.",
-    "Minden európai város azonos utcahálózattal rendelkezett."
+    "A kapu szűk keresztmetszetét másik vásárhely létesítésével lehetett volna ellensúlyozni, ezért az útvonal javítása szükségtelen volt.",
+    "A piac forgalma kizárólag a helyi termeléstől függött, így a kapu megközelíthetősége nem számított.",
+    "A kereskedelmi útvonalak minden középkori városban ugyanott haladtak el a piactér mellett."
    ],
    "answer": 0,
    "why": "A közlekedési kapcsolatok a kereskedelem szempontjából meghatározók, de a városok utcahálózata változatos."
@@ -339,10 +343,10 @@ const lessons=[
   {
    "q": "A tanuló Carcassonne ábráját és Lőcse városházát ábrázoló képét hasonlítja össze. Melyik következtetés helyes?",
    "options": [
-    "A városháza mindig a várfalon kívül állt.",
-    "A városfal miatt a városnak nem lehetett vására.",
+    "Az igazgatási központok elhelyezése önmagában meghatározta a település minden jogát.",
+    "A megerősített városokban a kapuk elsősorban elzárták az áruforgalmat.",
     "A védelmi és az igazgatási funkció eltérő épületekben jelenhetett meg, a szerkezet helyenként változott.",
-    "A képek alapján biztos, hogy a két város azonos jogokkal bírt."
+    "A két képi forrás alapján a városi kiváltságlevelek pontos tartalma rekonstruálható."
    ],
    "answer": 2,
    "why": "A két szemléltető forrás különféle funkciókat mutat be; a jogi helyzet képből önmagában nem állapítható meg."
@@ -383,9 +387,9 @@ const lessons=[
   {
    "q": "Az 1345-ös frankfurti posztókészítő szabályzat korlátozta a szövőszékek számát és az áru minőségét ellenőrizte. Mit bizonyít ez?",
    "options": [
-    "A céhek csak vallási ünnepeket szerveztek.",
-    "A céhek minden új kézművesnek automatikusan saját műhelyt adtak.",
-    "A céhek megszüntették a városi kereskedelmet.",
+    "A frankfurti szabályzat elsősorban az uralkodói adók mértékét állapította meg.",
+    "A minőségellenőrzés önmagában teljes szabadságot adott a mestereknek a termelési mennyiség meghatározásában.",
+    "A céhszabályok kizárólag a piaci árakat szabályozták, a termékek előállításának módját nem.",
     "A céhek a minőséget és a mesterek közötti verseny feltételeit is szabályozhatták."
    ],
    "answer": 3,
@@ -394,10 +398,10 @@ const lessons=[
   {
    "q": "Egy legény jó remekmunkát készített, de nincs elegendő pénze saját műhely nyitására. Miért nem biztos, hogy mesterré válhat?",
    "options": [
-    "Mert a remekmunka nem tartozott a céhes mesterségekhez.",
+    "Mert a sikeres remekmunka után az új mester általában még külön anyagi és belépési feltételekkel is szembesülhetett volna.",
     "Mert a szakmai felkészültség mellett helyi céhszabályok és anyagi feltételek is számítottak.",
-    "Mert a mesterré váláshoz mindenhol nemesi származás kellett.",
-    "Mert a legények csak földet művelhettek."
+    "Mert a saját műhely létrehozásának anyagi feltételei egyes városokban megnehezíthették az előmenetelt.",
+    "Mert az inasból legénnyé válás teljesítette a céhes képzés egészét, további vizsga nélkül."
    ],
    "answer": 1,
    "why": "A mesterré válás szakmai, gazdasági és helyi szabályozási feltételekhez kötődhetett."
@@ -438,10 +442,10 @@ const lessons=[
   {
    "q": "Egy kereskedő észak-európai kikötőkből sózott heringet és fát szeretne szállítani. Melyik kapcsolatrendszer lenne ehhez a leginkább megfelelő?",
    "options": [
-    "A közép-ázsiai Selyemút valamennyi városának szövetsége.",
-    "Kizárólag a velencei keleti fűszerkereskedelem.",
+    "A kelet-mediterrán luxuscikkeket szállító itáliai tengeri kapcsolatok.",
+    "A franciaországi Champagne szárazföldi vásárainak hálózata mint elsődleges tengeri szállítási térség.",
     "Az északi és balti térség Hanza-kapcsolatai.",
-    "A 16. századi atlanti gyarmati útvonalak."
+    "A Genova és Velence által szervezett levantei kereskedelmi hálózat."
    ],
    "answer": 2,
    "why": "A Hanza térségében jellemző volt a fa, hal és más északi tömegáruk szállítása."
@@ -449,9 +453,9 @@ const lessons=[
   {
    "q": "A Hanza 1260 körüli közös határozata a kalózok elleni fellépést hangsúlyozza. Miért lehetett ez fontos a városoknak?",
    "options": [
-    "A határozattal megszűnt minden vám Európában.",
-    "A városok minden hajózási útvonalat egy uralkodó alatt egyesítettek.",
-    "A levantei fűszerek kereskedelmét teljesen felszámolták.",
+    "A kalózok elleni fellépés a távolsági kereskedés kockázatait csökkenthette, de a vámok kérdését nem rendezte.",
+    "A közös fellépésből nem következett, hogy a városok valamennyien azonos politikai uralom alá kerültek.",
+    "A kereskedővárosok a tengeri biztonságot nem tudták pusztán saját kikötőjükben biztosítani.",
     "A kereskedők és áruk biztonsága közös gazdasági érdek volt."
    ],
    "answer": 3,
@@ -493,10 +497,10 @@ const lessons=[
   {
    "q": "Egy városi tanácsban a gazdag kereskedők képviseltetik magukat, a szegényebb lakók nagy része nem. Milyen jelenséget szemléltet ez?",
    "options": [
-    "A középkori városokban a földesúri robotot minden lakos azonosan teljesítette.",
+    "A városiaknak a tulajdon és polgárjog alapján eltérő közösségi szerepük volt, de adóterheik azonosak maradtak.",
     "A városi lakosok jogai és politikai részvétele vagyon és jogállás szerint eltérhetett.",
-    "A céhek minden középkori városban betiltották a kereskedelmet.",
-    "A középkori városokban semmilyen önkormányzat nem létezett."
+    "A városi tanács összetétele szükségszerűen pontosan követte a lakosság foglalkozási arányait.",
+    "A tanácsban a polgárjog nélküli lakók érdekei is automatikusan képviseletet kaptak."
    ],
    "answer": 1,
    "why": "A patríciusok, céhmesterek és polgárjog nélküli lakosok helyzete különbözött."
@@ -504,7 +508,7 @@ const lessons=[
   {
    "q": "II. Frigyes 1238-as rendelkezése védelmet ígért az utazó bécsi zsidó kereskedőknek. Mire NEM következtethetünk ebből?",
    "options": [
-    "Arra, hogy valamennyi középkori városban megszűnt a zsidók korlátozása és üldözése.",
+    "Arra, hogy a rendelkezés minden európai városban megszüntette a zsidó közösségekkel szembeni jogi korlátozásokat.",
     "Arra, hogy egyes uralkodók sajátos védelmi rendelkezéseket adhattak ki.",
     "Arra, hogy a kereskedés és a személyes biztonság összefüggött.",
     "Arra, hogy a városokban eltérő jogállású csoportok éltek."
@@ -918,6 +922,13 @@ function renderStudy(){
  elem("div","study-kicker",(studyIndex+1)+". FEJEZET / 6 · "+l.tag);
  elem("h2",null,l.icon+" "+l.title);
  elem("p","study-lead",m.lead);
+ const historical=sourceCards[studyIndex];
+ const magyar=elem("div","study-hungarian");
+ elem("strong",null,"🇭🇺 Magyar és történelmi példák",magyar);
+ elem("p",null,historical.hungarian||"A forrás a korszak európai összefüggéseihez kapcsolódik.",magyar);
+ elem("p",null,"Forráskörnyezet: "+historical.title+" ("+historical.when+"). "+historical.type+".",magyar);
+ if(historical.url){const a=document.createElement("a");a.textContent="Ellenőrzött külső történelmi forrás";a.href=historical.url;a.target="_blank";a.rel="noopener noreferrer";magyar.append(a);}
+
  for(const [heading,paras] of m.sections){elem("h3",null,heading);for(const p of paras)elem("p",null,p);}
  elem("h3",null,"Hogyan függnek össze a jelenségek?");
  const flow=elem("div","study-flow");
