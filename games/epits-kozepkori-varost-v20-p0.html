@@ -129,6 +129,14 @@ textarea::placeholder{color:#9db0af}
 .study-label{font-size:12px;font-weight:750;color:#7b694e}
 @media(max-width:790px){.study-layout{grid-template-columns:1fr}.study-index{position:static}.study-index #study-chapters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.study-heading{padding:18px}.study-terms{grid-template-columns:1fr}.main-tabs{width:100%}.main-tabs button{flex:1}.tab-count{display:none}}
 @media(max-width:460px){.study-index #study-chapters{grid-template-columns:1fr}.study-article{padding:19px 16px}.study-article p{font-size:14px}.study-flow{gap:4px}.study-flow span{font-size:11px;min-width:90px}.study-heading{padding:17px}.learn-banner{flex-wrap:wrap}.learn-banner button{width:100%}}
+.source-activity{background:#254a52;border:1px solid #7a9c92;border-radius:14px;padding:15px;margin:17px 0}
+.source-activity h3{font-family:Georgia,serif;color:#ffe2a3;font-size:21px;margin:8px 0}
+.source-activity>p{font-size:13px;line-height:1.65;color:#e6eee4}
+.source-activity .source-type{font-size:10px;letter-spacing:.13em;color:#fad69b;font-weight:900}
+.source-activity .source-hungary{background:#375a53;padding:11px;border-left:3px solid #f5d18d;border-radius:6px}
+.source-activity a{color:#ffe3a5;display:inline-block;margin:5px 0 10px;min-height:30px}
+.source-activity .source-answer{background:#203c39;border-left:4px solid #8ec6a0;border-radius:7px;padding:12px;margin-top:12px}
+.source-activity textarea{min-height:104px}
 </style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.180.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.180.0/examples/jsm/"}}</script>
 </head>
@@ -508,6 +516,71 @@ const lessons=[
  teacher:"Ne idealizáljuk a városi életet. Hasonlítsátok össze a városi jogok körét a modern polgári jogegyenlőséggel, de ne állítsuk, hogy a kettő azonos."
 }
 ];
+const sourceCards=[
+  {
+    "type": "Történeti ismeretekre épülő szerkesztett adatsor",
+    "when": "11–13. század",
+    "title": "A vízimalom és a városiasodás",
+    "text": "A vízimalom energiát biztosított a gabonaőrléshez és egyes ipari tevékenységekhez. A hatékonyabb termelés és a terményfelesleg hozzájárulhatott az árutermeléshez; a fejlődés azonban nem mindenhol volt azonos.",
+    "ref": "Oktatási Hivatal, Történelem 9. (OH-TOR09TB), 108. o. – A középkor technikai forradalma.",
+    "question": "Milyen két gazdasági következményt kapcsolhatunk a vízimalom terjedéséhez? Miért nem elegendő ez önmagában a városi önkormányzathoz?",
+    "expected": "A hatékonyabb termelés bővítheti a kínálatot, és a piac fejlődését segítheti. Az önkormányzati jogok megszerzése külön jogi-társadalmi folyamat.",
+    "hungarian": "Magyar kitekintés: Körmend a Rába-átkelő és több út találkozásánál fejlődött; IV. Béla 1244-ben városi kiváltságokkal ruházta fel.",
+    "url": "https://www.kormend.hu/A_varos/A_varosunk_tortenete.html"
+  },
+  {
+    "type": "Történelmi oklevél – tartalmi parafrázis, nem szó szerinti idézet",
+    "when": "Beauvais, 1182",
+    "title": "A kommuna és a városi vezetés",
+    "text": "A beauvais-i közösség tagjai saját kommunájukhoz kapcsolódtak, a városi ügyeket tanácsosok és elöljárók intézték. A vezetőkre igazságos eljárási kötelezettség vonatkozott. A rendelkezések meghatározott közösség jogait szabályozták.",
+    "ref": "A beauvais-i kommuna szokásjogának királyi megerősítése, 1182; Szent István Társulat, Történelem 9., 100. o.",
+    "question": "Ki intézte a közösség ügyeit, és mit árul ez el az önkormányzatról? Miért nem következik ebből általános választójog?",
+    "expected": "A tanács és elöljárók szervezett önkormányzatot mutatnak, de az eskü és a közösséghez tartozás nem bizonyít minden városlakóra kiterjedő azonos politikai jogokat.",
+    "hungarian": "Magyar összehasonlítás: IV. Béla 1244. október 28-án Körmendnek kiváltságokat adományozott. A konkrét jogokat csak a helyi oklevél alapján lehet meghatározni.",
+    "url": "https://www.kormend.hu/A_varos/A_varosunk_tortenete.html"
+  },
+  {
+    "type": "Dokumentált képi forrásra épülő saját szöveges elemzés",
+    "when": "Középkori városszerkezet",
+    "title": "Carcassonne és a lőcsei városháza",
+    "text": "A tankönyvi szemléltetésen Carcassonne erődített szerkezete, míg a lőcsei városháza a közösségi igazgatás reprezentatív épületeként figyelhető meg. A városfal a védelem, a városháza az önkormányzati működés egyik jelképe lehetett.",
+    "ref": "Oktatási Hivatal, Történelem 9. (OH-TOR09TB), 110. o., Carcassonne városszerkezete és a lőcsei városháza képe. A tankönyvi képeket nem másoljuk át.",
+    "question": "Mit vizsgálnál a Carcassonne-t bemutató ábrán, és mit a lőcsei városháza képén? Miért nem tekinthető egyik sem minden középkori város általános alaprajzának?",
+    "expected": "Carcassonne-nál kapuk, falak, utak, piac kapcsolatát; Lőcsénél a városháza és főtér igazgatási szerepét. A városok fejlődési útjai és szerkezete eltértek.",
+    "hungarian": "Magyarországi példa: Lőcse, a középkori Szepesség egyik városa; a tankönyv városházája a közösségi központ szerepét szemlélteti."
+  },
+  {
+    "type": "Történelmi céhszabályzat – tartalmi parafrázis",
+    "when": "Frankfurt, 1345 – későbbi összehasonlító forrás",
+    "title": "A posztókészítők szabályai",
+    "text": "A frankfurti posztókészítők a céh által használt pecsétet védték, egyes termelési eljárásokat ellenőriztek, a megengedett szövőszékek számát korlátozták és szabályszegésért pénzbírságot írhattak elő.",
+    "ref": "A frankfurti posztókészítők szabályzata, 1345; Szent István Társulat, Történelem 9., 104. o. Időben későbbi, nem 1250. évi dokumentum.",
+    "question": "Mely előírások védhették a minőséget, és melyek korlátozták a versenyt? Ki járhatott jól és ki rosszul a szabályokkal?",
+    "expected": "A pecsét és a termék ellenőrzése a minőséghez, a műhelyek és szövőszékek számának korlátozása a versenyhez kapcsolódott. A mesterek érdekei eltérhettek a vásárlók és új belépők érdekeitől.",
+    "hungarian": "A magyar tankönyvi összehasonlításhoz az OH 111. oldala a debreceni és párizsi céhek működését is vizsgáltatja. Ezek külön korszakos ellenőrzést igényelnek."
+  },
+  {
+    "type": "Hanza-határozatok – tartalmi parafrázis, nem szó szerinti idézet",
+    "when": "Hanza-városok, 1260 körül",
+    "title": "Kalózok elleni együttműködés",
+    "text": "A kereskedővárosok közös rendelkezései a tengeri hajózás biztonságára és a kalózok elleni fellépésre is kiterjedtek; az összefogás a kereskedők és szállítmányaik védelmét szolgálta.",
+    "ref": "A Hanza első közös határozatai, 1260 körül; Szent István Társulat, Történelem 9., 102. o.",
+    "question": "Miért volt egy városnak gazdasági érdeke egy másik várossal együtt fellépni a kalózok ellen? Melyik tengeri térségre vonatkoztatható a példa?",
+    "expected": "A biztonságosabb hajózás csökkentette a veszteség kockázatát és elősegítette a kereskedelmet; a Hanza az Északi- és Balti-tenger térségéhez kapcsolódott.",
+    "hungarian": "A fiktív közép-európai városunk nem lesz automatikusan Hanza-tag: szárazföldi vásárhelyekhez és közvetítő kereskedelmi utakhoz is kapcsolódhatott."
+  },
+  {
+    "type": "Uralkodói kiváltságlevél – tartalmi parafrázis",
+    "when": "II. Frigyes, 1238",
+    "title": "Védelem és különböző jogállás",
+    "text": "II. Frigyes a bécsi zsidó utazók és kereskedők számára védelmet írt elő az uralma alatt álló területeken, valamint az előírt vámmal kapcsolatos rendelkezést fogalmazott meg. Ez meghatározott személyekre vonatkozó intézkedés volt.",
+    "ref": "II. Frigyes kiváltságlevele a bécsi zsidóknak, 1238; Szent István Társulat, Történelem 9., 103. o.",
+    "question": "Miért volt szükség a személyek és áruk védelmét külön kimondani? Megszüntette-e ez automatikusan a zsidó közösségeket érő korlátozásokat?",
+    "expected": "A rendelkezés a jogbiztonság hiányára és a kereskedelem jelentőségére utal; konkrét védelem nem jelentett teljes jogegyenlőséget vagy a kirekesztés végét.",
+    "hungarian": "Későbbi magyar összehasonlító példa: I. Lajos 1361-es debreceni oklevele bíróválasztási jogot adott, miközben a település földesúri függése nem szűnt meg.",
+    "url": "https://mnl.gov.hu/mnl/hbml/hirek/neveztessek_es_cimeztessek_ezentul_a_mi_szabad_kiralyi_dobroczen_varosunknak"
+  }
+];
 const structures=[
  {title:"Kezdeti település",detail:"Az első kunyhók és az ellátási környezet már léteznek.",feature:"houses"},
  {title:"Kiváltságlevél",detail:"A városi közösség jogainak jelképe.",feature:"charter"},
@@ -516,9 +589,9 @@ const structures=[
  {title:"Kereskedőkapcsolatok",detail:"Új szekér és raktári épületek.",feature:"trade"},
  {title:"Városháza és közösség",detail:"A városvezetés térbeli jelképe.",feature:"hall"}
 ];
-const initial=()=>({mission:0,phase:"teach",decisions:{},reasons:{},answers:{},checks:{},mode:"guided",view:"3d",showTeacher:false,finished:false});
+const initial=()=>({mission:0,phase:"teach",decisions:{},reasons:{},sourceNotes:{},answers:{},checks:{},optionOrders:{},mode:"guided",view:"3d",showTeacher:false,finished:false});
 function load(){try{let s=JSON.parse(localStorage.getItem(STORAGE));if(!s||!Number.isInteger(s.mission)||s.mission<0||s.mission>=lessons.length||!["teach","decide","quiz","result"].includes(s.phase))return initial();
-return {...initial(),...s,decisions:s.decisions&&typeof s.decisions==="object"?s.decisions:{},reasons:s.reasons&&typeof s.reasons==="object"?s.reasons:{},answers:s.answers&&typeof s.answers==="object"?s.answers:{},checks:s.checks&&typeof s.checks==="object"?s.checks:{}};}catch(e){return initial();}}
+return {...initial(),...s,decisions:s.decisions&&typeof s.decisions==="object"?s.decisions:{},reasons:s.reasons&&typeof s.reasons==="object"?s.reasons:{},answers:s.answers&&typeof s.answers==="object"?s.answers:{},checks:s.checks&&typeof s.checks==="object"?s.checks:{},sourceNotes:s.sourceNotes&&typeof s.sourceNotes==="object"?s.sourceNotes:{},optionOrders:s.optionOrders&&typeof s.optionOrders==="object"?s.optionOrders:{}};}catch(e){return initial();}}
 let S=load(),warning="";
 function save(){try{localStorage.setItem(STORAGE,JSON.stringify(S));}catch(e){$("modelstatus").textContent="Mentés nem érhető el; a játék folytatható."}}
 function node(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;}
@@ -531,7 +604,8 @@ function completed(){return Object.keys(S.checks).length}
 function selected(l=S.mission){return S.decisions[l]}
 function validity(i=S.mission){return lessons[i].options.find(x=>x.id===S.decisions[i])?.valid===true;}
 function reasonValid(i=S.mission){return String(S.reasons[i]||"").trim().length>=20}
-function isReady(){if(S.phase==="teach")return true;if(S.phase==="decide")return validity()&&reasonValid();if(S.phase==="quiz")return !!S.checks[S.mission];return true;}
+function sourceValid(i=S.mission){return String(S.sourceNotes[i]||"").trim().length>=30}
+function isReady(){if(S.phase==="teach")return sourceValid();if(S.phase==="decide")return validity()&&reasonValid();if(S.phase==="quiz")return !!S.checks[S.mission];return true;}
 function render(){
  const l=lessons[S.mission],p=$("lesson");p.replaceChildren();
  $("progress").replaceChildren();for(let i=0;i<6;i++){let b=node("button","step"+(i<completed()?" done":i===S.mission?" now":""));b.type="button";b.title=lessons[i].title;b.setAttribute("aria-label",(i+1)+". küldetés: "+lessons[i].title+" – "+(i<completed()?"teljesítve":i===S.mission?"aktuális":"zárolt"));b.disabled=i>completed()||S.finished;b.addEventListener("click",()=>{if(i<=completed()){S.mission=i;S.phase=S.checks[i]?"result":"teach";warning="";save();render();}});$("progress").append(b);}
@@ -562,8 +636,22 @@ function render(){
 function teach(p,l){
  add(p,"p",l.intro);
  card(p,"Értsd meg!",l.concept);
- card(p,"Történelmi forrás alapján",l.source+". A magyarázat a két feltöltött tankönyv tananyagára épül; a szöveg saját átfogalmazás.");
- add(p,"p","A következő lépésben a történelmi ismeret alapján döntést hozol. Az építkezés a döntésed és az ellenőrzés után válik láthatóvá.","small");
+ const src=sourceCards[S.mission],doc=node("section","source-activity");
+ add(doc,"div","FORRÁSELEMZŐ FELADAT · "+src.when,"source-type");
+ add(doc,"h3",src.title);
+ add(doc,"p",src.text);
+ add(doc,"p","Forrásazonosító: "+src.ref,"small");
+ add(doc,"p",src.type+". Az ismertetés saját szövegezésű; nem eredeti idézet.","small");
+ if(src.hungarian)add(doc,"p",src.hungarian,"source-hungary");
+ if(src.url){const a=node("a",null,"Az ellenőrzött történelmi háttér megnyitása");a.href=src.url;a.target="_blank";a.rel="noopener noreferrer";doc.append(a);}
+ const q=add(doc,"label",src.question,"question");q.htmlFor="source-note";
+ const t=node("textarea");t.id="source-note";t.maxLength=850;t.value=S.sourceNotes[S.mission]||"";t.placeholder="Írj legalább két történelmi érvet vagy következtetést a forrás alapján…";
+ t.addEventListener("input",()=>{S.sourceNotes[S.mission]=t.value;save();$("next").disabled=!isReady();});doc.append(t);
+ add(doc,"p","Minimum 30 karakter. Ez nem automatikusan értékelt forráselemzés: a történelmi érvek minőségét a tanár ellenőrzi.","small");
+ const rev=action("Tanári mintaválasz megjelenítése",()=>{const view=doc.querySelector(".source-answer");view.hidden=!view.hidden;rev.setAttribute("aria-expanded",String(!view.hidden));rev.textContent=view.hidden?"Tanári mintaválasz megjelenítése":"Mintaválasz elrejtése";},"btn");rev.setAttribute("aria-expanded","false");doc.append(rev);
+ const answer=add(doc,"p",src.expected,"source-answer");answer.hidden=true;
+ p.append(doc);
+ add(p,"p","Előbb forrást értelmezel, majd a következő lépésben történelmi döntést hozol. Az építkezés a döntés és az ellenőrzés után válik láthatóvá.","small");
 }
 function decide(p,l){
  add(p,"p",l.intro);
@@ -608,17 +696,17 @@ function report(p,l){
  const pts=l.questions.filter((q,i)=>S.checks[S.mission]?.[i]===q.answer).length*5;
  const bx=node("div","result");add(bx,"strong",pts+" / 10 tudáspont");add(bx,"p","A döntésed és az ellenőrzés eredménye megmarad a következő küldetésig.");p.append(bx);
  const item=l.options.find(o=>o.id===selected());if(item)card(p,"Döntés és következmény",item.name+". "+item.why);
- card(p,"Indoklásod",S.reasons[S.mission]||"Nincs indoklás.");card(p,"A városban megjelent",structures[S.mission].title+" – "+structures[S.mission].detail);
+ card(p,"Forráselemzésed",S.sourceNotes[S.mission]||"Nincs forráselemzés.");card(p,"Indoklásod",S.reasons[S.mission]||"Nincs indoklás.");card(p,"A városban megjelent",structures[S.mission].title+" – "+structures[S.mission].detail);
  add(p,"p","A feladat pontszáma a két objektív kérdést méri. Az érvelést külön tanári értékelés egészíti ki.","small");
 }
 function finish(p){
  const n=completed(),pts=score();const box=node("div","result");add(box,"strong",pts+" / 60 tudáspont");add(box,"p","Mind a hat fejezet befejeződött. Az objektív kérdések eredménye nem helyettesíti a forráselemzés és a szöveges indoklás tanári értékelését.");p.append(box);
  add(p,"p","A városod fejlődése során gazdasági, jogi és társadalmi feltételeket is mérlegeltél. A városi kiváltságok megszerzése külön történelmi folyamat volt, amelyet építményekkel nem lehetett helyettesíteni.");
  for(let i=0;i<lessons.length;i++){
- const l=lessons[i],c=node("div","inset");add(c,"h3",(i+1)+". "+l.title);add(c,"p",(l.options.find(x=>x.id===S.decisions[i])?.name||"Nincs döntés")+". Indoklás: "+(S.reasons[i]||"–"));p.append(c);
+ const l=lessons[i],c=node("div","inset");add(c,"h3",(i+1)+". "+l.title);add(c,"p",(l.options.find(x=>x.id===S.decisions[i])?.name||"Nincs döntés")+". Forráselemzés: "+(S.sourceNotes[i]||"–")+". Döntés indoklása: "+(S.reasons[i]||"–"));p.append(c);
  }
  card(p,"Önellenőrzés – tanári beszélgetés","Magyarázd el a városfejlődés három feltételét; a kommuna és a céh feladatát; a Hanza és Levante közti különbséget; végül mondd el, miért nem volt minden városlakó egyformán polgár!");
- const copy=action("Eredmény másolása",()=>{const text="ÉPÍTS KÖZÉPKORI VÁROST!\\nTudáspont: "+pts+"/60\\n"+lessons.map((l,i)=>(i+1)+". "+l.title+": "+(S.reasons[i]||"–")).join("\\n");if(navigator.clipboard?.writeText)navigator.clipboard.writeText(text).then(()=>{copy.textContent="Vágólapra másolva ✓";}).catch(()=>{copy.textContent="Másolás nem sikerült";});else copy.textContent="Vágólap nem elérhető";},"btn");p.append(copy);
+ const copy=action("Eredmény másolása",()=>{const text="ÉPÍTS KÖZÉPKORI VÁROST!\\nObjektív tudáspont: "+pts+"/60\\nTanári értékelés szükséges!\\n"+lessons.map((l,i)=>(i+1)+". "+l.title+"\\nForráselemzés: "+(S.sourceNotes[i]||"–")+"\\nIndoklás: "+(S.reasons[i]||"–")).join("\\n");if(navigator.clipboard?.writeText)navigator.clipboard.writeText(text).then(()=>{copy.textContent="Vágólapra másolva ✓";}).catch(()=>{copy.textContent="Másolás nem sikerült";});else copy.textContent="Vágólap nem elérhető";},"btn");p.append(copy);
 }
 function updateSVG(){
  const g=$("map2d-build");g.replaceChildren();const NS="http://www.w3.org/2000/svg";
