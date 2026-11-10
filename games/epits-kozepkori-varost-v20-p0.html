@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Építs középkori várost! – 6 történelmi küldetés · TESZT v2.0 P0</title>
+<meta name="description" content="Önálló 9. évfolyamos történelmi városépítő játék hat tanulási küldetéssel, forrásokkal és ellenőrzéssel.">
+<meta name="theme-color" content="#102c33">
+<style>
+:root{color-scheme:dark;--deep:#0d2830;--nav:#122f38;--panel:#183943;--line:#446b73;--cream:#fff0cd;--muted:#bfd7d6;--gold:#f6cb77;--earth:#a36b42;--green:#8db99a;--good:#9fdfb4}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--deep);color:var(--cream)}
+button,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.52;cursor:not-allowed}
+:focus-visible{outline:3px solid #ffe58a!important;outline-offset:3px}
+[hidden]{display:none!important}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px max(14px,calc((100vw - 1640px)/2));background:#0b242e;border-bottom:1px solid var(--line)}
+.title-wrap{display:flex;align-items:center;gap:12px}.crest{font-family:Georgia,serif;background:#e7c17d;color:#152e30;padding:10px 11px;border-radius:12px;font-size:21px;font-weight:900}
+.top h1{font-family:Georgia,serif;letter-spacing:.005em;font-size:clamp(23px,2.5vw,35px);line-height:1.1;margin:0}
+.eyebrow{font-size:11px;color:#d3b87b;font-weight:850;letter-spacing:.12em;text-transform:uppercase}
+.sub{color:var(--muted);font-size:12px;margin:4px 0 0}
+.tag{padding:7px 10px;border:1px solid #a78b59;color:#ffdf99;background:#304536;border-radius:8px;font-size:11px;font-weight:800}
+.shell{max-width:1660px;margin:auto;padding:13px;display:grid;grid-template-columns:minmax(0,1.38fr) minmax(330px,.86fr);gap:12px;align-items:stretch}
+.left{min-width:0;display:flex;flex-direction:column;gap:11px}.right{background:linear-gradient(160deg,#1d4049,#132f3a);border:1px solid var(--line);border-radius:16px;padding:19px 18px;min-width:0;box-shadow:0 10px 30px #0002}
+.bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.bar .push{margin-left:auto}
+.seg{display:flex;padding:3px;border:1px solid #4b7078;background:#1b3d46;border-radius:11px;gap:3px}
+.seg button{border:0;border-radius:8px;background:transparent;color:#d7e5df;padding:9px 13px;font-size:12px;font-weight:750;min-height:41px}
+.seg button[aria-pressed=true]{background:var(--gold);color:#172c2f}
+.chip{color:#d6e6de;border:1px solid #496a70;background:#274751;padding:8px 10px;border-radius:11px;font-size:12px}
+.visual{border-radius:17px;border:1px solid #6a8d81;position:relative;overflow:hidden;height:clamp(430px,58vh,740px);background:linear-gradient(#a4d9ce,#87b6a1);box-shadow:0 16px 38px #0004}
+#three-container{position:absolute;inset:0}#three-container canvas{width:100%;height:100%;display:block;touch-action:none}
+#map2d{width:100%;height:100%;object-fit:contain;background:#bed8cb}#map2d:not([hidden]){display:block}#map2d[hidden]{display:none!important}
+.map-caption{position:absolute;left:13px;top:13px;max-width:260px;background:#15343bdf;border:1px solid #658b87;border-radius:12px;padding:11px 12px;color:#f9f2e2;pointer-events:none;box-shadow:0 5px 14px #0002}
+.map-caption strong{font-family:Georgia,serif;font-size:17px;display:block;margin-bottom:5px;color:#ffe4ad}
+.map-caption span{font-size:11px;line-height:1.5;display:block}
+.map-tools{position:absolute;left:13px;bottom:13px;display:flex;gap:8px;flex-wrap:wrap}
+.map-tools button{border:1px solid #f7daa5;border-radius:9px;background:#f8d78d;color:#193038;padding:9px 12px;font-size:12px;font-weight:850;min-height:43px}
+.modelstatus{position:absolute;right:12px;top:13px;background:#163540d9;border:1px solid #718f8c;border-radius:10px;padding:7px 10px;font-size:11px;color:#e9e9db;max-width:157px;text-align:right}
+.statusline{background:#173a43;border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:7px}
+.stat{border-radius:8px;background:#284c55;padding:7px 11px;font-size:12px}.stat strong{color:var(--gold);font-size:13px}
+.info{background:#153039;border-radius:12px;border:1px solid #365862;padding:11px 13px;font-size:12px;color:#c5dad8;line-height:1.65}
+.info strong{color:#ffe3a3}
+.progress{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:16px}
+.step{height:6px;border-radius:20px;background:#3a5a62}.step.done{background:#a4dfbc}.step.now{background:var(--gold)}
+.overline{color:#f4c97d;text-transform:uppercase;font-size:11px;font-weight:900;letter-spacing:.11em}
+.right h2{font-family:Georgia,serif;font-size:clamp(25px,2.5vw,34px);line-height:1.12;margin:7px 0 12px}
+.right p{color:#e5e9e0;line-height:1.62;font-size:14px;margin:10px 0}
+.right .inset{padding:14px 15px;background:#244752;border:1px solid #52737b;border-radius:12px;margin:12px 0}
+.right .inset h3{color:#f7d697;font-size:14px;margin:0 0 8px}.right .inset p{margin:0;font-size:13px}
+.small{font-size:12px!important;color:var(--muted)!important;line-height:1.5!important}
+.source{font-size:11px!important;color:#ddcb9b!important}
+.question{margin:12px 0 9px;font-weight:750;font-size:15px}
+.choices{display:grid;gap:9px;margin:12px 0}
+.choice{text-align:left;background:#254b54;border:1px solid #547a7b;color:var(--cream);padding:13px;border-radius:12px;display:flex;gap:12px;align-items:flex-start;min-height:62px;transition:background .15s}
+.choice:hover{background:#315a61}.choice.selected{border:2px solid #f6cb77;background:#355f58;padding:12px}.feedback.error{background:#56382b;border-left-color:#f3aa85;color:#ffe8d5}.choice.restricted{background:#344840;border-style:dashed;border-color:#b29563}.choice[aria-pressed=true]{border:2px solid var(--gold);padding:12px;background:#38584f}
+.choice .mark{width:29px;min-width:29px;height:29px;border-radius:8px;background:#43636b;display:grid;place-items:center;color:#ffe8aa;font-size:15px;font-weight:900}
+.choice[aria-pressed=true] .mark{background:var(--gold);color:#19313b}
+.choice b{display:block;font-size:14px;margin-bottom:3px}.choice small{color:#d9e3df;line-height:1.5;font-size:12px}
+.feedback{background:#1f4a48;border-left:4px solid #a7daaa;padding:11px 13px;border-radius:8px;margin:12px 0;color:#e4f4e6;font-size:12px;line-height:1.55}
+textarea{display:block;width:100%;min-height:92px;resize:vertical;background:#102d37;border:1px solid #69878a;border-radius:9px;color:#fff5da;padding:11px;line-height:1.45;margin:8px 0}
+textarea::placeholder{color:#9db0af}
+.control{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap;margin-top:20px}
+.btn{border:1px solid #69818a;background:#2c4b56;color:var(--cream);padding:11px 15px;border-radius:10px;font-size:13px;font-weight:800;min-height:45px}
+.btn.primary{background:#eac47d;border-color:#ffdb96;color:#162d32}.btn:hover{filter:brightness(1.08)}
+#quizList{display:grid;gap:12px}.quiz{border:1px solid #52757a;border-radius:12px;background:#20414c;padding:13px}
+.quiz legend{font-size:13px;font-weight:850;padding:0 5px;line-height:1.4}
+.quiz label{display:flex;align-items:start;gap:8px;line-height:1.45;font-size:12px;margin:11px 0;cursor:pointer}
+.quiz input{accent-color:#f4cf81;flex:none;margin-top:3px}
+.result{border-radius:13px;border:1px solid #76a894;background:#234c4a;padding:16px;margin:13px 0}
+.result strong{font-size:24px;color:#d8f3ca}
+.teach{border:1px dashed #ac9561;border-radius:11px;padding:10px 12px;margin:12px 0;color:#ead8a9;background:#283d39;font-size:12px;line-height:1.5}
+.footer{max-width:1660px;margin:0 auto 24px;padding:10px 16px;font-size:11px;color:#a9c2c0;line-height:1.6}
+.footer a{color:#f5d288}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.visual{height:clamp(345px,53vh,560px)}.right{padding:17px}.top{padding:13px}.stat{font-size:11px}}
+@media(max-width:450px){.top h1{font-size:23px}.title-wrap{gap:9px}.crest{font-size:17px;padding:8px}.visual{height:380px}.bar{gap:6px}.seg button{padding:9px 8px;font-size:11px}.chip{font-size:10px}.map-caption{max-width:172px;left:8px;top:8px;padding:9px}.map-caption strong{font-size:14px}.map-caption span{font-size:10px}.modelstatus{right:7px;top:8px;max-width:104px;font-size:9px;padding:6px}.map-tools{left:8px;bottom:8px}.map-tools button{font-size:11px;padding:8px}.shell{padding:8px}.right h2{font-size:25px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
+
+/* A tananyag elkülönített, mobilbarát fejezetei – v1.1 */
+.main-tabs{display:flex;gap:6px;flex-wrap:wrap;padding:4px;border:1px solid #4c6870;border-radius:11px;background:#1c3f48}
+.main-tabs button{min-height:43px;border:0;border-radius:8px;background:transparent;color:#dcebe4;font-weight:800;padding:9px 15px;font-size:13px}
+.main-tabs button[aria-pressed=true]{background:#f6cb77;color:#143139}
+.main-tabs button:hover:not([aria-pressed=true]){background:#365b62}
+.tab-count{font-size:10px;background:#385b63;padding:3px 6px;border-radius:5px;color:#e9e6d4;margin-left:4px}
+.main-tabs button[aria-pressed=true] .tab-count{background:#d7a55f;color:#203237}
+.learn-banner{display:flex;align-items:center;justify-content:space-between;gap:9px;padding:10px 11px;margin-bottom:14px;background:#2a4a4d;border:1px solid #7b8067;border-radius:12px}
+.learn-banner strong{display:block;font-size:13px;color:#ffe1a5}
+.learn-banner span{font-size:11px;color:#d1e1d9;display:block;margin-top:3px}
+.learn-banner button{flex:none;min-height:43px;background:#edd18e;color:#19363c;border:0;padding:9px 11px;border-radius:8px;font-size:11px;font-weight:800}
+.study-shell{max-width:1500px;margin:0 auto 28px;padding:13px 14px}
+.study-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;border:1px solid #456974;border-radius:16px;background:linear-gradient(115deg,#1b414a,#16333d);padding:22px 26px;margin-bottom:12px}
+.study-heading h2{font-family:Georgia,serif;font-size:clamp(26px,3vw,36px);margin:6px 0;color:#ffe1a5}
+.study-heading p{color:#c7dcd8;line-height:1.55;max-width:630px;margin:6px 0;font-size:13px}
+.study-back{background:#f0d18f;color:#1a343b;border:0;border-radius:10px;min-height:44px;padding:11px 14px;font-size:13px;font-weight:800}
+.study-layout{display:grid;grid-template-columns:minmax(220px,270px) minmax(0,1fr);gap:12px;align-items:start}
+.study-index{background:#183a44;border:1px solid #426873;border-radius:14px;padding:17px;position:sticky;top:12px}
+.study-index h3{font-family:Georgia,serif;color:#f4d69d;font-size:20px;margin:0 0 13px}
+#study-chapters{display:grid;gap:7px}
+.study-index button{width:100%;min-height:53px;text-align:left;padding:9px 12px;background:#21434e;color:#e4e8dd;border:1px solid #527680;border-radius:10px;line-height:1.35;font-size:12px;font-weight:750}
+.study-index button[aria-current=true]{background:#dabe81;color:#1d3639;border-color:#ffe1a4}
+.study-index button .chapter-progress{font-size:10px;display:block;opacity:.78;font-weight:650;margin-top:4px}
+.study-index>p{font-size:11px;color:#c1d2ce;line-height:1.55;margin:15px 3px 3px}
+.study-article{min-width:0;background:#f5efe0;color:#26393b;border-radius:16px;padding:clamp(18px,3vw,37px);border:1px solid #ddc79c;box-shadow:0 15px 35px #0002;line-height:1.65}
+.study-article:focus{outline:0}
+.study-article .study-kicker{color:#98672f;text-transform:uppercase;letter-spacing:.14em;font-size:11px;font-weight:900}
+.study-article h2{font-family:Georgia,serif;font-size:clamp(27px,3vw,38px);color:#203941;line-height:1.16;margin:7px 0 15px}
+.study-article h3{font-family:Georgia,serif;color:#254850;font-size:22px;margin:25px 0 9px}
+.study-article p{color:#334b4e;font-size:15px;line-height:1.78;margin:9px 0 13px}
+.study-article .study-lead{font-size:17px;color:#263f42}
+.study-flow{display:flex;align-items:stretch;gap:6px;flex-wrap:wrap;margin:18px 0}
+.study-flow span{background:#e1d7c2;color:#283f43;border:1px solid #bdaa83;border-radius:9px;padding:9px 11px;font-size:12px;font-weight:800;flex:1;min-width:112px;text-align:center}
+.study-flow .flow-arrow{flex:0;min-width:auto;background:transparent;border:0;padding:8px 2px;color:#946c38}
+.study-terms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:13px 0}
+.study-terms>div{background:#ece3cf;border:1px solid #d6c49f;border-radius:11px;padding:12px}
+.study-terms dt{font-weight:900;color:#284349;font-size:14px;margin-bottom:5px}
+.study-terms dd{font-size:12px;color:#465b59;line-height:1.55;margin:0}
+.study-source{background:#e3e8df;border-left:4px solid #639186;padding:14px 16px;border-radius:6px;margin:17px 0}
+.study-source b{color:#29524d}
+.study-source p{font-size:13px;margin:6px 0;color:#365451}
+.study-misconception{background:#f2dfc9;border-left:4px solid #b47d4d;border-radius:7px;padding:14px 16px;margin:20px 0}
+.study-misconception strong{color:#714a31}
+.study-misconception p{font-size:13px;color:#664c3c;margin:6px 0}
+.study-question{border:1px solid #bbceba;background:#e7ecdf;border-radius:12px;padding:15px;margin:20px 0}
+.study-question strong{color:#254941;display:block}
+.study-question p{font-size:14px}
+.study-question button{background:#265c63;color:#fff4db;padding:9px 12px;border:0;border-radius:8px;min-height:43px;font-weight:800;font-size:12px}
+.study-question .answer{background:#f3eee0;padding:11px 13px;border-radius:8px;margin-top:9px;font-size:13px;border:1px solid #becdb8}
+.study-foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid #d4c6a9;padding-top:20px;margin-top:21px}
+.study-foot button{border:1px solid #bd9a66;background:#dbba7c;border-radius:9px;padding:11px 13px;font-weight:850;color:#233d42;min-height:44px}
+.study-foot button:disabled{opacity:.36}
+.study-foot .primary{background:#234d56;color:#fff0d2;border-color:#234d56}
+.study-label{font-size:12px;font-weight:750;color:#7b694e}
+@media(max-width:790px){.study-layout{grid-template-columns:1fr}.study-index{position:static}.study-index #study-chapters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.study-heading{padding:18px}.study-terms{grid-template-columns:1fr}.main-tabs{width:100%}.main-tabs button{flex:1}.tab-count{display:none}}
+@media(max-width:460px){.study-index #study-chapters{grid-template-columns:1fr}.study-article{padding:19px 16px}.study-article p{font-size:14px}.study-flow{gap:4px}.study-flow span{font-size:11px;min-width:90px}.study-heading{padding:17px}.learn-banner{flex-wrap:wrap}.learn-banner button{width:100%}}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.180.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.180.0/examples/jsm/"}}</script>
+</head>
+<body>
+<header class="top">
+<div class="title-wrap"><div class="crest" aria-hidden="true">M·C</div><div><div class="eyebrow">Önálló történelmi oktatójáték · 9. évfolyam · 6 küldetés · TESZT v2.0 P0</div><h1>Építs középkori várost!</h1><p class="sub">Hat történelmi küldetés · tananyag, döntések, források, ellenőrzés</p></div></div>
+<nav class="main-tabs" aria-label="Játék és tananyag">
+  <button id="tab-game" type="button" aria-pressed="true" aria-controls="game-shell">⚒ Játék</button>
+  <button id="tab-study" type="button" aria-pressed="false" aria-controls="study-shell">📖 Tananyag <span class="tab-count">6 lecke</span></button>
+</nav>
+</header>
+<main class="shell" id="game-shell" aria-label="A középkori város építése">
+<section class="left" aria-label="Interaktív várostérkép">
+<div class="bar"><div class="seg" role="group" aria-label="Térképnézet"><button type="button" id="view3d" aria-pressed="true">3D város</button><button type="button" id="view2d" aria-pressed="false">2D térkép</button></div><span class="chip">Európa · 13. század eleje · fiktív helyszín</span><div class="push seg" role="group" aria-label="Tanulási mód"><button type="button" id="guided" aria-pressed="true">Tanórai</button><button type="button" id="practice" aria-pressed="false">Gyakorló</button></div></div>
+<div class="visual">
+<div id="three-container" aria-label="Interaktív sematikus középkori település 3D nézete" role="img"></div>
+<svg id="map2d" viewBox="0 0 900 625" role="img" aria-label="Szemléltető településtérkép folyóval, kereskedelmi úttal, várral és mezőgazdasági területtel" hidden xmlns="http://www.w3.org/2000/svg">
+<rect width="900" height="625" fill="#a9c49c"/><path d="M0 30 Q180 100 260 30 T550 55 T900 20 L900 625 L0 625Z" fill="#b9d2a7"/>
+<path d="M130 -30 Q175 95 140 190 T190 400 T110 675" stroke="#5ca6b3" stroke-width="115" fill="none"/>
+<path d="M130 -30 Q175 95 140 190 T190 400 T110 675" stroke="#97dbdf" stroke-width="75" fill="none"/>
+<path d="M-20 405 Q190 310 380 285 T950 210" stroke="#947354" stroke-width="41" fill="none" stroke-linecap="round"/><path d="M-20 405 Q190 310 380 285 T950 210" stroke="#d4b48b" stroke-width="26" fill="none" stroke-linecap="round"/>
+<rect x="147" y="310" width="130" height="41" rx="5" fill="#866245" stroke="#e4c598" stroke-width="8" transform="rotate(-8 180 325)"/>
+<g fill="#6d9662" opacity=".55"><circle cx="735" cy="490" r="82"/><circle cx="813" cy="530" r="70"/><circle cx="700" cy="567" r="40"/><circle cx="650" cy="80" r="65"/></g>
+<g stroke="#8a744c" stroke-width="5" fill="#d9b98b"><rect x="550" y="120" width="113" height="77" rx="8"/><rect x="580" y="80" width="64" height="60" rx="5"/><rect x="610" y="55" width="22" height="34"/></g>
+<g fill="#c47d56" stroke="#79543e" stroke-width="5"><path d="M295 375l50 -40 52 40v50h-102z"/><path d="M430 333l43 -35 43 35v47h-86z"/><path d="M368 440l37 -31 42 31v44h-79z"/></g>
+<g fill="#e0c17b" stroke="#a17b48" stroke-width="4"><rect x="630" y="390" width="69" height="77"/><rect x="712" y="384" width="70" height="78"/><rect x="630" y="483" width="69" height="60"/><rect x="712" y="480" width="70" height="62"/></g>
+<g id="map2d-build"></g>
+<g font-family="system-ui" font-size="17" font-weight="800" text-anchor="middle">
+<g><circle cx="274" cy="265" r="21" fill="#193941" stroke="#f8de9d" stroke-width="4"/><text x="274" y="272" fill="#f7d88f">A</text><text x="274" y="242" fill="#20373a">Folyóátkelő</text></g>
+<g><circle cx="610" cy="257" r="21" fill="#193941" stroke="#f8de9d" stroke-width="4"/><text x="610" y="264" fill="#f7d88f">B</text><text x="610" y="231" fill="#20373a">Vár alja</text></g>
+<g><circle cx="693" cy="466" r="21" fill="#193941" stroke="#f8de9d" stroke-width="4"/><text x="693" y="473" fill="#f7d88f">C</text><text x="693" y="579" fill="#20373a">Szántóföldek</text></g>
+</g>
+</svg>
+<div class="map-caption"><strong id="caption-title">Egy település története</strong><span id="caption-desc">Válassz területet, majd építsd ki a gazdasági élet alapjait. A környezet a döntéseidhez igazodik.</span></div>
+<div class="modelstatus" id="modelstatus" role="status">3D-világ betöltése…</div>
+<div class="map-tools"><button type="button" id="overview" title="Kamera visszaállítása">◎ Teljes település</button><button type="button" id="focus" title="Kamera közelítése a választott területre">⌖ Kijelölt hely</button></div>
+</div>
+<div class="statusline" id="statusline" aria-live="polite"><div class="stat">6 történelmi küldetés · 60 tudáspont</div></div>
+<div class="info"><strong>Történelmi pontosság:</strong> a helyszín fiktív és a 3D-környezet sematikus. Az építési előnyök szimulációs mutatók, nem rekonstruált középkori statisztikák. A város kialakulása nem egyetlen helyszín vagy épület következménye.</div>
+</section>
+<aside class="right" aria-label="Tanulási feladatok">
+<div class="learn-banner"><div><strong>📖 Segítségre van szükséged?</strong><span>Mind a hat lecke külön is elolvasható.</span></div><button id="read-current" type="button">Tananyag megnyitása</button></div>
+<div class="progress" id="progress" aria-label="Tanulási előrehaladás"></div>
+<div id="lesson" aria-live="polite"></div>
+<div id="teacher-hint" class="teach" hidden></div>
+<div class="control"><button class="btn" type="button" id="back">← Vissza</button><button class="btn primary" type="button" id="next">Tovább →</button></div>
+</aside>
+</main>
+<section class="study-shell" id="study-shell" aria-label="Tananyag és fogalomtár" hidden>
+  <div class="study-heading">
+    <div><div class="eyebrow">TANULÓI TUDÁSTÁR · 9. ÉVFOLYAM</div><h2>Ismerd meg a középkori városok világát!</h2><p>Hat, a tankönyvek alapján kidolgozott magyarázó lecke. Bármikor visszaléphetsz a játékba; az állásod megmarad.</p></div>
+    <button id="study-return" class="study-back" type="button">↩ Vissza a játékhoz</button>
+  </div>
+  <div class="study-layout">
+    <nav class="study-index" aria-label="A tananyag fejezetei"><h3>Fejezetek</h3><div id="study-chapters"></div><p>Az olvasás nem jár ponttal, a feladatokat a Játék fülön oldhatod meg.</p></nav>
+    <article class="study-article" id="study-article" tabindex="-1" aria-label="Aktuális tananyagfejezet"></article>
+  </div>
+</section>
+<footer class="footer"><strong>Tanári szakmai alap:</strong> Szent István Társulat: <em>Történelem 9.</em>, „A polgárok világa”, 100–102. oldal; Oktatási Hivatal: <em>Történelem 9.</em> (OH-TOR09TB), „A polgárok világa”, 106–112. oldal. Tankönyvi tényekből saját szövegezésű magyarázatok készültek; tankönyvi képeket és hosszú szövegrészleteket nem másoltunk át. 3D eszközök: <a href="https://polyfork.dev/kit/medieval-village-kit-ca0b43" target="_blank" rel="noopener noreferrer">Polyfork Medieval Village Kit</a> – GLB, CC BY 4.0. Three.js 0.180.0. <strong>Ez fejlesztői másolat; nincs beépítve a főoldalba.</strong></footer>
+<script>
+
+(function(){
+"use strict";
+const STORAGE="kozepkori-varos-v20-p0";
+const $=id=>document.getElementById(id);
+const lessons=[
+{
+ title:"A város születése",tag:"Gazdaság és településhely",icon:"🌾",source:"SZIT, 100. o.; OH, 106–109. o.",
+ intro:"A 11–13. században a mezőgazdasági termelés fejlődése hozzájárult a terményfelesleg és az árutermelés növekedéséhez. A piac, a pénzforgalom és a kézműipar kölcsönösen erősítették egymást. Várak, egyházi központok, utak és folyóátkelők mellett új települések fejlődhettek.",
+ concept:"Az árutermelés nem azt jelenti, hogy minden megtermelt javakat eladnak. A megélhetéshez szükséges mennyiségen felüli termény egy része piacra kerülhetett.",
+ task:"Hol helyeznéd el a városiasodásra alkalmas kezdeti települést?",
+ options:[
+ {id:"ford",name:"Folyóátkelő",sub:"Vízi és szárazföldi utak találkozása, kereskedelmi lehetőség – árvízkockázattal.",valid:true,why:"A folyóátkelőnél élénk lehet a forgalom, de az árvíz és az átkelő fenntartása kockázat."},
+ {id:"castle",name:"Vár alja",sub:"Védelem és földesúri központ, viszont erősebb függés.",valid:true,why:"Várak közelében is jöhettek létre kereskedő- és kézműves-települések."},
+ {id:"fields",name:"Termékeny mezők",sub:"Jó élelmiszer-ellátás, de távolabb a fontos kereskedelmi csomópontoktól.",valid:true,why:"A mezőgazdasági többlet előny, de a kereskedelmi kapcsolatokhoz további fejlesztések szükségesek."}
+ ],
+ reasoning:"Melyik két adottság segítheti, és melyik egy körülmény korlátozhatja a választott település fejlődését?",
+ questions:[
+  {
+   "q": "A település környékén két egymást követő évben több gabona termett, mint amennyit a családok elfogyasztottak. Melyik következmény segíthette legközvetlenebbül a városiasodást?",
+   "options": [
+    "A földművelők többsége azonnal polgárjogot szerzett.",
+    "A gabonát csak a földesúr fogyaszthatta el.",
+    "A felesleg egy részét piacon értékesíthették, így több kézműves szakosodhatott.",
+    "A város automatikusan királyi önkormányzatot kapott."
+   ],
+   "answer": 2,
+   "why": "A terményfelesleg, az árutermelés és a munkamegosztás összefüggött, de jogi kiváltság nem következett belőle automatikusan."
+  },
+  {
+   "q": "Egy kereskedelmi út mellett fekvő nagy faluban piac működik. Mit kell még megvizsgálni, mielőtt középkori önkormányzatú városnak nevezzük?",
+   "options": [
+    "Milyen kiváltságokkal és önigazgatási jogokkal rendelkezett a közösség.",
+    "Volt-e minden lakóházon kőből épült torony.",
+    "A kereskedők kizárólag tengerentúlról érkeztek-e.",
+    "A lakosság mind egyetlen céhhez tartozott-e."
+   ],
+   "answer": 0,
+   "why": "A városi jelleg gazdasági és jogi feltételei nem azonosak; a városi kiváltságokat külön ellenőrizni kell."
+  }
+ ],
+ teacher:"A helyszínválasztás nem egyválaszos földrajzi teszt: a tanuló érvelését értékeljük. Hangsúlyozzuk a gazdasági és a jogi várossá válás különbségét."
+},
+{
+ title:"Szerezz városi kiváltságokat!",tag:"Jogok és önkormányzat",icon:"📜",source:"SZIT, 100–101. o.; OH, 109–110. o.",
+ intro:"A kereskedők és kézművesek érdekeiket közösségekbe szerveződve védték. A kommuna a város közösségi önszerveződésének egyik formája volt. A városi kiváltságok a település jogállását, önkormányzatát, bíráskodását és gazdasági lehetőségeit szabályozhatták.",
+ concept:"Forráselemzés: az 1182-ben megerősített beauvais-i kommunaszabályok az esküt tevő városlakók közösségét, a tanács tagjait és elöljáróit említik. A városok jogai Európában nem voltak egységesek.",
+ task:"A kereskedők saját ügyeikben nagyobb önállóságot kérnek. Milyen lépés segítheti ezt?",
+ options:[
+  {
+   "id": "selfdeclare",
+   "name": "A tanács saját hatáskörben teljes joghatóságot hirdet",
+   "sub": "A közösség megállapodás nélkül kijelenti, hogy az uralkodó vagy földesúr többé nem gyakorolhat semmilyen jogot.",
+   "valid": false,
+   "why": "Önszerveződés létezhetett, de az elismert joghatóság megszerzését nem helyettesíti a jogosultságok egyoldalú kijelentése."
+  },
+  {
+   "id": "charter",
+   "name": "Királyi kiváltságokat kérni",
+   "sub": "Tárgyalás az uralkodóval meghatározott vásári, bíráskodási és önigazgatási jogokról; lehetséges adó- vagy katonai kötelezettséggel.",
+   "valid": true,
+   "why": "A királyi kiváltság megerősíthette a városi önkormányzatot, miközben a közösségnek kötelezettségei is maradhattak."
+  },
+  {
+   "id": "negotiate",
+   "name": "Megállapodás a földesúrral",
+   "sub": "A helyi úr elfogadja, hogy a polgárok bizonyos ügyekben maguk válasszanak vezetőt és bíráskodjanak.",
+   "valid": true,
+   "why": "Helyi egyezségek révén is kialakulhatott részleges önállóság; nem minden település vált szabad királyi várossá."
+  }
+ ],
+ reasoning:"Magyarázd meg, miben különbözik a piaccal rendelkező település az önkormányzattal rendelkező várostól!",
+ questions:[
+  {
+   "q": "Az 1182-es beauvais-i kommunaszabályozás a város tanácsát és elöljáróit is említi. Melyik következtetés igazolható ebből?",
+   "options": [
+    "Minden városnak pontosan tizenhárom tanácsosa volt.",
+    "A városi közösség szervezett testületei részt vehettek saját ügyeinek intézésében.",
+    "A városi lakók modern, általános választójoggal rendelkeztek.",
+    "Az uralkodók már nem adhattak több kiváltságot."
+   ],
+   "answer": 1,
+   "why": "A forrás a konkrét beauvais-i szervezetet mutatja be, amelyből általános önszerveződési szerepre következtethetünk, de részleteit nem általánosíthatjuk."
+  },
+  {
+   "q": "Körmend IV. Bélától 1244-ben városi kiváltságokat kapott. Mit lehet ebből megalapozottan állítani?",
+   "options": [
+    "Minden magyar város ugyanekkor ugyanazokat a jogokat kapta.",
+    "Körmend polgárai ettől modern értelemben vett egyenlő politikai jogokkal rendelkeztek.",
+    "A településnek kiváltságlevél nélkül nem lehetett piaca.",
+    "A település sajátos jogállása királyi intézkedéssel fejlődött, a jogosultságok tartalmát külön kell megvizsgálni."
+   ],
+   "answer": 3,
+   "why": "Az 1244-es körmendi kiváltság történeti tény. A jogok pontos körét az oklevél alapján lehet meghatározni."
+  }
+ ],
+ teacher:"A beauvais-i és a brémai kiváltságlevél a tankönyv két különböző példája; ne általánosítsuk az 'egy év és egy nap' szabályát minden európai városra."
+},
+{
+ title:"Rajzold meg a várost!",tag:"Középkori városszerkezet",icon:"🏘️",source:"OH, 109–111. o., Carcassonne ábra; SZIT, 100–101. o.",
+ intro:"A középkori városok képe változatos volt. A városfal, a kapuk, az utcák, a piac, a templom és a lakó- illetve műhelyépületek eltérő helyi adottságokhoz alkalmazkodtak. A piactér a gazdasági élet egyik központja lehetett.",
+ concept:"Térképolvasás: a Carcassonne-t bemutató tankönyvi rajz segít felismerni a kapuk, az utcák és a piactér kapcsolatát. A saját játékterünk sematikus modell, nem egyetlen történelmi város rekonstrukciója.",
+ task:"Hogyan rendeznéd el a vásártér, a városkapu és a kézművesutcák kapcsolatát?",
+ options:[
+  {
+   "id": "connected",
+   "name": "Piactér a főkapuhoz vezető úton",
+   "sub": "A fő kereskedelmi út kapcsolódik a piachoz, a műhelyek a mellékutcákban nyílnak.",
+   "valid": true,
+   "why": "A jó megközelíthetőség segíti az áruszállítást, de az utcák zsúfoltságát és a tűzveszélyt is kezelni kell."
+  },
+  {
+   "id": "riverside",
+   "name": "Piactér a kereskedelmi út és a rakodóhely találkozásánál",
+   "sub": "A vízi szállítás kihasználása mellett jól járható összeköttetés épül a város belsejébe.",
+   "valid": true,
+   "why": "A vízi és szárazföldi forgalom összekapcsolása előnyös lehet, de a környezeti adottságoktól függ."
+  },
+  {
+   "id": "courtyard",
+   "name": "Védettebb belső piactér több bekötőutcával",
+   "sub": "A központ beljebb kerül, de a kapuktól jól kijelölt utak vezetnek hozzá.",
+   "valid": true,
+   "why": "Ez is történelmileg elképzelhető, ha a kereskedők és vásárlók hozzá tudnak férni a piachoz."
+  }
+ ],
+ reasoning:"Miért célszerű a piacot jól megközelíthető helyre tenni? Milyen más közösségi épület lehet fontos?",
+ questions:[
+  {
+   "q": "A kapu és a piactér között egyetlen szűk, nehezen járható utca vezet. Melyik értelmezés a leginkább megalapozott?",
+   "options": [
+    "Az áruszállítás nehézsége akadályozhatja a piac működését, ezért a közlekedési kapcsolat fontos.",
+    "A városfalnak a középkorban csak díszítő szerepe volt.",
+    "A piacteret minden városban a folyó közepén építették.",
+    "Minden európai város azonos utcahálózattal rendelkezett."
+   ],
+   "answer": 0,
+   "why": "A közlekedési kapcsolatok a kereskedelem szempontjából meghatározók, de a városok utcahálózata változatos."
+  },
+  {
+   "q": "A tanuló Carcassonne ábráját és Lőcse városházát ábrázoló képét hasonlítja össze. Melyik következtetés helyes?",
+   "options": [
+    "A városháza mindig a várfalon kívül állt.",
+    "A városfal miatt a városnak nem lehetett vására.",
+    "A védelmi és az igazgatási funkció eltérő épületekben jelenhetett meg, a szerkezet helyenként változott.",
+    "A képek alapján biztos, hogy a két város azonos jogokkal bírt."
+   ],
+   "answer": 2,
+   "why": "A két szemléltető forrás különféle funkciókat mutat be; a jogi helyzet képből önmagában nem állapítható meg."
+  }
+ ],
+ teacher:"Mutasd meg a két tankönyvben a városszerkezet ábráját! Kérd meg a diákokat, hasonlítsák össze a stilizált játékmodellt a forrásban látható településsel."
+},
+{
+ title:"Szervezd meg a céheket!",tag:"Kézműipar és mesterek",icon:"⚒️",source:"SZIT, 101. o.; OH, 111. o., céhmodell és magyarázat.",
+ intro:"Az azonos mesterséget űző kézművesek céhekbe szerveződtek. A céhek a mesterek érdekeit védték, szabályozták a termékek minőségét és a versenyt. Az inas és legény szakasza után a remekmunka a mesterré válás egyik feltétele lehetett.",
+ concept:"A céhek egyszerre segíthették a minőségellenőrzést és korlátozhatták a versenyt. A céhen kívüli kézművesek helyzete és a mesterré válás lehetősége városonként eltérhetett.",
+ task:"Egy új kovácsműhely nyílik. Melyik szabály jellemző a korszak céhrendszerére?",
+ options:[
+  {
+   "id": "freeguild",
+   "name": "Céhszabályokat mellőző műhely",
+   "sub": "A városi céh saját mestereitől sem kér számon minőséget vagy szakmai követelményeket.",
+   "valid": false,
+   "why": "A céh jellegzetes szabályozó szerepe így nem érvényesülne; egy városon belül lehettek céhen kívüli iparosok, de a feladat céhalapításról szól."
+  },
+  {
+   "id": "quality",
+   "name": "Minőségi ellenőrzés és mesterré válás szabályozása",
+   "sub": "A céh minőségi előírásokat és szakmai feltételeket rögzít, ugyanakkor a belépés költségeit is mérlegelni kell.",
+   "valid": true,
+   "why": "A céhszabályzat a minőséget szolgálta, de szűkíthette az új mesterek lehetőségeit."
+  },
+  {
+   "id": "limits",
+   "name": "A műhelyek termelésének korlátozása",
+   "sub": "A céh meghatározza a szövőszékek és segédek számát; a mesterek védelmét előtérbe helyezi, de a versenyt fékezi.",
+   "valid": true,
+   "why": "A termelés korlátozása a céhek történelmileg ismert gyakorlata, amely egyszerre védhette tagjaikat és csökkenthette a versenyt."
+  }
+ ],
+ reasoning:"Milyen előnye és milyen hátránya lehet a céhes szabályozásnak a mesterek és a vásárlók számára?",
+ questions:[
+  {
+   "q": "Az 1345-ös frankfurti posztókészítő szabályzat korlátozta a szövőszékek számát és az áru minőségét ellenőrizte. Mit bizonyít ez?",
+   "options": [
+    "A céhek csak vallási ünnepeket szerveztek.",
+    "A céhek minden új kézművesnek automatikusan saját műhelyt adtak.",
+    "A céhek megszüntették a városi kereskedelmet.",
+    "A céhek a minőséget és a mesterek közötti verseny feltételeit is szabályozhatták."
+   ],
+   "answer": 3,
+   "why": "A szabályzat egyszerre bizonyítja a minőségellenőrzést és a termelés/verseny korlátozását."
+  },
+  {
+   "q": "Egy legény jó remekmunkát készített, de nincs elegendő pénze saját műhely nyitására. Miért nem biztos, hogy mesterré válhat?",
+   "options": [
+    "Mert a remekmunka nem tartozott a céhes mesterségekhez.",
+    "Mert a szakmai felkészültség mellett helyi céhszabályok és anyagi feltételek is számítottak.",
+    "Mert a mesterré váláshoz mindenhol nemesi származás kellett.",
+    "Mert a legények csak földet művelhettek."
+   ],
+   "answer": 1,
+   "why": "A mesterré válás szakmai, gazdasági és helyi szabályozási feltételekhez kötődhetett."
+  }
+ ],
+ teacher:"A céhek és a mai szakszervezetek vagy kamarák nem azonos szervezetek. Az 'atyamester', 'remekmunka' és 'kontár' fogalmakat opcionálisan lehet mélyíteni."
+},
+{
+ title:"Kapcsolódj a kereskedelemhez!",tag:"Helyi és távolsági áruforgalom",icon:"⚖️",source:"SZIT, 101–102. o.; OH, 111–112. o.",
+ intro:"A helyi piac mellett a távolsági kereskedelem is fejlődött. A Hanza-kereskedelem az Északi- és Balti-tenger vidékéhez kapcsolódott, a levantei kereskedelem a Földközi-tenger keleti térségéhez. A két térséget szárazföldi útvonalak és nagy vásárok is összekötötték.",
+ concept:"Kereskedelmi ábra: az északi tömegáruk között szerepelhetett gabona, fa, hering és viasz; a keleti luxusáruk között például fűszerek és selyem. A közép-európai város a közvetítő szárazföldi útvonalakon is részt vehetett a cserében.",
+ task:"Hogyan kapcsolnád be belső fekvésű, fejlődő városodat a szélesebb áruforgalomba?",
+ options:[
+  {
+   "id": "fair",
+   "name": "Kapcsolat a szárazföldi nagyvásárokkal",
+   "sub": "Kereskedőket és szekereket fogadsz más városokból; a vámok és a közlekedési kockázat költséget jelent.",
+   "valid": true,
+   "why": "A nagy vásárhelyek és szárazföldi útvonalak összekapcsolták a különböző kereskedelmi térségeket."
+  },
+  {
+   "id": "monopoly",
+   "name": "Minden idegen kereskedő kizárása",
+   "sub": "A helyi mestereket védenéd, de megszakítanád a célként kitűzött távolsági kereskedelmet.",
+   "valid": false,
+   "why": "Bizonyos korlátozások léteztek, de a teljes kizárás a küldetés távolsági kapcsolatteremtési célját meghiúsítaná."
+  },
+  {
+   "id": "partnership",
+   "name": "Szerződés kereskedőházakkal és biztonságos útvonalakkal",
+   "sub": "A szállítás biztonságát és a városok közti együttműködést helyezed előtérbe; ez költségekkel és kötelezettségekkel jár.",
+   "valid": true,
+   "why": "A kereskedők közötti összefogás és biztonsági intézkedések elősegítették az áruforgalmat."
+  }
+ ],
+ reasoning:"Miben különbözött a Hanza és a levantei kereskedelem földrajzi térsége és jellegzetes áruforgalma?",
+ questions:[
+  {
+   "q": "Egy kereskedő észak-európai kikötőkből sózott heringet és fát szeretne szállítani. Melyik kapcsolatrendszer lenne ehhez a leginkább megfelelő?",
+   "options": [
+    "A közép-ázsiai Selyemút valamennyi városának szövetsége.",
+    "Kizárólag a velencei keleti fűszerkereskedelem.",
+    "Az északi és balti térség Hanza-kapcsolatai.",
+    "A 16. századi atlanti gyarmati útvonalak."
+   ],
+   "answer": 2,
+   "why": "A Hanza térségében jellemző volt a fa, hal és más északi tömegáruk szállítása."
+  },
+  {
+   "q": "A Hanza 1260 körüli közös határozata a kalózok elleni fellépést hangsúlyozza. Miért lehetett ez fontos a városoknak?",
+   "options": [
+    "A határozattal megszűnt minden vám Európában.",
+    "A városok minden hajózási útvonalat egy uralkodó alatt egyesítettek.",
+    "A levantei fűszerek kereskedelmét teljesen felszámolták.",
+    "A kereskedők és áruk biztonsága közös gazdasági érdek volt."
+   ],
+   "answer": 3,
+   "why": "A tengeri kereskedelem biztonsága a városok együttműködésének gyakorlati oka volt."
+  }
+ ],
+ teacher:"A Hanza korábbi önálló játéka nem előfeltétele ennek a modulnak. Az északi és a levantei útvonalakat térképen érdemes összevetni; a város itt fiktív és nem közvetlen tengeri kikötő."
+},
+{
+ title:"Vezesd a városi közösséget!",tag:"Polgárok és társadalmi különbségek",icon:"🏛️",source:"SZIT, 100–101. o.; OH, 109–111. o.",
+ intro:"A középkori városok lakói nem rendelkeztek azonos jogokkal. A vagyonos kereskedők és a műhellyel rendelkező mesterek fontos szereplők voltak; a polgárjoggal nem rendelkező városlakók sokszor nem vehettek részt a városvezetésben. Az önkormányzat összetétele és jogai időben és térben változhattak.",
+ concept:"Társadalmi forráskritika: a városi szabadság nem jelentett modern általános választójogot. Az egyes csoportok eltérő érdekeket képviseltek, és a városi élet mellett kirekesztés, konfliktusok is megjelentek.",
+ task:"A tanács dönt az új vásár szabályairól. Melyik állítás írja le helyesen a korszak városi társadalmát?",
+ options:[
+  {
+   "id": "patricians",
+   "name": "A vagyonos kereskedők megtartják a vezető szerepet",
+   "sub": "A patríciusok ellenőrzik a legfontosabb városi tisztségeket, a céhek jogainak korlátozása feszültséget okozhat.",
+   "valid": true,
+   "why": "Sok városi tanácsban meghatározó volt a vagyonos kereskedő réteg, de ez társadalmi konfliktusokat is kiválthatott."
+  },
+  {
+   "id": "guildSeats",
+   "name": "A céhes mesterek nagyobb tanácsi beleszólást szereznek",
+   "sub": "A tanács egyes döntéseibe a műhellyel rendelkező mesterek is beleszólhatnak; a polgárjog nélküli lakók továbbra sem automatikusan résztvevők.",
+   "valid": true,
+   "why": "A céhes mesterek városi politikai befolyása növekedhetett, de a részvétel ekkor sem jelentett általános választójogot."
+  },
+  {
+   "id": "universal",
+   "name": "Modern értelemben mindenkinek azonos szavazati jogot adsz",
+   "sub": "Minden lakos, korától, jogállásától és vagyonától függetlenül azonos politikai jogot kap egy 13. századi városban.",
+   "valid": false,
+   "why": "A modern politikai jogegyenlőség visszavetítése a középkorra anakronisztikus."
+  }
+ ],
+ reasoning:"Hogyan különbözhetett a vagyonos kereskedő, a céhmester és a polgárjog nélküli lakos helyzete?",
+ questions:[
+  {
+   "q": "Egy városi tanácsban a gazdag kereskedők képviseltetik magukat, a szegényebb lakók nagy része nem. Milyen jelenséget szemléltet ez?",
+   "options": [
+    "A középkori városokban a földesúri robotot minden lakos azonosan teljesítette.",
+    "A városi lakosok jogai és politikai részvétele vagyon és jogállás szerint eltérhetett.",
+    "A céhek minden középkori városban betiltották a kereskedelmet.",
+    "A középkori városokban semmilyen önkormányzat nem létezett."
+   ],
+   "answer": 1,
+   "why": "A patríciusok, céhmesterek és polgárjog nélküli lakosok helyzete különbözött."
+  },
+  {
+   "q": "II. Frigyes 1238-as rendelkezése védelmet ígért az utazó bécsi zsidó kereskedőknek. Mire NEM következtethetünk ebből?",
+   "options": [
+    "Arra, hogy valamennyi középkori városban megszűnt a zsidók korlátozása és üldözése.",
+    "Arra, hogy egyes uralkodók sajátos védelmi rendelkezéseket adhattak ki.",
+    "Arra, hogy a kereskedés és a személyes biztonság összefüggött.",
+    "Arra, hogy a városokban eltérő jogállású csoportok éltek."
+   ],
+   "answer": 0,
+   "why": "A konkrét védelmi rendelkezés nem bizonyítja az általános jogegyenlőséget. A korabeli kirekesztés és üldözés másutt továbbra is fennállhatott."
+  }
+ ],
+ teacher:"Ne idealizáljuk a városi életet. Hasonlítsátok össze a városi jogok körét a modern polgári jogegyenlőséggel, de ne állítsuk, hogy a kettő azonos."
+}
+];
+const structures=[
+ {title:"Kezdeti település",detail:"Az első kunyhók és az ellátási környezet már léteznek.",feature:"houses"},
+ {title:"Kiváltságlevél",detail:"A városi közösség jogainak jelképe.",feature:"charter"},
+ {title:"Piac és városkapu",detail:"Megközelíthető piactér és bejárat.",feature:"market"},
+ {title:"Céhes műhely",detail:"Kézműves szakosodás és minőségellenőrzés.",feature:"forge"},
+ {title:"Kereskedőkapcsolatok",detail:"Új szekér és raktári épületek.",feature:"trade"},
+ {title:"Városháza és közösség",detail:"A városvezetés térbeli jelképe.",feature:"hall"}
+];
+const initial=()=>({mission:0,phase:"teach",decisions:{},reasons:{},answers:{},checks:{},mode:"guided",view:"3d",showTeacher:false,finished:false});
+function load(){try{let s=JSON.parse(localStorage.getItem(STORAGE));if(!s||!Number.isInteger(s.mission)||s.mission<0||s.mission>=lessons.length||!["teach","decide","quiz","result"].includes(s.phase))return initial();
+return {...initial(),...s,decisions:s.decisions&&typeof s.decisions==="object"?s.decisions:{},reasons:s.reasons&&typeof s.reasons==="object"?s.reasons:{},answers:s.answers&&typeof s.answers==="object"?s.answers:{},checks:s.checks&&typeof s.checks==="object"?s.checks:{}};}catch(e){return initial();}}
+let S=load(),warning="";
+function save(){try{localStorage.setItem(STORAGE,JSON.stringify(S));}catch(e){$("modelstatus").textContent="Mentés nem érhető el; a játék folytatható."}}
+function node(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;}
+function add(p,tag,text,cls){const n=node(tag,cls,text);p.append(n);return n;}
+function action(label,fn,variant="choice"){const b=node("button",variant,label);b.type="button";b.addEventListener("click",fn);return b;}
+function label(p,txt){add(p,"div",txt,"overline")}
+function card(p,title,copy){const d=node("div","inset");add(d,"h3",title);add(d,"p",copy);p.append(d);return d}
+function score(){return Object.entries(S.checks).reduce((sum,[i,x])=>sum+lessons[i].questions.filter((q,j)=>x[j]===q.answer).length*5,0)}
+function completed(){return Object.keys(S.checks).length}
+function selected(l=S.mission){return S.decisions[l]}
+function validity(i=S.mission){return lessons[i].options.find(x=>x.id===S.decisions[i])?.valid===true;}
+function reasonValid(i=S.mission){return String(S.reasons[i]||"").trim().length>=20}
+function isReady(){if(S.phase==="teach")return true;if(S.phase==="decide")return validity()&&reasonValid();if(S.phase==="quiz")return !!S.checks[S.mission];return true;}
+function render(){
+ const l=lessons[S.mission],p=$("lesson");p.replaceChildren();
+ $("progress").replaceChildren();for(let i=0;i<6;i++){let b=node("button","step"+(i<completed()?" done":i===S.mission?" now":""));b.type="button";b.title=lessons[i].title;b.setAttribute("aria-label",(i+1)+". küldetés: "+lessons[i].title+" – "+(i<completed()?"teljesítve":i===S.mission?"aktuális":"zárolt"));b.disabled=i>completed()||S.finished;b.addEventListener("click",()=>{if(i<=completed()){S.mission=i;S.phase=S.checks[i]?"result":"teach";warning="";save();render();}});$("progress").append(b);}
+ $("guided").setAttribute("aria-pressed",String(S.mode==="guided"));$("practice").setAttribute("aria-pressed",String(S.mode==="practice"));
+ $("view3d").setAttribute("aria-pressed",String(S.view==="3d"));$("view2d").setAttribute("aria-pressed",String(S.view==="2d"));
+ $("three-container").toggleAttribute("hidden",S.view!=="3d");
+ $("map2d").toggleAttribute("hidden",S.view!=="2d");
+ $("overview").toggleAttribute("hidden",S.view!=="3d");
+ $("focus").toggleAttribute("hidden",S.view!=="3d");
+ $("teacher-hint").hidden=S.mode!=="guided"&&!S.showTeacher;
+ $("teacher-hint").textContent="TANÁRI SEGÍTSÉG · "+l.teacher;
+ $("back").hidden=S.finished||S.phase==="teach"&&S.mission===0||S.phase==="result";
+ $("next").textContent=S.finished?"Új város építése ↻":S.phase==="teach"?"Tovább a döntéshez →":S.phase==="decide"?"Döntés véglegesítése →":S.phase==="quiz"?"Eredmény megtekintése →":S.mission===5?"Városod értékelése →":"Következő küldetés →";
+ $("next").disabled=!isReady();
+ label(p,(S.mission+1)+". KÜLDETÉS / 6 · "+l.tag);
+ add(p,"h2",l.title);
+ if(S.finished){finish(p);}
+ else if(S.phase==="teach"){teach(p,l)}
+ else if(S.phase==="decide"){decide(p,l)}
+ else if(S.phase==="quiz"){test(p,l)}
+ else report(p,l);
+ $("caption-title").textContent=S.finished?"Elkészült a városod!":l.title;
+ $("caption-desc").textContent=completed()+" / 6 küldetés befejezve. A döntéseid nyomán a település fokozatosan fejlődik.";
+ const hud=$("statusline");hud.replaceChildren();for(const [key,val] of [["Küldetés",(S.mission+1)+"/6"],["Tanulási pont",score()+"/60"],["Felépült fejlesztés",completed()+"/6"],["Tanulási mód",S.mode==="guided"?"Tanórai":"Gyakorló"]]){const c=node("div","stat");add(c,"span",key+": ");add(c,"strong",val);hud.append(c);}
+ updateSVG();
+ window.medievalSceneUpdate?.({mission:S.mission,phase:S.phase,completed:completed(),decisions:S.decisions,finished:S.finished});
+}
+function teach(p,l){
+ add(p,"p",l.intro);
+ card(p,"Értsd meg!",l.concept);
+ card(p,"Történelmi forrás alapján",l.source+". A magyarázat a két feltöltött tankönyv tananyagára épül; a szöveg saját átfogalmazás.");
+ add(p,"p","A következő lépésben a történelmi ismeret alapján döntést hozol. Az építkezés a döntésed és az ellenőrzés után válik láthatóvá.","small");
+}
+function decide(p,l){
+ add(p,"p",l.intro);
+ add(p,"h3",l.task,"question");
+ const choices=node("div","choices");
+ for(const [ix,opt] of l.options.entries()){
+  const b=node("button","choice"+(S.decisions[S.mission]===opt.id?" selected":""));b.type="button";b.setAttribute("aria-pressed",String(S.decisions[S.mission]===opt.id));
+  const marker=node("span","mark",String.fromCharCode(65+ix));marker.setAttribute("aria-hidden","true");
+  const copy=node("span");add(copy,"b",opt.name);add(copy,"small",opt.sub);b.append(marker,copy);
+  b.addEventListener("click",()=>{if(S.checks[S.mission])return;S.decisions[S.mission]=opt.id;S.reasons[S.mission]="";warning="";save();render();if(S.mission===0)window.medievalFocus?.(opt.id);});
+  choices.append(b);
+ }
+ p.append(choices);
+ const current=l.options.find(x=>x.id===selected());
+ if(current){p.append(node("div","feedback"+(current.valid?"":" error"),(current.valid?"Történelmi magyarázat: ":"Érdemes újragondolni: ")+current.why));}
+ if(warning)p.append(node("div","feedback error",warning));
+ const q=add(p,"label",l.reasoning,"question");q.setAttribute("for","reason");
+ const t=node("textarea");t.id="reason";t.maxLength=550;t.value=S.reasons[S.mission]||"";t.placeholder="A történelmi tananyag alapján úgy gondolom, hogy …";
+ t.addEventListener("input",()=>{S.reasons[S.mission]=t.value;save();$("next").disabled=!isReady();});
+ p.append(t);add(p,"p","Legalább 20 karakter. A rendszer a szöveg hosszát ellenőrzi, a történelmi indoklás minőségét a tanár értékeli.","small");
+}
+function test(p,l){
+ add(p,"p","Az építési döntésedet elfogadtuk. Most válaszolj két, a fejezethez kapcsolódó ellenőrző kérdésre. Minden helyes válasz 5 pontot ér.");
+ const keys=S.answers[S.mission]||{};
+ const form=node("div");form.id="quizList";
+ l.questions.forEach((q,i)=>{
+ const field=node("fieldset","quiz");add(field,"legend",(i+1)+". "+q.q);
+ q.options.forEach((ans,j)=>{const lab=node("label");const inp=node("input");inp.type="radio";inp.name="test"+S.mission+"_"+i;inp.value=String(j);inp.checked=keys[i]===j;inp.disabled=!!S.checks[S.mission];inp.addEventListener("change",()=>{
+ if(S.checks[S.mission])return;S.answers[S.mission]={...S.answers[S.mission],[i]:j};save();
+ });lab.append(inp,node("span",null,ans));field.append(lab);});
+ if(S.checks[S.mission])field.append(node("div","feedback",((S.checks[S.mission][i]===q.answer)?"✓ Helyes. ":"Még pontosítandó. ")+q.why));
+ form.append(field);
+ });p.append(form);
+ if(!S.checks[S.mission]){
+ const check=action("Válaszok ellenőrzése",()=>{
+ const a=S.answers[S.mission]||{};if(!l.questions.every((q,i)=>Number.isInteger(a[i]))){$("quiz-alert")?.remove();const warn=node("div","feedback error","Mindkét kérdésre válaszolj az ellenőrzés előtt!");warn.id="quiz-alert";p.append(warn);return;}
+ S.checks[S.mission]=[a[0],a[1]];save();render();
+ },"btn primary");p.append(check);
+ }else p.append(node("div","feedback","A küldetés tudáspontjai: "+l.questions.filter((q,i)=>S.checks[S.mission][i]===q.answer).length*5+" / 10. Egy megoldás csak egyszer értékelhető."));
+}
+function report(p,l){
+ const pts=l.questions.filter((q,i)=>S.checks[S.mission]?.[i]===q.answer).length*5;
+ const bx=node("div","result");add(bx,"strong",pts+" / 10 tudáspont");add(bx,"p","A döntésed és az ellenőrzés eredménye megmarad a következő küldetésig.");p.append(bx);
+ const item=l.options.find(o=>o.id===selected());if(item)card(p,"Döntés és következmény",item.name+". "+item.why);
+ card(p,"Indoklásod",S.reasons[S.mission]||"Nincs indoklás.");card(p,"A városban megjelent",structures[S.mission].title+" – "+structures[S.mission].detail);
+ add(p,"p","A feladat pontszáma a két objektív kérdést méri. Az érvelést külön tanári értékelés egészíti ki.","small");
+}
+function finish(p){
+ const n=completed(),pts=score();const box=node("div","result");add(box,"strong",pts+" / 60 tudáspont");add(box,"p","Mind a hat fejezet befejeződött. Az objektív kérdések eredménye nem helyettesíti a forráselemzés és a szöveges indoklás tanári értékelését.");p.append(box);
+ add(p,"p","A városod fejlődése során gazdasági, jogi és társadalmi feltételeket is mérlegeltél. A városi kiváltságok megszerzése külön történelmi folyamat volt, amelyet építményekkel nem lehetett helyettesíteni.");
+ for(let i=0;i<lessons.length;i++){
+ const l=lessons[i],c=node("div","inset");add(c,"h3",(i+1)+". "+l.title);add(c,"p",(l.options.find(x=>x.id===S.decisions[i])?.name||"Nincs döntés")+". Indoklás: "+(S.reasons[i]||"–"));p.append(c);
+ }
+ card(p,"Önellenőrzés – tanári beszélgetés","Magyarázd el a városfejlődés három feltételét; a kommuna és a céh feladatát; a Hanza és Levante közti különbséget; végül mondd el, miért nem volt minden városlakó egyformán polgár!");
+ const copy=action("Eredmény másolása",()=>{const text="ÉPÍTS KÖZÉPKORI VÁROST!\\nTudáspont: "+pts+"/60\\n"+lessons.map((l,i)=>(i+1)+". "+l.title+": "+(S.reasons[i]||"–")).join("\\n");if(navigator.clipboard?.writeText)navigator.clipboard.writeText(text).then(()=>{copy.textContent="Vágólapra másolva ✓";}).catch(()=>{copy.textContent="Másolás nem sikerült";});else copy.textContent="Vágólap nem elérhető";},"btn");p.append(copy);
+}
+function updateSVG(){
+ const g=$("map2d-build");g.replaceChildren();const NS="http://www.w3.org/2000/svg";
+ const addShape=(tag,attrs,text)=>{const el=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,v);if(text)el.textContent=text;g.append(el);};
+ const count=completed(),site=S.decisions[0];const spots={ford:[296,260],castle:[596,265],fields:[690,455]};
+ if(site&&spots[site]){const [x,y]=spots[site];addShape("circle",{cx:x,cy:y,r:41,fill:"none",stroke:"#e7b94d","stroke-width":9});
+ addShape("text",{x,y:y+78,"text-anchor":"middle",fill:"#18393a","font-size":21,"font-weight":900},"Induló település");}
+ const houses=[{x:350,y:190,w:36,h:31},{x:400,y:210,w:34,h:32},{x:470,y:250,w:35,h:31},{x:535,y:348,w:37,h:32}];
+ for(let i=0;i<Math.min(count,4);i++){const h=houses[i];addShape("rect",{x:h.x,y:h.y,width:h.w,height:h.h,rx:3,fill:"#daaa7c",stroke:"#8c5734","stroke-width":3});addShape("path",{d:"M"+(h.x-5)+" "+h.y+" L"+(h.x+h.w/2)+" "+(h.y-16)+" L"+(h.x+h.w+5)+" "+h.y+"Z",fill:"#9d5141"});}
+ if(count>=2){addShape("rect",{x:500,y:370,width:98,height:53,rx:3,fill:"#e4be8e",stroke:"#82513f","stroke-width":4});addShape("text",{x:548,y:439,"text-anchor":"middle","font-size":18,fill:"#26433e","font-weight":900},"Városháza");}
+ if(count>=3){for(const [x,y] of [[345,290],[435,345]]){addShape("rect",{x,y,width:62,height:30,rx:4,fill:"#c28b51",stroke:"#6f4e36","stroke-width":4});}}
+ if(count>=4){addShape("text",{x:424,y:510,fill:"#2b4b40","font-size":22,"font-weight":900},"Céhes műhely");}
+ if(count>=5){addShape("path",{d:"M550 500 L850 560",stroke:"#87582d","stroke-width":13,fill:"none","stroke-dasharray":"17 10"});}
+ if(count>=6){addShape("text",{x:520,y:70,fill:"#183a33","font-size":30,"font-weight":900},"Önkormányzattal rendelkező város");}
+}
+function progress(to){
+ if(S.finished){if(!window.confirm("Új város építését kezded? A mostani eredmény és az indoklások törlődnek."))return;const view=S.view,mode=S.mode;S=initial();S.view=view;S.mode=mode;warning="";save();render();return;}
+ if(to==="back"){
+ if(S.phase==="decide")S.phase="teach";else if(S.phase==="quiz")S.phase="decide";
+ else if(S.phase==="teach"&&S.mission>0){S.mission--;S.phase="result";}warning="";save();render();return;
+ }
+ if(S.phase==="teach")S.phase="decide";
+ else if(S.phase==="decide"){
+ const opt=lessons[S.mission].options.find(o=>o.id===selected());
+ if(!opt?.valid){warning="A választás nem felel meg a tananyaghoz kapcsolódó feltételeknek; vizsgáld meg az érveket, majd válassz más lehetőséget!";render();return;}
+ if(!reasonValid()){warning="Az indoklást történelmi érvekkel fogalmazd meg (legalább 20 karakter).";render();return;}
+ warning="";S.phase="quiz";
+ }else if(S.phase==="quiz"){if(!S.checks[S.mission])return;S.phase="result";}
+ else if(S.phase==="result"){
+ if(S.mission===5)S.finished=true;
+ else {S.mission++;S.phase=S.checks[S.mission]?"result":"teach";}
+ }
+ save();render();$("lesson").scrollIntoView({block:"nearest",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth"});
+}
+$("next").addEventListener("click",()=>progress("next"));
+$("back").addEventListener("click",()=>progress("back"));
+$("guided").addEventListener("click",()=>{S.mode="guided";save();render();});
+$("practice").addEventListener("click",()=>{S.mode="practice";save();render();});
+for(const [id,view] of [["view3d","3d"],["view2d","2d"]])$(id).addEventListener("click",()=>{S.view=view;save();render();$(id).focus();});
+$("overview").addEventListener("click",()=>window.medievalOverview?.());
+$("focus").addEventListener("click",()=>window.medievalFocus?.(S.decisions[0]||"ford"));
+window.medievalGetState=()=>({mission:S.mission,phase:S.phase,completed:completed(),decisions:S.decisions,finished:S.finished});
+window.medievalChoose=id=>{
+ if(S.mission!==0||S.phase!=="decide")return;
+ if(S.decisions[0]!==id){S.decisions[0]=id;S.reasons[0]="";warning="";save();render();}
+};
+
+const lessonLibrary=[
+{
+ lead:"A középkori város nem egyik napról a másikra született meg. Kialakulása hosszú folyamat volt, amelyben a mezőgazdaság, a kézműipar és a kereskedelem egymást erősítette.",
+ sections:[
+ ["A terményfeleslegtől a piacig",[
+ "A 11–13. századi Európa számos térségében fejlődött a mezőgazdasági termelés. Ha a földművelők a saját ellátásukhoz szükséges mennyiségnél többet tudtak előállítani, a felesleg egy részét elcserélhették vagy eladhatták. Ezt nevezzük árutermelésnek, ha a termelés egy része kifejezetten a piac számára történik.",
+ "A gyakoribb árucsere ösztönözte a pénzforgalmat és a mesterségek szakosodását. Egyre több kézműves foglalkozhatott főként a saját szakmájával, hiszen élelmet is tudott vásárolni. A kézművesek és a kereskedők közelében új lakók telepedhettek meg."
+ ]],
+ ["Miért pont itt?",[
+ "A kereskedők számára előnyt jelenthetett a folyóátkelő, a kikötő, egy fontos út vagy a vásártartásra alkalmas hely. Más települések korábbi római városokban, püspöki központok vagy várak szomszédságában indultak fejlődésnek. Ezért nincs mindenhol érvényes, egyetlen városalapítási minta.",
+ "A jó földrajzi helyzet önmagában nem teremtett városi önkormányzatot. Egy növekvő település gazdasági fejlődését és jogi helyzetét külön kell megvizsgálni."
+ ]]
+ ],
+ terms:[["terményfelesleg","A megtermelt javaknak az ellátáshoz közvetlenül nem szükséges része."],["árutermelés","A termelés egy része eladásra vagy cserére készül."],["piac","Az árucsere szervezett helyszíne, ahol eladók és vevők találkoznak."],["városiasodás","A városi települések növekedése, gazdasági és társadalmi szerepük erősödése."]],
+ flow:["Nagyobb termelés","Terményfelesleg","Piac és pénzforgalom","Kézművesek, kereskedők","Városiasodás"],
+ source:"SZIT: 15. A polgárok világa, 100. oldal; OH: 13. A polgárok világa, 106–109. oldal. A tankönyvek a mezőgazdasági fejlődést, a földrajzi adottságokat és a kereskedelem fellendülését hangsúlyozzák.",
+ sourceTask:"Hasonlítsd össze a folyóátkelő és a vár környezetének előnyeit! Melyiknél nagyobb a kereskedelmi lehetőség, hol lehet erősebb a védelem?",
+ misconception:"A sok ház és a piac még nem bizonyítja, hogy a település rendelkezett városi kiváltságokkal.",
+ question:"Miért segítette a mezőgazdasági terményfelesleg a kézműipar fejlődését?",
+ answer:"A mesterek egyre inkább saját szakmájukból élhettek, mert élelmiszert más termelőktől is megvásárolhattak. Így nőhetett a munkamegosztás és az árucsere.",
+ link:"A településhelyet a játék első küldetésében választod ki. Történelmi érveket is meg kell fogalmaznod."
+},
+{
+ lead:"A középkori város jogi értelemben is sajátos közösség volt. Kiváltságai meghatározták, milyen ügyekben dönthettek önállóan a város lakói és vezetői.",
+ sections:[
+ ["A kommuna és a városi önkormányzat",[
+ "A kereskedők és kézművesek érdekeik védelmére közösségeket szerveztek. A kommuna a polgárok együttműködésének és önszerveződésének egyik formája volt. A közösség a helyi uralkodóval vagy földesúrral szemben különféle szabadságjogokat és jogosultságokat igyekezett megszerezni.",
+ "Egyes városokban a polgárok testületei és választott tanácsai intézték a közösség ügyeit. A vezetők köre azonban nem azonos a modern, általános választójogra épülő városvezetéssel; a városi önkormányzatba való beleszólás gyakran jogálláshoz és vagyoni helyzethez kötődött."
+ ]],
+ ["Milyen jogokat jelenthetett a kiváltságlevél?",[
+ "A kiváltságok egy részét oklevelek rögzítették. Ide tartozhatott a vásár tartása, a saját bíráskodás, a közösség vezetőinek megválasztása, egyes vámok alóli mentesség vagy bizonyos védművek építése. Ezeket nem kapta meg minden város azonos tartalommal és ugyanabban az időben.",
+ "A városok megszerzett jogaikért gyakran pénzzel vagy katonai kötelezettséggel is tartoztak uruknak. A jogi önállóság mértéke és a városi szokásjog Európa különböző vidékein eltért."
+ ]]
+ ],
+ terms:[["kommuna","A városi közösség együttműködési és önkormányzati szerveződése."],["kiváltságlevél","Egy meghatározott közösségnek adott jogokat rögzítő oklevél."],["önkormányzat","A közösség egyes saját ügyeiben önálló döntési joggal rendelkezik."],["vásártartási jog","Jogosultság a meghatározott vásárok vagy piacok megszervezésére."],["bíráskodási jog","Az adott joghatóság körében a városi szervek ítélkezhetnek."],["árumegállító jog","Bizonyos helyeken a kereskedőket áruik felkínálására kötelező kereskedelmi kiváltság."]],
+ flow:["Kereskedői érdekek","Kommuna","Jogok megszerzése","Városi intézmények"],
+ source:"SZIT: 100–101. oldal, beauvais-i kommuna (1182), brémai kiváltságlevél (1164), valamint a városi önkormányzatról szóló magyarázat. OH: 109–110. oldal, városi szabadságok és intézmények.",
+ sourceTask:"Az 1182-es beauvais-i forrásban kik vehettek részt a közösség vezetésében? Miért nem azonos ez a mai általános választójoggal?",
+ misconception:"„A városi levegő szabaddá tesz” nem egységes, automatikusan minden városban érvényesülő jogszabály. A brémai forrás konkrét helyhez és korszakhoz kapcsolódik.",
+ question:"Miért nem lehetett egy díszes városháza felépítésével kiváltságokat szerezni?",
+ answer:"Az épület a közösségi hatalom jelképe lehetett, de az önkormányzati, vásártartási vagy bíráskodási jog külön jogi felhatalmazáshoz és történelmi folyamathoz kötődött.",
+ link:"A második küldetésben a város jogállásáról döntesz, és megindokolod, miért van szükség kiváltságokra."
+},
+{
+ lead:"A középkori város épületei nem csupán díszletek voltak. A piactér, a városkapu, az utak és a közösségi intézmények a lakosság mindennapjait szervezték.",
+ sections:[
+ ["Városfal, kapuk és utak",[
+ "Sok várost fallal vagy egyéb védelmi létesítménnyel erősítettek meg. A kapukon keresztül érkeztek az utazók, a szekerek és a kereskedők. A falak fenntartása költséges lehetett, a város terjeszkedését pedig korlátozhatta. A városfal azonban nem volt minden városban és minden időszakban ugyanilyen.",
+ "Az utcák, hidak és kapuk kapcsolata meghatározta a helyi közlekedést. Egy fontos piactér jellemzően jól megközelíthető helyen működött; a kézművesműhelyek és házak a környező utcákba települtek."
+ ]],
+ ["Közösségi és gazdasági terek",[
+ "A piactéren árut cseréltek, a templom a vallási és közösségi élet fontos helyszíne volt, a városháza pedig az önkormányzat tevékenységéhez kapcsolódhatott. Az épületek mérete és elhelyezkedése a város gazdagságát és intézményeit is tükrözhette.",
+ "A középkori városok szerkezete nem volt egységes. Egy régi római eredetű település, egy vár alatti város vagy egy később tervezett település alaprajza jelentősen eltérhetett egymástól."
+ ]]
+ ],
+ terms:[["piactér","A helyi áruforgalom és gyakran a városi közélet egyik központja."],["városfal","A védelemre szolgáló épített határoló rendszer, amelynek fenntartása erőforrásokat igényelt."],["városkapu","A városba vezető bejárat, fontos közlekedési és ellenőrzési pont."],["városháza","A városi önkormányzat intézményéhez kapcsolódó középület."],["kézművesutca","Egymáshoz közeli műhelyek és lakóépületek területe; nem mindenhol létezett elkülönült formában."]],
+ flow:["Városkapu","Járható utcák","Piactér","Műhelyek és házak"],
+ source:"OH: 110. oldal, Carcassonne városa és városszerkezeti ábra; a lőcsei városháza példája. SZIT: 100–101. oldal, a városok fejlődése és védelmi joga.",
+ sourceTask:"A Carcassonne-t bemutató tankönyvi ábrán keresd meg a kapukat és az utcahálózatot! Hasonlítsd össze a saját játékbeli városoddal!",
+ misconception:"A játék sematikus városa nem történelmi rekonstrukció. Nem minden város épült szabályos alaprajz szerint, és nem minden várost vett körbe ugyanakkora fal.",
+ question:"Miért problémás, ha a piac nem közelíthető meg a városkapu felől?",
+ answer:"A kereskedőknek és a vásárlóknak el kell jutniuk a piacra. A rossz megközelíthetőség akadályozhatta az áruszállítást és az árucserét.",
+ link:"A harmadik küldetésben piacot, utakat, kaput és közösségi épületeket helyezel el – azok működését is meg kell indokolnod."
+},
+{
+ lead:"A céhek a középkori városi kézműipar meghatározó szervezetei voltak. Egyaránt támogatták a szakmai minőséget és korlátozták a versenyt.",
+ sections:[
+ ["A mester műhelye és a szakmai képzés",[
+ "A városokban különböző mesterségeket űztek: pékek, kovácsok, takácsok és más kézművesek dolgoztak. Sok mesterségben a fiatal előbb inasként tanult, legényként gyakorlatot szerzett, majd meghatározott feltételek teljesítése után válhatott önálló mesterré.",
+ "A mesterré válás feltétele lehetett a vándorlás, a szakmai tudás bizonyítása és a remekmunka elkészítése. A saját műhely fenntartása anyagi feltételeket is igényelt, ezért nem lett minden legényből mester."
+ ]],
+ ["Mit tett a céh?",[
+ "Az azonos mesterséghez tartozó mesterek gyakran céhbe tömörültek. A céh előírhatott minőségi követelményeket, ellenőrizhette a munkát és tagjai érdekeit védhette. Egyes céhek szociális segítséget nyújtottak tagjaiknak és részt vettek a város védelmében.",
+ "A céhszabályzatok a munkaidőt, a termelési mennyiséget és a verseny feltételeit is korlátozhatták. Így segíthették a mesterek megélhetését, de a fogyasztók és az újonnan érkezők lehetőségeit is szűkíthették."
+ ]]
+ ],
+ terms:[["céh","Azonos vagy rokon mesterségű önálló mesterek városi érdekvédelmi és szabályozó szervezete."],["inas","A mesterséget tanuló fiatal a mester műhelyében."],["legény","Képzett, de nem feltétlenül önálló műhellyel rendelkező kézműves."],["mester","Önállóan dolgozó, az adott mesterségben elismert kézműves."],["remekmunka","A szakmai felkészültséget bemutató, mesterré váláshoz előírt munka."],["kontár","A céhen kívül működő iparűző megnevezése a céhes szabályozás nézőpontjából."]],
+ flow:["Inas","Legény","Szakmai feltételek","Mester"],
+ source:"SZIT: 101. oldal, céhek és céhszabályozás; OH: 111. oldal, a céhek, a mesterré válás és a céhes működés ábrája és leírása.",
+ sourceTask:"Gyűjtsd ki a tankönyvből, milyen területeket szabályozhatott egy céh! Melyik intézkedés szolgálhatta a minőséget, és melyik a verseny korlátozását?",
+ misconception:"A céhek nem kizárólag a minőség javítására jöttek létre; a mesterek gazdasági érdekeit is védték, és a piacra lépést korlátozhatták.",
+ question:"Miért kellett a legénynek remekmunkát készítenie, és milyen nehézség maradhatott ezután?",
+ answer:"A remekmunka a szakmai tudást igazolta, de az önálló műhely megnyitásához anyagi erőforrás és más helyi feltételek is szükségesek lehettek.",
+ link:"A negyedik küldetésben céhszabályzatról döntesz, és mérlegeled annak előnyeit és hátrányait."
+},
+{
+ lead:"A középkori városokat helyi piacok és távolsági kereskedelmi útvonalak kapcsolták össze. Az áru minősége, értéke, a szállítás költsége és a biztonság is számított.",
+ sections:[
+ ["Két jelentős kereskedelmi térség",[
+ "A Hanza-kereskedelem az Északi- és a Balti-tenger környékének városaihoz kapcsolódott. Az északi és keleti területekről többek között hal, gabona, fa, viasz és prém érkezhetett nyugatra; más térségekből posztó és más iparcikkek áramlottak ellenkező irányba.",
+ "A levantei kereskedelem a Földközi-tenger keleti térségéhez kötődött. Jelentős központjai között szerepelt Velence és Genova. A keleti áruk között különösen értékes luxuscikkek, például fűszerek és selymek is voltak."
+ ]],
+ ["Hogyan találkozhattak az áruk?",[
+ "A tengeri szállítás nagy árumennyiségek mozgatására alkalmas lehetett, ugyanakkor veszélyeket hordozott. A szárazföldi kereskedelmet vásárok és fontos útvonalak segítették. Champagne vásárai például jelentős találkozóhelyek voltak a különböző kereskedelmi térségek árui számára.",
+ "Egy belső fekvésű közép-európai város nem volt automatikusan Hanza-tag vagy tengeri kikötő. A játékban kereskedelmi utakhoz és vásárhelyekhez kapcsolódó közvetítő városként fejlődhet."
+ ]]
+ ],
+ terms:[["Hanza","Észak- és balti-tengeri kereskedővárosok kapcsolatrendszere, szövetsége."],["levantei kereskedelem","A Földközi-tenger keleti térségéhez kötődő kereskedelmi kapcsolatok."],["távolsági kereskedelem","Nagyobb térségek között zajló áruforgalom."],["posztó","Gyapjúból előállított textiltermék."],["vásár","Időszakos vagy meghatározott alkalomhoz kötődő nagyobb árucserehelyszín."],["vám","Az áru mozgásához, szállításához kapcsolódó fizetési kötelezettség."]],
+ flow:["Helyi termelők","Városi piac","Kereskedők","Nagy vásárok","Távoli térségek"],
+ source:"SZIT: 101–102. oldal, Hanza, Levante és Európa kereskedelmi útvonalai; OH: 111–112. oldal, kereskedelem és gazdaság a 11–13. században.",
+ sourceTask:"A tankönyvi térképen jelöld az északi és a mediterrán kereskedelmi útvonalakat! Nevezz meg mindkettőhöz legalább két jellegzetes árut!",
+ misconception:"A Hanza és a levantei kereskedelem nem ugyanaz az útvonal, és a kereskedővárosok sem mind tartoztak ugyanahhoz a szövetséghez.",
+ question:"Miért voltak fontosak a nagy szárazföldi vásárhelyek?",
+ answer:"Összekapcsolhattak különböző tengeri és szárazföldi áruforgalmi térségeket, lehetővé téve a különböző termékek cseréjét.",
+ link:"Az ötödik küldetésben a városodat szélesebb kereskedelmi kapcsolatokhoz csatlakoztatod."
+},
+{
+ lead:"A város lakossága összetett társadalmat alkotott. A gazdagság, a foglalkozás és a jogállás szerint jelentős különbségek lehettek a városban élők között.",
+ sections:[
+ ["Kik éltek a városban?",[
+ "A vagyonos kereskedők a városi előkelők, patríciusok fontos csoportjához tartozhattak. A kézművesmesterek saját műhelyük révén gazdasági önállóságra tehettek szert. A városban éltek legények, szolgák és más, polgárjoggal nem rendelkező lakosok is.",
+ "A polgárjog meghatározta, ki milyen közösségi és politikai lehetőségekkel rendelkezett. A városvezetéshez való hozzáférés nem volt általános, és a különféle városok közösségi szabályai eltérhettek."
+ ]],
+ ["Vezetés, konfliktus és kirekesztés",[
+ "A városi tanácsban gyakran a jómódú rétegek szava volt meghatározó, miközben más városlakók érdekei is megjelentek a közösségi életben. A kereskedők, céhmesterek és kevésbé tehetős lakók eltérően viszonyulhattak a vásárokhoz, adókhoz vagy a városi tisztségekhez.",
+ "A középkori városok életének része volt a társadalmi és vallási kirekesztés is. Például a zsidó közösségek jogi helyzete korszakonként és helyenként változott; védelmüket vagy korlátozásaikat külön rendelkezések szabályozhatták. A városi szabadság tehát nem jelentett minden ember számára egyenlő jogokat."
+ ]]
+ ],
+ terms:[["polgár","Az adott város szabályai szerint meghatározott polgárjoggal rendelkező személy."],["patrícius","A tehetősebb városi előkelők tagja, gyakran gazdag kereskedő."],["plebs","A városban élő, gyakran polgárjog nélküli szegényebb lakosság megnevezése a tankönyvi összefüggésben."],["városi tanács","A város egyes közösségi ügyeit intéző vezető testület."],["polgárjog","A közösség által elismert jogállás, amely nem illette meg automatikusan az összes lakót."]],
+ flow:["Eltérő vagyon","Eltérő polgárjog","Eltérő közéleti részvétel"],
+ source:"SZIT: 101. oldal, a középkori városi társadalom; a jogi különbségekről és a zsidó közösségek korabeli helyzetéről kapcsolódó források. OH: 109–111. oldal, városi önkormányzat és társadalom.",
+ sourceTask:"A városi társadalmat bemutató tankönyvi ábra alapján hasonlítsd össze a patrícius, a céhmester és a polgárjog nélküli lakos lehetőségeit!",
+ misconception:"A középkori polgárság nem azonos a modern, egyenlő politikai jogokkal rendelkező állampolgárok összességével.",
+ question:"Miért nem nevezhetjük mai értelemben vett demokratikus önkormányzatnak minden középkori város vezetését?",
+ answer:"Mert nem volt általános, minden lakosra kiterjedő választójog; a városi döntésekben való részvételt polgárjog, vagyon és helyi szabályok korlátozhatták.",
+ link:"A hatodik küldetésben a városi tanács és a különböző lakossági csoportok érdekeit kell értelmezned."
+}
+];
+let studyIndex=0,primary="game";
+function navigatePrimary(which,focus=true){
+ primary=which;
+ $("game-shell").toggleAttribute("hidden",which!=="game");
+ $("study-shell").toggleAttribute("hidden",which!=="study");
+ $("tab-game").setAttribute("aria-pressed",String(which==="game"));
+ $("tab-study").setAttribute("aria-pressed",String(which==="study"));
+ if(which==="study")renderStudy();
+ if(focus){(which==="game"?$("tab-game"):$("tab-study")).focus();window.scrollTo?.({top:0,behavior:"instant"});}
+}
+function renderStudy(){
+ const chapters=$("study-chapters");chapters.replaceChildren();
+ lessons.forEach((l,i)=>{
+ const b=document.createElement("button");
+ b.type="button";b.setAttribute("aria-current",String(i===studyIndex));
+ b.textContent=(i+1)+". "+l.title;
+ const status=document.createElement("span");status.className="chapter-progress";status.textContent=S.checks[i]?"✓ Küldetés teljesítve":i===S.mission?"● Aktuális küldetés":"Szabadon olvasható";
+ b.append(status);b.addEventListener("click",()=>{studyIndex=i;renderStudy();$("study-article").focus();});
+ chapters.append(b);
+ });
+ const l=lessons[studyIndex],m=lessonLibrary[studyIndex],article=$("study-article");
+ article.replaceChildren();
+ function elem(tag,cls,value,parent=article){const n=document.createElement(tag);if(cls)n.className=cls;if(value!==undefined)n.textContent=value;parent.append(n);return n;}
+ elem("div","study-kicker",(studyIndex+1)+". FEJEZET / 6 · "+l.tag);
+ elem("h2",null,l.icon+" "+l.title);
+ elem("p","study-lead",m.lead);
+ for(const [heading,paras] of m.sections){elem("h3",null,heading);for(const p of paras)elem("p",null,p);}
+ elem("h3",null,"Hogyan függnek össze a jelenségek?");
+ const flow=elem("div","study-flow");
+ m.flow.forEach((x,i)=>{elem("span",null,x,flow);if(i<m.flow.length-1)elem("span","flow-arrow","→",flow);});
+ elem("h3",null,"Fogalomtár");
+ const dl=elem("dl","study-terms");
+ for(const [term,meaning] of m.terms){const div=elem("div",null,undefined,dl);elem("dt",null,term,div);elem("dd",null,meaning,div);}
+ const source=elem("div","study-source");elem("b",null,"📜 Tankönyvi forrás és feladat",source);elem("p",null,m.source,source);elem("p",null,m.sourceTask,source);
+ const misconception=elem("div","study-misconception");elem("strong",null,"⚠ Fontos történelmi pontosítás",misconception);elem("p",null,m.misconception,misconception);
+ const quest=elem("div","study-question");elem("strong",null,"💡 Ellenőrizd, hogy érted-e!",quest);elem("p",null,m.question,quest);
+ const reveal=elem("button",null,"Mintaválasz megjelenítése",quest);reveal.type="button";reveal.setAttribute("aria-expanded","false");
+ const answer=elem("p","answer",m.answer,quest);answer.hidden=true;
+ reveal.addEventListener("click",()=>{const on=answer.hidden;answer.hidden=!on;reveal.setAttribute("aria-expanded",String(on));reveal.textContent=on?"Mintaválasz elrejtése":"Mintaválasz megjelenítése";});
+ const note=elem("div","study-source");elem("b",null,"🎮 Kapcsolat a játékkal",note);elem("p",null,m.link,note);
+ elem("p","study-label","Önálló, magyarázó tananyag a feltöltött 9. évfolyamos tankönyvek alapján. A feladatok megoldása és a pontszám a Játék fülön érhető el.");
+ const foot=elem("div","study-foot");
+ const prev=elem("button",null,"← Előző lecke",foot);prev.type="button";prev.disabled=studyIndex===0;prev.addEventListener("click",()=>{studyIndex--;renderStudy();$("study-article").focus();});
+ const follow=elem("button","primary","Vissza a játékhoz ↗",foot);follow.type="button";follow.addEventListener("click",()=>navigatePrimary("game"));
+ const next=elem("button",null,"Következő lecke →",foot);next.type="button";next.disabled=studyIndex===5;next.addEventListener("click",()=>{studyIndex++;renderStudy();$("study-article").focus();});
+}
+$("tab-game").addEventListener("click",()=>navigatePrimary("game"));
+$("tab-study").addEventListener("click",()=>{studyIndex=S.mission;navigatePrimary("study");});
+$("read-current").addEventListener("click",()=>{studyIndex=S.mission;navigatePrimary("study");});
+$("study-return").addEventListener("click",()=>navigatePrimary("game"));
+
+render();
+})();
+</script>
+<script type="module">
+let THREE,scene,camera,renderer,orbit,assets={},dynamic,markers={},paused=false;
+const modelstatus=document.getElementById("modelstatus"),host=document.getElementById("three-container");
+const sitePos={ford:[-6,-2],castle:[5,-3],fields:[5,6]};
+function fallback(message){modelstatus.textContent=message;const b=document.getElementById("view2d");if(b)b.click();}
+try{
+THREE=await import("three");
+const [{OrbitControls},{GLTFLoader}]=await Promise.all([import("three/addons/controls/OrbitControls.js"),import("three/addons/loaders/GLTFLoader.js")]);
+renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"low-power"});
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.45;
+host.append(renderer.domElement);
+scene=new THREE.Scene();scene.background=new THREE.Color("#a8d8c9");
+camera=new THREE.OrthographicCamera(-14,14,9,-9,.1,100);camera.position.set(16,19,20);
+orbit=new OrbitControls(camera,renderer.domElement);orbit.target.set(0,0,0);orbit.enableDamping=true;orbit.enablePan=false;orbit.minZoom=.75;orbit.maxZoom=4;orbit.maxPolarAngle=1.35;orbit.update();
+scene.add(new THREE.HemisphereLight(0xf9f9dc,0x568573,3));
+const sun=new THREE.DirectionalLight(0xfff0bc,2.3);sun.position.set(-7,17,-5);scene.add(sun);
+const mat=c=>new THREE.MeshStandardMaterial({color:c,roughness:.95,flatShading:true});
+function shape(geometry,color,x,y,z,parent=scene){const o=new THREE.Mesh(geometry,mat(color));o.position.set(x,y,z);parent.add(o);return o;}
+shape(new THREE.BoxGeometry(29,.24,23),"#8eaf82",0,-.18,0);
+shape(new THREE.BoxGeometry(2.85,.05,25),"#4e9da6",-8,-.035,0);
+shape(new THREE.BoxGeometry(2.05,.05,25),"#7bc4c6",-8,.002,0);
+const road=shape(new THREE.BoxGeometry(26,.08,1.36),"#c4ae83",0,-.012,-3.2);road.rotation.y=.1;
+shape(new THREE.BoxGeometry(5.1,.21,1.63),"#80654c",-8,.12,-3.2);
+shape(new THREE.BoxGeometry(5.3,.10,1.22),"#d9b78b",-8,.23,-3.2);
+for(let i=0;i<8;i++){shape(new THREE.BoxGeometry(.1,.04,23),"#9fd3d2",-9+i%2*.55,.035,-11+i*2.9);}
+function tree(x,z,r=1){shape(new THREE.CylinderGeometry(.12,.16,.7,6),"#76553d",x,.33,z);const crown=shape(new THREE.ConeGeometry(.56*r,1.45*r,6),"#52866a",x,1.35*r,z);crown.rotation.y=.4;}
+for(const [x,z,r] of [[-11,-9,1],[-12,-7,.8],[-11,7,.85],[-10,9,.9],[11,-9,1.2],[12,8,1.0],[10,10,.85],[-1,9,.85],[1,9,.75]])tree(x,z,r);
+for(let i=0;i<6;i++)shape(new THREE.BoxGeometry(1.1,.08,1.7),"#c1a76c",2+i%3*1.35,-.025,5+Math.floor(i/3)*1.9);
+const world=new THREE.Group();scene.add(world);
+dynamic=new THREE.Group();scene.add(dynamic);
+const terrain={
+ford:[-6,-2],castle:[5,-3],fields:[5,6]
+};
+function label(str){const cv=document.createElement("canvas");cv.width=512;cv.height=112;const c=cv.getContext("2d");c.fillStyle="#123640f0";c.fillRect(0,0,512,112);c.strokeStyle="#edc986";c.lineWidth=5;c.strokeRect(3,3,506,106);c.fillStyle="#ffefcb";c.font="bold 35px system-ui";c.textAlign="center";c.fillText(str,256,72,480);const spr=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cv),depthTest:false}));spr.scale.set(3.65,.8,1);return spr;}
+function marker(id,letter,text){const v=terrain[id],g=new THREE.Group();g.position.set(v[0],.1,v[1]);
+const cyl=shape(new THREE.CylinderGeometry(.47,.52,.35,16),"#e2b267",0,.36,0,g);
+const pin=shape(new THREE.CylinderGeometry(.28,.28,.75,16),"#284954",0,.83,0,g);
+const title=label(letter+" · "+text);title.position.y=2.38;g.add(title);
+const hit=new THREE.Mesh(new THREE.CylinderGeometry(1.3,1.3,3.5,16),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));hit.position.y=1.3;hit.userData.site=id;g.add(hit);scene.add(g);
+markers[id]={g,cyl,hit,title};}
+marker("ford","A","Folyóátkelő");marker("castle","B","Vár alja");marker("fields","C","Szántóföldek");
+const modelIds=["thatched-cottage-0e63f5","market-stall-94937d","water-mill-b31972","village-gatehouse-181a9e","oak-tree-50ee7c","wooden-bridge-9d2308"];
+function home(parent,x,z,color){const g=new THREE.Group();g.position.set(x,.12,z);parent.add(g);shape(new THREE.BoxGeometry(1.06,.73,.82),color,0,.38,0,g);
+const roof=shape(new THREE.ConeGeometry(.76,.65,4),"#b66d49",0,1.06,0,g);roof.rotation.y=Math.PI/4;return g;}
+home(world,-1,-4.4,"#e5d1a5");home(world,.5,-4.8,"#cbb78b");home(world,2,-3.7,"#e1c39a");
+function keepModel(parent,id,x,z,targetSize=1.4){
+const g=new THREE.Group();g.position.set(x,.13,z);parent.add(g);
+if(!assets[id]){home(g,0,0,"#d4b58e");return;}
+const node=assets[id].clone(true);g.add(node);const box=new THREE.Box3().setFromObject(node),size=box.getSize(new THREE.Vector3());
+const scl=targetSize/Math.max(.1,size.x,size.y,size.z);node.scale.setScalar(scl);const b2=new THREE.Box3().setFromObject(node);
+node.position.set(-.5*(b2.min.x+b2.max.x),-.05-b2.min.y,-.5*(b2.min.z+b2.max.z));
+}
+function sync(s){
+ if(!dynamic)return;
+ while(dynamic.children.length)dynamic.remove(dynamic.children[0]);
+ const count=Math.max(0,Math.min(6,Number(s.completed)||0));
+ const here=s.decisions?.[0]||null;
+ for(const [id,m] of Object.entries(markers))m.cyl.material.color.set(here===id?"#ffe39b":"#d5a65b");
+ if(!here)return;
+ const [x,z]=terrain[here];
+ keepModel(dynamic,"thatched-cottage-0e63f5",x+1.7,z+1.2,1.85);
+ keepModel(dynamic,"thatched-cottage-0e63f5",x-1.6,z+1.5,1.55);
+ if(count>=1){
+  keepModel(dynamic,"water-mill-b31972",-8.45,-5.85,1.6);
+  keepModel(dynamic,"thatched-cottage-0e63f5",-2.8,-4.8,1.6);
+ }
+ if(count>=2){
+  keepModel(dynamic,"village-gatehouse-181a9e",1.6,-6,2.45);
+  keepModel(dynamic,"thatched-cottage-0e63f5",3.2,-4.8,1.6);
+ }
+ if(count>=3){
+  keepModel(dynamic,"market-stall-94937d",-0.4,-2.2,2.4);
+  keepModel(dynamic,"market-stall-94937d",1.8,-1.8,2.0);
+  shape(new THREE.BoxGeometry(3.8,.055,2.75),"#d6bb8e",.8,.02,-2.4,dynamic);
+ }
+ if(count>=4){
+  keepModel(dynamic,"thatched-cottage-0e63f5",5,-1.2,2.0);
+  shape(new THREE.CylinderGeometry(.17,.22,1.6,8),"#98634c",4.8,1.18,-1.45,dynamic);
+  shape(new THREE.ConeGeometry(.5,.8,6),"#7d4e34",5,.9,-1.2,dynamic);
+ }
+ if(count>=5){
+  keepModel(dynamic,"thatched-cottage-0e63f5",-3.2,-1.2,1.9);
+  shape(new THREE.BoxGeometry(1.6,.48,1.0),"#b77b47",-.9,.52,-4.85,dynamic);
+  for(const a of [-.65,.65])for(const b of [-.45,.45]){
+   const wheel=shape(new THREE.CylinderGeometry(.25,.25,.13,12),"#65472e",-.9+a,.32,-4.85+b,dynamic);
+   wheel.rotation.z=Math.PI/2;
+  }
+ }
+ if(count>=6){
+  shape(new THREE.BoxGeometry(2.15,1.85,1.75),"#d2bd91",4.2,1.05,1.5,dynamic);
+  const roof=shape(new THREE.ConeGeometry(1.75,1.13,4),"#955b43",4.2,2.58,1.5,dynamic);roof.rotation.y=Math.PI/4;
+  shape(new THREE.BoxGeometry(.42,.64,.06),"#cc993f",4.2,3.55,1.5,dynamic);
+ }
+}
+window.medievalSceneUpdate=sync;
+let cameraAnimation=null;
+function focus(which){const p=which?terrain[which]:[0,0];const target=new THREE.Vector3(p[0],0,p[1]);cameraAnimation={target,position:target.clone().add(new THREE.Vector3(16,19,20)),zoom:which?1.65:1};}
+window.medievalFocus=id=>{if(terrain[id])focus(id);};window.medievalOverview=()=>focus(null);
+function resize(){const r=host.getBoundingClientRect();const w=Math.max(1,r.width),h=Math.max(1,r.height),a=w/h;const span=Math.max(22,29/a);camera.left=-span*a/2;camera.right=span*a/2;camera.top=span/2;camera.bottom=-span/2;camera.updateProjectionMatrix();renderer.setSize(w,h,false);}
+new ResizeObserver(resize).observe(host);resize();
+const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();let start=null;
+renderer.domElement.addEventListener("pointerdown",e=>{start=[e.clientX,e.clientY];});
+renderer.domElement.addEventListener("pointerup",e=>{if(!start)return;const d=Math.hypot(e.clientX-start[0],e.clientY-start[1]);start=null;if(d>8)return;
+const r=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(pointer,camera);
+const hit=ray.intersectObjects(Object.values(markers).map(v=>v.hit),false)[0];if(hit){const id=hit.object.userData.site;window.medievalChoose?.(id);focus(id);}
+});
+const loader=new GLTFLoader();let loaded=0;
+modelstatus.textContent="Épületek betöltése…";
+async function loadAll(){await Promise.allSettled(modelIds.map(async id=>{try{assets[id]=(await loader.loadAsync("https://polyfork.dev/cdn/"+id+".glb")).scene;loaded++;}catch(e){console.warn("Model fallback:",id,e.message||e);}}));
+modelstatus.textContent=loaded+"/"+modelIds.length+" 3D-modell betöltve";sync(window.medievalGetState?.()||{});}
+loadAll();
+let last=0,frame;
+function render(t){frame=requestAnimationFrame(render);if(document.hidden||t-last<30)return;last=t;
+if(cameraAnimation){const a=cameraAnimation;const rate=matchMedia("(prefers-reduced-motion: reduce)").matches?1:.12;camera.position.lerp(a.position,rate);orbit.target.lerp(a.target,rate);camera.zoom+=(a.zoom-camera.zoom)*rate;camera.updateProjectionMatrix();if(camera.position.distanceTo(a.position)<.045&&orbit.target.distanceTo(a.target)<.045)cameraAnimation=null;}
+orbit.update();renderer.render(scene,camera);}
+frame=requestAnimationFrame(render);window.addEventListener("pagehide",()=>{cancelAnimationFrame(frame);orbit.dispose();renderer.dispose();},{once:true});
+sync(window.medievalGetState?.()||{});
+}catch(e){console.error("3D nem elérhető:",e);fallback("3D nem elérhető, a 2D nézet működik.");}
+</script>
+</body></html>
