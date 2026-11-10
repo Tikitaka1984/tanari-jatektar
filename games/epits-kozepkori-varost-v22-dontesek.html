@@ -1199,8 +1199,20 @@ function valid(raw){
  }
  return result;
 }
-let state={selected:"road",items:[]};
-try{const saved=JSON.parse(localStorage.getItem(KEY));if(saved&&typeof saved==="object"){state.items=valid(saved.items);state.selected=saved.selected in TYPE?saved.selected:"road";}}catch(e){}
+let state={selected:"road",items:[],choices:{},reflections:{},history:[]};
+try{
+ const saved=JSON.parse(localStorage.getItem(KEY));
+ if(saved&&typeof saved==="object"&&!Array.isArray(saved)){
+  state.items=valid(saved.items);state.selected=saved.selected in TYPE?saved.selected:"road";
+  if(saved.choices&&typeof saved.choices==="object"&&!Array.isArray(saved.choices)){
+   for(const e of SCENARIOS)if(e.choices.some(c=>c.id===saved.choices[e.id]))state.choices[e.id]=saved.choices[e.id];
+  }
+  if(saved.reflections&&typeof saved.reflections==="object"&&!Array.isArray(saved.reflections)){
+   for(const e of SCENARIOS)if(typeof saved.reflections[e.id]==="string")state.reflections[e.id]=saved.reflections[e.id].slice(0,700);
+  }
+  if(Array.isArray(saved.history))state.history=saved.history.filter(x=>typeof x==="string").slice(-40).map(x=>x.slice(0,220));
+ }
+}catch(e){}
 let note="";
 const completed=()=>Math.max(0,Math.min(6,Number(window.medievalGetState?.().completed||0)));
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){note="A böngésző tárolása nem elérhető; az építkezés jelenleg nem menthető.";}}
@@ -1234,6 +1246,7 @@ function buildAt(x,y){
  if(err){note="⚠ "+err;render();return false;}
  state.items.push({type:state.selected,x,y});
  note=TYPE[state.selected].name+" elhelyezve: "+String.fromCharCode(65+x)+(y+1)+". telek.";
+ historyAdd(note);
  onChange();return true;
 }
 function elem(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;}
@@ -1267,23 +1280,92 @@ function render(){
   tile.addEventListener("click",()=>{buildAt(x,y);grid.querySelector('[data-cell="'+x+"-"+y+'"]')?.focus();});
   grid.append(tile);
  }
- const score=state.items.reduce((arr,b)=>arr.map((v,i)=>v+TYPE[b.type].metric[i]),[0,0,0,0]);
+ const model=cityModel(),score=model.metrics;
  const metrics=$("builder-metrics");metrics.replaceChildren();
- for(const [idx,t] of ["Ellátás","Áruforgalom","Védelem","Városi intézmények"].entries()){
+ for(const [idx,t] of namesOfMetrics.entries()){
   const card=elem("div");card.append(elem("strong",null,String(score[idx])),elem("span",null,t));metrics.append(card);
  }
+ const links=$("builder-links");links.replaceChildren();
+ if(model.bonuses.length){
+  for(const b of model.bonuses){
+   const el=elem("div","city-synergy");
+   el.textContent="↗ "+b.description+" ("+b.bonus.map((n,i)=>n?namesOfMetrics[i]+" "+(n>0?"+":"")+n:"").filter(Boolean).join(", ")+")";
+   links.append(el);
+  }
+ }else links.append(elem("p","city-no-link","Térbeli többlethatás még nincs. Építs például egymás közelébe malmot és lakóházat, vagy piacteret és raktárt!"));
+ renderEvents(model);renderJournal();
  $("builder-undo").disabled=!state.items.length;
  $("builder-message").textContent=note||"Válassz épületet, majd kattints egy szabad telekre.";
  $("builder-message").classList.toggle("error",note.startsWith("⚠"));
 }
+
+function chooseEvent(e,id){
+ if(!eventOpen(e)){note="⚠ A helyzet még nem érhető el.";render();return;}
+ if(state.choices[e.id]){note="⚠ Ezt a helyzetet már eldöntötted; előbb válaszd az Újragondolás gombot.";render();return;}
+ const reason=String(state.reflections[e.id]||"").trim();
+ if(reason.length<25){note="⚠ Az intézkedéshez legalább 25 karakteres történelmi indoklást írj!";render();return;}
+ const option=e.choices.find(c=>c.id===id);if(!option)return;
+ state.choices[e.id]=option.id;
+ const summary=e.title+": "+option.title;
+ historyAdd("Történelmi döntés – "+summary+". Indoklás rögzítve.");
+ note="A döntésed rögzítve: "+option.title+". A város modellmutatói frissültek.";
+ onChange();
+}
+function renderEvents(model){
+ const container=$("city-events");container.replaceChildren();
+ const list=elem("div","city-event-list");
+ for(const e of SCENARIOS){
+  const card=elem("article","city-event");
+  card.append(elem("div","city-event-kicker",e.level+". küldetéstől · "+e.needs.map(t=>TYPE[t].name).join(" + ")));
+  card.append(elem("h4",null,e.title),elem("p",null,e.when));
+  const open=eventOpen(e),chosen=e.choices.find(c=>c.id===state.choices[e.id]);
+  if(!open&&!chosen){
+   card.append(elem("div","city-event-locked","🔒 "+(completed()<e.level?"A "+e.level+". küldetés után válik elérhetővé. ":"")+"Szükséges: "+e.needs.map(t=>TYPE[t].name).join(" és ")+"."));
+  }else if(chosen){
+   const info=elem("p","city-effect",(open?"✓ A választásod hatása aktív: ":"○ A korábbi döntés megmaradt, de a szükséges épület hiányzik, ezért most nincs hatása: ")+chosen.title+". "+chosen.explain);
+   card.append(info,elem("p",null,"Indoklásod: "+(state.reflections[e.id]||"–")));
+   const rethink=elem("button","city-rethink","↶ Döntés újragondolása");rethink.type="button";
+   rethink.addEventListener("click",()=>{delete state.choices[e.id];historyAdd("Korábbi döntés újragondolása: "+e.title+".");note="Újra mérlegelheted a két lehetőséget.";onChange();});
+   card.append(rethink);
+  }else{
+   card.append(elem("p",null,e.source));
+   const label=elem("label",null,e.ask);const area=elem("textarea");area.id="reflection-"+e.id;area.maxLength=700;area.value=state.reflections[e.id]||"";area.placeholder="Fogalmazz meg legalább egy történelmi érvet és a választásod korlátját (min. 25 karakter).";label.htmlFor=area.id;
+   area.addEventListener("input",()=>{state.reflections[e.id]=area.value.slice(0,700);save();});
+   card.append(label,area);
+   const choices=elem("div","city-choices");
+   for(const c of e.choices){
+    const btn=elem("button");btn.type="button";btn.append(elem("strong",null,c.title),elem("span",null,c.sub));
+    btn.setAttribute("aria-label",c.title+". "+c.sub);
+    btn.addEventListener("click",()=>chooseEvent(e,c.id));choices.append(btn);
+   }
+   card.append(choices);
+  }
+  list.append(card);
+ }
+ container.append(list);
+}
+function renderJournal(){
+ const list=$("city-journal");list.replaceChildren();
+ if(!state.history.length){list.append(elem("li","city-empty","Még nincs rögzített építés vagy történelmi döntés."));return;}
+ for(const entry of state.history.slice(-7).reverse())list.append(elem("li",null,entry));
+}
+
 function undo(){
  const last=state.items.pop();if(!last)return;
  note=TYPE[last.type].name+" visszavonva. A visszavonás az építési erőforrást is visszaadja.";
+ historyAdd("Visszavonás: "+TYPE[last.type].name+" ("+String.fromCharCode(65+last.x)+(last.y+1)+").");
  onChange();
 }
-function reset(){state={selected:"road",items:[]};note="";onChange();}
+function reset(){state={selected:"road",items:[],choices:{},reflections:{},history:[]};note="";onChange();}
 $("builder-undo").addEventListener("click",undo);
-window.medievalBuilder={render,reset,getBuilds:()=>state.items.map(x=>({...x})),buildAt,types:TYPE};
+window.medievalBuilder={render,reset,getBuilds:()=>state.items.map(x=>({...x})),buildAt,types:TYPE,
+ analyze:()=>cityModel(),reportText:summaryText};
+$("city-copy").addEventListener("click",()=>{
+ const text=summaryText();
+ if(!navigator.clipboard?.writeText){note="⚠ A böngésző nem engedélyezi a vágólapot; az eredményt a befejező panelben találod.";render();return;}
+ navigator.clipboard.writeText(text).then(()=>{note="A döntési összefoglaló a vágólapra került.";render();})
+ .catch(()=>{note="⚠ Másolás nem sikerült. A befejező panelben olvashatod a döntéseidet.";render();});
+});
 $("map2d").addEventListener("click",event=>{
  if(completed()<1)return;
  const svg=$("map2d"),ctm=svg.getScreenCTM();if(!ctm)return;
