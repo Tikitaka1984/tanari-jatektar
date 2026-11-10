@@ -798,13 +798,14 @@ function updateSVG(){
  const count=completed(),site=S.decisions[0];const spots={ford:[296,260],castle:[596,265],fields:[690,455]};
  if(site&&spots[site]){const [x,y]=spots[site];addShape("circle",{cx:x,cy:y,r:41,fill:"none",stroke:"#e7b94d","stroke-width":9});
  addShape("text",{x,y:y+78,"text-anchor":"middle",fill:"#18393a","font-size":21,"font-weight":900},"Induló település");}
- const houses=[{x:350,y:190,w:36,h:31},{x:400,y:210,w:34,h:32},{x:470,y:250,w:35,h:31},{x:535,y:348,w:37,h:32}];
- for(let i=0;i<Math.min(count,4);i++){const h=houses[i];addShape("rect",{x:h.x,y:h.y,width:h.w,height:h.h,rx:3,fill:"#daaa7c",stroke:"#8c5734","stroke-width":3});addShape("path",{d:"M"+(h.x-5)+" "+h.y+" L"+(h.x+h.w/2)+" "+(h.y-16)+" L"+(h.x+h.w+5)+" "+h.y+"Z",fill:"#9d5141"});}
- if(count>=2){addShape("rect",{x:500,y:370,width:98,height:53,rx:3,fill:"#e4be8e",stroke:"#82513f","stroke-width":4});addShape("text",{x:548,y:439,"text-anchor":"middle","font-size":18,fill:"#26433e","font-weight":900},"Városháza");}
- if(count>=3){for(const [x,y] of [[345,290],[435,345]]){addShape("rect",{x,y,width:62,height:30,rx:4,fill:"#c28b51",stroke:"#6f4e36","stroke-width":4});}}
- if(count>=4){addShape("text",{x:424,y:510,fill:"#2b4b40","font-size":22,"font-weight":900},"Céhes műhely");}
- if(count>=5){addShape("path",{d:"M550 500 L850 560",stroke:"#87582d","stroke-width":13,fill:"none","stroke-dasharray":"17 10"});}
- if(count>=6){addShape("text",{x:520,y:70,fill:"#183a33","font-size":30,"font-weight":900},"Önkormányzattal rendelkező város");}
+ const palette={road:"#cfa66f",house:"#d9ab83",mill:"#a4c3bb",gate:"#e4c78b",market:"#d4a261",workshop:"#be9076",warehouse:"#c5ad89",hall:"#e9d2a6"};
+ const builds=window.medievalBuilder?.getBuilds?.()||[];
+ for(let r=0;r<5;r++)for(let c=0;c<6;c++){
+  const x=345+58*c,y=160+62*r,entry=builds.find(b=>b.x===c&&b.y===r);
+  addShape("rect",{x:x-25,y:y-25,width:50,height:50,rx:5,fill:r===2?"#b49a71":entry?palette[entry.type]:"#d8e3c4",opacity:r===2?".68":".82",stroke:"#65826e","stroke-width":2,"stroke-dasharray":entry||r===2?"none":"4 4"});
+  if(entry){addShape("text",{x,y:y+7,"text-anchor":"middle","font-size":22,fill:"#234044","font-weight":800},window.medievalBuilder.types[entry.type].icon);}
+  else if(r===2)addShape("text",{x,y:y+6,"text-anchor":"middle","font-size":20,fill:"#6b5336","font-weight":900},"═");
+ }
 }
 function progress(to){
  if(S.finished){if(!window.confirm("Új város építését kezded? A mostani eredmény és az indoklások törlődnek."))return;const view=S.view,mode=S.mode;S=initial();S.view=view;S.mode=mode;warning="";window.medievalBuilder?.reset();save();render();return;}
@@ -1145,6 +1146,13 @@ function undo(){
 function reset(){state={selected:"road",items:[]};note="";onChange();}
 $("builder-undo").addEventListener("click",undo);
 window.medievalBuilder={render,reset,getBuilds:()=>state.items.map(x=>({...x})),buildAt,types:TYPE};
+$("map2d").addEventListener("click",event=>{
+ if(completed()<1)return;
+ const svg=$("map2d"),ctm=svg.getScreenCTM();if(!ctm)return;
+ const point=svg.createSVGPoint();point.x=event.clientX;point.y=event.clientY;
+ const pos=point.matrixTransform(ctm.inverse()),x=Math.round((pos.x-345)/58),y=Math.round((pos.y-160)/62);
+ if(x>=0&&x<6&&y>=0&&y<5&&Math.abs(pos.x-(345+58*x))<26&&Math.abs(pos.y-(160+62*y))<26)buildAt(x,y);
+});
 render();
 })();
 </script>
