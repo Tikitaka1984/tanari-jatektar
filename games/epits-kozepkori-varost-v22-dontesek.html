@@ -1081,6 +1081,113 @@ const TYPE={
  warehouse:{name:"Áruraktár",icon:"📦",w:2,c:3,level:5,desc:"Az áruraktár segíti a kereskedelmet, de a biztonság és az útvonalak is számítanak.",metric:[0,2,0,0]},
  hall:{name:"Városháza",icon:"🏛️",w:4,c:4,level:6,desc:"A városháza a közösségi vezetés jelképe, nem helyettesíti a jogok megszerzését.",metric:[0,0,0,4]}
 };
+
+const SCENARIOS=[
+ {id:"mill",title:"Kié legyen az őrölt gabona?",level:1,needs:["mill","house"],
+  when:"A malom és a lakóház már áll. A megtermelt és feldolgozott gabona felhasználásáról kell mérlegelned.",
+  source:"Kapcsolódás: árutermelés, terményfelesleg és munkamegosztás – OH Történelem 9., 108–109. oldal.",
+  ask:"Miért előnyös a választásod a településnek, és milyen áldozattal járhat?",
+  choices:[
+   {id:"reserve",title:"Tartalék a lakosságnak",sub:"Biztosabb helyi ellátás, kisebb eladható készlet.",effect:[2,-1,0,1],
+    explain:"A tartalékolás csökkentheti az ellátási kockázatot, de kevesebb termény kerül piacra."},
+   {id:"sell",title:"A felesleg piacra vitele",sub:"Több árucsere, kisebb tartalék.",effect:[-1,2,0,0],
+    explain:"Az árucsere elősegítheti a szakosodást, de a tartalékok csökkenése növelheti a kockázatot."}
+  ]},
+ {id:"market",title:"Piacnap és közrend",level:3,needs:["market"],
+  when:"A piactér elkészült. A nagyobb forgalom a közlekedésnek és a biztonságnak is kihívás.",
+  source:"Kapcsolódás: a középkori városok piactere és vásártartási jogai – SZIT Történelem 9., 100–102. oldal.",
+  ask:"Milyen kompromisszumot választasz a piaci forgalom és a városi biztonság között?",
+  choices:[
+   {id:"extend",title:"Sűrűbb piacnapok",sub:"Nagyobb kereskedelmi lehetőség, több ellenőrizendő forgalom.",effect:[0,3,-1,0],
+    explain:"A forgalom növekedése kedvezhet a cserének, de a rendfenntartás nehezebb lehet. A piac léte nem teremt automatikusan vásárjogot."},
+   {id:"regulated",title:"Őrök és szabályozott forgalom",sub:"Mérsékeltebb bővülés, jobb rendfenntartás.",effect:[0,1,2,0],
+    explain:"A forgalom ellenőrzése javíthatja a biztonságot, de az intézkedéseknek költségei és korlátai lehetnek."}
+  ]},
+ {id:"guild",title:"A céh szabályai",level:4,needs:["workshop"],
+  when:"A céhes műhely működik. A mestereknek a termék minőségéről és az utánpótlásról is dönteniük kell.",
+  source:"Kapcsolódás: az 1345-ös frankfurti posztószabályzat mint KÉSŐBBI összehasonlító forrás – SZIT Történelem 9., 104. oldal.",
+  ask:"Miért támogathatja az adott céhszabály a mestereket, és kit hozhat hátrányba?",
+  choices:[
+   {id:"strict",title:"Szigorúbb minőség- és termelésellenőrzés",sub:"Kiszámíthatóbb áru, erősebb belépési korlát.",effect:[0,2,0,-1],
+    explain:"A szabályozás védhette a mesterek szakmai érdekeit, de korlátozhatta az új belépők lehetőségeit és a versenyt."},
+   {id:"teach",title:"Több inas képzése",sub:"Több tanulási lehetőség, lassabb azonnali piaci eredmény.",effect:[0,1,0,2],
+    explain:"A mesterség átadása erősítheti a szakmai utánpótlást, de képzési időt és erőforrást igényel."}
+  ]},
+ {id:"trade",title:"Kereskedői útválasztás",level:5,needs:["warehouse","market"],
+  when:"Piac és áruraktár is rendelkezésre áll. A távolsági kereskedők a biztonság és a gyorsaság között mérlegelnek.",
+  source:"Kapcsolódás: Hanza, Levante és kereskedelmi utak – SZIT Történelem 9., 101–102. oldal; OH 111–112. oldal.",
+  ask:"Melyik veszélyt és melyik gazdasági lehetőséget mérlegelnéd a kereskedők helyében?",
+  choices:[
+   {id:"guards",title:"Őrzött, lassabb szállítás",sub:"Biztonságosabb út, mérsékeltebb árumozgás.",effect:[0,1,2,0],
+    explain:"A kereskedői együttműködés növelheti a biztonságot, miközben az őrzés és a kerülőút erőforrást igényel."},
+   {id:"fast",title:"Gyorsabb szállítás",sub:"Több áru, nagyobb szállítási kockázat.",effect:[0,3,-1,0],
+    explain:"A gyorsaság és a nagyobb forgalom előnyös lehet, de az út és a szállítmány biztonságára figyelni kell."}
+  ]},
+ {id:"council",title:"Mire fordítson a város közösségi erőforrást?",level:6,needs:["hall"],
+  when:"Elkészült a városháza. A városi tanács eltérő közösségi szükségletek között oszthatja meg forrásait.",
+  source:"Kapcsolódás: városi önkormányzat, polgárjog, társadalmi különbségek – OH 109–111. oldal.",
+  ask:"Kinek kedvezhet az intézkedésed, és milyen más igényt szoríthat háttérbe?",
+  choices:[
+   {id:"water",title:"Közös kút és vízellátás",sub:"A helyi ellátás és a közösségi élet fejlesztése.",effect:[2,0,0,2],
+    explain:"Az alapvető ellátás közösségi érdek lehetett, de a város más védelmi vagy gazdasági feladatokra is költhetett."},
+   {id:"defense",title:"Védművek fenntartása",sub:"A védelem erősítése, kevesebb forrás más beruházásra.",effect:[0,0,3,1],
+    explain:"A védelem a polgárok érdeke lehetett, de a költségek és a városi jogállás külön mérlegelést igényelnek."}
+  ]}
+];
+const namesOfMetrics=["Ellátás","Áruforgalom","Védelem","Városi intézmények"];
+function distance(a,b){return Math.abs(a.x-b.x)+Math.abs(a.y-b.y);}
+function eventOpen(e,items=state.items,level=completed()){
+ return level>=e.level&&e.needs.every(t=>items.some(b=>b.type===t));
+}
+function cityModel(items=state.items,choices=state.choices,level=completed()){
+ const totals=items.reduce((arr,b)=>arr.map((v,i)=>v+TYPE[b.type].metric[i]),[0,0,0,0]);
+ const bonuses=[];
+ const pairs=[
+  ["mill","house",[2,0,0,0],"A malom és a lakóház közelsége: a feldolgozás és a munkaerő kapcsolata."],
+  ["market","house",[0,1,0,0],"A piac és a lakóház közelsége: könnyebben elérhető helyi árucsere."],
+  ["market","warehouse",[0,2,0,0],"A piac és a raktár közelsége: rövidebb árumozgatás."],
+  ["market","workshop",[0,2,0,0],"A piac és a céhes műhely közelsége: termék és vevő gyorsabb találkozása."],
+  ["gate","warehouse",[0,0,1,0],"A városkapu és a raktár közelsége: az ellenőrzött árumozgás szemléltetése."]
+ ];
+ for(const [a,b,bonus,description] of pairs){
+  const near=items.some(x=>x.type===a&&items.some(y=>y.type===b&&distance(x,y)<=2));
+  if(near){for(let i=0;i<4;i++)totals[i]+=bonus[i];bonuses.push({description,bonus});}
+ }
+ const houses=items.filter(b=>b.type==="house").length;
+ if(houses>=3&&!items.some(b=>b.type==="mill")){
+  totals[0]-=2;bonuses.push({description:"Sok lakóház, de nincs malom: az ellátás terhelése a játékmodellben.",bonus:[-2,0,0,0]});
+ }
+ const activeChoices=[];
+ for(const e of SCENARIOS){
+  const choice=e.choices.find(c=>c.id===choices[e.id]);
+  if(choice&&eventOpen(e,items,level)){
+   for(let i=0;i<4;i++)totals[i]+=choice.effect[i];
+   activeChoices.push({scenario:e,choice});
+  }
+ }
+ return {metrics:totals.map(n=>Math.max(0,n)),bonuses,activeChoices};
+}
+function historyAdd(message){
+ state.history.push(message.slice(0,220));
+ if(state.history.length>40)state.history=state.history.slice(-40);
+}
+function summaryText(){
+ const a=cityModel();
+ const detail=Object.entries(TYPE).map(([id,type])=>type.name+": "+state.items.filter(x=>x.type===id).length).filter(x=>!x.endsWith(": 0"));
+ return [
+  "ÉPÍTS KÖZÉPKORI VÁROST! – V2.2 építési eredmény",
+  "Önálló oktatási modell, NEM történelmi statisztika és NEM tanulói tudáspont.",
+  "Építmények: "+(detail.join("; ")||"nincsenek"),
+  "Modellmutatók: "+namesOfMetrics.map((n,i)=>n+" "+a.metrics[i]).join("; "),
+  "Térbeli összefüggések: "+(a.bonuses.map(b=>b.description).join(" | ")||"nincs külön közelségi hatás"),
+  ...SCENARIOS.filter(e=>state.choices[e.id]).map(e=>{
+   const picked=e.choices.find(c=>c.id===state.choices[e.id]);
+   return e.title+": "+picked.title+". Indoklás: "+(state.reflections[e.id]||"–")+(eventOpen(e)?"":" (a hatás most nem aktív: hiányzik egy feltétel)");
+  }),
+  "A 60 pontos történelmi teszt és a forrásjegyzetek külön értékelendők."
+ ].join("\n");
+}
+
 function valid(raw){
  if(!Array.isArray(raw))return [];
  const result=[],seen=new Set();
