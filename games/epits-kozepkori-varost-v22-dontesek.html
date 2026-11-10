@@ -821,6 +821,9 @@ function finish(p){
  const l=lessons[i],c=node("div","inset");add(c,"h3",(i+1)+". "+l.title);add(c,"p",(l.options.find(x=>x.id===S.decisions[i])?.name||"Nincs döntés")+". Forráselemzés: "+(S.sourceNotes[i]||"–")+". Döntés indoklása: "+(S.reasons[i]||"–"));p.append(c);
  }
  card(p,"Önellenőrzés – tanári beszélgetés","Magyarázd el a városfejlődés három feltételét; a kommuna és a céh feladatát; a Hanza és Levante közti különbséget; végül mondd el, miért nem volt minden városlakó egyformán polgár!");
+ const citySummary=window.medievalBuilder?.reportText?.();
+ if(citySummary){const result=card(p,"Saját városod: építések, indoklások és modellkövetkezmények",citySummary);result.querySelector("p").style.whiteSpace="pre-line";}
+
  const copy=action("Eredmény másolása",()=>{const text="ÉPÍTS KÖZÉPKORI VÁROST!\\nObjektív tudáspont: "+pts+"/60\\nTanári értékelés szükséges!\\n"+lessons.map((l,i)=>(i+1)+". "+l.title+"\\nForráselemzés: "+(S.sourceNotes[i]||"–")+"\\nIndoklás: "+(S.reasons[i]||"–")).join("\\n");if(navigator.clipboard?.writeText)navigator.clipboard.writeText(text).then(()=>{copy.textContent="Vágólapra másolva ✓";}).catch(()=>{copy.textContent="Másolás nem sikerült";});else copy.textContent="Vágólap nem elérhető";},"btn");p.append(copy);
 }
 function updateSVG(){
