@@ -594,8 +594,29 @@ const structures=[
  {title:"Városháza és közösség",detail:"A városvezetés térbeli jelképe.",feature:"hall"}
 ];
 const initial=()=>({mission:0,phase:"teach",decisions:{},reasons:{},sourceNotes:{},answers:{},checks:{},optionOrders:{},mode:"guided",view:"3d",showTeacher:false,finished:false});
-function load(){try{let s=JSON.parse(localStorage.getItem(STORAGE));if(!s||!Number.isInteger(s.mission)||s.mission<0||s.mission>=lessons.length||!["teach","decide","quiz","result"].includes(s.phase))return initial();
-return {...initial(),...s,decisions:s.decisions&&typeof s.decisions==="object"?s.decisions:{},reasons:s.reasons&&typeof s.reasons==="object"?s.reasons:{},answers:s.answers&&typeof s.answers==="object"?s.answers:{},checks:s.checks&&typeof s.checks==="object"?s.checks:{},sourceNotes:s.sourceNotes&&typeof s.sourceNotes==="object"?s.sourceNotes:{},optionOrders:s.optionOrders&&typeof s.optionOrders==="object"?s.optionOrders:{}};}catch(e){return initial();}}
+function load(){
+ try{
+  const raw=JSON.parse(localStorage.getItem(STORAGE));
+  if(!raw||!Number.isInteger(raw.mission)||raw.mission<0||raw.mission>=lessons.length||!["teach","decide","quiz","result"].includes(raw.phase))return initial();
+  const safe=(obj)=>obj&&typeof obj==="object"&&!Array.isArray(obj)?obj:{};
+  // Ne engedjük, hogy sérült böngészős mentés hibás pontszámot
+  // vagy befejezett állapotot generáljon.
+  const checks={};
+  for(let i=0;i<lessons.length;i++){
+   const answers=safe(raw.checks)[i];
+   if(Array.isArray(answers)&&answers.length===lessons[i].questions.length&&
+      answers.every((v,j)=>Number.isInteger(v)&&v>=0&&v<lessons[i].questions[j].options.length)){
+       checks[i]=answers.slice();
+   }
+  }
+  const finished=raw.finished===true&&Object.keys(checks).length===lessons.length;
+  const phase=raw.phase==="result"&&!checks[raw.mission]?"teach":raw.phase;
+  return {...initial(),mission:raw.mission,phase,mode:["guided","practice"].includes(raw.mode)?raw.mode:"guided",
+   view:["3d","2d"].includes(raw.view)?raw.view:"3d",
+   decisions:safe(raw.decisions),reasons:safe(raw.reasons),sourceNotes:safe(raw.sourceNotes),
+   answers:safe(raw.answers),checks,optionOrders:safe(raw.optionOrders),finished};
+ }catch(e){return initial();}
+}
 let S=load(),warning="";
 function save(){try{localStorage.setItem(STORAGE,JSON.stringify(S));}catch(e){$("modelstatus").textContent="Mentés nem érhető el; a játék folytatható."}}
 function node(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;}
@@ -647,6 +668,7 @@ function teach(p,l){
  add(doc,"p","Forrásazonosító: "+src.ref,"small");
  add(doc,"p",src.type+". Az ismertetés saját szövegezésű; nem eredeti idézet.","small");
  if(src.hungarian)add(doc,"p",src.hungarian,"source-hungary");
+ if(warning)add(doc,"p",warning,"feedback error");
  if(src.url){const a=node("a",null,"Az ellenőrzött történelmi háttér megnyitása");a.href=src.url;a.target="_blank";a.rel="noopener noreferrer";doc.append(a);}
  const q=add(doc,"label",src.question,"question");q.htmlFor="source-note";
  const t=node("textarea");t.id="source-note";t.maxLength=850;t.value=S.sourceNotes[S.mission]||"";t.placeholder="Írj legalább két történelmi érvet vagy következtetést a forrás alapján…";
@@ -742,7 +764,10 @@ function progress(to){
  if(S.phase==="decide")S.phase="teach";else if(S.phase==="quiz")S.phase="decide";
  else if(S.phase==="teach"&&S.mission>0){S.mission--;S.phase="result";}warning="";save();render();return;
  }
- if(S.phase==="teach")S.phase="decide";
+ if(S.phase==="teach"){
+  if(!sourceValid()){warning="A történelmi forráselemzést legalább 30 karakterben fogalmazd meg, majd folytasd a küldetést!";render();return;}
+  warning="";S.phase="decide";
+ }
  else if(S.phase==="decide"){
  const opt=lessons[S.mission].options.find(o=>o.id===selected());
  if(!opt?.valid){warning="A választás nem felel meg a tananyaghoz kapcsolódó feltételeknek; vizsgáld meg az érveket, majd válassz más lehetőséget!";render();return;}
