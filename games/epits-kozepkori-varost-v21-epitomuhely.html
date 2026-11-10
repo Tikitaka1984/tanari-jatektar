@@ -1201,7 +1201,7 @@ marker("ford","A","Folyóátkelő");marker("castle","B","Vár alja");marker("fie
 const modelIds=["thatched-cottage-0e63f5","market-stall-94937d","water-mill-b31972","village-gatehouse-181a9e","oak-tree-50ee7c","wooden-bridge-9d2308"];
 function home(parent,x,z,color){const g=new THREE.Group();g.position.set(x,.12,z);parent.add(g);shape(new THREE.BoxGeometry(1.06,.73,.82),color,0,.38,0,g);
 const roof=shape(new THREE.ConeGeometry(.76,.65,4),"#b66d49",0,1.06,0,g);roof.rotation.y=Math.PI/4;return g;}
-home(world,-1,-4.4,"#e5d1a5");home(world,.5,-4.8,"#cbb78b");home(world,2,-3.7,"#e1c39a");
+home(world,8.5,-6.5,"#e5d1a5");home(world,9.5,-3.8,"#cbb78b");
 function keepModel(parent,id,x,z,targetSize=1.4){
 const g=new THREE.Group();g.position.set(x,.13,z);parent.add(g);
 if(!assets[id]){home(g,0,0,"#d4b58e");return;}
@@ -1211,44 +1211,32 @@ node.position.set(-.5*(b2.min.x+b2.max.x),-.05-b2.min.y,-.5*(b2.min.z+b2.max.z))
 }
 function sync(s){
  if(!dynamic)return;
- while(dynamic.children.length)dynamic.remove(dynamic.children[0]);
- const count=Math.max(0,Math.min(6,Number(s.completed)||0));
- const here=s.decisions?.[0]||null;
+ while(dynamic.children.length){
+  const old=dynamic.children[0];dynamic.remove(old);
+  old.traverse?.(child=>{if(child.isSprite){child.material.map?.dispose();child.material.dispose();}});
+ }
+ const here=s?.decisions?.[0]||null;
  for(const [id,m] of Object.entries(markers))m.cyl.material.color.set(here===id?"#ffe39b":"#d5a65b");
- if(!here)return;
- const [x,z]=terrain[here];
- keepModel(dynamic,"thatched-cottage-0e63f5",x+1.7,z+1.2,1.85);
- keepModel(dynamic,"thatched-cottage-0e63f5",x-1.6,z+1.5,1.55);
- if(count>=1){
-  keepModel(dynamic,"water-mill-b31972",-8.45,-5.85,1.6);
-  keepModel(dynamic,"thatched-cottage-0e63f5",-2.8,-4.8,1.6);
- }
- if(count>=2){
-  keepModel(dynamic,"village-gatehouse-181a9e",1.6,-6,2.45);
-  keepModel(dynamic,"thatched-cottage-0e63f5",3.2,-4.8,1.6);
- }
- if(count>=3){
-  keepModel(dynamic,"market-stall-94937d",-0.4,-2.2,2.4);
-  keepModel(dynamic,"market-stall-94937d",1.8,-1.8,2.0);
-  shape(new THREE.BoxGeometry(3.8,.055,2.75),"#d6bb8e",.8,.02,-2.4,dynamic);
- }
- if(count>=4){
-  keepModel(dynamic,"thatched-cottage-0e63f5",5,-1.2,2.0);
-  shape(new THREE.CylinderGeometry(.17,.22,1.6,8),"#98634c",4.8,1.18,-1.45,dynamic);
-  shape(new THREE.ConeGeometry(.5,.8,6),"#7d4e34",5,.9,-1.2,dynamic);
- }
- if(count>=5){
-  keepModel(dynamic,"thatched-cottage-0e63f5",-3.2,-1.2,1.9);
-  shape(new THREE.BoxGeometry(1.6,.48,1.0),"#b77b47",-.9,.52,-4.85,dynamic);
-  for(const a of [-.65,.65])for(const b of [-.45,.45]){
-   const wheel=shape(new THREE.CylinderGeometry(.25,.25,.13,12),"#65472e",-.9+a,.32,-4.85+b,dynamic);
-   wheel.rotation.z=Math.PI/2;
+ const builds=window.medievalBuilder?.getBuilds?.()||s?.builds||[];
+ for(const b of builds){
+  if(!Number.isInteger(b.x)||!Number.isInteger(b.y)||b.x<0||b.x>=6||b.y<0||b.y>=5||b.y===2)continue;
+  const x=-5+b.x*2,z=-7+b.y*2;
+  if(b.type==="road")shape(new THREE.BoxGeometry(1.92,.08,1.92),"#c4a478",x,.022,z,dynamic);
+  else if(b.type==="house")keepModel(dynamic,"thatched-cottage-0e63f5",x,z,1.6);
+  else if(b.type==="mill")keepModel(dynamic,"water-mill-b31972",x,z,1.9);
+  else if(b.type==="gate")keepModel(dynamic,"village-gatehouse-181a9e",x,z,2.0);
+  else if(b.type==="market")keepModel(dynamic,"market-stall-94937d",x,z,1.95);
+  else {
+   const color={workshop:["#cf9f7b","#89523d"],warehouse:["#cbb89c","#78624e"],hall:["#e9cfa3","#946b4b"]}[b.type];
+   if(!color)continue;
+   const tall=b.type==="hall",w=tall?1.72:1.45,h=tall?1.46:1.05;
+   shape(new THREE.BoxGeometry(w,h,1.35),color[0],x,h/2,z,dynamic);
+   const roof=shape(new THREE.ConeGeometry(tall?1.45:1.15,.85,4),color[1],x,h+.36,z,dynamic);roof.rotation.y=Math.PI/4;
   }
- }
- if(count>=6){
-  shape(new THREE.BoxGeometry(2.15,1.85,1.75),"#d2bd91",4.2,1.05,1.5,dynamic);
-  const roof=shape(new THREE.ConeGeometry(1.75,1.13,4),"#955b43",4.2,2.58,1.5,dynamic);roof.rotation.y=Math.PI/4;
-  shape(new THREE.BoxGeometry(.42,.64,.06),"#cc993f",4.2,3.55,1.5,dynamic);
+  if(b.type!=="road"){
+   const names={house:"HÁZ",mill:"MALOM",gate:"KAPU",market:"PIAC",workshop:"MŰHELY",warehouse:"RAKTÁR",hall:"VÁROSHÁZA"};
+   const tag=label(names[b.type]||b.type);tag.position.set(x,2.65,z);tag.scale.set(2.65,.55,1);dynamic.add(tag);
+  }
  }
 }
 window.medievalSceneUpdate=sync;
@@ -1257,11 +1245,20 @@ function focus(which){const p=which?terrain[which]:[0,0];const target=new THREE.
 window.medievalFocus=id=>{if(terrain[id])focus(id);};window.medievalOverview=()=>focus(null);
 function resize(){const r=host.getBoundingClientRect();const w=Math.max(1,r.width),h=Math.max(1,r.height),a=w/h;const span=Math.max(22,29/a);camera.left=-span*a/2;camera.right=span*a/2;camera.top=span/2;camera.bottom=-span/2;camera.updateProjectionMatrix();renderer.setSize(w,h,false);}
 new ResizeObserver(resize).observe(host);resize();
+const buildTiles=[];
+for(let y=0;y<5;y++)for(let x=0;x<6;x++){
+ if(y===2)continue;
+ const tile=new THREE.Mesh(new THREE.PlaneGeometry(1.9,1.9),new THREE.MeshBasicMaterial({color:0xb8d4ae,transparent:true,opacity:.025,depthWrite:false,side:THREE.DoubleSide}));
+ tile.rotation.x=-Math.PI/2;tile.position.set(-5+x*2,.04,-7+y*2);tile.userData.buildCell={x,y};scene.add(tile);buildTiles.push(tile);
+}
 const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();let start=null;
 renderer.domElement.addEventListener("pointerdown",e=>{start=[e.clientX,e.clientY];});
 renderer.domElement.addEventListener("pointerup",e=>{if(!start)return;const d=Math.hypot(e.clientX-start[0],e.clientY-start[1]);start=null;if(d>8)return;
 const r=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(pointer,camera);
-const hit=ray.intersectObjects(Object.values(markers).map(v=>v.hit),false)[0];if(hit){const id=hit.object.userData.site;window.medievalChoose?.(id);focus(id);}
+const hit=ray.intersectObjects(Object.values(markers).map(v=>v.hit),false)[0];
+ if(hit){const id=hit.object.userData.site;window.medievalChoose?.(id);focus(id);return;}
+ const tile=ray.intersectObjects(buildTiles,false)[0];
+ if(tile&&window.medievalBuilder)window.medievalBuilder.buildAt(tile.object.userData.buildCell.x,tile.object.userData.buildCell.y);
 });
 const loader=new GLTFLoader();let loaded=0;
 modelstatus.textContent="Épületek betöltése…";
