@@ -1031,6 +1031,123 @@ $("study-return").addEventListener("click",()=>navigatePrimary("game"));
 render();
 })();
 </script>
+<script>
+/* V2.1 – önálló, helyi mentésű városépítő állapot.
+   A 12 kérdés és a 6 történelmi küldetés változatlanul megmarad. */
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const KEY="kozepkori-varos-v21-epitohelyek";
+const COLS=6,ROWS=5;
+const TYPE={
+ road:{name:"Összekötő út",icon:"🛤️",w:1,c:0,level:1,desc:"Az összekötő út a meglévő főúthoz vagy egy már kiépített úthoz csatlakozik.",metric:[0,0,0,0]},
+ house:{name:"Lakóház",icon:"🏠",w:2,c:0,level:1,desc:"A lakóház útkapcsolatot igényel. A település növekedése a megélhetés és ellátás kérdését is felveti.",metric:[1,0,0,0]},
+ mill:{name:"Vízimalom",icon:"⚙️",w:3,c:1,level:1,desc:"A vízimalom a folyóparti A oszlopban és megközelíthető út mellett építhető.",metric:[3,0,0,0]},
+ gate:{name:"Városkapu",icon:"🏰",w:3,c:2,level:2,desc:"A városkaput az F oszlopba, az úthálózathoz kapcsolódó szélső telekre helyezheted.",metric:[0,0,3,0]},
+ market:{name:"Piactér",icon:"🏪",w:2,c:2,level:3,desc:"A piacot megközelíthető út mellé építsd. Az épület önmagában nem jelent vásártartási kiváltságot.",metric:[0,3,0,0]},
+ workshop:{name:"Céhes műhely",icon:"⚒️",w:3,c:2,level:4,desc:"A műhely az út mellé telepíthető, de egy céh létrejötte nem kizárólag az épülettől függ.",metric:[0,2,0,1]},
+ warehouse:{name:"Áruraktár",icon:"📦",w:2,c:3,level:5,desc:"Az áruraktár segíti a kereskedelmet, de a biztonság és az útvonalak is számítanak.",metric:[0,2,0,0]},
+ hall:{name:"Városháza",icon:"🏛️",w:4,c:4,level:6,desc:"A városháza a közösségi vezetés jelképe, nem helyettesíti a jogok megszerzését.",metric:[0,0,0,4]}
+};
+function valid(raw){
+ if(!Array.isArray(raw))return [];
+ const result=[],seen=new Set();
+ for(const item of raw.slice(0,24)){
+  if(!item||!(item.type in TYPE)||!Number.isInteger(item.x)||!Number.isInteger(item.y)||item.x<0||item.x>=COLS||item.y<0||item.y>=ROWS||item.y===2)continue;
+  const k=item.x+","+item.y;
+  if(seen.has(k))continue;
+  seen.add(k);result.push({x:item.x,y:item.y,type:item.type});
+ }
+ return result;
+}
+let state={selected:"road",items:[]};
+try{const saved=JSON.parse(localStorage.getItem(KEY));if(saved&&typeof saved==="object"){state.items=valid(saved.items);state.selected=saved.selected in TYPE?saved.selected:"road";}}catch(e){}
+let note="";
+const completed=()=>Math.max(0,Math.min(6,Number(window.medievalGetState?.().completed||0)));
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){note="A böngésző tárolása nem elérhető; az építkezés jelenleg nem menthető.";}}
+function budget(){
+ const used=state.items.reduce((o,p)=>{o.w+=TYPE[p.type].w;o.c+=TYPE[p.type].c;return o;},{w:0,c:0});
+ return {w:11+completed()*5-used.w,c:7+completed()*3-used.c,totalW:11+completed()*5,totalC:7+completed()*3};
+}
+const occupied=(x,y)=>state.items.find(b=>b.x===x&&b.y===y);
+const road=(x,y)=>y===2||!!occupied(x,y)&&occupied(x,y).type==="road";
+const connected=(x,y)=>[[x-1,y],[x+1,y],[x,y-1],[x,y+1]].some(([xx,yy])=>xx>=0&&xx<COLS&&yy>=0&&yy<ROWS&&road(xx,yy));
+function eligible(type,x,y){
+ const b=TYPE[type];
+ if(!b)return "Ismeretlen építmény.";
+ if(completed()<b.level)return "Ez az építmény csak a "+b.level+". küldetés után nyílik meg.";
+ if(!Number.isInteger(x)||!Number.isInteger(y)||x<0||x>=COLS||y<0||y>=ROWS)return "Ez nem építési telek.";
+ if(y===2)return "A meglévő főút nem építhető be.";
+ if(occupied(x,y))return "A telken már áll építmény. Az utolsó építést lehet visszavonni.";
+ if(!connected(x,y))return "Útkapcsolat hiányzik. Előbb építs összekötő utat.";
+ if(type==="mill"&&x!==0)return "Vízimalom csak a folyópart melletti A oszlopba kerülhet.";
+ if(type==="gate"&&x!==5)return "A városkapu csak a keleti F oszlopba helyezhető el.";
+ const available=budget();
+ if(available.w<b.w||available.c<b.c)return "Nem elegendő a faanyag vagy a kereskedelmi keret. Küldetések teljesítésével több erőforrás érhető el.";
+ return "";
+}
+function onChange(){
+ save();render();window.medievalRefreshMap2D?.();
+ window.medievalSceneUpdate?.({...window.medievalGetState?.(),builds:state.items});
+}
+function buildAt(x,y){
+ const err=eligible(state.selected,x,y);
+ if(err){note="⚠ "+err;render();return false;}
+ state.items.push({type:state.selected,x,y});
+ note=TYPE[state.selected].name+" elhelyezve: "+String.fromCharCode(65+x)+(y+1)+". telek.";
+ onChange();return true;
+}
+function elem(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;}
+function render(){
+ const opened=completed()>=1;
+ $("builder-locked").hidden=opened;$("builder-content").hidden=!opened;
+ $("builder-count").textContent=state.items.length+" építmény";
+ if(!opened)return;
+ const funds=budget(),stock=$("builder-stock");stock.replaceChildren();
+ for(const [name,text] of [["🪵 Faanyag",funds.w+" / "+funds.totalW],["🪙 Kereskedelmi keret",funds.c+" / "+funds.totalC]]){
+  const wrap=elem("span");wrap.append(elem("span",null,name+": "),elem("b",null,text));stock.append(wrap);
+ }
+ const tools=$("builder-tools");tools.replaceChildren();
+ for(const [kind,b] of Object.entries(TYPE)){
+  const item=elem("button");item.type="button";item.disabled=completed()<b.level;
+  item.setAttribute("aria-pressed",String(state.selected===kind));
+  item.setAttribute("aria-label",b.name+", "+b.w+" faanyag, "+b.c+" kereskedelmi keret, feloldás a "+b.level+". küldetés után");
+  item.append(elem("span","emoji",b.icon));
+  const desc=elem("span");desc.append(elem("b",null,b.name),elem("small",null,b.w+" 🪵 · "+b.c+" 🪙"+(item.disabled?" · 🔒":"")));item.append(desc);
+  item.addEventListener("click",()=>{state.selected=kind;note=b.desc;save();render();});
+  tools.append(item);
+ }
+ $("builder-help").textContent=TYPE[state.selected].desc;
+ const grid=$("builder-grid");grid.replaceChildren();
+ for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++){
+  const tile=elem("button"),built=occupied(x,y),base=y===2;
+  tile.type="button";tile.dataset.cell=x+"-"+y;tile.disabled=base;tile.className=base?"base-road":built?"built":"";
+  const title=base?"Meglévő főút":built?TYPE[built.type].name:"Szabad építési telek";
+  tile.setAttribute("aria-label",String.fromCharCode(65+x)+(y+1)+" – "+title);
+  tile.append(elem("span","tile-emoji",base?"═":built?TYPE[built.type].icon:"＋"),elem("span","tile-code",String.fromCharCode(65+x)+(y+1)));
+  tile.addEventListener("click",()=>{buildAt(x,y);grid.querySelector('[data-cell="'+x+"-"+y+'"]')?.focus();});
+  grid.append(tile);
+ }
+ const score=state.items.reduce((arr,b)=>arr.map((v,i)=>v+TYPE[b.type].metric[i]),[0,0,0,0]);
+ const metrics=$("builder-metrics");metrics.replaceChildren();
+ for(const [idx,t] of ["Ellátás","Áruforgalom","Védelem","Városi intézmények"].entries()){
+  const card=elem("div");card.append(elem("strong",null,String(score[idx])),elem("span",null,t));metrics.append(card);
+ }
+ $("builder-undo").disabled=!state.items.length;
+ $("builder-message").textContent=note||"Válassz épületet, majd kattints egy szabad telekre.";
+ $("builder-message").classList.toggle("error",note.startsWith("⚠"));
+}
+function undo(){
+ const last=state.items.pop();if(!last)return;
+ note=TYPE[last.type].name+" visszavonva. A visszavonás az építési erőforrást is visszaadja.";
+ onChange();
+}
+function reset(){state={selected:"road",items:[]};note="";onChange();}
+$("builder-undo").addEventListener("click",undo);
+window.medievalBuilder={render,reset,getBuilds:()=>state.items.map(x=>({...x})),buildAt,types:TYPE};
+render();
+})();
+</script>
 <script type="module">
 let THREE,scene,camera,renderer,orbit,assets={},dynamic,markers={},paused=false;
 const modelstatus=document.getElementById("modelstatus"),host=document.getElementById("three-container");
