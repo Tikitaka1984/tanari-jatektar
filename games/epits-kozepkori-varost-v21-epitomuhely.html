@@ -1080,9 +1080,9 @@ function eligible(type,x,y){
  if(!Number.isInteger(x)||!Number.isInteger(y)||x<0||x>=COLS||y<0||y>=ROWS)return "Ez nem építési telek.";
  if(y===2)return "A meglévő főút nem építhető be.";
  if(occupied(x,y))return "A telken már áll építmény. Az utolsó építést lehet visszavonni.";
- if(!connected(x,y))return "Útkapcsolat hiányzik. Előbb építs összekötő utat.";
  if(type==="mill"&&x!==0)return "Vízimalom csak a folyópart melletti A oszlopba kerülhet.";
  if(type==="gate"&&x!==5)return "A városkapu csak a keleti F oszlopba helyezhető el.";
+ if(!connected(x,y))return "Útkapcsolat hiányzik. Előbb építs összekötő utat.";
  const available=budget();
  if(available.w<b.w||available.c<b.c)return "Nem elegendő a faanyag vagy a kereskedelmi keret. Küldetések teljesítésével több erőforrás érhető el.";
  return "";
