@@ -16,6 +16,10 @@
   - Raktár eltávolításával az ahhoz kötött kereskedői esemény hatása nem számít bele, így az említett példa **6 áruforgalom**.
 - A mutatók oktatási szimulációs értékek, nem történeti statisztikák vagy a 60 pont részei.
 
+**Mentési struktúra külön egységpróbája:** szintetikus, de valós adatformájú localStorage-adatsorból (`A2 vízimalom + B2 lakóház + tartalékolás`) a 2 épület, a `mill=reserve` döntés, a szöveges indoklás és a napló sértetlenül visszaállt; a kiszámított ellátás ismét **8** volt. Ezt külön, ismételhető kódszintű tesztnek tekintjük, **nem élő böngészős mentési bizonyítéknak**.
+
+**3D memóriakezelés:** a többször újrarajzolt, saját Three.js primitívek geometriáinak és anyagainak felszabadítását külön javítottuk, anélkül hogy a megosztott Polyfork-modell-erőforrásokat felszabadítanánk. A tényleges böngészős memória-/WebGL-profilozás továbbra is nyitott.
+
 ## 2. Böngészős teszt 1 – hibás tesztfeltevés feltárása
 
 **Futam:** `bdf2da5c-4fd0-40fa-a458-3a1a1c4d843c`.
