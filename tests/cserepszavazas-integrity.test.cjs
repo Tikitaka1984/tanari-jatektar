@@ -9,7 +9,7 @@ const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
 const relativeFiles = [
-  ['jatekok/cserepszavazas-napja/index.html', 129963, '04847419a9bbcff656128c3903f8b120fd8991230f3a323ac4d4464284bd15e4'],
+  ['jatekok/cserepszavazas-napja/index.html', 642131, 'da25f5a89940d95a2094cba59d882a075bd99c78a9752f897517ff8f696f509a'],
   ['jatekok/cserepszavazas-napja/docs/tanari_kiseroanyag_athen_agora.docx', 12955, '104d17bdfcd5e4ae2e5158d10d6a666323da6e5bcf58af4fb7165a782bdf6f8d'],
   ['jatekok/cserepszavazas-napja/docs/tartalmi_terv_athen_agora.docx', 12826, '78af3e0d5b743c199078c347b33428bc679eaef01095287bd6084e712d54b5be']
 ];

@@ -14,9 +14,9 @@
 - A láda fedele a Polyfork-modellben felnyílik (korábban oldalra csúszott); a szöveg „felnyílik”-ra módosult.
 - Tartalmi megjegyzés: a Kr. e. 508/507 időpont a szakirodalomban kissé eltérően szerepel; a játék a tankönyvi 508-at használja, változatlanul.
 
-## Nyitott döntés: integritás-teszt
+## Integritás-teszt (frissítve)
 
-A `tests/cserepszavazas-integrity.test.cjs` rögzíti a játékfájl méretét és SHA-256 értékét (129 963 bájt), ezért a módosított fájlon ez a teszt szándékosan elbukik („Unexpected file size”). A teszt értékeit nem módosítottuk; a tanári jóváhagyás után az új méret és hash rögzítése szükséges. A többi ellenőrzés (szkriptek fordítása, katalógus, hub) ugyanebben a tesztben a méret/hash-ellenőrzés után fut.
+A `tests/cserepszavazas-integrity.test.cjs` rögzíti a játékfájl méretét és SHA-256 értékét (129 963 bájt), ezért a módosított fájlon ez a teszt szándékosan elbukik („Unexpected file size”). A tanári jóváhagyás után (2026-11-13) az új méret és SHA-256 érték rögzítésre került a tesztben. A többi ellenőrzés (szkriptek fordítása, katalógus, hub) ugyanebben a tesztben a méret/hash-ellenőrzés után fut.
 
 
 ## Tesztek
