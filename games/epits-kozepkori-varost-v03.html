@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Építs középkori várost! – 1. küldetés · TESZT v0.3</title>
+<meta name="description" content="9. évfolyamos, önálló történelmi döntésszimulátor. Első küldetés: hogyan születtek a középkori városok?">
+<meta name="theme-color" content="#102c33">
+<style>
+:root{color-scheme:dark;--deep:#0d2830;--nav:#122f38;--panel:#183943;--line:#446b73;--cream:#fff0cd;--muted:#bfd7d6;--gold:#f6cb77;--earth:#a36b42;--green:#8db99a;--good:#9fdfb4}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--deep);color:var(--cream)}
+button,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.52;cursor:not-allowed}
+:focus-visible{outline:3px solid #ffe58a!important;outline-offset:3px}
+[hidden]{display:none!important}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px max(14px,calc((100vw - 1640px)/2));background:#0b242e;border-bottom:1px solid var(--line)}
+.title-wrap{display:flex;align-items:center;gap:12px}.crest{font-family:Georgia,serif;background:#e7c17d;color:#152e30;padding:10px 11px;border-radius:12px;font-size:21px;font-weight:900}
+.top h1{font-family:Georgia,serif;letter-spacing:.005em;font-size:clamp(23px,2.5vw,35px);line-height:1.1;margin:0}
+.eyebrow{font-size:11px;color:#d3b87b;font-weight:850;letter-spacing:.12em;text-transform:uppercase}
+.sub{color:var(--muted);font-size:12px;margin:4px 0 0}
+.tag{padding:7px 10px;border:1px solid #a78b59;color:#ffdf99;background:#304536;border-radius:8px;font-size:11px;font-weight:800}
+.shell{max-width:1660px;margin:auto;padding:13px;display:grid;grid-template-columns:minmax(0,1.38fr) minmax(330px,.86fr);gap:12px;align-items:stretch}
+.left{min-width:0;display:flex;flex-direction:column;gap:11px}.right{background:linear-gradient(160deg,#1d4049,#132f3a);border:1px solid var(--line);border-radius:16px;padding:19px 18px;min-width:0;box-shadow:0 10px 30px #0002}
+.bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.bar .push{margin-left:auto}
+.seg{display:flex;padding:3px;border:1px solid #4b7078;background:#1b3d46;border-radius:11px;gap:3px}
+.seg button{border:0;border-radius:8px;background:transparent;color:#d7e5df;padding:9px 13px;font-size:12px;font-weight:750;min-height:41px}
+.seg button[aria-pressed=true]{background:var(--gold);color:#172c2f}
+.chip{color:#d6e6de;border:1px solid #496a70;background:#274751;padding:8px 10px;border-radius:11px;font-size:12px}
+.visual{border-radius:17px;border:1px solid #6a8d81;position:relative;overflow:hidden;height:clamp(430px,58vh,740px);background:linear-gradient(#a4d9ce,#87b6a1);box-shadow:0 16px 38px #0004}
+#three-container{position:absolute;inset:0}#three-container canvas{width:100%;height:100%;display:block;touch-action:none}
+#map2d{width:100%;height:100%;object-fit:contain;background:#bed8cb}#map2d:not([hidden]){display:block}#map2d[hidden]{display:none!important}
+.map-caption{position:absolute;left:13px;top:13px;max-width:260px;background:#15343bdf;border:1px solid #658b87;border-radius:12px;padding:11px 12px;color:#f9f2e2;pointer-events:none;box-shadow:0 5px 14px #0002}
+.map-caption strong{font-family:Georgia,serif;font-size:17px;display:block;margin-bottom:5px;color:#ffe4ad}
+.map-caption span{font-size:11px;line-height:1.5;display:block}
+.map-tools{position:absolute;left:13px;bottom:13px;display:flex;gap:8px;flex-wrap:wrap}
+.map-tools button{border:1px solid #f7daa5;border-radius:9px;background:#f8d78d;color:#193038;padding:9px 12px;font-size:12px;font-weight:850;min-height:43px}
+.modelstatus{position:absolute;right:12px;top:13px;background:#163540d9;border:1px solid #718f8c;border-radius:10px;padding:7px 10px;font-size:11px;color:#e9e9db;max-width:157px;text-align:right}
+.statusline{background:#173a43;border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-wrap:wrap;gap:7px}
+.stat{border-radius:8px;background:#284c55;padding:7px 11px;font-size:12px}.stat strong{color:var(--gold);font-size:13px}
+.info{background:#153039;border-radius:12px;border:1px solid #365862;padding:11px 13px;font-size:12px;color:#c5dad8;line-height:1.65}
+.info strong{color:#ffe3a3}
+.progress{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:16px}
+.step{height:6px;border-radius:20px;background:#3a5a62}.step.done{background:#a4dfbc}.step.now{background:var(--gold)}
+.overline{color:#f4c97d;text-transform:uppercase;font-size:11px;font-weight:900;letter-spacing:.11em}
+.right h2{font-family:Georgia,serif;font-size:clamp(25px,2.5vw,34px);line-height:1.12;margin:7px 0 12px}
+.right p{color:#e5e9e0;line-height:1.62;font-size:14px;margin:10px 0}
+.right .inset{padding:14px 15px;background:#244752;border:1px solid #52737b;border-radius:12px;margin:12px 0}
+.right .inset h3{color:#f7d697;font-size:14px;margin:0 0 8px}.right .inset p{margin:0;font-size:13px}
+.small{font-size:12px!important;color:var(--muted)!important;line-height:1.5!important}
+.source{font-size:11px!important;color:#ddcb9b!important}
+.question{margin:12px 0 9px;font-weight:750;font-size:15px}
+.choices{display:grid;gap:9px;margin:12px 0}
+.choice{text-align:left;background:#254b54;border:1px solid #547a7b;color:var(--cream);padding:13px;border-radius:12px;display:flex;gap:12px;align-items:flex-start;min-height:62px;transition:background .15s}
+.choice:hover{background:#315a61}.choice.restricted{background:#344840;border-style:dashed;border-color:#b29563}.choice[aria-pressed=true]{border:2px solid var(--gold);padding:12px;background:#38584f}
+.choice .mark{width:29px;min-width:29px;height:29px;border-radius:8px;background:#43636b;display:grid;place-items:center;color:#ffe8aa;font-size:15px;font-weight:900}
+.choice[aria-pressed=true] .mark{background:var(--gold);color:#19313b}
+.choice b{display:block;font-size:14px;margin-bottom:3px}.choice small{color:#d9e3df;line-height:1.5;font-size:12px}
+.feedback{background:#1f4a48;border-left:4px solid #a7daaa;padding:11px 13px;border-radius:8px;margin:12px 0;color:#e4f4e6;font-size:12px;line-height:1.55}
+textarea{display:block;width:100%;min-height:92px;resize:vertical;background:#102d37;border:1px solid #69878a;border-radius:9px;color:#fff5da;padding:11px;line-height:1.45;margin:8px 0}
+textarea::placeholder{color:#9db0af}
+.control{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap;margin-top:20px}
+.btn{border:1px solid #69818a;background:#2c4b56;color:var(--cream);padding:11px 15px;border-radius:10px;font-size:13px;font-weight:800;min-height:45px}
+.btn.primary{background:#eac47d;border-color:#ffdb96;color:#162d32}.btn:hover{filter:brightness(1.08)}
+#quizList{display:grid;gap:12px}.quiz{border:1px solid #52757a;border-radius:12px;background:#20414c;padding:13px}
+.quiz legend{font-size:13px;font-weight:850;padding:0 5px;line-height:1.4}
+.quiz label{display:flex;align-items:start;gap:8px;line-height:1.45;font-size:12px;margin:11px 0;cursor:pointer}
+.quiz input{accent-color:#f4cf81;flex:none;margin-top:3px}
+.result{border-radius:13px;border:1px solid #76a894;background:#234c4a;padding:16px;margin:13px 0}
+.result strong{font-size:24px;color:#d8f3ca}
+.teach{border:1px dashed #ac9561;border-radius:11px;padding:10px 12px;margin:12px 0;color:#ead8a9;background:#283d39;font-size:12px;line-height:1.5}
+.footer{max-width:1660px;margin:0 auto 24px;padding:10px 16px;font-size:11px;color:#a9c2c0;line-height:1.6}
+.footer a{color:#f5d288}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.visual{height:clamp(345px,53vh,560px)}.right{padding:17px}.top{padding:13px}.stat{font-size:11px}}
+@media(max-width:450px){.top h1{font-size:23px}.title-wrap{gap:9px}.crest{font-size:17px;padding:8px}.visual{height:380px}.bar{gap:6px}.seg button{padding:9px 8px;font-size:11px}.chip{font-size:10px}.map-caption{max-width:172px;left:8px;top:8px;padding:9px}.map-caption strong{font-size:14px}.map-caption span{font-size:10px}.modelstatus{right:7px;top:8px;max-width:104px;font-size:9px;padding:6px}.map-tools{left:8px;bottom:8px}.map-tools button{font-size:11px;padding:8px}.shell{padding:8px}.right h2{font-size:25px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important;transition:none!important}}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.180.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.180.0/examples/jsm/"}}</script>
+</head>
+<body>
+<header class="top">
+<div class="title-wrap"><div class="crest" aria-hidden="true">M·C</div><div><div class="eyebrow">Önálló történelmi oktatójáték · 9. évfolyam · TESZT v0.3</div><h1>Építs középkori várost!</h1><p class="sub">Tanulj · dönts · építs · indokolj</p></div></div>
+<span class="tag">1. KÜLDETÉS · A VÁROS SZÜLETÉSE</span>
+</header>
+<main class="shell">
+<section class="left" aria-label="Interaktív várostérkép">
+<div class="bar"><div class="seg" role="group" aria-label="Térképnézet"><button type="button" id="view3d" aria-pressed="true">3D város</button><button type="button" id="view2d" aria-pressed="false">2D térkép</button></div><span class="chip">Európa · 13. század eleje · fiktív helyszín</span><div class="push seg" role="group" aria-label="Tanulási mód"><button type="button" id="guided" aria-pressed="true">Tanórai</button><button type="button" id="practice" aria-pressed="false">Gyakorló</button></div></div>
+<div class="visual">
+<div id="three-container" aria-label="Interaktív sematikus középkori település 3D nézete" role="img"></div>
+<svg id="map2d" viewBox="0 0 900 625" role="img" aria-label="Szemléltető településtérkép folyóval, kereskedelmi úttal, várral és mezőgazdasági területtel" hidden xmlns="http://www.w3.org/2000/svg">
+<rect width="900" height="625" fill="#a9c49c"/><path d="M0 30 Q180 100 260 30 T550 55 T900 20 L900 625 L0 625Z" fill="#b9d2a7"/>
+<path d="M130 -30 Q175 95 140 190 T190 400 T110 675" stroke="#5ca6b3" stroke-width="115" fill="none"/>
+<path d="M130 -30 Q175 95 140 190 T190 400 T110 675" stroke="#97dbdf" stroke-width="75" fill="none"/>
+<path d="M-20 405 Q190 310 380 285 T950 210" stroke="#947354" stroke-width="41" fill="none" stroke-linecap="round"/><path d="M-20 405 Q190 310 380 285 T950 210" stroke="#d4b48b" stroke-width="26" fill="none" stroke-linecap="round"/>
+<rect x="147" y="310" width="130" height="41" rx="5" fill="#866245" stroke="#e4c598" stroke-width="8" transform="rotate(-8 180 325)"/>
+<g fill="#6d9662" opacity=".55"><circle cx="735" cy="490" r="82"/><circle cx="813" cy="530" r="70"/><circle cx="700" cy="567" r="40"/><circle cx="650" cy="80" r="65"/></g>
+<g stroke="#8a744c" stroke-width="5" fill="#d9b98b"><rect x="550" y="120" width="113" height="77" rx="8"/><rect x="580" y="80" width="64" height="60" rx="5"/><rect x="610" y="55" width="22" height="34"/></g>
+<g fill="#c47d56" stroke="#79543e" stroke-width="5"><path d="M295 375l50 -40 52 40v50h-102z"/><path d="M430 333l43 -35 43 35v47h-86z"/><path d="M368 440l37 -31 42 31v44h-79z"/></g>
+<g fill="#e0c17b" stroke="#a17b48" stroke-width="4"><rect x="630" y="390" width="69" height="77"/><rect x="712" y="384" width="70" height="78"/><rect x="630" y="483" width="69" height="60"/><rect x="712" y="480" width="70" height="62"/></g>
+<g id="map2d-build"></g>
+<g font-family="system-ui" font-size="17" font-weight="800" text-anchor="middle">
+<g><circle cx="274" cy="265" r="21" fill="#193941" stroke="#f8de9d" stroke-width="4"/><text x="274" y="272" fill="#f7d88f">A</text><text x="274" y="242" fill="#20373a">Folyóátkelő</text></g>
+<g><circle cx="610" cy="257" r="21" fill="#193941" stroke="#f8de9d" stroke-width="4"/><text x="610" y="264" fill="#f7d88f">B</text><text x="610" y="231" fill="#20373a">Vár alja</text></g>
+<g><circle cx="693" cy="466" r="21" fill="#193941" stroke="#f8de9d" stroke-width="4"/><text x="693" y="473" fill="#f7d88f">C</text><text x="693" y="579" fill="#20373a">Szántóföldek</text></g>
+</g>
+</svg>
+<div class="map-caption"><strong id="caption-title">Egy település története</strong><span id="caption-desc">Válassz területet, majd építsd ki a gazdasági élet alapjait. A környezet a döntéseidhez igazodik.</span></div>
+<div class="modelstatus" id="modelstatus" role="status">3D-világ betöltése…</div>
+<div class="map-tools"><button type="button" id="overview" title="Kamera visszaállítása">◎ Teljes település</button><button type="button" id="focus" title="Kamera közelítése a választott területre">⌖ Kijelölt hely</button></div>
+</div>
+<div class="statusline" id="statusline" aria-live="polite"><div class="stat">A település alapításra vár.</div></div>
+<div class="info"><strong>Történelmi pontosság:</strong> a helyszín fiktív és a 3D-környezet sematikus. Az építési előnyök szimulációs mutatók, nem rekonstruált középkori statisztikák. A város kialakulása nem egyetlen helyszín vagy épület következménye.</div>
+</section>
+<aside class="right" aria-label="Tanulási feladatok">
+<div class="progress" id="progress" aria-label="Tanulási előrehaladás"></div>
+<div id="lesson" aria-live="polite"></div>
+<div id="teacher-hint" class="teach" hidden></div>
+<div class="control"><button class="btn" type="button" id="back">← Vissza</button><button class="btn primary" type="button" id="next">Tovább →</button></div>
+</aside>
+</main>
+<footer class="footer"><strong>Tanári szakmai alap:</strong> Szent István Társulat: <em>Történelem 9.</em>, „A polgárok világa”, 100–101. oldal; Oktatási Hivatal: <em>Történelem 9.</em> (OH-TOR09TB), „A polgárok világa”, 108–109. oldal. Tankönyvi tényekből saját szövegezésű magyarázatok készültek; tankönyvi képeket és hosszú szövegrészleteket nem másoltunk át. 3D eszközök: <a href="https://polyfork.dev/kit/medieval-village-kit-ca0b43" target="_blank" rel="noopener noreferrer">Polyfork Medieval Village Kit</a> – GLB, CC BY 4.0. Three.js 0.180.0. <strong>Ez fejlesztői másolat; nincs beépítve a főoldalba.</strong></footer>
+<script>
+(function(){
+"use strict";
+const STORAGE="kozepkori-varos-v03-prototipus";
+const sites={
+ ford:{title:"A · Folyóátkelő",explain:"A vízi és szárazföldi út találkozása vonzhatja a kereskedőket. Ugyanakkor az árvíz és a híd fenntartása kockázatot, illetve költséget jelenthet.",trade:3,food:1,safety:1,warning:"A folyó közelsége nem jelent önmagában városi önkormányzatot."},
+ castle:{title:"B · Vár alja",explain:"A vár környéke védelmet és vásározási lehetőséget kínálhat. A földesúri függés és a helyszűke azonban korlátozhatja az önállóságot.",trade:2,food:1,safety:3,warning:"A vár körüli település nem automatikusan szabad város."},
+ fields:{title:"C · Termékeny földek",explain:"Az élelmiszer-ellátás kedvezőbb lehet, de a távolabbi kereskedelmi kapcsolatok kiépítése külön feladat.",trade:1,food:3,safety:1,warning:"A mezőgazdasági termelés önmagában nem tesz várossá egy falut."}
+};
+const investments={
+ market:{title:"Piactér és vásári standok",why:"Áruk találkozási pontja: a helyi termelők és a kereskedők közelebb kerülhetnek egymáshoz.",trade:2,food:0,safety:0},
+ mill:{title:"Vízimalom",why:"A víz energiáját gabonaőrlésre lehet felhasználni, ami elősegíti a gazdasági fejlődést. A helyszínhez megfelelő vízfolyás szükséges.",trade:0,food:2,safety:0},
+ houses:{title:"Lakóházak és műhely",why:"A település fogadhat kézműveseket és további lakosokat; az ellátás és a kereskedelem így még fontosabbá válik.",trade:1,food:1,safety:0}
+};
+const quiz=[
+ {q:"Mi segítette elő a 11–13. században sok európai város növekedését?",a:["A mezőgazdasági árutermelés és a kereskedelem fellendülése.","Minden falu automatikusan királyi várossá vált.","A kereskedelem teljes megszűnése."],correct:0,why:"A mezőgazdasági többlet, az iparosodás és az élénkülő kereskedelem egymást erősíthették."},
+ {q:"Melyik településfejlődési állítás történelmileg megalapozott?",a:["Csak az egykori római városok fejlődhettek.","Várak, egyházi központok és kereskedelmi útvonalak mellett is fejlődhettek városok.","A folyók akadályozták az európai városiasodást."],correct:1,why:"Többféle városfejlődési út létezett. A gazdasági és helyi jogi környezet is számított."},
+ {q:"Miért nem elég egy településre csak sok házat és piacot építeni, hogy középkori városnak tekintsük?",a:["Mert a középkori városokban nem volt kereskedelem.","Mert minden középkori városnak azonos lakosságszáma volt.","Mert a városi jogállás és az önkormányzat is fontos sajátosság."],correct:2,why:"A városi kiváltságok és önkormányzat a középkori város megkülönböztető intézményei. Részletesen a 2. küldetésben vizsgáljuk."}
+];
+const initial=()=>({stage:0,site:null,investment:null,reason:"",warning:"",answers:{},checked:false,score:0,mode:"guided",view:"3d"});
+function read(){try{const x=JSON.parse(localStorage.getItem(STORAGE));if(!x||!Number.isInteger(x.stage)||x.stage<0||x.stage>4||!["guided","practice"].includes(x.mode)||!["3d","2d"].includes(x.view))return initial();return {...initial(),...x,answers:x.answers&&typeof x.answers==="object"?x.answers:{}};}catch(e){return initial();}}
+let S=read();
+const $=id=>document.getElementById(id);const stages=["Bevezetés","Helyszín","Építkezés","Ellenőrzés","Összegzés"];
+const teacher=[
+"Tanári cél: kérdezzük meg, miben különbözik a település gazdasági központtá válása és jogi értelemben vett várossá válása.",
+"Pedagógiai kérdés: több helyszín is indokolható. A helyválasztást ne helyes/hibás tesztként, hanem érvelési feladatként értékeljük.",
+"Tanári kérdés: miért nem elég egyetlen épület felépítése a városiasodáshoz? A malom és a piactér hogyan függ össze az agrártermeléssel?",
+"A feladat 3 pontot ad. Nem azonos a teljes leckét lezáró minősítő értékeléssel. Figyelj az indoklás minőségére is.",
+"A tanuló mutassa be a helyszín előnyeit, korlátait és a városi kiváltságok szerepét."
+];
+function el(tag,cls,content){const e=document.createElement(tag);if(cls)e.className=cls;if(content!==undefined)e.textContent=content;return e;}
+function save(){try{localStorage.setItem(STORAGE,JSON.stringify(S));}catch(e){$("modelstatus").textContent="A böngésző nem engedélyezi a mentést."}}
+function txt(parent,tag,content,cls){const e=el(tag,cls,content);parent.append(e);return e}
+function btn(title,description,marker,selected,fn){const b=el("button","choice");b.type="button";b.setAttribute("aria-pressed",String(selected));const m=el("span","mark",marker);m.setAttribute("aria-hidden","true");const a=el("span");txt(a,"b",title);txt(a,"small",description);b.append(m,a);b.addEventListener("click",fn);return b;}
+function h(parent,over,title){txt(parent,"div",over,"overline");txt(parent,"h2",title);}
+function inset(parent,title,content){const div=el("div","inset");txt(div,"h3",title);txt(div,"p",content);parent.append(div);}
+function setStage(i){if(S.checked&&i<3)return;S.stage=Math.max(0,Math.min(4,i));save();render();$("lesson").scrollIntoView({block:"nearest",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth"});}
+function render(){
+ const content=$("lesson");content.replaceChildren();
+ $("progress").replaceChildren();
+ for(let i=0;i<6;i++){const p=el("div","step"+(i<S.stage?" done":i===S.stage?" now":""));p.title=i<5?stages[i]:"Következő küldetés (későbbi fejlesztés)";$("progress").append(p);}
+ $("guided").setAttribute("aria-pressed",String(S.mode==="guided"));$("practice").setAttribute("aria-pressed",String(S.mode==="practice"));
+ $("view3d").setAttribute("aria-pressed",String(S.view==="3d"));$("view2d").setAttribute("aria-pressed",String(S.view==="2d"));
+ // SVG SVGElement.hidden is not a reliably reflecting HTML property.
+ // Modify the actual hidden attribute, otherwise the 2D map remains blank.
+ $("three-container").toggleAttribute("hidden",S.view!=="3d");
+ $("map2d").toggleAttribute("hidden",S.view!=="2d");
+ $("overview").toggleAttribute("hidden",S.view!=="3d");
+ $("focus").toggleAttribute("hidden",S.view!=="3d");
+ $("teacher-hint").hidden=S.mode!=="guided";$("teacher-hint").textContent="TANÁRI SEGÍTSÉG · "+teacher[S.stage];
+ $("back").hidden=S.stage===0||S.stage===4||S.checked;
+ $("next").textContent=["Kezdjük a városalapítást →","Tovább az építkezéshez →","Jöhet az ellenőrzés →","Eredmény megtekintése →","Új játék indítása ↻"][S.stage];
+ $("next").disabled=(S.stage===1&&(!S.site||S.reason.trim().length<12))||(S.stage===2&&!S.investment)||(S.stage===3&&!S.checked);
+ if(S.stage===0)intro(content);
+ else if(S.stage===1)site(content);
+ else if(S.stage===2)build(content);
+ else if(S.stage===3)test(content);
+ else summary(content);
+ stats();if(window.medievalSceneUpdate)window.medievalSceneUpdate(S);
+ $("caption-title").textContent=S.site?sites[S.site].title:"Egy település története";
+ $("caption-desc").textContent=S.site?sites[S.site].explain:"A három választható helyszín: folyóátkelő, vár alja és termékeny mezők. A választás után a falu épülni kezd.";
+ const buildGroup=$("map2d-build");buildGroup.replaceChildren();if(S.site){const coords={ford:[300,270],castle:[610,270],fields:[700,460]};const q=coords[S.site];const ring=document.createElementNS("http://www.w3.org/2000/svg","circle");ring.setAttribute("cx",q[0]);ring.setAttribute("cy",q[1]);ring.setAttribute("r","39");ring.setAttribute("stroke","#efad31");ring.setAttribute("stroke-width","9");ring.setAttribute("fill","none");buildGroup.append(ring);
+ if(S.investment){const l=document.createElementNS("http://www.w3.org/2000/svg","text");l.setAttribute("x",q[0]);l.setAttribute("y",q[1]+72);l.setAttribute("fill","#193a34");l.setAttribute("text-anchor","middle");l.setAttribute("font-size","20");l.setAttribute("font-weight","900");l.textContent=investments[S.investment].title;buildGroup.append(l);}}
+}
+function intro(root){
+ h(root,"1. KÜLDETÉS · ISMERETSZERZÉS","Hogyan születik egy középkori város?");
+ txt(root,"p","A 11–13. században Európa számos térségében élénkült a mezőgazdasági árutermelés, fejlődött a kézműipar, és megerősödött a kereskedelem. Egyes várak, egyházi központok, folyóátkelők és vásárhelyek körül népes, gazdaságilag aktív települések fejlődtek.");
+ inset(root,"Történelmi összefüggés","Nagyobb mezőgazdasági termelés → eladható terményfelesleg → piac és pénzforgalom → kézművesek és kereskedők megtelepedése. A városi kiváltságok kialakulása önálló, fontos történelmi folyamat volt.");
+ txt(root,"p","Egy fiktív közép-európai település vezetőjeként kell választanod. Nem egyetlen tökéletes válasz létezik: minden helyszín előnyökkel és korlátokkal jár.");
+ txt(root,"p","Cél: a helyszín kiválasztása, egy gazdasági fejlesztés és három ellenőrző kérdés. A döntéseidet röviden meg is kell indokolnod.","small");
+ txt(root,"p","Tankönyvi alap: Szent István Társulat, 100. oldal; OH, 108–109. oldal.","source");
+}
+function site(root){
+ h(root,"2. LÉPÉS · TÖRTÉNELMI DÖNTÉS","Hol alakuljon ki a település?");
+ txt(root,"p","Három lehetőség közül választhatsz. Mérlegeld a kereskedelmet, a biztonságot és az élelmiszer-ellátást.");
+ const a=el("div","choices");
+ for(const [id,item,marker] of [["ford",sites.ford,"A"],["castle",sites.castle,"B"],["fields",sites.fields,"C"]])a.append(btn(item.title,item.explain,marker,S.site===id,()=>{if(S.checked)return;S.site=id;S.investment=null;S.warning="";save();render();if(window.medievalFocus)window.medievalFocus(id);}));
+ root.append(a);
+ if(S.site){const x=sites[S.site];txt(root,"p","A választott helyszín előnye és kockázata:","question");const f=el("div","feedback",x.explain+" "+x.warning);root.append(f);}
+ txt(root,"label","Indokold legalább egy történelmi szemponttal a választásodat!","question").setAttribute("for","reason");
+ const t=el("textarea");t.id="reason";t.maxLength=600;t.value=S.reason;t.placeholder="Például: azért választom ezt a helyet, mert ...";t.setAttribute("aria-describedby","reason-help");
+ t.addEventListener("input",()=>{S.reason=t.value;save();$("next").disabled=!S.site||S.reason.trim().length<12;});root.append(t);
+ txt(root,"p","Nem az egyetlen „helyes” helyszínt keressük. A tanár az indoklás történelmi megalapozottságát értékeli.","small").id="reason-help";
+}
+function build(root){
+ h(root,"3. LÉPÉS · GAZDASÁGI FEJLŐDÉS","Mivel erősíted meg a települést?");
+ txt(root,"p","A terményfelesleg, a kézműipar és a kereskedelem összekapcsolódott. Válassz egy első fejlesztést!");
+ const a=el("div","choices");
+ for(const [id,item,marker] of [["market",investments.market,"⚖"],["mill",investments.mill,"⚙"],["houses",investments.houses,"⌂"]]){
+const impossible=id==="mill"&&S.site!=="ford";
+const extra=impossible?" A kiválasztott helyszínen a térképen nincs használható vízfolyás.": "";
+const b=btn(item.title,item.why+extra,marker,S.investment===id,()=>{
+if(S.checked)return;
+if(impossible){S.warning="A vízimalom vízfolyás energiáját hasznosítja. A választott területen nincs megfelelő folyó vagy patak: válassz más fejlesztést, vagy lépj vissza és válaszd a folyóátkelőt.";save();render();return;}
+S.warning="";S.investment=id;save();render();
+});
+if(impossible)b.classList.add("restricted");a.append(b);
+}
+ root.append(a);
+ if(S.warning)root.append(el("div","feedback",S.warning));
+ if(S.investment){const item=investments[S.investment];root.append(el("div","feedback",item.why+" Egyetlen épület sem alakít át automatikusan egy falut önkormányzattal rendelkező várossá."));}
+ inset(root,"Mit tanulunk az építésből?","Az árutermelés és a piac kölcsönhatásban fejlődhetett. A vízimalom technikai fejlődést szemléltet, a lakóház és a műhely a lakosság és a szakosodás növekedésére utal. A mutatók játékbeli jelzések.");
+}
+function test(root){
+ h(root,"4. LÉPÉS · AKTÍV FELIDÉZÉS","Mit tudsz már a városokról?");
+ txt(root,"p","Három kérdés következik. Kérdésenként egy választ jelölj meg. A magyarázatok az ellenőrzés után jelennek meg.");
+ const wrap=el("div");wrap.id="quizList";
+ quiz.forEach((q,i)=>{const f=el("fieldset","quiz");const legend=el("legend",null,(i+1)+". "+q.q);f.append(legend);
+ q.a.forEach((answer,j)=>{const label=el("label"),inp=el("input");inp.type="radio";inp.name="q"+i;inp.value=String(j);inp.checked=S.answers[i]===j;inp.disabled=S.checked;inp.addEventListener("change",()=>{if(S.checked)return;S.answers[i]=j;save();});label.append(inp,el("span",null,answer));f.append(label);});
+ if(S.checked){const ok=S.answers[i]===q.correct;f.append(el("div","feedback",(ok?"✓ Helyes. ":"Még pontosítandó. ")+q.why));}
+ wrap.append(f);
+ });root.append(wrap);
+ if(!S.checked){const b=el("button","btn primary","Válaszok ellenőrzése");b.type="button";b.addEventListener("click",()=>{if(!quiz.every((_,i)=>Number.isInteger(S.answers[i]))){root.querySelector("#quiz-alert")?.remove();const p=el("p","feedback","Mindhárom kérdésre jelölj meg egy választ!");p.id="quiz-alert";root.append(p);return;}S.score=quiz.filter((q,i)=>S.answers[i]===q.correct).length;S.checked=true;save();render();});root.append(b);}
+ else root.append(el("div","feedback","Ellenőrzés kész: "+S.score+" / 3 pont. A pontozás egyetlen alkalommal történik; a döntési indoklást külön értékeld."));
+}
+function summary(root){
+ h(root,"5. LÉPÉS · ÖNÉRTÉKELÉS","Elindult a városod története!");
+ const box=el("div","result");box.append(el("strong",null,S.score+" / 3 tudáspont"));box.append(el("p",null,"Ez a rövid felidéző teszt eredménye, nem az egész tananyag tudásszintmérése."));root.append(box);
+ if(S.site){inset(root,"Választott helyszín",sites[S.site].title+". "+sites[S.site].explain);}
+ if(S.investment)inset(root,"Első fejlesztés",investments[S.investment].title+". "+investments[S.investment].why);
+ inset(root,"Indoklásod",S.reason||"Nincs megadva.");
+ txt(root,"p","Továbbgondolás: mitől lenne a település nemcsak gazdasági központ, hanem kiváltságokkal rendelkező város? A következő küldetés a kommunáról, a polgárokról és az önkormányzatról fog szólni.");
+ txt(root,"p","A következő küldetés fejlesztés alatt áll. A mostani változat önmagában kipróbálható és újrakezdhető.","small");
+}
+function stats(){
+ const p=$("statusline");p.replaceChildren();
+ function add(label,value){const s=el("div","stat");s.append(el("span",null,label+" "));s.append(el("strong",null,value));p.append(s);}
+ if(!S.site){add("Település:","alapítás előtt");add("Küldetés:","1 / 6");return;}
+ const a=sites[S.site],b=S.investment?investments[S.investment]:{trade:0,food:0,safety:0};
+ add("Helyszín:",a.title);add("Kereskedelmi lehetőség:",String(a.trade+b.trade)+"/5");add("Ellátási lehetőség:",String(a.food+b.food)+"/5");add("Védelem:",String(a.safety+b.safety)+"/5");
+}
+$("back").addEventListener("click",()=>setStage(S.stage-1));
+$("next").addEventListener("click",()=>{
+ if(S.stage===1&&(!S.site||S.reason.trim().length<12))return;
+ if(S.stage===2&&!S.investment)return;if(S.stage===3&&!S.checked)return;
+ if(S.stage===4){if(!window.confirm("Újrakezded a tanulási küldetést? A jelenlegi teszteredmény törlődik."))return;const v=S.view,m=S.mode;S=initial();S.view=v;S.mode=m;save();render();return;}
+ setStage(S.stage+1);
+});
+$("guided").addEventListener("click",()=>{S.mode="guided";save();render();});
+$("practice").addEventListener("click",()=>{S.mode="practice";save();render();});
+function switchView(v){S.view=v;save();render();$("view"+v).focus();}
+$("view3d").addEventListener("click",()=>switchView("3d"));$("view2d").addEventListener("click",()=>switchView("2d"));
+$("overview").addEventListener("click",()=>window.medievalOverview?.());$("focus").addEventListener("click",()=>window.medievalFocus?.(S.site||"ford"));
+window.medievalChoose=id=>{if(S.checked||S.stage<1)return;S.site=id;S.investment=null;S.warning="";save();render();};
+window.medievalGetState=()=>S;
+render();
+})();
+</script>
+<script type="module">
+let THREE,scene,camera,renderer,orbit,assets={},dynamic,markers={},paused=false;
+const modelstatus=document.getElementById("modelstatus"),host=document.getElementById("three-container");
+const sitePos={ford:[-6,-2],castle:[5,-3],fields:[5,6]};
+function fallback(message){modelstatus.textContent=message;const b=document.getElementById("view2d");if(b)b.click();}
+try{
+THREE=await import("three");
+const [{OrbitControls},{GLTFLoader}]=await Promise.all([import("three/addons/controls/OrbitControls.js"),import("three/addons/loaders/GLTFLoader.js")]);
+renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:"low-power"});
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.45;
+host.append(renderer.domElement);
+scene=new THREE.Scene();scene.background=new THREE.Color("#a8d8c9");
+camera=new THREE.OrthographicCamera(-14,14,9,-9,.1,100);camera.position.set(16,19,20);
+orbit=new OrbitControls(camera,renderer.domElement);orbit.target.set(0,0,0);orbit.enableDamping=true;orbit.enablePan=false;orbit.minZoom=.75;orbit.maxZoom=4;orbit.maxPolarAngle=1.35;orbit.update();
+scene.add(new THREE.HemisphereLight(0xf9f9dc,0x568573,3));
+const sun=new THREE.DirectionalLight(0xfff0bc,2.3);sun.position.set(-7,17,-5);scene.add(sun);
+const mat=c=>new THREE.MeshStandardMaterial({color:c,roughness:.95,flatShading:true});
+function shape(geometry,color,x,y,z,parent=scene){const o=new THREE.Mesh(geometry,mat(color));o.position.set(x,y,z);parent.add(o);return o;}
+shape(new THREE.BoxGeometry(29,.24,23),"#8eaf82",0,-.18,0);
+shape(new THREE.BoxGeometry(2.85,.05,25),"#4e9da6",-8,-.035,0);
+shape(new THREE.BoxGeometry(2.05,.05,25),"#7bc4c6",-8,.002,0);
+const road=shape(new THREE.BoxGeometry(26,.08,1.36),"#c4ae83",0,-.012,-3.2);road.rotation.y=.1;
+shape(new THREE.BoxGeometry(5.1,.21,1.63),"#80654c",-8,.12,-3.2);
+shape(new THREE.BoxGeometry(5.3,.10,1.22),"#d9b78b",-8,.23,-3.2);
+for(let i=0;i<8;i++){shape(new THREE.BoxGeometry(.1,.04,23),"#9fd3d2",-9+i%2*.55,.035,-11+i*2.9);}
+function tree(x,z,r=1){shape(new THREE.CylinderGeometry(.12,.16,.7,6),"#76553d",x,.33,z);const crown=shape(new THREE.ConeGeometry(.56*r,1.45*r,6),"#52866a",x,1.35*r,z);crown.rotation.y=.4;}
+for(const [x,z,r] of [[-11,-9,1],[-12,-7,.8],[-11,7,.85],[-10,9,.9],[11,-9,1.2],[12,8,1.0],[10,10,.85],[-1,9,.85],[1,9,.75]])tree(x,z,r);
+for(let i=0;i<6;i++)shape(new THREE.BoxGeometry(1.1,.08,1.7),"#c1a76c",2+i%3*1.35,-.025,5+Math.floor(i/3)*1.9);
+const world=new THREE.Group();scene.add(world);
+dynamic=new THREE.Group();scene.add(dynamic);
+const terrain={
+ford:[-6,-2],castle:[5,-3],fields:[5,6]
+};
+function label(str){const cv=document.createElement("canvas");cv.width=512;cv.height=112;const c=cv.getContext("2d");c.fillStyle="#123640f0";c.fillRect(0,0,512,112);c.strokeStyle="#edc986";c.lineWidth=5;c.strokeRect(3,3,506,106);c.fillStyle="#ffefcb";c.font="bold 35px system-ui";c.textAlign="center";c.fillText(str,256,72,480);const spr=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cv),depthTest:false}));spr.scale.set(3.65,.8,1);return spr;}
+function marker(id,letter,text){const v=terrain[id],g=new THREE.Group();g.position.set(v[0],.1,v[1]);
+const cyl=shape(new THREE.CylinderGeometry(.47,.52,.35,16),"#e2b267",0,.36,0,g);
+const pin=shape(new THREE.CylinderGeometry(.28,.28,.75,16),"#284954",0,.83,0,g);
+const title=label(letter+" · "+text);title.position.y=2.38;g.add(title);
+const hit=new THREE.Mesh(new THREE.CylinderGeometry(1.3,1.3,3.5,16),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));hit.position.y=1.3;hit.userData.site=id;g.add(hit);scene.add(g);
+markers[id]={g,cyl,hit,title};}
+marker("ford","A","Folyóátkelő");marker("castle","B","Vár alja");marker("fields","C","Szántóföldek");
+const modelIds=["thatched-cottage-0e63f5","market-stall-94937d","water-mill-b31972","village-gatehouse-181a9e","oak-tree-50ee7c","wooden-bridge-9d2308"];
+function home(parent,x,z,color){const g=new THREE.Group();g.position.set(x,.12,z);parent.add(g);shape(new THREE.BoxGeometry(1.06,.73,.82),color,0,.38,0,g);
+const roof=shape(new THREE.ConeGeometry(.76,.65,4),"#b66d49",0,1.06,0,g);roof.rotation.y=Math.PI/4;return g;}
+home(world,-1,-4.4,"#e5d1a5");home(world,.5,-4.8,"#cbb78b");home(world,2,-3.7,"#e1c39a");
+function keepModel(parent,id,x,z,targetSize=1.4){
+const g=new THREE.Group();g.position.set(x,.13,z);parent.add(g);
+if(!assets[id]){home(g,0,0,"#d4b58e");return;}
+const node=assets[id].clone(true);g.add(node);const box=new THREE.Box3().setFromObject(node),size=box.getSize(new THREE.Vector3());
+const scl=targetSize/Math.max(.1,size.x,size.y,size.z);node.scale.setScalar(scl);const b2=new THREE.Box3().setFromObject(node);
+node.position.set(-.5*(b2.min.x+b2.max.x),-.05-b2.min.y,-.5*(b2.min.z+b2.max.z));
+}
+function sync(s){
+if(!dynamic)return;while(dynamic.children.length){dynamic.remove(dynamic.children[0]);}
+for(const [id,m] of Object.entries(markers))m.cyl.material.color.set(s.site===id?"#ffe39b":"#d5a65b");
+if(!s.site)return;
+const [x,z]=terrain[s.site];const dx=s.site==="ford"?1:0;
+keepModel(dynamic,"thatched-cottage-0e63f5",x+1.7,z+1.2,1.85);
+keepModel(dynamic,"thatched-cottage-0e63f5",x-1.6,z+1.5,1.55);
+if(s.investment==="market")keepModel(dynamic,"market-stall-94937d",x+1,z-1.2,2.1);
+if(s.investment==="mill")keepModel(dynamic,"water-mill-b31972",s.site==="ford"?-8.0:x+.8,z-1.5,2.3);
+if(s.investment==="houses"){keepModel(dynamic,"thatched-cottage-0e63f5",x-1.4,z-1.6,1.7);keepModel(dynamic,"market-stall-94937d",x+1.5,z-1.4,1.5);}
+}
+window.medievalSceneUpdate=sync;
+let cameraAnimation=null;
+function focus(which){const p=which?terrain[which]:[0,0];const target=new THREE.Vector3(p[0],0,p[1]);cameraAnimation={target,position:target.clone().add(new THREE.Vector3(16,19,20)),zoom:which?1.65:1};}
+window.medievalFocus=id=>{if(terrain[id])focus(id);};window.medievalOverview=()=>focus(null);
+function resize(){const r=host.getBoundingClientRect();const w=Math.max(1,r.width),h=Math.max(1,r.height),a=w/h;const span=Math.max(22,29/a);camera.left=-span*a/2;camera.right=span*a/2;camera.top=span/2;camera.bottom=-span/2;camera.updateProjectionMatrix();renderer.setSize(w,h,false);}
+new ResizeObserver(resize).observe(host);resize();
+const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();let start=null;
+renderer.domElement.addEventListener("pointerdown",e=>{start=[e.clientX,e.clientY];});
+renderer.domElement.addEventListener("pointerup",e=>{if(!start)return;const d=Math.hypot(e.clientX-start[0],e.clientY-start[1]);start=null;if(d>8)return;
+const r=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(pointer,camera);
+const hit=ray.intersectObjects(Object.values(markers).map(v=>v.hit),false)[0];if(hit){const id=hit.object.userData.site;window.medievalChoose?.(id);focus(id);}
+});
+const loader=new GLTFLoader();let loaded=0;
+modelstatus.textContent="Épületek betöltése…";
+async function loadAll(){await Promise.allSettled(modelIds.map(async id=>{try{assets[id]=(await loader.loadAsync("https://polyfork.dev/cdn/"+id+".glb")).scene;loaded++;}catch(e){console.warn("Model fallback:",id,e.message||e);}}));
+modelstatus.textContent=loaded+"/"+modelIds.length+" 3D-modell betöltve";sync(window.medievalGetState?.()||{});}
+loadAll();
+let last=0,frame;
+function render(t){frame=requestAnimationFrame(render);if(document.hidden||t-last<30)return;last=t;
+if(cameraAnimation){const a=cameraAnimation;const rate=matchMedia("(prefers-reduced-motion: reduce)").matches?1:.12;camera.position.lerp(a.position,rate);orbit.target.lerp(a.target,rate);camera.zoom+=(a.zoom-camera.zoom)*rate;camera.updateProjectionMatrix();if(camera.position.distanceTo(a.position)<.045&&orbit.target.distanceTo(a.target)<.045)cameraAnimation=null;}
+orbit.update();renderer.render(scene,camera);}
+frame=requestAnimationFrame(render);window.addEventListener("pagehide",()=>{cancelAnimationFrame(frame);orbit.dispose();renderer.dispose();},{once:true});
+sync(window.medievalGetState?.()||{});
+}catch(e){console.error("3D nem elérhető:",e);fallback("3D nem elérhető, a 2D nézet működik.");}
+</script>
+</body></html>
