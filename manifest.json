@@ -161,18 +161,18 @@
   },
   "athen-nyomozas": {
     "path": "games/athen-nyomozas.html",
-    "bytes": 37580,
-    "md5": "f1316f8bb2f720afba2da8f360e394b9"
+    "bytes": 39665,
+    "md5": "be1188e94a7937abb853493a44b554fb"
   },
   "allampolgari-nyomozas": {
     "path": "games/allampolgari-nyomozas.html",
-    "bytes": 40422,
-    "md5": "1aeb99da2515e1f8c02766e82cb2499e"
+    "bytes": 42500,
+    "md5": "f17e19b74f8484067d4788170d91b065"
   },
   "rome-nyomozas": {
     "path": "games/rome-nyomozas.html",
-    "bytes": 42819,
-    "md5": "9fd64dbe6a412dbbb0269036d6d76b24"
+    "bytes": 44887,
+    "md5": "c0eefad4c94c8934f12d6b4a1ef1bcc0"
   },
   "nagy-valsag": {
     "path": "games/nagy-valsag.html",
