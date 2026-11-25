@@ -205,7 +205,7 @@ const COURTS=[
 
 /* ---------- ÁLLAPOT ---------- */
 const S={phase:"intro",step:0,score:100,tries:0,sel:[],fb:null,hintShown:false,
-  clues:[],elim:{},marks:{},notes:"",rev:0,ret:"case",tab:"game",scoring:true,acc:{killer:null,motive:null,ev:[],proc:null,court:null},accErr:null,result:null};
+  clues:[],elim:{},marks:{},notes:"",name:"",rev:0,ret:"case",tab:"game",scoring:true,acc:{killer:null,motive:null,ev:[],proc:null,court:null},accErr:null,result:null};
 const $=id=>document.getElementById(id);
 const app=$("app");
 
@@ -303,6 +303,15 @@ function viewAccuse(){
   +'<div class="row"><button data-act="submit"'+(ready?'':' disabled')+'>Vád beküldése</button><button class="ghost" data-act="backacc">◀ Nyomok áttekintése</button></div>';
 }
 
+function esc(t){ return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;"); }
+function summaryText(){
+  const r=S.result, d=new Date().toLocaleDateString("hu-HU");
+  const L=["Az eltűnt árvízvédelmi alap – eredmény","Név / csapat: "+(S.name.trim()||"—"),"Dátum: "+d];
+  if(S.scoring){ L.push("Pontszám: "+S.score+" / 100","Rang: "+r.rank); } else { L.push("Tanári mód: a pontozás ki volt kapcsolva."); }
+  L.push("","A vád:"); r.lines.forEach(l=>L.push("- "+l[0]+": "+l[1]));
+  if(S.notes.trim()) L.push("","Saját jegyzet:",S.notes.trim());
+  return L.join("\n");
+}
 function viewResult(){
   const r=S.result;
   const rows=r.lines.map(l=>'<div class="res-row"><span>'+l[0]+'</span><span>'+l[1]+'</span></div>').join('');
@@ -310,6 +319,10 @@ function viewResult(){
   '<div class="card"><h2>A vizsgálat eredménye</h2>'
   +(S.scoring?'<div class="big">'+S.score+' / 100</div><p><b>Rang: '+r.rank+'</b></p>':'<p><b>Tanári mód: a pontozás ki van kapcsolva.</b></p>')
   +rows+'</div>'
+  +'<div class="card"><h2>Eredmény beküldése</h2><p class="muted">Írja be a nevét (vagy a páros nevét), másolja az összesítőt, és illessze be a Google Classroom feladatba.</p>'
+  +'<label for="resName"><b>Név / csapat</b></label><input id="resName" type="text" autocomplete="off" maxlength="80" value="'+esc(S.name)+'" style="width:100%;margin:6px 0 10px;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit">'
+  +'<label for="sumTxt" class="muted">Az összesítő szövege</label><textarea id="sumTxt" class="notes" readonly aria-label="Eredmény-összesítő, másolható szöveg">'+esc(summaryText())+'</textarea>'
+  +'<div class="row"><button data-act="copy">Eredmény másolása</button></div><div id="copyMsg" class="muted" role="status" aria-live="polite"></div></div>'
   +'<div class="card"><h2>Mi történt valójában?</h2>'
   +'<p>A pénzt <b>Fehér Margit polgármester</b> térítette el. A központi költségvetés végrehajtása rendben lezajlott: az Országgyűlés elfogadta a költségvetést, a köztársasági elnök kihirdette, a minisztérium pedig átutalta az összeget. A pénz megérkezett Folyóváros önkormányzatához.</p>'
   +'<p>A polgármester a 160 millió forintot a képviselőtestület határozata nélkül, tanácsadói díj címén egy olyan cég számlájára utalta, amelynek tulajdonosa a sógora. A jegyző, aki a hivatal törvényes működéséért felel, írásban jelezte a törvénysértést, de a polgármester nem foglalkozott vele. A szabálytalanságot az Állami Számvevőszék közpénz-ellenőrzése derítette fel.</p>'
@@ -387,7 +400,10 @@ $("tabs").addEventListener("click",e=>{
   const b=e.target.closest("[data-tab]"); if(!b) return;
   S.tab=b.dataset.tab; render();
 });
-document.addEventListener("input",e=>{ if(e.target.id==="notes") S.notes=e.target.value; });
+document.addEventListener("input",e=>{
+  if(e.target.id==="notes") S.notes=e.target.value;
+  else if(e.target.id==="resName"){ S.name=e.target.value; const t=$("sumTxt"); if(t) t.value=summaryText(); }
+});
 
 function render(){
   setScore(); renderTabs();
@@ -426,6 +442,11 @@ app.addEventListener("click",ev=>{
   else if(act==="revnext"){ if(S.rev<S.clues.length-1) S.rev++; render(); }
   else if(act==="revret"){ S.phase=S.ret; render(); }
   else if(act==="revi"){ S.tab="game"; if(S.phase!=="review") S.ret=S.phase; S.rev=+t.dataset.i; S.phase="review"; render(); }
+  else if(act==="copy"){
+    const t=$("sumTxt"), m=$("copyMsg"); t.value=summaryText();
+    const fb=()=>{ t.focus(); t.select(); let ok=false; try{ ok=document.execCommand("copy"); }catch(e){} m.textContent=ok?"Az összesítő a vágólapra került.":"Jelölje ki a szöveget, és másolja ki (Ctrl+C)."; };
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(t.value).then(()=>{ m.textContent="Az összesítő a vágólapra került."; },fb); } else fb();
+  }
   else if(act==="restart"){ Object.assign(S,{phase:"intro",step:0,score:100,tries:0,sel:[],fb:null,hintShown:false,clues:[],elim:{},marks:{},notes:"",rev:0,ret:"case",tab:"game",acc:{killer:null,motive:null,ev:[],proc:null,court:null},accErr:null,result:null}); render(); }
 });
 app.addEventListener("change",ev=>{
